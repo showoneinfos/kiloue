@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Catégories — kiloue.com</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{--teal:#00A693;--teal2:#008577;--teal-light:#E8F7F5;--ink:#1A1A1A;--ink2:#666;--ink3:#999;--border:#E5E5E5;--bg:#FAFAFA;--white:#fff;--sans:'Inter',system-ui,sans-serif;}
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{font-family:var(--sans);background:var(--bg);color:var(--ink);}
+
+  /* NAV */
+  nav{background:var(--white);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:200;}
+  .nav-top{height:60px;display:flex;align-items:center;padding:0 24px;gap:16px;}
+  .logo{font-size:22px;font-weight:700;color:var(--teal);text-decoration:none;white-space:nowrap;}
+  .logo span{color:var(--ink);}
+  .nav-search{flex:1;max-width:480px;display:flex;align-items:center;background:var(--bg);border:1.5px solid var(--border);border-radius:6px;padding:0 12px;height:40px;gap:8px;}
+  .nav-search svg{width:16px;height:16px;fill:none;stroke:var(--ink3);stroke-width:2;flex-shrink:0;}
+  .nav-search input{border:none;outline:none;background:transparent;font-family:var(--sans);font-size:14px;color:var(--ink);flex:1;}
+  .nav-search input::placeholder{color:var(--ink3);}
+  .nav-actions{margin-left:auto;display:flex;gap:8px;align-items:center;}
+  .btn-login{padding:8px 16px;border-radius:6px;border:1.5px solid var(--border);background:var(--white);font-size:13px;font-weight:500;font-family:var(--sans);color:var(--ink);cursor:pointer;white-space:nowrap;}
+  .btn-login:hover{border-color:var(--teal);color:var(--teal);}
+  .btn-sell{padding:8px 18px;border-radius:6px;border:none;background:var(--teal);font-size:13px;font-weight:600;font-family:var(--sans);color:var(--white);cursor:pointer;white-space:nowrap;}
+  .btn-sell:hover{background:var(--teal2);}
+
+  /* CATEGORIES BAR */
+  .cats-bar{border-top:1px solid var(--border);height:44px;display:flex;align-items:center;padding:0 24px;gap:0;overflow-x:auto;}
+  .cats-bar::-webkit-scrollbar{display:none;}
+  .cat-tab{padding:0 16px;height:44px;display:flex;align-items:center;gap:7px;font-size:13px;font-weight:500;color:var(--ink2);cursor:pointer;white-space:nowrap;border-bottom:2px solid transparent;transition:all .15s;position:relative;}
+  .cat-tab:hover,.cat-tab.active{color:var(--teal);border-bottom-color:var(--teal);}
+  .cat-tab .emoji{font-size:15px;}
+
+  /* MEGA MENU */
+  .mega-wrap{position:absolute;left:0;right:0;top:104px;z-index:300;display:none;}
+  .mega-wrap.open{display:block;}
+  .mega-menu{background:var(--white);border-top:2px solid var(--teal);border-bottom:1px solid var(--border);box-shadow:0 8px 32px rgba(0,0,0,.1);padding:24px 40px;display:grid;grid-template-columns:200px 1fr;gap:0;min-height:300px;}
+  .mega-left{border-right:1px solid var(--border);padding-right:20px;display:flex;flex-direction:column;gap:2px;}
+  .mega-left-item{padding:9px 12px;border-radius:6px;font-size:13px;color:var(--ink2);cursor:pointer;display:flex;align-items:center;gap:8px;transition:all .15s;}
+  .mega-left-item:hover,.mega-left-item.active{background:var(--teal-light);color:var(--teal);font-weight:500;}
+  .mega-left-item .arrow{margin-left:auto;font-size:10px;color:var(--ink3);}
+  .mega-right{padding-left:28px;padding-top:4px;}
+  .mega-right-title{font-size:12px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.6px;margin-bottom:14px;}
+  .subcats-list{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;}
+  .subcat-link{padding:8px 10px;border-radius:6px;font-size:13px;color:var(--ink2);cursor:pointer;transition:all .15s;display:block;text-decoration:none;}
+  .subcat-link:hover{background:var(--teal-light);color:var(--teal);}
+  .mega-footer{grid-column:1/-1;border-top:1px solid var(--border);margin-top:16px;padding-top:14px;display:flex;align-items:center;gap:12px;}
+  .mega-footer a{font-size:13px;color:var(--teal);text-decoration:none;font-weight:500;}
+  .mega-footer a:hover{text-decoration:underline;}
+
+  /* BREADCRUMB */
+  .breadcrumb{padding:12px 24px;font-size:13px;color:var(--ink2);display:flex;align-items:center;gap:6px;background:var(--white);border-bottom:1px solid var(--border);}
+  .breadcrumb a{color:var(--ink2);text-decoration:none;}
+  .breadcrumb a:hover{color:var(--teal);}
+  .breadcrumb svg{width:12px;height:12px;fill:none;stroke:var(--ink3);stroke-width:2;}
+  .bc-current{color:var(--ink);font-weight:500;}
+
+  /* PAGE CONTENT */
+  .page-content{max-width:1200px;margin:0 auto;padding:28px 24px;}
+  .page-title{font-size:22px;font-weight:700;color:var(--ink);margin-bottom:6px;}
+  .page-sub{font-size:14px;color:var(--ink2);margin-bottom:28px;}
+
+  /* ALL CATS GRID */
+  .all-cats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-bottom:40px;}
+  .all-cat-card{background:var(--white);border:1.5px solid var(--border);border-radius:10px;padding:18px 16px;cursor:pointer;transition:all .15s;text-decoration:none;display:flex;align-items:center;gap:12px;}
+  .all-cat-card:hover{border-color:var(--teal);background:var(--teal-light);}
+  .all-cat-card .emoji{font-size:22px;}
+  .all-cat-card .info .name{font-size:14px;font-weight:500;color:var(--ink);}
+  .all-cat-card:hover .info .name{color:var(--teal);}
+  .all-cat-card .info .count{font-size:12px;color:var(--ink3);}
+
+  /* SUBCAT VIEW */
+  .subcat-view{display:none;}
+  .subcat-view.active{display:block;}
+  .subcat-header{display:flex;align-items:center;gap:12px;margin-bottom:20px;}
+  .subcat-header h1{font-size:20px;font-weight:700;color:var(--ink);}
+  .subcat-header .emoji-big{font-size:28px;}
+  .subcat-chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:28px;}
+  .subcat-chip{padding:8px 16px;border-radius:20px;border:1.5px solid var(--border);background:var(--white);font-size:13px;color:var(--ink2);cursor:pointer;transition:all .15s;}
+  .subcat-chip:hover,.subcat-chip.active{background:var(--teal);border-color:var(--teal);color:#fff;}
+
+  /* LISTINGS */
+  .results-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid var(--border);}
+  .results-info{font-size:14px;color:var(--ink2);}
+  .results-info strong{color:var(--ink);}
+  .sort-sel{padding:8px 14px;border-radius:6px;border:1.5px solid var(--border);background:var(--white);font-size:13px;font-family:var(--sans);color:var(--ink);cursor:pointer;outline:none;}
+  .sort-sel:focus{border-color:var(--teal);}
+  .listings-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:14px;}
+  .lcard{cursor:pointer;border-radius:8px;overflow:hidden;background:var(--white);border:1px solid var(--border);transition:all .15s;}
+  .lcard:hover{border-color:var(--teal);transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,166,147,.1);}
+  .lcard-img-w{position:relative;}
+  .lcard-img{width:100%;aspect-ratio:1;object-fit:cover;display:block;}
+  .lcard-fav{position:absolute;top:8px;right:8px;width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.9);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+  .lcard-fav svg{width:14px;height:14px;fill:none;stroke:var(--ink2);stroke-width:2;}
+  .lcard-fav:hover svg{stroke:var(--teal);}
+  .lcard-body{padding:10px 12px;}
+  .lcard-name{font-size:13px;font-weight:500;color:var(--ink);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .lcard-meta{font-size:12px;color:var(--ink3);margin-bottom:6px;}
+  .lcard-bot{display:flex;align-items:center;justify-content:space-between;}
+  .lcard-price{font-size:15px;font-weight:700;color:var(--ink);}
+  .lcard-price small{font-size:11px;font-weight:400;color:var(--ink3);}
+  .lcard-badge{font-size:10px;padding:2px 8px;border-radius:20px;font-weight:500;}
+  .bl{background:var(--teal-light);color:var(--teal2);}
+  .bc{background:#FFF8E1;color:#F57F17;}
+
+  @media(max-width:768px){
+    nav .btn-login{display:none;}
+    nav{padding:0;}
+    .nav-top{padding:0 16px;}
+    .cats-bar{padding:0 8px;}
+    .cat-tab{padding:0 10px;font-size:12px;}
+    .page-content{padding:16px;}
+    .all-cats-grid{grid-template-columns:1fr 1fr;}
+    .listings-grid{grid-template-columns:repeat(2,1fr);gap:10px;}
+    .subcats-list{grid-template-columns:repeat(2,1fr);}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-top">
+    <a class="logo" href="index.html">kiloue<span>.com</span></a>
+    <div class="nav-search">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" placeholder="Rechercher du matériel…">
+    </div>
+    <div class="nav-actions">
+      <button class="btn-login" onclick="window.location.href='inscription.html'">S'inscrire | Se connecter</button>
+      <button class="btn-sell" onclick="window.location.href='publier.html'">Déposer une annonce</button>
+    </div>
+  </div>
+
+  <div class="cats-bar" id="cats-bar">
+    <div class="cat-tab active" onclick="selectTab(this,'all')" data-cat="all">Toutes les catégories</div>
+    <div class="cat-tab" onclick="selectTab(this,'vehicules')" data-cat="vehicules"><span class="emoji">🚗</span>Véhicules</div>
+    <div class="cat-tab" onclick="selectTab(this,'nautisme')" data-cat="nautisme"><span class="emoji">🚤</span>Nautisme</div>
+    <div class="cat-tab" onclick="selectTab(this,'bricolage')" data-cat="bricolage"><span class="emoji">🔨</span>Bricolage</div>
+    <div class="cat-tab" onclick="selectTab(this,'jardinage')" data-cat="jardinage"><span class="emoji">🌳</span>Jardinage</div>
+    <div class="cat-tab" onclick="selectTab(this,'btp')" data-cat="btp"><span class="emoji">🏗️</span>BTP & Chantier</div>
+    <div class="cat-tab" onclick="selectTab(this,'agricole')" data-cat="agricole"><span class="emoji">🚜</span>Agricole</div>
+    <div class="cat-tab" onclick="selectTab(this,'maison')" data-cat="maison"><span class="emoji">🏠</span>Maison</div>
+    <div class="cat-tab" onclick="selectTab(this,'evenementiel')" data-cat="evenementiel"><span class="emoji">🎉</span>Événementiel</div>
+    <div class="cat-tab" onclick="selectTab(this,'sport')" data-cat="sport"><span class="emoji">⚽</span>Sport & Loisirs</div>
+    <div class="cat-tab" onclick="selectTab(this,'hightech')" data-cat="hightech"><span class="emoji">💻</span>High-Tech</div>
+    <div class="cat-tab" onclick="selectTab(this,'mode')" data-cat="mode"><span class="emoji">👗</span>Mode</div>
+    <div class="cat-tab" onclick="selectTab(this,'animaux')" data-cat="animaux"><span class="emoji">🐶</span>Animaux</div>
+    <div class="cat-tab" onclick="selectTab(this,'divers')" data-cat="divers"><span class="emoji">📦</span>Divers</div>
+  </div>
+</nav>
+
+<div class="breadcrumb" id="breadcrumb">
+  <a href="index.html">Accueil</a>
+  <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+  <span class="bc-current" id="bc-text">Toutes les catégories</span>
+</div>
+
+<div class="page-content">
+
+  <!-- ALL CATS -->
+  <div id="view-all" class="subcat-view active">
+    <div class="page-title">Toutes les catégories</div>
+    <div class="page-sub">Parcourez les 13 catégories de kiloue.com</div>
+    <div class="all-cats-grid">
+      <a class="all-cat-card" onclick="selectTabByName('vehicules')"><span class="emoji">🚗</span><div class="info"><div class="name">Véhicules</div><div class="count">12 sous-catégories</div></div></a>
+      <a class="all-cat-card" onclick="selectTabByName('nautisme')"><span class="emoji">🚤</span><div class="info"><div class="name">Nautisme</div><div class="count">10 sous-catégories</div></div></a>
+      <a class="all-cat-card" onclick="selectTabByName('bricolage')"><span class="emoji">🔨</span><div class="info"><div class="name">Bricolage & Outillage</div><div class="count">11 sous-catégories</div></div></a>
+      <a class="all-cat-card" onclick="selectTabByName('jardinage')"><span class="emoji">🌳</span><div class="info"><div class="name">Jardinage</div><div class="count">10 sous-catégories</div></div></a>
+      <a class="all-cat-card" onclick="selectTabByName('btp')"><span class="emoji">🏗️</span><div class="info"><div class="name">BTP & Chantier</div><div class="count">10 sous-catégories</div></div></a>
+      <a class="all-cat-card" onclick="selectTabByName('agricole')"><span class="emoji">🚜</span><div class="info"><div class="name">Matériel Agricole</div><div class="count">10 sous-catégories</div></div></a>
+      <a class="all-cat-card" onclick="selectTabByName('maison')"><span class="emoji">🏠</span><div class="info"><div class="name">Maison & Équipement</div><div class="count">9 sous-catégories</div></div></a>
+      <a class="all-cat-card" onclick="selectTabByName('evenementiel')"><span class="emoji">🎉</span><div class="info"><div class="name">Événementiel</div><div class="count">12 sous-catégories</div></div></a>
+      <a class="all-cat-card" onclick="selectTabByName('sport')"><span class="emoji">⚽</span><div class="info"><div class="name">Sport & Loisirs</div><div class="count">11 sous-catégories</div></div></a>
+      <a class="all-cat-card" onclick="selectTabByName('hightech')"><span class="emoji">💻</span><div class="info"><div class="name">High-Tech & Multimédia</div><div class="count">12 sous-catégories</div></div></a>
+      <a class="all-cat-card" onclick="selectTabByName('mode')"><span class="emoji">👗</span><div class="info"><div class="name">Mode & Accessoires</div><div class="count">10 sous-catégories</div></div></a>
+      <a class="all-cat-card" onclick="selectTabByName('animaux')"><span class="emoji">🐶</span><div class="info"><div class="name">Animaux</div><div class="count">9 sous-catégories</div></div></a>
+      <a class="all-cat-card" onclick="selectTabByName('divers')"><span class="emoji">📦</span><div class="info"><div class="name">Divers</div><div class="count">10 sous-catégories</div></div></a>
+    </div>
+  </div>
+
+  <!-- EACH CAT VIEW -->
+  <div id="view-vehicules" class="subcat-view">
+    <div class="subcat-header"><span class="emoji-big">🚗</span><h1>Véhicules</h1></div>
+    <div class="subcat-chips" id="chips-vehicules">
+      <div class="subcat-chip active" onclick="selChip(this,'vehicules')">Tout voir</div>
+      <div class="subcat-chip" onclick="selChip(this,'vehicules')">Voitures</div>
+      <div class="subcat-chip" onclick="selChip(this,'vehicules')">Utilitaires</div>
+      <div class="subcat-chip" onclick="selChip(this,'vehicules')">Motos</div>
+      <div class="subcat-chip" onclick="selChip(this,'vehicules')">Scooters</div>
+      <div class="subcat-chip" onclick="selChip(this,'vehicules')">Vélos</div>
+      <div class="subcat-chip" onclick="selChip(this,'vehicules')">Vélos électriques</div>
+      <div class="subcat-chip" onclick="selChip(this,'vehicules')">Trottinettes électriques</div>
+      <div class="subcat-chip" onclick="selChip(this,'vehicules')">Quads</div>
+      <div class="subcat-chip" onclick="selChip(this,'vehicules')">Buggys</div>
+      <div class="subcat-chip" onclick="selChip(this,'vehicules')">Camping-cars</div>
+      <div class="subcat-chip" onclick="selChip(this,'vehicules')">Caravanes</div>
+      <div class="subcat-chip" onclick="selChip(this,'vehicules')">Remorques</div>
+      <div class="subcat-chip" onclick="selChip(this,'vehicules')">Autres</div>
+    </div>
+    <div class="results-bar"><span class="results-info"><strong>48</strong> annonces</span><select class="sort-sel"><option>Plus récentes</option><option>Prix croissant</option><option>Prix décroissant</option><option>Mieux notés</option></select></div>
+    <div class="listings-grid" id="grid-vehicules"></div>
+  </div>
+
+  <div id="view-nautisme" class="subcat-view">
+    <div class="subcat-header"><span class="emoji-big">🚤</span><h1>Nautisme</h1></div>
+    <div class="subcat-chips" id="chips-nautisme">
+      <div class="subcat-chip active" onclick="selChip(this,'nautisme')">Tout voir</div>
+      <div class="subcat-chip" onclick="selChip(this,'nautisme')">Bateaux à moteur</div>
+      <div class="subcat-chip" onclick="selChip(this,'nautisme')">Voiliers</div>
+      <div class="subcat-chip" onclick="selChip(this,'nautisme')">Jet-skis</div>
+      <div class="subcat-chip" onclick="selChip(this,'nautisme')">Kayaks</div>
+      <div class="subcat-chip" onclick="selChip(this,'nautisme')">Canoës</div>
+      <div class="subcat-chip" onclick="selChip(this,'nautisme')">Paddles</div>
+      <div class="subcat-chip" onclick="selChip(this,'nautisme')">Pédalos</div>
+      <div class="subcat-chip" onclick="selChip(this,'nautisme')">Équipements de pêche</div>
+      <div class="subcat-chip" onclick="selChip(this,'nautisme')">Équipements de plongée</div>
+      <div class="subcat-chip" onclick="selChip(this,'nautisme')">Remorques bateau</div>
+      <div class="subcat-chip" onclick="selChip(this,'nautisme')">Autres</div>
+    </div>
+    <div class="results-bar"><span class="results-info"><strong>23</strong> annonces</span><select class="sort-sel"><option>Plus récentes</option><option>Prix croissant</option><option>Prix décroissant</option></select></div>
+    <div class="listings-grid" id="grid-nautisme"></div>
+  </div>
+
+  <div id="view-bricolage" class="subcat-view">
+    <div class="subcat-header"><span class="emoji-big">🔨</span><h1>Bricolage & Outillage</h1></div>
+    <div class="subcat-chips" id="chips-bricolage">
+      <div class="subcat-chip active" onclick="selChip(this,'bricolage')">Tout voir</div>
+      <div class="subcat-chip" onclick="selChip(this,'bricolage')">Perçage</div>
+      <div class="subcat-chip" onclick="selChip(this,'bricolage')">Découpe</div>
+      <div class="subcat-chip" onclick="selChip(this,'bricolage')">Ponçage</div>
+      <div class="subcat-chip" onclick="selChip(this,'bricolage')">Soudure</div>
+      <div class="subcat-chip" onclick="selChip(this,'bricolage')">Peinture</div>
+      <div class="subcat-chip" onclick="selChip(this,'bricolage')">Outillage manuel</div>
+      <div class="subcat-chip" onclick="selChip(this,'bricolage')">Outillage électrique</div>
+      <div class="subcat-chip" onclick="selChip(this,'bricolage')">Échelles</div>
+      <div class="subcat-chip" onclick="selChip(this,'bricolage')">Échafaudages</div>
+      <div class="subcat-chip" onclick="selChip(this,'bricolage')">Nettoyage professionnel</div>
+      <div class="subcat-chip" onclick="selChip(this,'bricolage')">Détecteurs et mesure</div>
+      <div class="subcat-chip" onclick="selChip(this,'bricolage')">Autres</div>
+    </div>
+    <div class="results-bar"><span class="results-info"><strong>67</strong> annonces</span><select class="sort-sel"><option>Plus récentes</option><option>Prix croissant</option><option>Prix décroissant</option></select></div>
+    <div class="listings-grid" id="grid-bricolage"></div>
+  </div>
+
+  <div id="view-jardinage" class="subcat-view">
+    <div class="subcat-header"><span class="emoji-big">🌳</span><h1>Jardinage</h1></div>
+    <div class="subcat-chips" id="chips-jardinage">
+      <div class="subcat-chip active" onclick="selChip(this,'jardinage')">Tout voir</div>
+      <div class="subcat-chip" onclick="selChip(this,'jardinage')">Tondeuses</div>
+      <div class="subcat-chip" onclick="selChip(this,'jardinage')">Tronçonneuses</div>
+      <div class="subcat-chip" onclick="selChip(this,'jardinage')">Taille-haies</div>
+      <div class="subcat-chip" onclick="selChip(this,'jardinage')">Débroussailleuses</div>
+      <div class="subcat-chip" onclick="selChip(this,'jardinage')">Motobineuses</div>
+      <div class="subcat-chip" onclick="selChip(this,'jardinage')">Broyeurs de végétaux</div>
+      <div class="subcat-chip" onclick="selChip(this,'jardinage')">Souffleurs</div>
+      <div class="subcat-chip" onclick="selChip(this,'jardinage')">Scarificateurs</div>
+      <div class="subcat-chip" onclick="selChip(this,'jardinage')">Outils de jardin</div>
+      <div class="subcat-chip" onclick="selChip(this,'jardinage')">Arrosage</div>
+      <div class="subcat-chip" onclick="selChip(this,'jardinage')">Autres</div>
+    </div>
+    <div class="results-bar"><span class="results-info"><strong>54</strong> annonces</span><select class="sort-sel"><option>Plus récentes</option><option>Prix croissant</option><option>Prix décroissant</option></select></div>
+    <div class="listings-grid" id="grid-jardinage"></div>
+  </div>
+
+  <div id="view-btp" class="subcat-view">
+    <div class="subcat-header"><span class="emoji-big">🏗️</span><h1>BTP & Chantier</h1></div>
+    <div class="subcat-chips" id="chips-btp">
+      <div class="subcat-chip active" onclick="selChip(this,'btp')">Tout voir</div>
+      <div class="subcat-chip" onclick="selChip(this,'btp')">Mini-pelles</div>
+      <div class="subcat-chip" onclick="selChip(this,'btp')">Nacelles</div>
+      <div class="subcat-chip" onclick="selChip(this,'btp')">Compacteurs</div>
+      <div class="subcat-chip" onclick="selChip(this,'btp')">Bétonnières</div>
+      <div class="subcat-chip" onclick="selChip(this,'btp')">Groupes électrogènes</div>
+      <div class="subcat-chip" onclick="selChip(this,'btp')">Marteaux-piqueurs</div>
+      <div class="subcat-chip" onclick="selChip(this,'btp')">Lasers de chantier</div>
+      <div class="subcat-chip" onclick="selChip(this,'btp')">Matériel de coffrage</div>
+      <div class="subcat-chip" onclick="selChip(this,'btp')">Matériel de levage</div>
+      <div class="subcat-chip" onclick="selChip(this,'btp')">Équipement de sécurité</div>
+      <div class="subcat-chip" onclick="selChip(this,'btp')">Autres</div>
+    </div>
+    <div class="results-bar"><span class="results-info"><strong>31</strong> annonces</span><select class="sort-sel"><option>Plus récentes</option><option>Prix croissant</option><option>Prix décroissant</option></select></div>
+    <div class="listings-grid" id="grid-btp"></div>
+  </div>
+
+  <div id="view-agricole" class="subcat-view">
+    <div class="subcat-header"><span class="emoji-big">🚜</span><h1>Matériel Agricole</h1></div>
+    <div class="subcat-chips" id="chips-agricole">
+      <div class="subcat-chip active" onclick="selChip(this,'agricole')">Tout voir</div>
+      <div class="subcat-chip" onclick="selChip(this,'agricole')">Tracteurs</div>
+      <div class="subcat-chip" onclick="selChip(this,'agricole')">Micro-tracteurs</div>
+      <div class="subcat-chip" onclick="selChip(this,'agricole')">Remorques agricoles</div>
+      <div class="subcat-chip" onclick="selChip(this,'agricole')">Broyeurs agricoles</div>
+      <div class="subcat-chip" onclick="selChip(this,'agricole')">Charrues</div>
+      <div class="subcat-chip" onclick="selChip(this,'agricole')">Pulvérisateurs</div>
+      <div class="subcat-chip" onclick="selChip(this,'agricole')">Semoirs</div>
+      <div class="subcat-chip" onclick="selChip(this,'agricole')">Matériel d'irrigation</div>
+      <div class="subcat-chip" onclick="selChip(this,'agricole')">Récolte et entretien</div>
+      <div class="subcat-chip" onclick="selChip(this,'agricole')">Équipements d'élevage</div>
+      <div class="subcat-chip" onclick="selChip(this,'agricole')">Autres</div>
+    </div>
+    <div class="results-bar"><span class="results-info"><strong>19</strong> annonces</span><select class="sort-sel"><option>Plus récentes</option><option>Prix croissant</option><option>Prix décroissant</option></select></div>
+    <div class="listings-grid" id="grid-agricole"></div>
+  </div>
+
+  <div id="view-maison" class="subcat-view">
+    <div class="subcat-header"><span class="emoji-big">🏠</span><h1>Maison & Équipement</h1></div>
+    <div class="subcat-chips" id="chips-maison">
+      <div class="subcat-chip active" onclick="selChip(this,'maison')">Tout voir</div>
+      <div class="subcat-chip" onclick="selChip(this,'maison')">Électroménager</div>
+      <div class="subcat-chip" onclick="selChip(this,'maison')">Chauffage</div>
+      <div class="subcat-chip" onclick="selChip(this,'maison')">Climatisation</div>
+      <div class="subcat-chip" onclick="selChip(this,'maison')">Nettoyage</div>
+      <div class="subcat-chip" onclick="selChip(this,'maison')">Déshumidificateurs</div>
+      <div class="subcat-chip" onclick="selChip(this,'maison')">Mobilier</div>
+      <div class="subcat-chip" onclick="selChip(this,'maison')">Déménagement</div>
+      <div class="subcat-chip" onclick="selChip(this,'maison')">Décoration</div>
+      <div class="subcat-chip" onclick="selChip(this,'maison')">Bricolage domestique</div>
+      <div class="subcat-chip" onclick="selChip(this,'maison')">Autres</div>
+    </div>
+    <div class="results-bar"><span class="results-info"><strong>42</strong> annonces</span><select class="sort-sel"><option>Plus récentes</option><option>Prix croissant</option><option>Prix décroissant</option></select></div>
+    <div class="listings-grid" id="grid-maison"></div>
+  </div>
+
+  <div id="view-evenementiel" class="subcat-view">
+    <div class="subcat-header"><span class="emoji-big">🎉</span><h1>Événementiel</h1></div>
+    <div class="subcat-chips" id="chips-evenementiel">
+      <div class="subcat-chip active" onclick="selChip(this,'evenementiel')">Tout voir</div>
+      <div class="subcat-chip" onclick="selChip(this,'evenementiel')">Tables</div>
+      <div class="subcat-chip" onclick="selChip(this,'evenementiel')">Chaises</div>
+      <div class="subcat-chip" onclick="selChip(this,'evenementiel')">Barnums</div>
+      <div class="subcat-chip" onclick="selChip(this,'evenementiel')">Tentes de réception</div>
+      <div class="subcat-chip" onclick="selChip(this,'evenementiel')">Vaisselle</div>
+      <div class="subcat-chip" onclick="selChip(this,'evenementiel')">Décoration événementielle</div>
+      <div class="subcat-chip" onclick="selChip(this,'evenementiel')">Structures gonflables</div>
+      <div class="subcat-chip" onclick="selChip(this,'evenementiel')">Machines festives</div>
+      <div class="subcat-chip" onclick="selChip(this,'evenementiel')">Matériel mariage</div>
+      <div class="subcat-chip" onclick="selChip(this,'evenementiel')">Matériel anniversaire</div>
+      <div class="subcat-chip" onclick="selChip(this,'evenementiel')">Sonorisation</div>
+      <div class="subcat-chip" onclick="selChip(this,'evenementiel')">Éclairage</div>
+      <div class="subcat-chip" onclick="selChip(this,'evenementiel')">Autres</div>
+    </div>
+    <div class="results-bar"><span class="results-info"><strong>38</strong> annonces</span><select class="sort-sel"><option>Plus récentes</option><option>Prix croissant</option><option>Prix décroissant</option></select></div>
+    <div class="listings-grid" id="grid-evenementiel"></div>
+  </div>
+
+  <div id="view-sport" class="subcat-view">
+    <div class="subcat-header"><span class="emoji-big">⚽</span><h1>Sport & Loisirs</h1></div>
+    <div class="subcat-chips" id="chips-sport">
+      <div class="subcat-chip active" onclick="selChip(this,'sport')">Tout voir</div>
+      <div class="subcat-chip" onclick="selChip(this,'sport')">Fitness & Musculation</div>
+      <div class="subcat-chip" onclick="selChip(this,'sport')">Cyclisme</div>
+      <div class="subcat-chip" onclick="selChip(this,'sport')">Sports nautiques</div>
+      <div class="subcat-chip" onclick="selChip(this,'sport')">Sports d'hiver</div>
+      <div class="subcat-chip" onclick="selChip(this,'sport')">Sports collectifs</div>
+      <div class="subcat-chip" onclick="selChip(this,'sport')">Sports de combat</div>
+      <div class="subcat-chip" onclick="selChip(this,'sport')">Sports de raquette</div>
+      <div class="subcat-chip" onclick="selChip(this,'sport')">Randonnée</div>
+      <div class="subcat-chip" onclick="selChip(this,'sport')">Camping</div>
+      <div class="subcat-chip" onclick="selChip(this,'sport')">Chasse</div>
+      <div class="subcat-chip" onclick="selChip(this,'sport')">Pêche</div>
+      <div class="subcat-chip" onclick="selChip(this,'sport')">Autres</div>
+    </div>
+    <div class="results-bar"><span class="results-info"><strong>29</strong> annonces</span><select class="sort-sel"><option>Plus récentes</option><option>Prix croissant</option><option>Prix décroissant</option></select></div>
+    <div class="listings-grid" id="grid-sport"></div>
+  </div>
+
+  <div id="view-hightech" class="subcat-view">
+    <div class="subcat-header"><span class="emoji-big">💻</span><h1>High-Tech & Multimédia</h1></div>
+    <div class="subcat-chips" id="chips-hightech">
+      <div class="subcat-chip active" onclick="selChip(this,'hightech')">Tout voir</div>
+      <div class="subcat-chip" onclick="selChip(this,'hightech')">Ordinateurs</div>
+      <div class="subcat-chip" onclick="selChip(this,'hightech')">Tablettes</div>
+      <div class="subcat-chip" onclick="selChip(this,'hightech')">Smartphones</div>
+      <div class="subcat-chip" onclick="selChip(this,'hightech')">Consoles de jeux</div>
+      <div class="subcat-chip" onclick="selChip(this,'hightech')">Réalité virtuelle</div>
+      <div class="subcat-chip" onclick="selChip(this,'hightech')">Appareils photo</div>
+      <div class="subcat-chip" onclick="selChip(this,'hightech')">Caméras</div>
+      <div class="subcat-chip" onclick="selChip(this,'hightech')">Drones</div>
+      <div class="subcat-chip" onclick="selChip(this,'hightech')">Vidéoprojecteurs</div>
+      <div class="subcat-chip" onclick="selChip(this,'hightech')">Imprimantes</div>
+      <div class="subcat-chip" onclick="selChip(this,'hightech')">Écrans</div>
+      <div class="subcat-chip" onclick="selChip(this,'hightech')">Accessoires informatiques</div>
+      <div class="subcat-chip" onclick="selChip(this,'hightech')">Autres</div>
+    </div>
+    <div class="results-bar"><span class="results-info"><strong>44</strong> annonces</span><select class="sort-sel"><option>Plus récentes</option><option>Prix croissant</option><option>Prix décroissant</option></select></div>
+    <div class="listings-grid" id="grid-hightech"></div>
+  </div>
+
+  <div id="view-mode" class="subcat-view">
+    <div class="subcat-header"><span class="emoji-big">👗</span><h1>Mode & Accessoires</h1></div>
+    <div class="subcat-chips" id="chips-mode">
+      <div class="subcat-chip active" onclick="selChip(this,'mode')">Tout voir</div>
+      <div class="subcat-chip" onclick="selChip(this,'mode')">Robes de soirée</div>
+      <div class="subcat-chip" onclick="selChip(this,'mode')">Costumes</div>
+      <div class="subcat-chip" onclick="selChip(this,'mode')">Vêtements homme</div>
+      <div class="subcat-chip" onclick="selChip(this,'mode')">Vêtements femme</div>
+      <div class="subcat-chip" onclick="selChip(this,'mode')">Vêtements enfant</div>
+      <div class="subcat-chip" onclick="selChip(this,'mode')">Sacs de luxe</div>
+      <div class="subcat-chip" onclick="selChip(this,'mode')">Bijoux</div>
+      <div class="subcat-chip" onclick="selChip(this,'mode')">Montres</div>
+      <div class="subcat-chip" onclick="selChip(this,'mode')">Chaussures</div>
+      <div class="subcat-chip" onclick="selChip(this,'mode')">Accessoires de mode</div>
+      <div class="subcat-chip" onclick="selChip(this,'mode')">Autres</div>
+    </div>
+    <div class="results-bar"><span class="results-info"><strong>26</strong> annonces</span><select class="sort-sel"><option>Plus récentes</option><option>Prix croissant</option><option>Prix décroissant</option></select></div>
+    <div class="listings-grid" id="grid-mode"></div>
+  </div>
+
+  <div id="view-animaux" class="subcat-view">
+    <div class="subcat-header"><span class="emoji-big">🐶</span><h1>Animaux</h1></div>
+    <div class="subcat-chips" id="chips-animaux">
+      <div class="subcat-chip active" onclick="selChip(this,'animaux')">Tout voir</div>
+      <div class="subcat-chip" onclick="selChip(this,'animaux')">Cages</div>
+      <div class="subcat-chip" onclick="selChip(this,'animaux')">Niches</div>
+      <div class="subcat-chip" onclick="selChip(this,'animaux')">Clôtures mobiles</div>
+      <div class="subcat-chip" onclick="selChip(this,'animaux')">Remorques pour animaux</div>
+      <div class="subcat-chip" onclick="selChip(this,'animaux')">Matériel d'équitation</div>
+      <div class="subcat-chip" onclick="selChip(this,'animaux')">Transport animalier</div>
+      <div class="subcat-chip" onclick="selChip(this,'animaux')">Matériel d'élevage</div>
+      <div class="subcat-chip" onclick="selChip(this,'animaux')">Accessoires pour chiens</div>
+      <div class="subcat-chip" onclick="selChip(this,'animaux')">Accessoires pour chats</div>
+      <div class="subcat-chip" onclick="selChip(this,'animaux')">Autres</div>
+    </div>
+    <div class="results-bar"><span class="results-info"><strong>14</strong> annonces</span><select class="sort-sel"><option>Plus récentes</option><option>Prix croissant</option><option>Prix décroissant</option></select></div>
+    <div class="listings-grid" id="grid-animaux"></div>
+  </div>
+
+  <div id="view-divers" class="subcat-view">
+    <div class="subcat-header"><span class="emoji-big">📦</span><h1>Divers</h1></div>
+    <div class="subcat-chips" id="chips-divers">
+      <div class="subcat-chip active" onclick="selChip(this,'divers')">Tout voir</div>
+      <div class="subcat-chip" onclick="selChip(this,'divers')">Instruments de musique</div>
+      <div class="subcat-chip" onclick="selChip(this,'divers')">Équipements pour animaux</div>
+      <div class="subcat-chip" onclick="selChip(this,'divers')">Matériel médical</div>
+      <div class="subcat-chip" onclick="selChip(this,'divers')">Déguisements</div>
+      <div class="subcat-chip" onclick="selChip(this,'divers')">Livres et collections</div>
+      <div class="subcat-chip" onclick="selChip(this,'divers')">Jeux de société</div>
+      <div class="subcat-chip" onclick="selChip(this,'divers')">Voyage et bagagerie</div>
+      <div class="subcat-chip" onclick="selChip(this,'divers')">Matériel scolaire</div>
+      <div class="subcat-chip" onclick="selChip(this,'divers')">Objets de collection</div>
+      <div class="subcat-chip" onclick="selChip(this,'divers')">Autres</div>
+    </div>
+    <div class="results-bar"><span class="results-info"><strong>18</strong> annonces</span><select class="sort-sel"><option>Plus récentes</option><option>Prix croissant</option><option>Prix décroissant</option></select></div>
+    <div class="listings-grid" id="grid-divers"></div>
+  </div>
+
+</div>
+
+<script>
+const IMGS = [
+  'https://images.unsplash.com/photo-1617953141905-b27fb1f9a1b0?w=400&q=80',
+  'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=400&q=80',
+  'https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=400&q=80',
+  'https://images.unsplash.com/photo-1504148455328-c376907d081c?w=400&q=80',
+  'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&q=80',
+  'https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=400&q=80',
+  'https://images.unsplash.com/photo-1572981779307-38b8cabb2407?w=400&q=80',
+  'https://images.unsplash.com/photo-1562259949-e8e7689d7828?w=400&q=80',
+];
+const SAMPLE = [
+  {n:'Tronçonneuse Stihl MS 250',l:'Ajaccio · 4 km · ⭐ 4,9',p:25,b:'Livraison',bl:true,i:0},
+  {n:'Motoculteur Honda F220',l:'Ajaccio · 8 km · ⭐ 4,7',p:35,b:'Certifié',bl:false,i:1},
+  {n:'Lot 50 chaises blanches',l:'Mezzavia · 12 km · ⭐ 5,0',p:40,b:'+20€ livr.',bl:true,i:2},
+  {n:'Échafaudage roulant 4 m',l:'Ajaccio · 16 km · ⭐ 4,6',p:18,b:'Certifié',bl:false,i:3},
+  {n:'Chapiteau 6×9 m',l:'Ajaccio · 6 km · ⭐ 4,8',p:120,b:'Livraison',bl:true,i:4},
+  {n:'Remorque benne 750 kg',l:'Ajaccio · 2 km · ⭐ 4,5',p:22,b:'Sans caution',bl:false,i:5},
+  {n:'Perceuse colonne Metabo',l:'Ajaccio · 5 km · ⭐ 4,9',p:12,b:'Sur place',bl:false,i:6},
+  {n:'Nettoyeur haute pression',l:'Ajaccio · 3 km · ⭐ 4,7',p:15,b:'Certifié',bl:false,i:7},
+];
+
+function renderGrid(id) {
+  const c = document.getElementById('grid-' + id);
+  if (!c || c.children.length) return;
+  c.innerHTML = SAMPLE.map(s => `
+    <div class="lcard" onclick="window.location.href='annonce.html'">
+      <div class="lcard-img-w">
+        <img class="lcard-img" src="${IMGS[s.i]}" alt="${s.n}">
+        <button class="lcard-fav" onclick="event.stopPropagation()"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+      </div>
+      <div class="lcard-body">
+        <div class="lcard-name">${s.n}</div>
+        <div class="lcard-meta">${s.l}</div>
+        <div class="lcard-bot">
+          <div class="lcard-price">${s.p} €<small>/jour</small></div>
+          <div class="lcard-badge ${s.bl?'bl':'bc'}">${s.b}</div>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+const CAT_NAMES = {all:'Toutes les catégories',vehicules:'Véhicules',nautisme:'Nautisme',bricolage:'Bricolage & Outillage',jardinage:'Jardinage',btp:'BTP & Chantier',agricole:'Matériel Agricole',maison:'Maison & Équipement',evenementiel:'Événementiel',sport:'Sport & Loisirs',hightech:'High-Tech & Multimédia',mode:'Mode & Accessoires',animaux:'Animaux',divers:'Divers'};
+
+function selectTab(el, cat) {
+  document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  document.querySelectorAll('.subcat-view').forEach(v => v.classList.remove('active'));
+  document.getElementById('view-' + cat).classList.add('active');
+  document.getElementById('bc-text').textContent = CAT_NAMES[cat] || cat;
+  if (cat !== 'all') renderGrid(cat);
+  window.scrollTo(0, 0);
+}
+
+function selectTabByName(cat) {
+  const el = document.querySelector(`[data-cat="${cat}"]`);
+  if (el) selectTab(el, cat);
+}
+
+function selChip(el, cat) {
+  el.closest('.subcat-chips').querySelectorAll('.subcat-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// URL param
+const p = new URLSearchParams(window.location.search).get('cat');
+if (p) selectTabByName(p);
+</script>
+</body>
+</html>
