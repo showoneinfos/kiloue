@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>kiloue.com</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --teal:#00A693;--teal2:#008577;--teal-light:#E8F7F5;
+    --ink:#1A1A1A;--ink2:#666;--ink3:#999;
+    --border:#E5E5E5;--bg:#FAFAFA;--white:#fff;
+    --sans:'Inter',system-ui,sans-serif;
+    --bottom-nav:60px;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  html,body{height:100%;overflow:hidden;}
+  body{font-family:var(--sans);background:var(--bg);color:var(--ink);display:flex;flex-direction:column;}
+
+  /* ── TOP BAR ── */
+  .topbar{background:var(--white);border-bottom:1px solid var(--border);padding:10px 16px;display:flex;align-items:center;gap:10px;flex-shrink:0;height:56px;}
+  .logo{font-size:20px;font-weight:700;color:var(--teal);text-decoration:none;white-space:nowrap;}
+  .logo span{color:var(--ink);}
+  .search-pill{flex:1;display:flex;align-items:center;gap:8px;background:var(--bg);border:1.5px solid var(--border);border-radius:22px;padding:0 14px;height:38px;cursor:pointer;}
+  .search-pill svg{width:15px;height:15px;fill:none;stroke:var(--ink3);stroke-width:2;flex-shrink:0;}
+  .search-pill span{font-size:14px;color:var(--ink3);}
+  .notif-btn{width:38px;height:38px;border-radius:50%;border:1.5px solid var(--border);background:var(--white);display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;flex-shrink:0;}
+  .notif-btn svg{width:18px;height:18px;fill:none;stroke:var(--ink2);stroke-width:2;}
+  .notif-dot{position:absolute;top:6px;right:6px;width:8px;height:8px;border-radius:50%;background:var(--teal);border:2px solid var(--white);}
+
+  /* ── PAGES ── */
+  .pages{flex:1;overflow:hidden;position:relative;}
+  .page{position:absolute;inset:0;overflow-y:auto;display:none;-webkit-overflow-scrolling:touch;}
+  .page.active{display:block;}
+
+  /* ── HOME PAGE ── */
+  .cats-scroll{display:flex;gap:8px;padding:12px 16px;overflow-x:auto;}
+  .cats-scroll::-webkit-scrollbar{display:none;}
+  .cat-chip{padding:7px 16px;border-radius:20px;border:1.5px solid var(--border);background:var(--white);font-size:13px;font-weight:500;color:var(--ink2);white-space:nowrap;cursor:pointer;flex-shrink:0;}
+  .cat-chip.active{background:var(--teal);border-color:var(--teal);color:#fff;}
+
+  .section-head{display:flex;align-items:baseline;justify-content:space-between;padding:4px 16px 12px;}
+  .section-title{font-size:16px;font-weight:700;color:var(--ink);}
+  .section-more{font-size:13px;color:var(--teal);}
+
+  .cards-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 16px 16px;}
+  .lcard{border-radius:10px;overflow:hidden;background:var(--white);border:1px solid var(--border);cursor:pointer;}
+  .lcard:active{opacity:.85;}
+  .lcard-img-w{position:relative;}
+  .lcard-img{width:100%;aspect-ratio:1;object-fit:cover;display:block;}
+  .lcard-fav{position:absolute;top:7px;right:7px;width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.9);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;}
+  .lcard-fav svg{width:14px;height:14px;fill:none;stroke:var(--ink2);stroke-width:2;}
+  .lcard-fav.liked svg{fill:#e53935;stroke:#e53935;}
+  .lcard-body{padding:8px 10px;}
+  .lcard-name{font-size:12px;font-weight:500;color:var(--ink);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .lcard-loc{font-size:11px;color:var(--ink3);margin-bottom:5px;}
+  .lcard-bot{display:flex;align-items:center;justify-content:space-between;}
+  .lcard-price{font-size:14px;font-weight:700;color:var(--ink);}
+  .lcard-price small{font-size:10px;font-weight:400;color:var(--ink3);}
+  .lcard-badge{font-size:9px;padding:2px 6px;border-radius:20px;font-weight:500;}
+  .bl{background:var(--teal-light);color:var(--teal2);}
+  .bc{background:#FFF8E1;color:#F57F17;}
+
+  /* BANNER */
+  .banner{margin:0 16px 16px;border-radius:12px;overflow:hidden;position:relative;height:140px;}
+  .banner img{width:100%;height:100%;object-fit:cover;}
+  .banner-overlay{position:absolute;inset:0;background:linear-gradient(to right,rgba(0,0,0,.6),transparent);}
+  .banner-content{position:absolute;top:50%;left:16px;transform:translateY(-50%);}
+  .banner-content h2{font-size:16px;font-weight:700;color:#fff;margin-bottom:6px;line-height:1.3;}
+  .banner-btn{padding:7px 16px;border-radius:6px;background:var(--teal);color:#fff;border:none;font-size:12px;font-weight:600;font-family:var(--sans);cursor:pointer;}
+
+  /* ── SEARCH PAGE ── */
+  .search-topbar{padding:12px 16px;background:var(--white);border-bottom:1px solid var(--border);}
+  .search-input-wrap{display:flex;align-items:center;gap:10px;background:var(--bg);border:1.5px solid var(--teal);border-radius:22px;padding:0 14px;height:42px;}
+  .search-input-wrap svg{width:16px;height:16px;fill:none;stroke:var(--teal);stroke-width:2;flex-shrink:0;}
+  .search-input-wrap input{border:none;outline:none;background:transparent;font-family:var(--sans);font-size:15px;color:var(--ink);flex:1;}
+  .search-input-wrap button{background:none;border:none;cursor:pointer;color:var(--ink3);font-size:18px;line-height:1;}
+  .filter-row{display:flex;gap:8px;padding:10px 16px;overflow-x:auto;}
+  .filter-row::-webkit-scrollbar{display:none;}
+  .filter-pill{padding:6px 14px;border-radius:20px;border:1.5px solid var(--border);background:var(--white);font-size:12px;color:var(--ink2);white-space:nowrap;cursor:pointer;display:flex;align-items:center;gap:5px;}
+  .filter-pill.on{background:var(--teal);border-color:var(--teal);color:#fff;}
+  .filter-pill svg{width:12px;height:12px;fill:none;stroke:currentColor;stroke-width:2;}
+  .results-info{padding:8px 16px;font-size:13px;color:var(--ink2);}
+  .results-info strong{color:var(--ink);}
+
+  /* ── PUBLISH PAGE ── */
+  .pub-header{padding:16px;background:var(--white);border-bottom:1px solid var(--border);}
+  .pub-header h1{font-size:18px;font-weight:700;color:var(--ink);}
+  .pub-header p{font-size:13px;color:var(--ink2);margin-top:3px;}
+  .pub-steps{display:flex;padding:16px;gap:0;}
+  .pub-step{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;}
+  .pub-step-num{width:28px;height:28px;border-radius:50%;border:2px solid var(--border);background:var(--white);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--ink3);}
+  .pub-step-num.active{border-color:var(--teal);background:var(--teal);color:#fff;}
+  .pub-step-num.done{border-color:var(--teal);background:var(--teal);color:#fff;}
+  .pub-step-label{font-size:10px;color:var(--ink3);text-align:center;}
+  .pub-step-label.active{color:var(--teal);font-weight:600;}
+  .pub-step-line{flex:1;height:1px;background:var(--border);margin-top:14px;}
+  .pub-step-line.done{background:var(--teal);}
+  .pub-form{padding:16px;}
+  .pub-field{margin-bottom:16px;}
+  .pub-field label{display:block;font-size:12px;font-weight:600;color:var(--ink2);margin-bottom:6px;text-transform:uppercase;letter-spacing:.4px;}
+  .pub-field input,.pub-field select,.pub-field textarea{width:100%;border:1.5px solid var(--border);border-radius:10px;padding:12px 14px;font-size:15px;font-family:var(--sans);color:var(--ink);background:var(--white);outline:none;}
+  .pub-field input:focus,.pub-field select:focus,.pub-field textarea:focus{border-color:var(--teal);}
+  .pub-field textarea{min-height:80px;resize:none;}
+  .pub-row2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .pub-cats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+  .pub-cat{padding:12px 8px;border-radius:10px;border:1.5px solid var(--border);text-align:center;cursor:pointer;}
+  .pub-cat.sel{border-color:var(--teal);background:var(--teal-light);}
+  .pub-cat .ico{font-size:20px;display:block;margin-bottom:5px;}
+  .pub-cat .nm{font-size:11px;color:var(--ink2);}
+  .pub-cat.sel .nm{color:var(--teal);font-weight:600;}
+  .pub-tgl-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--bg);}
+  .pub-tgl-lbl{font-size:14px;color:var(--ink);font-weight:500;}
+  .pub-tgl-sub{font-size:12px;color:var(--ink2);}
+  .tgl{width:44px;height:26px;border-radius:13px;background:var(--border);position:relative;cursor:pointer;transition:background .2s;}
+  .tgl.on{background:var(--teal);}
+  .tgl::after{content:'';position:absolute;width:20px;height:20px;border-radius:50%;background:#fff;top:3px;left:3px;transition:transform .2s;box-shadow:0 1px 4px rgba(0,0,0,.2);}
+  .tgl.on::after{transform:translateX(18px);}
+  .pub-bottom{position:sticky;bottom:0;background:var(--white);border-top:1px solid var(--border);padding:12px 16px;display:flex;gap:10px;}
+  .btn-back{flex:1;padding:13px;border-radius:10px;border:1.5px solid var(--border);background:var(--white);font-size:14px;font-family:var(--sans);cursor:pointer;color:var(--ink2);}
+  .btn-next{flex:2;padding:13px;border-radius:10px;background:var(--teal);color:#fff;border:none;font-size:15px;font-weight:600;font-family:var(--sans);cursor:pointer;}
+  .btn-next:hover{background:var(--teal2);}
+
+  /* ── PROFILE PAGE ── */
+  .prof-header{background:var(--white);padding:20px 16px;border-bottom:1px solid var(--border);}
+  .prof-top{display:flex;align-items:center;gap:14px;margin-bottom:16px;}
+  .prof-av{width:64px;height:64px;border-radius:50%;object-fit:cover;}
+  .prof-name{font-size:18px;font-weight:700;color:var(--ink);}
+  .prof-city{font-size:13px;color:var(--ink2);}
+  .prof-cert{display:inline-flex;align-items:center;gap:5px;background:var(--teal-light);color:var(--teal2);font-size:12px;font-weight:500;padding:4px 10px;border-radius:20px;margin-top:5px;}
+  .prof-cert svg{width:12px;height:12px;fill:none;stroke:var(--teal);stroke-width:2.5;}
+  .stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+  .stat{background:var(--bg);border-radius:10px;padding:12px;text-align:center;}
+  .stat-val{font-size:22px;font-weight:700;color:var(--ink);}
+  .stat-lbl{font-size:11px;color:var(--ink2);margin-top:2px;}
+  .prof-section{padding:16px;}
+  .prof-section h3{font-size:15px;font-weight:600;color:var(--ink);margin-bottom:12px;}
+  .menu-item{display:flex;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid var(--bg);cursor:pointer;}
+  .menu-item svg{width:20px;height:20px;fill:none;stroke:var(--ink2);stroke-width:2;flex-shrink:0;}
+  .menu-item .mi-label{flex:1;font-size:14px;color:var(--ink);}
+  .menu-item .mi-right{font-size:13px;color:var(--ink3);display:flex;align-items:center;gap:6px;}
+  .menu-item .mi-right svg{width:14px;height:14px;}
+  .badge-new{background:var(--teal);color:#fff;font-size:10px;padding:1px 7px;border-radius:20px;font-weight:600;}
+  .earn-card{background:var(--teal);border-radius:12px;padding:18px;margin-bottom:16px;}
+  .earn-card .earn-lbl{font-size:12px;color:rgba(255,255,255,.8);margin-bottom:4px;}
+  .earn-card .earn-val{font-size:28px;font-weight:700;color:#fff;}
+  .earn-card .earn-sub{font-size:12px;color:rgba(255,255,255,.7);margin-top:4px;}
+
+  /* ── MESSAGES PAGE ── */
+  .msg-list{padding:8px 0;}
+  .msg-item{display:flex;align-items:center;gap:12px;padding:12px 16px;cursor:pointer;border-bottom:1px solid var(--bg);}
+  .msg-item:active{background:var(--bg);}
+  .msg-av{width:48px;height:48px;border-radius:50%;object-fit:cover;flex-shrink:0;position:relative;}
+  .msg-av-online{position:absolute;bottom:1px;right:1px;width:12px;height:12px;border-radius:50%;background:#4CAF50;border:2px solid var(--white);}
+  .msg-info{flex:1;min-width:0;}
+  .msg-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:3px;}
+  .msg-name{font-size:14px;font-weight:600;color:var(--ink);}
+  .msg-time{font-size:11px;color:var(--ink3);}
+  .msg-preview{font-size:13px;color:var(--ink3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .msg-preview.unread{color:var(--ink);font-weight:500;}
+  .msg-prod{font-size:11px;color:var(--teal2);margin-top:3px;}
+  .msg-unread{width:8px;height:8px;border-radius:50%;background:var(--teal);flex-shrink:0;}
+
+  /* ── BOTTOM NAV ── */
+  .bottom-nav{height:var(--bottom-nav);background:var(--white);border-top:1px solid var(--border);display:flex;align-items:center;flex-shrink:0;padding-bottom:env(safe-area-inset-bottom);}
+  .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:6px 0;position:relative;}
+  .nav-item svg{width:24px;height:24px;fill:none;stroke:var(--ink3);stroke-width:2;transition:stroke .15s;}
+  .nav-item span{font-size:10px;color:var(--ink3);transition:color .15s;}
+  .nav-item.active svg{stroke:var(--teal);}
+  .nav-item.active span{color:var(--teal);font-weight:600;}
+  .nav-badge{position:absolute;top:4px;right:calc(50% - 18px);background:var(--teal);color:#fff;font-size:10px;font-weight:700;min-width:16px;height:16px;border-radius:8px;display:flex;align-items:center;justify-content:center;padding:0 4px;}
+
+  /* PUBLISH FAB */
+  .nav-item.pub-btn{background:var(--teal);border-radius:50%;width:48px;height:48px;display:flex;align-items:center;justify-content:center;margin-top:-18px;box-shadow:0 4px 12px rgba(0,166,147,.4);flex:0;flex-shrink:0;margin-left:auto;margin-right:auto;}
+  .nav-item.pub-btn svg{stroke:#fff;width:22px;height:22px;}
+  .nav-item.pub-btn span{display:none;}
+
+  /* SLIDE TRANSITIONS */
+  .page{transition:opacity .15s;}
+
+  /* SEARCH SUGGESTIONS */
+  .suggestions{background:var(--white);border-bottom:1px solid var(--border);}
+  .suggestion{display:flex;align-items:center;gap:12px;padding:12px 16px;cursor:pointer;border-bottom:1px solid var(--bg);}
+  .suggestion:active{background:var(--bg);}
+  .suggestion svg{width:16px;height:16px;fill:none;stroke:var(--ink3);stroke-width:2;}
+  .suggestion span{font-size:14px;color:var(--ink);}
+  .suggestion .recent{font-size:12px;color:var(--ink3);margin-left:auto;}
+
+  /* STICKY CATS BAR */
+  .cats-sticky-bar{background:var(--white);border-bottom:1px solid var(--border);flex-shrink:0;}
+  .catsb-scroll{display:flex;gap:0;overflow-x:auto;padding:0 8px;}
+  .catsb-scroll::-webkit-scrollbar{display:none;}
+  .catsb-item{display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 12px;cursor:pointer;white-space:nowrap;flex-shrink:0;border-bottom:2px solid transparent;transition:all .15s;}
+  .catsb-item:active{background:var(--bg);}
+  .catsb-item.active{border-bottom-color:var(--teal);}
+  .catsb-item span:first-child{font-size:20px;}
+  .catsb-item{font-size:11px;color:var(--ink2);font-weight:500;}
+  .catsb-item.active{color:var(--teal);}
+
+  /* HOME CATEGORIES LIST */
+  .home-cats-grid{background:var(--white);margin:0 0 8px;}
+  .home-cat-item{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--bg);cursor:pointer;transition:background .1s;}
+  .home-cat-item:active{background:var(--bg);}
+  .hci-emoji{font-size:22px;width:32px;text-align:center;flex-shrink:0;}
+  .hci-name{flex:1;font-size:14px;color:var(--ink);font-weight:500;}
+  .hci-arrow{font-size:18px;color:var(--ink3);}
+
+  /* SUBCAT LIST ITEMS */
+  .subcat-item{display:flex;align-items:center;gap:12px;padding:13px 16px;border-bottom:1px solid var(--bg);cursor:pointer;background:var(--white);}
+  .subcat-item:active{background:var(--teal-light);}
+  .subcat-item span{font-size:14px;color:var(--ink);}
+  .subcat-item .sub-arrow{margin-left:auto;font-size:16px;color:var(--ink3);}
+
+  /* ANNONCE DETAIL (in-app) */
+  .det-back{display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--white);border-bottom:1px solid var(--border);cursor:pointer;}
+  .det-back svg{width:20px;height:20px;fill:none;stroke:var(--ink);stroke-width:2;}
+  .det-back span{font-size:15px;font-weight:500;color:var(--ink);}
+  .det-img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;}
+  .det-body{padding:16px;background:var(--white);margin-bottom:8px;}
+  .det-title{font-size:20px;font-weight:700;color:var(--ink);margin-bottom:6px;}
+  .det-meta{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px;}
+  .det-loc{font-size:13px;color:var(--ink2);display:flex;align-items:center;gap:4px;}
+  .det-loc svg{width:13px;height:13px;fill:none;stroke:var(--teal);stroke-width:2;}
+  .det-stars{font-size:13px;color:var(--ink2);}
+  .det-cert{background:#FFF8E1;color:#F57F17;font-size:12px;padding:3px 10px;border-radius:20px;font-weight:500;}
+  .det-tags{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;}
+  .det-tag{padding:6px 12px;border-radius:20px;border:1px solid var(--border);font-size:12px;color:var(--ink2);}
+  .det-tag.green{background:var(--teal-light);color:var(--teal2);border-color:#C8EEEA;}
+  .det-sec{padding:16px;background:var(--white);margin-bottom:8px;}
+  .det-sec h3{font-size:15px;font-weight:600;color:var(--ink);margin-bottom:8px;}
+  .det-sec p{font-size:14px;color:var(--ink2);line-height:1.7;}
+  .det-owner{display:flex;align-items:center;gap:12px;padding:16px;background:var(--white);margin-bottom:8px;}
+  .det-owner-av{width:44px;height:44px;border-radius:50%;object-fit:cover;}
+  .det-owner-name{font-size:14px;font-weight:600;color:var(--ink);}
+  .det-owner-meta{font-size:12px;color:var(--ink2);}
+  .det-owner-cert{display:inline-flex;align-items:center;gap:4px;background:var(--teal-light);color:var(--teal2);font-size:11px;padding:2px 8px;border-radius:20px;margin-top:3px;}
+  .det-sticky{position:sticky;bottom:0;background:var(--white);border-top:1px solid var(--border);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;}
+  .det-price{font-size:22px;font-weight:700;color:var(--ink);}
+  .det-price small{font-size:13px;font-weight:400;color:var(--ink2);}
+  .btn-reserver{flex:1;padding:14px;border-radius:10px;background:var(--teal);color:#fff;border:none;font-size:15px;font-weight:600;font-family:var(--sans);cursor:pointer;}
+  .btn-reserver:hover{background:var(--teal2);}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <a class="logo" href="#">kiloue<span>.com</span></a>
+  <div class="search-pill" onclick="goPage('search')">
+    <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <span>Tronçonneuse, tables…</span>
+  </div>
+  <div class="notif-btn" onclick="goPage('messages')">
+    <svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+    <div class="notif-dot"></div>
+  </div>
+</div>
+
+
+<!-- CATS BAR -->
+<div class="cats-sticky-bar">
+  <div class="catsb-scroll">
+    <div class="catsb-item" onclick="openCat('vehicules')"><span>🚗</span>Véhicules</div>
+    <div class="catsb-item" onclick="openCat('nautisme')"><span>🚤</span>Nautisme</div>
+    <div class="catsb-item" onclick="openCat('bricolage')"><span>🔨</span>Bricolage</div>
+    <div class="catsb-item" onclick="openCat('jardinage')"><span>🌳</span>Jardinage</div>
+    <div class="catsb-item" onclick="openCat('btp')"><span>🏗️</span>BTP</div>
+    <div class="catsb-item" onclick="openCat('agricole')"><span>🚜</span>Agricole</div>
+    <div class="catsb-item" onclick="openCat('maison')"><span>🏠</span>Maison</div>
+    <div class="catsb-item" onclick="openCat('evenementiel')"><span>🎉</span>Évènementiel</div>
+    <div class="catsb-item" onclick="openCat('sport')"><span>⚽</span>Sport</div>
+    <div class="catsb-item" onclick="openCat('hightech')"><span>💻</span>High-Tech</div>
+    <div class="catsb-item" onclick="openCat('mode')"><span>👗</span>Mode</div>
+    <div class="catsb-item" onclick="openCat('animaux')"><span>🐶</span>Animaux</div>
+    <div class="catsb-item" onclick="openCat('divers')"><span>📦</span>Divers</div>
+  </div>
+</div>
+<!-- PAGES -->
+<div class="pages">
+
+  <!-- HOME -->
+  <div class="page active" id="page-home">
+    <div class="banner">
+      <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80" alt="">
+      <div class="banner-overlay"></div>
+      <div class="banner-content">
+        <h2>Louez près<br>de chez vous</h2>
+        <button class="banner-btn" onclick="goPage('search')">Parcourir →</button>
+      </div>
+    </div>
+
+    <div class="section-head" style="padding-top:8px;">
+      <div class="section-title">Près de vous · Ajaccio</div>
+      <div class="section-more" onclick="goPage('search')">Voir tout</div>
+    </div>
+    <div class="cards-grid" id="home-grid"></div>
+    <div style="height:20px;"></div>
+  </div>
+
+  <!-- SUBCATEGORIES PAGE -->
+  <div class="page" id="page-subcat">
+    <div class="det-back" id="subcat-back" onclick="goPage('home')">
+      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+      <span id="subcat-back-label">Accueil</span>
+    </div>
+    <div style="padding:16px;background:var(--white);border-bottom:1px solid var(--border);">
+      <div style="font-size:22px;margin-bottom:4px;" id="subcat-emoji">🌳</div>
+      <div style="font-size:18px;font-weight:700;color:var(--ink);" id="subcat-title">Jardinage</div>
+      <div style="font-size:13px;color:var(--ink2);margin-top:2px);" id="subcat-count">10 sous-catégories</div>
+    </div>
+    <div style="padding:12px 16px 8px;font-size:12px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.5px;">Sous-catégories</div>
+    <div id="subcat-list" style="background:var(--white);"></div>
+    <div style="padding:16px;">
+      <div style="font-size:13px;font-weight:600;color:var(--ink2);margin-bottom:12px;">Annonces dans cette catégorie</div>
+      <div class="cards-grid" style="padding:0;" id="subcat-grid"></div>
+    </div>
+    <div style="height:20px;"></div>
+  </div>
+
+  <!-- SEARCH -->
+  <div class="page" id="page-search">
+    <div class="search-topbar">
+      <div class="search-input-wrap">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input type="text" id="mob-search" placeholder="Tronçonneuse, tables, remorque…" autofocus>
+        <button onclick="document.getElementById('mob-search').value=''">×</button>
+      </div>
+    </div>
+    <div class="filter-row">
+      <div class="filter-pill on" onclick="this.classList.toggle('on')">
+        <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        Ajaccio · 30km
+      </div>
+      <div class="filter-pill" onclick="this.classList.toggle('on')">Prix</div>
+      <div class="filter-pill" onclick="this.classList.toggle('on')">Catégorie</div>
+      <div class="filter-pill" onclick="this.classList.toggle('on')">
+        <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        Certifiés
+      </div>
+      <div class="filter-pill" onclick="this.classList.toggle('on')">Livraison</div>
+    </div>
+    <div class="suggestions">
+      <div class="suggestion" onclick="goPage('home')"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg><span>Tronçonneuse</span><span class="recent">Récent</span></div>
+      <div class="suggestion" onclick="goPage('home')"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg><span>Tables de reception</span><span class="recent">Récent</span></div>
+      <div class="suggestion" onclick="goPage('home')"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg><span>Motoculteur</span><span class="recent">Récent</span></div>
+      <div class="suggestion" onclick="goPage('home')"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg><span>Remorque</span><span class="recent">Récent</span></div>
+    </div>
+    <div class="results-info"><strong>24 résultats</strong> autour d'Ajaccio</div>
+    <div class="cards-grid" style="padding-top:0;">
+      <div class="lcard" onclick="goPage('detail')"><div class="lcard-img-w"><img class="lcard-img" src="https://images.unsplash.com/photo-1617953141905-b27fb1f9a1b0?w=400&q=80" alt=""><button class="lcard-fav" onclick="event.stopPropagation()"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button></div><div class="lcard-body"><div class="lcard-name">Tronçonneuse Stihl</div><div class="lcard-loc">Ajaccio · 4 km · ⭐ 4,9</div><div class="lcard-bot"><div class="lcard-price">25€<small>/j</small></div><div class="lcard-badge bl">Livraison</div></div></div></div>
+      <div class="lcard" onclick="goPage('detail')"><div class="lcard-img-w"><img class="lcard-img" src="https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=400&q=80" alt=""><button class="lcard-fav" onclick="event.stopPropagation()"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button></div><div class="lcard-body"><div class="lcard-name">50 chaises blanches</div><div class="lcard-loc">Mezzavia · 12 km · ⭐ 5,0</div><div class="lcard-bot"><div class="lcard-price">40€<small>/j</small></div><div class="lcard-badge bl">+livraison</div></div></div></div>
+      <div class="lcard" onclick="goPage('detail')"><div class="lcard-img-w"><img class="lcard-img" src="https://images.unsplash.com/photo-1504148455328-c376907d081c?w=400&q=80" alt=""><button class="lcard-fav" onclick="event.stopPropagation()"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button></div><div class="lcard-body"><div class="lcard-name">Échafaudage 4 m</div><div class="lcard-loc">Ajaccio · 16 km · ⭐ 4,6</div><div class="lcard-bot"><div class="lcard-price">18€<small>/j</small></div><div class="lcard-badge bc">Certifié</div></div></div></div>
+      <div class="lcard" onclick="goPage('detail')"><div class="lcard-img-w"><img class="lcard-img" src="https://images.unsplash.com/photo-1572981779307-38b8cabb2407?w=400&q=80" alt=""><button class="lcard-fav" onclick="event.stopPropagation()"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button></div><div class="lcard-body"><div class="lcard-name">Perceuse Metabo</div><div class="lcard-loc">Ajaccio · 5 km · ⭐ 4,9</div><div class="lcard-bot"><div class="lcard-price">12€<small>/j</small></div><div class="lcard-badge bl">Sur place</div></div></div></div>
+    </div>
+    <div style="height:20px;"></div>
+  </div>
+
+  <!-- DETAIL -->
+  <div class="page" id="page-detail">
+    <div class="det-back" onclick="goBack()">
+      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+      <span>Retour</span>
+    </div>
+    <img class="det-img" src="https://images.unsplash.com/photo-1617953141905-b27fb1f9a1b0?w=800&q=80" alt="">
+    <div class="det-body">
+      <div class="det-title">Tronçonneuse Stihl MS 250</div>
+      <div class="det-meta">
+        <div class="det-loc"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Ajaccio · 4 km</div>
+        <div class="det-stars">⭐ 4,9 · 14 avis</div>
+        <div class="det-cert">Certifié</div>
+      </div>
+      <div class="det-tags">
+        <div class="det-tag green">Livraison possible</div>
+        <div class="det-tag">Caution 150€</div>
+        <div class="det-tag">Dispo maintenant</div>
+      </div>
+    </div>
+    <div class="det-sec">
+      <h3>Description</h3>
+      <p>Tronçonneuse Stihl MS 250 en excellent état, chaîne neuve. Casque de protection, lunettes et gants fournis. Carburant non inclus.</p>
+    </div>
+    <div class="det-owner">
+      <img class="det-owner-av" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&q=80" alt="">
+      <div>
+        <div class="det-owner-name">Jean-Pierre M.</div>
+        <div class="det-owner-meta">Membre depuis 2024 · Ajaccio</div>
+        <div class="det-owner-cert">✓ Identité vérifiée</div>
+      </div>
+    </div>
+    <div class="det-sticky">
+      <div class="det-price">25€<small>/jour</small></div>
+      <button class="btn-reserver" onclick="goPage('messages')">Réserver maintenant</button>
+    </div>
+  </div>
+
+  <!-- PUBLISH -->
+  <div class="page" id="page-publish">
+    <div class="pub-header">
+      <h1>Déposer une annonce</h1>
+      <p>Gratuit · 5% de commission seulement</p>
+    </div>
+    <div class="pub-steps">
+      <div class="pub-step"><div class="pub-step-num done">✓</div><div class="pub-step-label active">Catégorie</div></div>
+      <div class="pub-step-line done"></div>
+      <div class="pub-step"><div class="pub-step-num active">2</div><div class="pub-step-label active">Matériel</div></div>
+      <div class="pub-step-line"></div>
+      <div class="pub-step"><div class="pub-step-num">3</div><div class="pub-step-label">Tarifs</div></div>
+      <div class="pub-step-line"></div>
+      <div class="pub-step"><div class="pub-step-num">4</div><div class="pub-step-label">Photos</div></div>
+    </div>
+    <div class="pub-form">
+      <div class="pub-field">
+        <label>Titre *</label>
+        <input type="text" placeholder="Ex : Tronçonneuse Stihl MS 250">
+      </div>
+      <div class="pub-field">
+        <label>Description *</label>
+        <textarea placeholder="État, accessoires inclus, conditions…"></textarea>
+      </div>
+      <div class="pub-row2">
+        <div class="pub-field">
+          <label>Prix / jour (€) *</label>
+          <input type="number" placeholder="25">
+        </div>
+        <div class="pub-field">
+          <label>Caution (€)</label>
+          <input type="number" placeholder="0">
+        </div>
+      </div>
+      <div class="pub-field">
+        <label>Votre ville *</label>
+        <input type="text" placeholder="Ajaccio">
+      </div>
+      <div class="pub-field">
+        <label>Zone maximum</label>
+        <select><option>10 km</option><option selected>30 km</option><option>50 km</option></select>
+      </div>
+      <div class="pub-tgl-row">
+        <div><div class="pub-tgl-lbl">Livraison à domicile</div><div class="pub-tgl-sub">Fixez votre supplément</div></div>
+        <div class="tgl on" onclick="this.classList.toggle('on')"></div>
+      </div>
+      <div class="pub-field" style="margin-top:12px;">
+        <label>Supplément livraison (€)</label>
+        <input type="number" placeholder="Ex : 15, 20, 50…">
+      </div>
+    </div>
+    <div class="pub-bottom">
+      <button class="btn-back" onclick="goPage('home')">Annuler</button>
+      <button class="btn-next" onclick="goPage('home')">Continuer →</button>
+    </div>
+  </div>
+
+  <!-- MESSAGES -->
+  <div class="page" id="page-messages">
+    <div style="padding:16px;background:var(--white);border-bottom:1px solid var(--border);">
+      <div style="font-size:18px;font-weight:700;color:var(--ink);">Messages</div>
+    </div>
+    <div class="msg-list">
+      <div class="msg-item" onclick="goPage('detail')">
+        <div style="position:relative;">
+          <img class="msg-av" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&q=80" alt="">
+          <div class="msg-av-online"></div>
+        </div>
+        <div class="msg-info">
+          <div class="msg-top"><span class="msg-name">Marie-Laure B.</span><span class="msg-time">14:32</span></div>
+          <div class="msg-preview unread">Super, ça me convient ! Je confirme pour samedi</div>
+          <div class="msg-prod">🪚 Tronçonneuse Stihl MS 250</div>
+        </div>
+        <div class="msg-unread"></div>
+      </div>
+      <div class="msg-item" onclick="goPage('detail')">
+        <img class="msg-av" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&q=80" alt="">
+        <div class="msg-info">
+          <div class="msg-top"><span class="msg-name">Antoine T.</span><span class="msg-time">11:08</span></div>
+          <div class="msg-preview unread">La remorque est disponible vendredi ?</div>
+          <div class="msg-prod">🚛 Remorque benne 750 kg</div>
+        </div>
+        <div class="msg-unread"></div>
+      </div>
+      <div class="msg-item" onclick="goPage('detail')">
+        <img class="msg-av" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&q=80" alt="">
+        <div class="msg-info">
+          <div class="msg-top"><span class="msg-name">Pierre D.</span><span class="msg-time">Hier</span></div>
+          <div class="msg-preview">Merci pour la location, parfait !</div>
+          <div class="msg-prod">🔧 Échafaudage roulant 4 m</div>
+        </div>
+      </div>
+      <div class="msg-item" onclick="goPage('detail')">
+        <img class="msg-av" src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=80&q=80" alt="">
+        <div class="msg-info">
+          <div class="msg-top"><span class="msg-name">Sophie M.</span><span class="msg-time">Lun.</span></div>
+          <div class="msg-preview">Vous : Je peux livrer mardi matin</div>
+          <div class="msg-prod">🪑 Lot 50 chaises blanches</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROFILE -->
+  <div class="page" id="page-profile">
+    <div class="prof-header">
+      <div class="prof-top">
+        <img class="prof-av" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=160&q=80" alt="Manu">
+        <div>
+          <div class="prof-name">Manu</div>
+          <div class="prof-city">Ajaccio, Corse-du-Sud</div>
+          <div class="prof-cert"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>Loueur certifié</div>
+        </div>
+      </div>
+      <div class="stats-row">
+        <div class="stat"><div class="stat-val">12</div><div class="stat-lbl">Locations</div></div>
+        <div class="stat"><div class="stat-val" style="color:#F57F17;">4,8★</div><div class="stat-lbl">Note</div></div>
+        <div class="stat"><div class="stat-val" style="color:var(--teal);">324€</div><div class="stat-lbl">Ce mois</div></div>
+      </div>
+    </div>
+    <div class="prof-section">
+      <div class="earn-card">
+        <div class="earn-lbl">Revenus mai 2025</div>
+        <div class="earn-val">324,90 €</div>
+        <div class="earn-sub">Prochain virement le 5 juin · Commission 5% déduite</div>
+      </div>
+      <h3>Mon compte</h3>
+      <div class="menu-item" onclick="goPage('publish')"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span class="mi-label">Mes annonces</span><span class="mi-right">3 actives <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></span></div>
+      <div class="menu-item" onclick="goPage('messages')"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span class="mi-label">Messages</span><span class="mi-right"><span class="badge-new">3</span> <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></span></div>
+      <div class="menu-item"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><span class="mi-label">Réservations</span><span class="mi-right">1 en attente <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></span></div>
+      <div class="menu-item"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg><span class="mi-label">Certification</span><span class="mi-right">3/5 <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></span></div>
+      <div class="menu-item"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 1 0-16 0"/></svg><span class="mi-label">Mon profil</span><span class="mi-right"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></span></div>
+      <div class="menu-item"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg><span class="mi-label">Paramètres</span><span class="mi-right"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></span></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- BOTTOM NAV -->
+<div class="bottom-nav">
+  <div class="nav-item active" id="nav-home" onclick="goPage('home')">
+    <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    <span>Accueil</span>
+  </div>
+  <div class="nav-item" id="nav-search" onclick="goPage('search')">
+    <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <span>Chercher</span>
+  </div>
+  <div class="nav-item pub-btn" onclick="goPage('publish')">
+    <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+    <span>Publier</span>
+  </div>
+  <div class="nav-item" id="nav-messages" onclick="goPage('messages')">
+    <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    <span>Messages</span>
+    <div class="nav-badge">3</div>
+  </div>
+  <div class="nav-item" id="nav-profile" onclick="goPage('profile')">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 1 0-16 0"/></svg>
+    <span>Profil</span>
+  </div>
+</div>
+
+<script>
+  let history = ['home'];
+
+  function goPage(name) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-' + name).classList.add('active');
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    const map = {home:'nav-home', search:'nav-search', messages:'nav-messages', profile:'nav-profile'};
+    if (map[name]) document.getElementById(map[name]).classList.add('active');
+    if (name !== history[history.length-1]) history.push(name);
+    window.scrollTo(0,0);
+    document.querySelector('.pages').scrollTop = 0;
+    const el = document.getElementById('page-'+name);
+    if (el) el.scrollTop = 0;
+  }
+
+  function goBack() {
+    history.pop();
+    const prev = history[history.length-1] || 'home';
+    goPage(prev);
+  }
+
+  const SUBCATS = {
+    vehicules:  {emoji:'🚗', title:'Véhicules',            subs:['Voitures','Utilitaires','Motos','Scooters','Vélos','Vélos électriques','Trottinettes électriques','Quads','Buggys','Camping-cars','Caravanes','Remorques','Autres']},
+    nautisme:   {emoji:'🚤', title:'Nautisme',             subs:['Bateaux à moteur','Voiliers','Jet-skis','Kayaks','Canoës','Paddles','Pédalos','Équipements de pêche','Équipements de plongée','Remorques bateau','Autres']},
+    bricolage:  {emoji:'🔨', title:'Bricolage & Outillage', subs:['Perçage','Découpe','Ponçage','Soudure','Peinture','Outillage manuel','Outillage électrique','Échelles','Échafaudages','Nettoyage professionnel','Détecteurs et mesure','Autres']},
+    jardinage:  {emoji:'🌳', title:'Jardinage',            subs:['Tondeuses','Tronçonneuses','Taille-haies','Débroussailleuses','Motobineuses','Broyeurs de végétaux','Souffleurs','Scarificateurs','Outils de jardin','Arrosage','Autres']},
+    btp:        {emoji:'🏗️', title:'BTP & Chantier',       subs:['Mini-pelles','Nacelles','Compacteurs','Bétonnières','Groupes électrogènes','Marteaux-piqueurs','Lasers de chantier','Matériel de coffrage','Matériel de levage','Équipement de sécurité','Autres']},
+    agricole:   {emoji:'🚜', title:'Matériel Agricole',    subs:['Tracteurs','Micro-tracteurs','Remorques agricoles','Broyeurs agricoles','Charrues','Pulvérisateurs','Semoirs','Matériel d'irrigation','Récolte et entretien','Équipements d'élevage','Autres']},
+    maison:     {emoji:'🏠', title:'Maison & Équipement',  subs:['Électroménager','Chauffage','Climatisation','Nettoyage','Déshumidificateurs','Mobilier','Déménagement','Décoration','Bricolage domestique','Autres']},
+    evenementiel:{emoji:'🎉',title:'Événementiel',          subs:['Tables','Chaises','Barnums','Tentes de réception','Vaisselle','Décoration événementielle','Structures gonflables','Machines festives','Matériel mariage','Matériel anniversaire','Sonorisation','Éclairage','Autres']},
+    sport:      {emoji:'⚽', title:'Sport & Loisirs',      subs:['Fitness & Musculation','Cyclisme','Sports nautiques','Sports d'hiver','Sports collectifs','Sports de combat','Sports de raquette','Randonnée','Camping','Chasse','Pêche','Autres']},
+    hightech:   {emoji:'💻', title:'High-Tech & Multimédia',subs:['Ordinateurs','Tablettes','Smartphones','Consoles de jeux','Réalité virtuelle','Appareils photo','Caméras','Drones','Vidéoprojecteurs','Imprimantes','Écrans','Accessoires informatiques','Autres']},
+    mode:       {emoji:'👗', title:'Mode & Accessoires',   subs:['Robes de soirée','Costumes','Vêtements homme','Vêtements femme','Vêtements enfant','Sacs de luxe','Bijoux','Montres','Chaussures','Accessoires de mode','Autres']},
+    animaux:    {emoji:'🐶', title:'Animaux',              subs:['Cages','Niches','Clôtures mobiles','Remorques pour animaux','Matériel d'équitation','Transport animalier','Matériel d'élevage','Accessoires pour chiens','Accessoires pour chats','Autres']},
+    divers:     {emoji:'📦', title:'Divers',               subs:['Instruments de musique','Équipements pour animaux','Matériel médical','Déguisements','Livres et collections','Jeux de société','Voyage et bagagerie','Matériel scolaire','Objets de collection','Autres']},
+  };
+
+  function openCat(cat) {
+    const d = SUBCATS[cat];
+    if (!d) return;
+    document.getElementById('subcat-emoji').textContent = d.emoji;
+    document.getElementById('subcat-title').textContent = d.title;
+    document.getElementById('subcat-count').textContent = d.subs.length + ' sous-catégories';
+    // Render subcat list
+    document.getElementById('subcat-list').innerHTML = d.subs.map(s =>
+      `<div class="subcat-item" onclick="selectSubcat('${s}')"><span>${s}</span><span class="sub-arrow">›</span></div>`
+    ).join('');
+    // Render sample annonces
+    const grid = document.getElementById('subcat-grid');
+    const filtered = ANNONCES.filter(a => a.cat === cat);
+    const items = filtered.length ? filtered : ANNONCES.slice(0,4);
+    grid.innerHTML = items.map((a,i) => `
+      <div class="lcard" onclick="goPage('detail')">
+        <div class="lcard-img-w">
+          <img class="lcard-img" src="${a.img}" alt="${a.name}" loading="lazy">
+          <button class="lcard-fav" onclick="event.stopPropagation();toggleLike(${i},this)">
+            <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </button>
+        </div>
+        <div class="lcard-body">
+          <div class="lcard-name">${a.name}</div>
+          <div class="lcard-loc">${a.loc}</div>
+          <div class="lcard-bot">
+            <div class="lcard-price">${a.price}€<small>/j</small></div>
+            <div class="lcard-badge ${a.bl?'bl':'bc'}">${a.badge}</div>
+          </div>
+        </div>
+      </div>`).join('');
+    goPage('subcat');
+  }
+
+  function selectSubcat(sub) {
+    // Pour l'instant on va sur la recherche avec le nom de la sous-cat
+    goPage('search');
+  }
+
+  const ANNONCES = [
+    {name:'Tronçonneuse Stihl MS 250', loc:'Ajaccio · 4 km · ⭐ 4,9', price:25, badge:'Livraison', bl:true,  img:'https://images.unsplash.com/photo-1617953141905-b27fb1f9a1b0?w=400&q=80', cat:'jardinage'},
+    {name:'Motoculteur Honda F220',    loc:'Ajaccio · 8 km · ⭐ 4,7', price:35, badge:'Certifié',  bl:false, img:'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=400&q=80', cat:'agricole'},
+    {name:'50 chaises blanches',       loc:'Mezzavia · 12 km · ⭐ 5,0',price:40, badge:'+20€ livr.',bl:true,  img:'https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=400&q=80', cat:'evenementiel'},
+    {name:'Échafaudage roulant 4 m',   loc:'Ajaccio · 16 km · ⭐ 4,6', price:18, badge:'Certifié',  bl:false, img:'https://images.unsplash.com/photo-1504148455328-c376907d081c?w=400&q=80', cat:'bricolage'},
+    {name:'Perceuse colonne Metabo',   loc:'Ajaccio · 5 km · ⭐ 4,9',  price:12, badge:'Sur place', bl:false, img:'https://images.unsplash.com/photo-1572981779307-38b8cabb2407?w=400&q=80', cat:'bricolage'},
+    {name:'Remorque benne 750 kg',     loc:'Ajaccio · 2 km · ⭐ 4,5',  price:22, badge:'Sans caution',bl:false,img:'https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=400&q=80', cat:'transport'},
+    {name:'Chapiteau 6×9 m',           loc:'Ajaccio · 6 km · ⭐ 4,8',  price:120,badge:'Livraison', bl:true,  img:'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&q=80', cat:'evenementiel'},
+    {name:'Nettoyeur haute pression',  loc:'Ajaccio · 3 km · ⭐ 4,7',  price:15, badge:'Certifié',  bl:false, img:'https://images.unsplash.com/photo-1562259949-e8e7689d7828?w=400&q=80', cat:'bricolage'},
+    {name:'Taille-haie Bosch',         loc:'Ajaccio · 7 km · ⭐ 4,8',  price:10, badge:'Sur place', bl:false, img:'https://images.unsplash.com/photo-1617953141905-b27fb1f9a1b0?w=400&q=80', cat:'jardinage'},
+    {name:'Drone DJI Mini 3',          loc:'Ajaccio · 9 km · ⭐ 5,0',  price:45, badge:'Certifié',  bl:false, img:'https://images.unsplash.com/photo-1562259949-e8e7689d7828?w=400&q=80', cat:'hightech'},
+  ];
+
+  let liked = new Set();
+
+  function renderHomeGrid(cat) {
+    const grid = document.getElementById('home-grid');
+    const filtered = cat === 'tout' ? ANNONCES : ANNONCES.filter(a => a.cat === cat);
+    const title = document.getElementById('home-section-title');
+    const labels = {tout:'Près de vous · Ajaccio', jardinage:'🌳 Jardinage', bricolage:'🔨 Bricolage', evenementiel:'🎉 Évènementiel', agricole:'🚜 Agricole', transport:'🚛 Transport', hightech:'💻 High-Tech', animaux:'🐶 Animaux'};
+    title.textContent = labels[cat] || 'Près de vous · Ajaccio';
+    if (!filtered.length) {
+      grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:32px 16px;color:var(--ink2);font-size:14px;">Aucune annonce dans cette catégorie pour le moment.</div>';
+      return;
+    }
+    grid.innerHTML = filtered.map((a, i) => `
+      <div class="lcard" onclick="goPage('detail')">
+        <div class="lcard-img-w">
+          <img class="lcard-img" src="${a.img}" alt="${a.name}" loading="lazy">
+          <button class="lcard-fav ${liked.has(i)?'liked':''}" onclick="event.stopPropagation();toggleLike(${i},this)">
+            <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </button>
+        </div>
+        <div class="lcard-body">
+          <div class="lcard-name">${a.name}</div>
+          <div class="lcard-loc">${a.loc}</div>
+          <div class="lcard-bot">
+            <div class="lcard-price">${a.price}€<small>/j</small></div>
+            <div class="lcard-badge ${a.bl?'bl':'bc'}">${a.badge}</div>
+          </div>
+        </div>
+      </div>`).join('');
+  }
+
+  function toggleLike(id, btn) {
+    if (liked.has(id)) { liked.delete(id); btn.classList.remove('liked'); }
+    else { liked.add(id); btn.classList.add('liked'); }
+  }
+
+  // Init
+  renderHomeGrid('tout');
+</script>
+</body>
+</html>
