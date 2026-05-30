@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Catégories — kiloue.com</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{--teal:#00A693;--teal2:#008577;--teal-light:#E8F7F5;--ink:#1A1A1A;--ink2:#666;--ink3:#999;--border:#E5E5E5;--bg:#FAFAFA;--white:#fff;--sans:'Inter',system-ui,sans-serif;}
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{font-family:var(--sans);background:var(--bg);color:var(--ink);}
+
+  /* NAV */
+  nav{position:sticky;top:0;z-index:100;background:var(--white);border-bottom:1px solid var(--border);height:60px;display:flex;align-items:center;padding:0 24px;gap:16px;}
+  .logo{font-size:22px;font-weight:700;color:var(--teal);text-decoration:none;white-space:nowrap;}
+  .logo span{color:var(--ink);}
+  .nav-search{flex:1;max-width:480px;display:flex;align-items:center;background:var(--bg);border:1.5px solid var(--border);border-radius:6px;padding:0 12px;height:40px;gap:8px;}
+  .nav-search svg{width:16px;height:16px;fill:none;stroke:var(--ink3);stroke-width:2;flex-shrink:0;}
+  .nav-search input{border:none;outline:none;background:transparent;font-family:var(--sans);font-size:14px;color:var(--ink);flex:1;}
+  .nav-search input::placeholder{color:var(--ink3);}
+  .nav-actions{margin-left:auto;display:flex;gap:8px;}
+  .btn-login{padding:8px 16px;border-radius:6px;border:1.5px solid var(--border);background:var(--white);font-size:13px;font-weight:500;font-family:var(--sans);color:var(--ink);cursor:pointer;}
+  .btn-login:hover{border-color:var(--teal);color:var(--teal);}
+  .btn-sell{padding:8px 18px;border-radius:6px;border:none;background:var(--teal);font-size:13px;font-weight:600;font-family:var(--sans);color:var(--white);cursor:pointer;}
+  .btn-sell:hover{background:var(--teal2);}
+
+  /* BREADCRUMB */
+  .breadcrumb{padding:12px 24px;font-size:13px;color:var(--ink2);display:flex;align-items:center;gap:6px;background:var(--white);border-bottom:1px solid var(--border);}
+  .breadcrumb a{color:var(--ink2);text-decoration:none;}
+  .breadcrumb a:hover{color:var(--teal);}
+  .breadcrumb svg{width:12px;height:12px;fill:none;stroke:var(--ink3);stroke-width:2;}
+  .breadcrumb .current{color:var(--ink);font-weight:500;}
+
+  /* LAYOUT */
+  .page{display:grid;grid-template-columns:260px 1fr;min-height:calc(100vh - 100px);}
+
+  /* SIDEBAR CATS */
+  .cats-sidebar{background:var(--white);border-right:1px solid var(--border);padding:16px 0;position:sticky;top:100px;height:calc(100vh - 100px);overflow-y:auto;}
+  .cats-sidebar::-webkit-scrollbar{width:4px;}
+  .cats-sidebar::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+  .cat-nav-item{display:flex;align-items:center;gap:10px;padding:10px 18px;cursor:pointer;transition:all .15s;border-left:3px solid transparent;text-decoration:none;}
+  .cat-nav-item:hover{background:var(--bg);}
+  .cat-nav-item.active{background:var(--teal-light);border-left-color:var(--teal);}
+  .cat-nav-item .emoji{font-size:18px;width:28px;text-align:center;flex-shrink:0;}
+  .cat-nav-item .name{font-size:13px;color:var(--ink);font-weight:500;}
+  .cat-nav-item.active .name{color:var(--teal);}
+  .cat-nav-item .count{margin-left:auto;font-size:11px;color:var(--ink3);}
+
+  /* MAIN CONTENT */
+  .main-content{padding:24px 28px;}
+
+  /* CATEGORY HEADER */
+  .cat-header{margin-bottom:24px;}
+  .cat-header h1{font-size:22px;font-weight:700;color:var(--ink);margin-bottom:6px;display:flex;align-items:center;gap:10px;}
+  .cat-header p{font-size:14px;color:var(--ink2);}
+
+  /* SUBCATEGORIES GRID */
+  .subcat-section{display:none;}
+  .subcat-section.active{display:block;}
+  .subcats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-bottom:32px;}
+  .subcat-card{background:var(--white);border:1.5px solid var(--border);border-radius:10px;padding:14px 12px;cursor:pointer;transition:all .15s;text-align:center;}
+  .subcat-card:hover,.subcat-card.active{border-color:var(--teal);background:var(--teal-light);}
+  .subcat-card .sub-icon{font-size:24px;margin-bottom:8px;display:block;}
+  .subcat-card .sub-name{font-size:13px;font-weight:500;color:var(--ink);}
+  .subcat-card:hover .sub-name,.subcat-card.active .sub-name{color:var(--teal);}
+  .subcat-card .sub-count{font-size:11px;color:var(--ink3);margin-top:3px;}
+
+  /* RESULTS AREA */
+  .results-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;padding-top:8px;border-top:1px solid var(--border);}
+  .results-title{font-size:15px;font-weight:600;color:var(--ink);}
+  .results-count{font-size:13px;color:var(--ink2);}
+  .sort-select{padding:7px 12px;border-radius:6px;border:1.5px solid var(--border);background:var(--white);font-size:13px;font-family:var(--sans);color:var(--ink2);cursor:pointer;outline:none;}
+  .sort-select:focus{border-color:var(--teal);}
+
+  /* LISTING CARDS */
+  .listings-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:14px;}
+  .listing-card{cursor:pointer;border-radius:8px;overflow:hidden;background:var(--white);border:1px solid var(--border);transition:all .15s;}
+  .listing-card:hover{border-color:var(--teal);transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,166,147,.1);}
+  .lc-img-wrap{position:relative;}
+  .lc-img{width:100%;aspect-ratio:1;object-fit:cover;display:block;}
+  .lc-fav{position:absolute;top:8px;right:8px;width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.9);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+  .lc-fav svg{width:15px;height:15px;fill:none;stroke:var(--ink2);stroke-width:2;}
+  .lc-fav:hover svg{stroke:var(--teal);}
+  .lc-body{padding:10px 12px;}
+  .lc-name{font-size:13px;font-weight:500;color:var(--ink);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .lc-meta{font-size:12px;color:var(--ink3);margin-bottom:6px;}
+  .lc-bot{display:flex;align-items:center;justify-content:space-between;}
+  .lc-price{font-size:15px;font-weight:700;color:var(--ink);}
+  .lc-price small{font-size:11px;font-weight:400;color:var(--ink3);}
+  .lc-badge{font-size:10px;padding:2px 8px;border-radius:20px;font-weight:500;}
+  .bl{background:var(--teal-light);color:var(--teal2);}
+  .bc{background:#FFF8E1;color:#F57F17;}
+
+  /* MOBILE */
+  .mob-cats-btn{display:none;position:fixed;bottom:20px;right:20px;background:var(--teal);color:#fff;border:none;border-radius:30px;padding:12px 20px;font-size:14px;font-weight:600;font-family:var(--sans);cursor:pointer;z-index:50;box-shadow:0 4px 16px rgba(0,166,147,.3);}
+  .mob-cats-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:100;}
+  .mob-cats-panel{position:fixed;bottom:0;left:0;right:0;background:var(--white);border-radius:16px 16px 0 0;padding:20px 0;max-height:70vh;overflow-y:auto;z-index:101;}
+  .mob-cats-panel h3{font-size:15px;font-weight:600;padding:0 20px 14px;border-bottom:1px solid var(--border);margin-bottom:8px;}
+
+  @media(max-width:768px){
+    nav{padding:0 16px;}
+    .nav-actions .btn-login{display:none;}
+    .page{grid-template-columns:1fr;}
+    .cats-sidebar{display:none;}
+    .main-content{padding:16px;}
+    .mob-cats-btn{display:flex;align-items:center;gap:6px;}
+    .subcats-grid{grid-template-columns:repeat(2,1fr);}
+    .listings-grid{grid-template-columns:repeat(2,1fr);gap:10px;}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="logo" href="index.html">kiloue<span>.com</span></a>
+  <div class="nav-search">
+    <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input type="text" placeholder="Rechercher dans cette catégorie…" id="search-input" oninput="filterSubs()">
+  </div>
+  <div class="nav-actions">
+    <button class="btn-login" onclick="window.location.href='inscription.html'">S'inscrire | Se connecter</button>
+    <button class="btn-sell" onclick="window.location.href='publier.html'">Déposer une annonce</button>
+  </div>
+</nav>
+
+<div class="breadcrumb" id="breadcrumb">
+  <a href="index.html">Accueil</a>
+  <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+  <span class="current" id="bc-cat">Toutes les catégories</span>
+</div>
+
+<div class="page">
+
+  <!-- SIDEBAR -->
+  <div class="cats-sidebar">
+    <div class="cat-nav-item active" onclick="showCat(this,'all')" data-cat="all">
+      <span class="emoji">🏠</span><span class="name">Toutes les catégories</span>
+    </div>
+    <div class="cat-nav-item" onclick="showCat(this,'vehicules')" data-cat="vehicules"><span class="emoji">🚗</span><span class="name">Véhicules</span><span class="count">12</span></div>
+    <div class="cat-nav-item" onclick="showCat(this,'nautisme')" data-cat="nautisme"><span class="emoji">🚤</span><span class="name">Nautisme</span><span class="count">10</span></div>
+    <div class="cat-nav-item" onclick="showCat(this,'bricolage')" data-cat="bricolage"><span class="emoji">🔨</span><span class="name">Bricolage & Outillage</span><span class="count">11</span></div>
+    <div class="cat-nav-item" onclick="showCat(this,'jardinage')" data-cat="jardinage"><span class="emoji">🌳</span><span class="name">Jardinage</span><span class="count">10</span></div>
+    <div class="cat-nav-item" onclick="showCat(this,'btp')" data-cat="btp"><span class="emoji">🏗️</span><span class="name">BTP & Chantier</span><span class="count">10</span></div>
+    <div class="cat-nav-item" onclick="showCat(this,'agricole')" data-cat="agricole"><span class="emoji">🚜</span><span class="name">Matériel Agricole</span><span class="count">10</span></div>
+    <div class="cat-nav-item" onclick="showCat(this,'maison')" data-cat="maison"><span class="emoji">🏠</span><span class="name">Maison & Équipement</span><span class="count">10</span></div>
+    <div class="cat-nav-item" onclick="showCat(this,'evenementiel')" data-cat="evenementiel"><span class="emoji">🎉</span><span class="name">Événementiel</span><span class="count">12</span></div>
+    <div class="cat-nav-item" onclick="showCat(this,'sport')" data-cat="sport"><span class="emoji">⚽</span><span class="name">Sport & Loisirs</span><span class="count">11</span></div>
+    <div class="cat-nav-item" onclick="showCat(this,'hightech')" data-cat="hightech"><span class="emoji">💻</span><span class="name">High-Tech & Multimédia</span><span class="count">12</span></div>
+    <div class="cat-nav-item" onclick="showCat(this,'mode')" data-cat="mode"><span class="emoji">👗</span><span class="name">Mode & Accessoires</span><span class="count">10</span></div>
+    <div class="cat-nav-item" onclick="showCat(this,'animaux')" data-cat="animaux"><span class="emoji">🐶</span><span class="name">Animaux</span><span class="count">9</span></div>
+    <div class="cat-nav-item" onclick="showCat(this,'divers')" data-cat="divers"><span class="emoji">📦</span><span class="name">Divers</span><span class="count">10</span></div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main-content">
+
+    <!-- ALL CATS VIEW -->
+    <div class="subcat-section active" id="sec-all">
+      <div class="cat-header"><h1>🏠 Toutes les catégories</h1><p>Parcourez les 13 catégories de kiloue.com</p></div>
+      <div class="subcats-grid" id="all-grid">
+        <div class="subcat-card" onclick="showCatByName('vehicules')"><span class="sub-icon">🚗</span><div class="sub-name">Véhicules</div><div class="sub-count">12 sous-catégories</div></div>
+        <div class="subcat-card" onclick="showCatByName('nautisme')"><span class="sub-icon">🚤</span><div class="sub-name">Nautisme</div><div class="sub-count">10 sous-catégories</div></div>
+        <div class="subcat-card" onclick="showCatByName('bricolage')"><span class="sub-icon">🔨</span><div class="sub-name">Bricolage & Outillage</div><div class="sub-count">11 sous-catégories</div></div>
+        <div class="subcat-card" onclick="showCatByName('jardinage')"><span class="sub-icon">🌳</span><div class="sub-name">Jardinage</div><div class="sub-count">10 sous-catégories</div></div>
+        <div class="subcat-card" onclick="showCatByName('btp')"><span class="sub-icon">🏗️</span><div class="sub-name">BTP & Chantier</div><div class="sub-count">10 sous-catégories</div></div>
+        <div class="subcat-card" onclick="showCatByName('agricole')"><span class="sub-icon">🚜</span><div class="sub-name">Matériel Agricole</div><div class="sub-count">10 sous-catégories</div></div>
+        <div class="subcat-card" onclick="showCatByName('maison')"><span class="sub-icon">🏠</span><div class="sub-name">Maison & Équipement</div><div class="sub-count">10 sous-catégories</div></div>
+        <div class="subcat-card" onclick="showCatByName('evenementiel')"><span class="sub-icon">🎉</span><div class="sub-name">Événementiel</div><div class="sub-count">12 sous-catégories</div></div>
+        <div class="subcat-card" onclick="showCatByName('sport')"><span class="sub-icon">⚽</span><div class="sub-name">Sport & Loisirs</div><div class="sub-count">11 sous-catégories</div></div>
+        <div class="subcat-card" onclick="showCatByName('hightech')"><span class="sub-icon">💻</span><div class="sub-name">High-Tech & Multimédia</div><div class="sub-count">12 sous-catégories</div></div>
+        <div class="subcat-card" onclick="showCatByName('mode')"><span class="sub-icon">👗</span><div class="sub-name">Mode & Accessoires</div><div class="sub-count">10 sous-catégories</div></div>
+        <div class="subcat-card" onclick="showCatByName('animaux')"><span class="sub-icon">🐶</span><div class="sub-name">Animaux</div><div class="sub-count">9 sous-catégories</div></div>
+        <div class="subcat-card" onclick="showCatByName('divers')"><span class="sub-icon">📦</span><div class="sub-name">Divers</div><div class="sub-count">10 sous-catégories</div></div>
+      </div>
+    </div>
+
+    <!-- VÉHICULES -->
+    <div class="subcat-section" id="sec-vehicules">
+      <div class="cat-header"><h1><span>🚗</span> Véhicules</h1><p>Louer une voiture, un utilitaire, un vélo ou une remorque près de chez vous</p></div>
+      <div class="subcats-grid">
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🚗</span><div class="sub-name">Voitures</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🚐</span><div class="sub-name">Utilitaires</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🏍️</span><div class="sub-name">Motos</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🛵</span><div class="sub-name">Scooters</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🚲</span><div class="sub-name">Vélos</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">⚡</span><div class="sub-name">Vélos électriques</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🛴</span><div class="sub-name">Trottinettes électriques</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🏎️</span><div class="sub-name">Quads</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🚙</span><div class="sub-name">Buggys</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🚌</span><div class="sub-name">Camping-cars</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🚎</span><div class="sub-name">Caravanes</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🚛</span><div class="sub-name">Remorques</div></div>
+      </div>
+      <div class="results-header"><div class="results-title" id="res-title-vehicules">Toutes les annonces · Véhicules</div><div style="display:flex;align-items:center;gap:10px;"><span class="results-count">48 annonces</span><select class="sort-select"><option>Plus récentes</option><option>Prix croissant</option><option>Prix décroissant</option><option>Mieux notés</option></select></div></div>
+      <div class="listings-grid" id="listings-vehicules"></div>
+    </div>
+
+    <!-- NAUTISME -->
+    <div class="subcat-section" id="sec-nautisme">
+      <div class="cat-header"><h1><span>🚤</span> Nautisme</h1><p>Bateaux, kayaks, paddles et équipements nautiques à louer</p></div>
+      <div class="subcats-grid">
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">⛵</span><div class="sub-name">Bateaux à moteur</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">⛵</span><div class="sub-name">Voiliers</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🚤</span><div class="sub-name">Jet-skis</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🛶</span><div class="sub-name">Kayaks</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🛶</span><div class="sub-name">Canoës</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🏄</span><div class="sub-name">Paddles</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🎡</span><div class="sub-name">Pédalos</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🎣</span><div class="sub-name">Équipements de pêche</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🤿</span><div class="sub-name">Équipements de plongée</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🚛</span><div class="sub-name">Remorques bateau</div></div>
+      </div>
+      <div class="results-header"><div class="results-title">Toutes les annonces · Nautisme</div><div style="display:flex;align-items:center;gap:10px;"><span class="results-count">23 annonces</span><select class="sort-select"><option>Plus récentes</option><option>Prix croissant</option><option>Prix décroissant</option></select></div></div>
+      <div class="listings-grid" id="listings-nautisme"></div>
+    </div>
+
+    <!-- BRICOLAGE -->
+    <div class="subcat-section" id="sec-bricolage">
+      <div class="cat-header"><h1><span>🔨</span> Bricolage & Outillage</h1><p>Perceuses, scies, échafaudages et tous vos outils à louer</p></div>
+      <div class="subcats-grid">
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🔩</span><div class="sub-name">Perçage</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🪚</span><div class="sub-name">Découpe</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🪛</span><div class="sub-name">Ponçage</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🔥</span><div class="sub-name">Soudure</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🎨</span><div class="sub-name">Peinture</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🔧</span><div class="sub-name">Outillage manuel</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">⚡</span><div class="sub-name">Outillage électrique</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🪜</span><div class="sub-name">Échelles</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🏗️</span><div class="sub-name">Échafaudages</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">💧</span><div class="sub-name">Nettoyage professionnel</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">📏</span><div class="sub-name">Détecteurs et mesure</div></div>
+      </div>
+      <div class="results-header"><div class="results-title">Toutes les annonces · Bricolage</div><div style="display:flex;align-items:center;gap:10px;"><span class="results-count">67 annonces</span><select class="sort-select"><option>Plus récentes</option><option>Prix croissant</option><option>Prix décroissant</option></select></div></div>
+      <div class="listings-grid" id="listings-bricolage"></div>
+    </div>
+
+    <!-- JARDINAGE -->
+    <div class="subcat-section" id="sec-jardinage">
+      <div class="cat-header"><h1><span>🌳</span> Jardinage</h1><p>Tondeuses, tronçonneuses, taille-haies et tout le matériel de jardin</p></div>
+      <div class="subcats-grid">
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🌿</span><div class="sub-name">Tondeuses</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🪚</span><div class="sub-name">Tronçonneuses</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">✂️</span><div class="sub-name">Taille-haies</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🌾</span><div class="sub-name">Débroussailleuses</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🚜</span><div class="sub-name">Motobineuses</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🍃</span><div class="sub-name">Broyeurs de végétaux</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">💨</span><div class="sub-name">Souffleurs</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🌱</span><div class="sub-name">Scarificateurs</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">⛏️</span><div class="sub-name">Outils de jardin</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">💧</span><div class="sub-name">Arrosage</div></div>
+      </div>
+      <div class="results-header"><div class="results-title">Toutes les annonces · Jardinage</div><div style="display:flex;align-items:center;gap:10px;"><span class="results-count">54 annonces</span><select class="sort-select"><option>Plus récentes</option><option>Prix croissant</option><option>Prix décroissant</option></select></div></div>
+      <div class="listings-grid" id="listings-jardinage"></div>
+    </div>
+
+    <!-- BTP -->
+    <div class="subcat-section" id="sec-btp">
+      <div class="cat-header"><h1><span>🏗️</span> BTP & Chantier</h1><p>Mini-pelles, nacelles, bétonnières et matériel de chantier professionnel</p></div>
+      <div class="subcats-grid">
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🏗️</span><div class="sub-name">Mini-pelles</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🔝</span><div class="sub-name">Nacelles</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🔄</span><div class="sub-name">Compacteurs</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🏠</span><div class="sub-name">Bétonnières</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">⚡</span><div class="sub-name">Groupes électrogènes</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🔨</span><div class="sub-name">Marteaux-piqueurs</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">📏</span><div class="sub-name">Lasers de chantier</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🧱</span><div class="sub-name">Matériel de coffrage</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🏋️</span><div class="sub-name">Matériel de levage</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🦺</span><div class="sub-name">Équipement de sécurité</div></div>
+      </div>
+      <div class="results-header"><div class="results-title">Toutes les annonces · BTP</div><div style="display:flex;align-items:center;gap:10px;"><span class="results-count">31 annonces</span><select class="sort-select"><option>Plus récentes</option><option>Prix croissant</option><option>Prix décroissant</option></select></div></div>
+      <div class="listings-grid" id="listings-btp"></div>
+    </div>
+
+    <!-- AGRICOLE -->
+    <div class="subcat-section" id="sec-agricole">
+      <div class="cat-header"><h1><span>🚜</span> Matériel Agricole</h1><p>Tracteurs, micro-tracteurs, pulvérisateurs et tout le matériel agricole</p></div>
+      <div class="subcats-grid">
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🚜</span><div class="sub-name">Tracteurs</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🚗</span><div class="sub-name">Micro-tracteurs</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🚛</span><div class="sub-name">Remorques agricoles</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🌿</span><div class="sub-name">Broyeurs agricoles</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🌾</span><div class="sub-name">Charrues</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">💧</span><div class="sub-name">Pulvérisateurs</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🌱</span><div class="sub-name">Semoirs</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🚿</span><div class="sub-name">Matériel d'irrigation</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🌻</span><div class="sub-name">Récolte et entretien</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🐄</span><div class="sub-name">Équipements d'élevage</div></div>
+      </div>
+      <div class="results-header"><div class="results-title">Toutes les annonces · Agricole</div><div style="display:flex;align-items:center;gap:10px;"><span class="results-count">19 annonces</span><select class="sort-select"><option>Plus récentes</option><option>Prix croissant</option><option>Prix décroissant</option></select></div></div>
+      <div class="listings-grid" id="listings-agricole"></div>
+    </div>
+
+    <!-- MAISON -->
+    <div class="subcat-section" id="sec-maison">
+      <div class="cat-header"><h1><span>🏠</span> Maison & Équipement</h1><p>Électroménager, chauffage, climatisation, mobilier et plus encore</p></div>
+      <div class="subcats-grid">
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🏠</span><div class="sub-name">Électroménager</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🔥</span><div class="sub-name">Chauffage</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">❄️</span><div class="sub-name">Climatisation</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🧹</span><div class="sub-name">Nettoyage</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">💨</span><div class="sub-name">Déshumidificateurs</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🛋️</span><div class="sub-name">Mobilier</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">📦</span><div class="sub-name">Déménagement</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🎀</span><div class="sub-name">Décoration</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🔧</span><div class="sub-name">Bricolage domestique</div></div>
+      </div>
+      <div class="results-header"><div class="results-title">Toutes les annonces · Maison</div><div style="display:flex;align-items:center;gap:10px;"><span class="results-count">42 annonces</span><select class="sort-select"><option>Plus récentes</option><option>Prix croissant</option><option>Prix décroissant</option></select></div></div>
+      <div class="listings-grid" id="listings-maison"></div>
+    </div>
+
+    <!-- ÉVÉNEMENTIEL -->
+    <div class="subcat-section" id="sec-evenementiel">
+      <div class="cat-header"><h1><span>🎉</span> Événementiel</h1><p>Tables, chaises, barnums, sono et tout pour organiser vos événements</p></div>
+      <div class="subcats-grid">
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🪑</span><div class="sub-name">Tables</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🪑</span><div class="sub-name">Chaises</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">⛺</span><div class="sub-name">Barnums</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🎪</span><div class="sub-name">Tentes de réception</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🍽️</span><div class="sub-name">Vaisselle</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🎀</span><div class="sub-name">Décoration événementielle</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🎈</span><div class="sub-name">Structures gonflables</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🎰</span><div class="sub-name">Machines festives</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">💒</span><div class="sub-name">Matériel mariage</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🎂</span><div class="sub-name">Matériel anniversaire</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🔊</span><div class="sub-name">Sonorisation</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">💡</span><div class="sub-name">Éclairage</div></div>
+      </div>
+      <div class="results-header"><div class="results-title">Toutes les annonces · Événementiel</div><div style="display:flex;align-items:center;gap:10px;"><span class="results-count">38 annonces</span><select class="sort-select"><option>Plus récentes</option><option>Prix croissant</option><option>Prix décroissant</option></select></div></div>
+      <div class="listings-grid" id="listings-evenementiel"></div>
+    </div>
+
+    <!-- SPORT -->
+    <div class="subcat-section" id="sec-sport">
+      <div class="cat-header"><h1><span>⚽</span> Sport & Loisirs</h1><p>Fitness, vélos, sports nautiques, camping et tout pour vos loisirs</p></div>
+      <div class="subcats-grid">
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">💪</span><div class="sub-name">Fitness & Musculation</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🚲</span><div class="sub-name">Cyclisme</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🏄</span><div class="sub-name">Sports nautiques</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">⛷️</span><div class="sub-name">Sports d'hiver</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">⚽</span><div class="sub-name">Sports collectifs</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🥊</span><div class="sub-name">Sports de combat</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🎾</span><div class="sub-name">Sports de raquette</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🥾</span><div class="sub-name">Randonnée</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">⛺</span><div class="sub-name">Camping</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🎯</span><div class="sub-name">Chasse</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🎣</span><div class="sub-name">Pêche</div></div>
+      </div>
+      <div class="results-header"><div class="results-title">Toutes les annonces · Sport</div><div style="display:flex;align-items:center;gap:10px;"><span class="results-count">29 annonces</span><select class="sort-select"><option>Plus récentes</option><option>Prix croissant</option><option>Prix décroissant</option></select></div></div>
+      <div class="listings-grid" id="listings-sport"></div>
+    </div>
+
+    <!-- HIGH-TECH -->
+    <div class="subcat-section" id="sec-hightech">
+      <div class="cat-header"><h1><span>💻</span> High-Tech & Multimédia</h1><p>Ordinateurs, caméras, drones, vidéoprojecteurs et matériel high-tech</p></div>
+      <div class="subcats-grid">
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">💻</span><div class="sub-name">Ordinateurs</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">📱</span><div class="sub-name">Tablettes</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">📲</span><div class="sub-name">Smartphones</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🎮</span><div class="sub-name">Consoles de jeux</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🥽</span><div class="sub-name">Réalité virtuelle</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">📷</span><div class="sub-name">Appareils photo</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🎥</span><div class="sub-name">Caméras</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🚁</span><div class="sub-name">Drones</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">📽️</span><div class="sub-name">Vidéoprojecteurs</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🖨️</span><div class="sub-name">Imprimantes</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🖥️</span><div class="sub-name">Écrans</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🔌</span><div class="sub-name">Accessoires informatiques</div></div>
+      </div>
+      <div class="results-header"><div class="results-title">Toutes les annonces · High-Tech</div><div style="display:flex;align-items:center;gap:10px;"><span class="results-count">44 annonces</span><select class="sort-select"><option>Plus récentes</option><option>Prix croissant</option><option>Prix décroissant</option></select></div></div>
+      <div class="listings-grid" id="listings-hightech"></div>
+    </div>
+
+    <!-- MODE -->
+    <div class="subcat-section" id="sec-mode">
+      <div class="cat-header"><h1><span>👗</span> Mode & Accessoires</h1><p>Robes de soirée, costumes, sacs de luxe, bijoux et accessoires de mode</p></div>
+      <div class="subcats-grid">
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">👗</span><div class="sub-name">Robes de soirée</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🤵</span><div class="sub-name">Costumes</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">👔</span><div class="sub-name">Vêtements homme</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">👚</span><div class="sub-name">Vêtements femme</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">👕</span><div class="sub-name">Vêtements enfant</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">👜</span><div class="sub-name">Sacs de luxe</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">💍</span><div class="sub-name">Bijoux</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">⌚</span><div class="sub-name">Montres</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">👠</span><div class="sub-name">Chaussures</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🧣</span><div class="sub-name">Accessoires de mode</div></div>
+      </div>
+      <div class="results-header"><div class="results-title">Toutes les annonces · Mode</div><div style="display:flex;align-items:center;gap:10px;"><span class="results-count">26 annonces</span><select class="sort-select"><option>Plus récentes</option><option>Prix croissant</option><option>Prix décroissant</option></select></div></div>
+      <div class="listings-grid" id="listings-mode"></div>
+    </div>
+
+    <!-- ANIMAUX -->
+    <div class="subcat-section" id="sec-animaux">
+      <div class="cat-header"><h1><span>🐶</span> Animaux</h1><p>Cages, clôtures, matériel d'équitation et accessoires pour animaux</p></div>
+      <div class="subcats-grid">
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🏠</span><div class="sub-name">Cages</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🏡</span><div class="sub-name">Niches</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🚧</span><div class="sub-name">Clôtures mobiles</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🚛</span><div class="sub-name">Remorques pour animaux</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🏇</span><div class="sub-name">Matériel d'équitation</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">📦</span><div class="sub-name">Transport animalier</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🐄</span><div class="sub-name">Matériel d'élevage</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🐕</span><div class="sub-name">Accessoires pour chiens</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🐈</span><div class="sub-name">Accessoires pour chats</div></div>
+      </div>
+      <div class="results-header"><div class="results-title">Toutes les annonces · Animaux</div><div style="display:flex;align-items:center;gap:10px;"><span class="results-count">14 annonces</span><select class="sort-select"><option>Plus récentes</option><option>Prix croissant</option><option>Prix décroissant</option></select></div></div>
+      <div class="listings-grid" id="listings-animaux"></div>
+    </div>
+
+    <!-- DIVERS -->
+    <div class="subcat-section" id="sec-divers">
+      <div class="cat-header"><h1><span>📦</span> Divers</h1><p>Instruments de musique, matériel médical, jeux et bien plus encore</p></div>
+      <div class="subcats-grid">
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🎸</span><div class="sub-name">Instruments de musique</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🐾</span><div class="sub-name">Équipements pour animaux</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🏥</span><div class="sub-name">Matériel médical</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🎭</span><div class="sub-name">Déguisements</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">📚</span><div class="sub-name">Livres et collections</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🎲</span><div class="sub-name">Jeux de société</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🧳</span><div class="sub-name">Voyage et bagagerie</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">🎒</span><div class="sub-name">Matériel scolaire</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">💎</span><div class="sub-name">Objets de collection</div></div>
+        <div class="subcat-card" onclick="selSub(this)"><span class="sub-icon">📦</span><div class="sub-name">Autres</div></div>
+      </div>
+      <div class="results-header"><div class="results-title">Toutes les annonces · Divers</div><div style="display:flex;align-items:center;gap:10px;"><span class="results-count">18 annonces</span><select class="sort-select"><option>Plus récentes</option><option>Prix croissant</option><option>Prix décroissant</option></select></div></div>
+      <div class="listings-grid" id="listings-divers"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- MOBILE FAB -->
+<button class="mob-cats-btn" onclick="openMobCats()">☰ Catégories</button>
+<div class="mob-cats-overlay" id="mob-overlay" onclick="closeMobCats()"></div>
+<div class="mob-cats-panel" id="mob-panel" style="display:none;">
+  <h3>Toutes les catégories</h3>
+  <div class="cat-nav-item" onclick="showCatMob('all')"><span class="emoji">🏠</span><span class="name">Toutes les catégories</span></div>
+  <div class="cat-nav-item" onclick="showCatMob('vehicules')"><span class="emoji">🚗</span><span class="name">Véhicules</span></div>
+  <div class="cat-nav-item" onclick="showCatMob('nautisme')"><span class="emoji">🚤</span><span class="name">Nautisme</span></div>
+  <div class="cat-nav-item" onclick="showCatMob('bricolage')"><span class="emoji">🔨</span><span class="name">Bricolage & Outillage</span></div>
+  <div class="cat-nav-item" onclick="showCatMob('jardinage')"><span class="emoji">🌳</span><span class="name">Jardinage</span></div>
+  <div class="cat-nav-item" onclick="showCatMob('btp')"><span class="emoji">🏗️</span><span class="name">BTP & Chantier</span></div>
+  <div class="cat-nav-item" onclick="showCatMob('agricole')"><span class="emoji">🚜</span><span class="name">Matériel Agricole</span></div>
+  <div class="cat-nav-item" onclick="showCatMob('maison')"><span class="emoji">🏠</span><span class="name">Maison & Équipement</span></div>
+  <div class="cat-nav-item" onclick="showCatMob('evenementiel')"><span class="emoji">🎉</span><span class="name">Événementiel</span></div>
+  <div class="cat-nav-item" onclick="showCatMob('sport')"><span class="emoji">⚽</span><span class="name">Sport & Loisirs</span></div>
+  <div class="cat-nav-item" onclick="showCatMob('hightech')"><span class="emoji">💻</span><span class="name">High-Tech & Multimédia</span></div>
+  <div class="cat-nav-item" onclick="showCatMob('mode')"><span class="emoji">👗</span><span class="name">Mode & Accessoires</span></div>
+  <div class="cat-nav-item" onclick="showCatMob('animaux')"><span class="emoji">🐶</span><span class="name">Animaux</span></div>
+  <div class="cat-nav-item" onclick="showCatMob('divers')"><span class="emoji">📦</span><span class="name">Divers</span></div>
+</div>
+
+<script>
+const LISTINGS = [
+  {name:'Tronçonneuse Stihl MS 250',loc:'Ajaccio · 4 km',price:25,badge:'Livraison',bl:true,img:'https://images.unsplash.com/photo-1617953141905-b27fb1f9a1b0?w=400&q=80',cat:['jardinage','bricolage']},
+  {name:'Motoculteur Honda F220',loc:'Ajaccio · 8 km',price:35,badge:'Certifié',bl:false,img:'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=400&q=80',cat:['jardinage','agricole']},
+  {name:'Lot 50 chaises blanches',loc:'Mezzavia · 12 km',price:40,badge:'+20€ livr.',bl:true,img:'https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=400&q=80',cat:['evenementiel','maison']},
+  {name:'Échafaudage roulant 4 m',loc:'Ajaccio · 16 km',price:18,badge:'Certifié',bl:false,img:'https://images.unsplash.com/photo-1504148455328-c376907d081c?w=400&q=80',cat:['bricolage','btp']},
+  {name:'Chapiteau 6×9 m',loc:'Ajaccio · 6 km',price:120,badge:'Livraison',bl:true,img:'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&q=80',cat:['evenementiel']},
+  {name:'Remorque benne 750 kg',loc:'Ajaccio · 2 km',price:22,badge:'Sans caution',bl:false,img:'https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=400&q=80',cat:['vehicules','agricole']},
+  {name:'Perceuse colonne Metabo',loc:'Ajaccio · 5 km',price:12,badge:'Sur place',bl:false,img:'https://images.unsplash.com/photo-1572981779307-38b8cabb2407?w=400&q=80',cat:['bricolage']},
+  {name:'Nettoyeur haute pression',loc:'Ajaccio · 3 km',price:15,badge:'Certifié',bl:false,img:'https://images.unsplash.com/photo-1562259949-e8e7689d7828?w=400&q=80',cat:['bricolage','maison','jardinage']},
+];
+
+function renderListings(containerId, catFilter) {
+  const c = document.getElementById(containerId);
+  if (!c) return;
+  const filtered = catFilter === 'all' ? LISTINGS : LISTINGS.filter(l => l.cat.includes(catFilter));
+  const items = filtered.length ? filtered : LISTINGS.slice(0, 4);
+  c.innerHTML = items.map(l => `
+    <div class="listing-card" onclick="window.location.href='annonce.html'">
+      <div class="lc-img-wrap">
+        <img class="lc-img" src="${l.img}" alt="${l.name}">
+        <button class="lc-fav" onclick="event.stopPropagation()"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+      </div>
+      <div class="lc-body">
+        <div class="lc-name">${l.name}</div>
+        <div class="lc-meta">${l.loc}</div>
+        <div class="lc-bot">
+          <div class="lc-price">${l.price} €<small>/jour</small></div>
+          <div class="lc-badge ${l.bl?'bl':'bc'}">${l.badge}</div>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function showCat(el, cat) {
+  document.querySelectorAll('.cat-nav-item').forEach(i => i.classList.remove('active'));
+  el.classList.add('active');
+  document.querySelectorAll('.subcat-section').forEach(s => s.classList.remove('active'));
+  document.getElementById('sec-' + cat).classList.add('active');
+  const names = {all:'Toutes les catégories',vehicules:'Véhicules',nautisme:'Nautisme',bricolage:'Bricolage & Outillage',jardinage:'Jardinage',btp:'BTP & Chantier',agricole:'Matériel Agricole',maison:'Maison & Équipement',evenementiel:'Événementiel',sport:'Sport & Loisirs',hightech:'High-Tech & Multimédia',mode:'Mode & Accessoires',animaux:'Animaux',divers:'Divers'};
+  document.getElementById('bc-cat').textContent = names[cat] || cat;
+  renderListings('listings-' + cat, cat);
+  window.scrollTo(0, 0);
+}
+
+function showCatByName(cat) {
+  const el = document.querySelector(`[data-cat="${cat}"]`);
+  if (el) showCat(el, cat);
+}
+
+function selSub(el) {
+  document.querySelectorAll('.subcat-card').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function openMobCats() {
+  document.getElementById('mob-overlay').style.display = 'block';
+  document.getElementById('mob-panel').style.display = 'block';
+}
+function closeMobCats() {
+  document.getElementById('mob-overlay').style.display = 'none';
+  document.getElementById('mob-panel').style.display = 'none';
+}
+function showCatMob(cat) {
+  showCatByName(cat);
+  closeMobCats();
+}
+
+// Init
+renderListings('listings-all', 'all');
+
+// URL param
+const params = new URLSearchParams(window.location.search);
+const catParam = params.get('cat');
+if (catParam) showCatByName(catParam);
+</script>
+</body>
+</html>
