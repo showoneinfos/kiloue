@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mon espace — kiloue.com</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{--teal:#00A693;--teal2:#008577;--teal-light:#E8F7F5;--ink:#1A1A1A;--ink2:#666;--ink3:#999;--border:#E5E5E5;--bg:#FAFAFA;--white:#fff;--sans:'Inter',system-ui,sans-serif;}
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:var(--sans);background:var(--bg);color:var(--ink);display:flex;min-height:100vh;}
+  .sidebar{width:220px;background:var(--white);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:20px 0;flex-shrink:0;position:sticky;top:0;height:100vh;}
+  .sidebar-logo{padding:0 18px 20px;border-bottom:1px solid var(--border);margin-bottom:12px;}
+  .sidebar-logo a{font-size:20px;font-weight:700;color:var(--teal);text-decoration:none;}
+  .sidebar-logo a span{color:var(--ink);}
+  .nav-item{display:flex;align-items:center;gap:10px;padding:10px 18px;font-size:13px;color:var(--ink2);cursor:pointer;transition:all .15s;text-decoration:none;border-left:3px solid transparent;}
+  .nav-item:hover{background:var(--bg);color:var(--ink);}
+  .nav-item.active{background:var(--teal-light);color:var(--teal);border-left-color:var(--teal);font-weight:600;}
+  .nav-item svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:2;flex-shrink:0;}
+  .nav-sep{font-size:10px;color:var(--ink3);text-transform:uppercase;letter-spacing:.8px;padding:14px 18px 5px;}
+  .nav-badge{margin-left:auto;background:var(--teal);color:#fff;font-size:10px;padding:1px 7px;border-radius:20px;}
+  .sidebar-bottom{margin-top:auto;padding:16px 18px;border-top:1px solid var(--border);}
+  .user-row{display:flex;align-items:center;gap:10px;}
+  .user-av{width:36px;height:36px;border-radius:50%;object-fit:cover;}
+  .user-name{font-size:13px;font-weight:600;color:var(--ink);}
+  .user-cert{font-size:11px;color:var(--teal);}
+  .main{flex:1;overflow-x:hidden;}
+  .topbar{background:var(--white);border-bottom:1px solid var(--border);padding:0 28px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;}
+  .topbar h1{font-size:18px;font-weight:700;color:var(--ink);}
+  .btn-primary{padding:9px 20px;border-radius:7px;background:var(--teal);color:#fff;border:none;font-size:13px;font-weight:600;font-family:var(--sans);cursor:pointer;display:flex;align-items:center;gap:6px;}
+  .btn-primary:hover{background:var(--teal2);}
+  .btn-primary svg{width:15px;height:15px;fill:none;stroke:#fff;stroke-width:2;}
+  .content{padding:24px 28px;}
+  .alert{background:#FFF8E1;border:1px solid #FFE082;border-radius:10px;padding:14px 18px;display:flex;align-items:center;gap:12px;margin-bottom:22px;font-size:13px;color:#F57F17;}
+  .alert svg{width:20px;height:20px;fill:none;stroke:#F57F17;stroke-width:2;flex-shrink:0;}
+  .alert .txt{flex:1;}
+  .alert strong{display:block;margin-bottom:2px;font-size:14px;}
+  .btn-alert{padding:8px 16px;border-radius:6px;background:#F57F17;color:#fff;border:none;font-size:12px;font-weight:600;font-family:var(--sans);cursor:pointer;white-space:nowrap;}
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px;}
+  .stat{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:18px;}
+  .stat-lbl{font-size:12px;color:var(--ink2);margin-bottom:8px;display:flex;align-items:center;gap:5px;}
+  .stat-lbl svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:2;}
+  .stat-val{font-size:26px;font-weight:700;color:var(--ink);}
+  .stat-chg{font-size:12px;margin-top:4px;}
+  .up{color:var(--teal);}
+  .stat.hl{background:var(--teal);border-color:var(--teal);}
+  .stat.hl .stat-lbl{color:rgba(255,255,255,.7);}
+  .stat.hl .stat-val{color:#fff;}
+  .stat.hl .stat-chg{color:rgba(255,255,255,.7);}
+  .two-col{display:grid;grid-template-columns:1fr 320px;gap:18px;margin-bottom:20px;}
+  .card{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:18px;}
+  .card h2{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;}
+  .card h2 a{font-size:12px;color:var(--teal);text-decoration:none;font-weight:400;}
+  .resa-item{display:flex;align-items:center;gap:12px;padding:10px;background:var(--bg);border-radius:8px;margin-bottom:8px;}
+  .resa-img{width:44px;height:44px;border-radius:8px;object-fit:cover;flex-shrink:0;}
+  .resa-info{flex:1;}
+  .resa-name{font-size:13px;font-weight:500;color:var(--ink);}
+  .resa-meta{font-size:12px;color:var(--ink2);margin-top:2px;}
+  .badge{font-size:11px;padding:3px 10px;border-radius:20px;font-weight:500;white-space:nowrap;}
+  .badge-wait{background:#FFF8E1;color:#F57F17;}
+  .badge-ok{background:var(--teal-light);color:var(--teal2);}
+  .badge-done{background:var(--bg);color:var(--ink2);border:1px solid var(--border);}
+  .resa-amt{font-size:14px;font-weight:600;color:var(--teal);white-space:nowrap;}
+  .actions{display:flex;gap:8px;margin-top:12px;padding-top:12px;border-top:1px solid var(--border);}
+  .btn-sm{padding:7px 14px;border-radius:7px;font-size:12px;font-family:var(--sans);cursor:pointer;border:1.5px solid var(--border);background:var(--white);color:var(--ink2);flex:1;}
+  .btn-sm:hover{border-color:var(--teal);color:var(--teal);}
+  .btn-sm.danger:hover{border-color:#E53935;color:#E53935;}
+  .rev-row{display:flex;justify-content:space-between;font-size:13px;padding:7px 0;border-bottom:1px solid var(--bg);}
+  .rev-row:last-of-type{border:none;}
+  .rev-row .l{color:var(--ink2);}
+  .rev-row .v{font-weight:500;color:var(--ink);}
+  .rev-total{display:flex;justify-content:space-between;font-size:15px;font-weight:700;border-top:2px solid var(--border);padding-top:10px;margin-top:4px;}
+  .rev-total .big{color:var(--teal);}
+  .certif-step{display:flex;align-items:center;gap:10px;padding:9px;border-radius:8px;margin-bottom:6px;}
+  .cs-done{background:var(--teal-light);}
+  .cs-cur{background:#FFF8E1;border:1px solid #FFE082;}
+  .cs-todo{background:var(--bg);}
+  .cs-icon{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:12px;font-weight:700;}
+  .cs-icon.done{background:var(--teal);color:#fff;}
+  .cs-icon.cur{background:#F57F17;color:#fff;}
+  .cs-icon.todo{background:var(--border);color:var(--ink2);}
+  .cs-txt strong{font-size:13px;color:var(--ink);display:block;}
+  .cs-txt span{font-size:11px;color:var(--ink2);}
+  .cs-action{margin-left:auto;font-size:12px;color:var(--teal);cursor:pointer;text-decoration:underline;white-space:nowrap;}
+  .ann-item{display:flex;align-items:center;gap:12px;padding:12px;background:var(--bg);border-radius:8px;margin-bottom:8px;}
+  .ann-img{width:52px;height:52px;border-radius:8px;object-fit:cover;flex-shrink:0;}
+  .ann-info{flex:1;}
+  .ann-name{font-size:13px;font-weight:500;color:var(--ink);}
+  .ann-meta{font-size:12px;color:var(--ink2);margin-top:3px;display:flex;gap:10px;}
+  .ann-acts{display:flex;gap:6px;}
+  .dot-on{width:7px;height:7px;border-radius:50%;background:var(--teal);display:inline-block;margin-right:3px;}
+  .dot-off{width:7px;height:7px;border-radius:50%;background:var(--ink3);display:inline-block;margin-right:3px;}
+  .chart{display:flex;align-items:flex-end;gap:8px;height:140px;padding-top:10px;}
+  .bar-g{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;}
+  .bar{width:100%;border-radius:4px 4px 0 0;background:var(--border);cursor:pointer;min-height:4px;transition:background .15s;}
+  .bar:hover,.bar.active{background:var(--teal);}
+  .bar-val{font-size:10px;color:var(--ink2);}
+  .bar-lbl{font-size:10px;color:var(--ink3);}
+  #toast{display:none;position:fixed;bottom:24px;right:24px;background:var(--ink);color:#fff;padding:11px 18px;border-radius:8px;font-size:13px;z-index:300;}
+  @media(max-width:900px){.sidebar{display:none;}.content{padding:16px;}.stats{grid-template-columns:1fr 1fr;}.two-col{grid-template-columns:1fr;}.topbar{padding:0 16px;}}
+</style>
+</head>
+<body>
+<div class="sidebar">
+  <div class="sidebar-logo"><a href="index.html">kiloue<span>.com</span></a></div>
+  <a class="nav-item active" href="#"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Tableau de bord</a>
+  <a class="nav-item" href="#"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Mes annonces</a>
+  <a class="nav-item" href="#"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Réservations</a>
+  <a class="nav-item" href="#"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Messages<span class="nav-badge">3</span></a>
+  <div class="nav-sep">Finances</div>
+  <a class="nav-item" href="#"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Revenus</a>
+  <a class="nav-item" href="#"><svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>Paiements</a>
+  <div class="nav-sep">Compte</div>
+  <a class="nav-item" href="#"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Certification</a>
+  <a class="nav-item" href="#"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 1 0-16 0"/></svg>Mon profil</a>
+  <div class="sidebar-bottom">
+    <div class="user-row">
+      <img class="user-av" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&q=80" alt="Manu">
+      <div><div class="user-name">Manu</div><div class="user-cert">✓ Certifié</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+  <div class="topbar">
+    <h1>Tableau de bord</h1>
+    <button class="btn-primary" onclick="window.location.href='publier.html'"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Nouvelle annonce</button>
+  </div>
+  <div class="content">
+
+    <div class="alert" id="alert-certif">
+      <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      <div class="txt"><strong>Finalisez votre certification pour +4× de visibilité</strong>Il vous reste 2 étapes — vérification d'identité et justificatif de domicile.</div>
+      <button class="btn-alert" onclick="document.getElementById('alert-certif').style.display='none'">Continuer →</button>
+    </div>
+
+    <div class="stats">
+      <div class="stat hl">
+        <div class="stat-lbl"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Revenus ce mois</div>
+        <div class="stat-val">324 €</div>
+        <div class="stat-chg">↑ +18% vs avril</div>
+      </div>
+      <div class="stat">
+        <div class="stat-lbl"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Locations</div>
+        <div class="stat-val">12</div>
+        <div class="stat-chg up">↑ 3 ce mois</div>
+      </div>
+      <div class="stat">
+        <div class="stat-lbl"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Note moyenne</div>
+        <div class="stat-val" style="color:#F57F17;">4,8 ★</div>
+        <div class="stat-chg" style="color:var(--ink2);">sur 14 avis</div>
+      </div>
+      <div class="stat">
+        <div class="stat-lbl"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>Vues ce mois</div>
+        <div class="stat-val">248</div>
+        <div class="stat-chg up">↑ +32%</div>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div class="card">
+        <h2>Réservations récentes <a href="#">Voir tout →</a></h2>
+        <div class="resa-item">
+          <img class="resa-img" src="https://images.unsplash.com/photo-1617953141905-b27fb1f9a1b0?w=100&q=80" alt="">
+          <div class="resa-info"><div class="resa-name">Tronçonneuse Stihl MS 250</div><div class="resa-meta">Marie-Laure B. · 2–3 juin · Livraison</div></div>
+          <div class="badge badge-wait">En attente</div>
+          <div class="resa-amt">+23,75€</div>
+        </div>
+        <div class="resa-item">
+          <img class="resa-img" src="https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=100&q=80" alt="">
+          <div class="resa-info"><div class="resa-name">Lot 50 chaises blanches</div><div class="resa-meta">Antoine M. · 25 mai · Sur place</div></div>
+          <div class="badge badge-ok">Confirmée</div>
+          <div class="resa-amt">+38,00€</div>
+        </div>
+        <div class="resa-item">
+          <img class="resa-img" src="https://images.unsplash.com/photo-1504148455328-c376907d081c?w=100&q=80" alt="">
+          <div class="resa-info"><div class="resa-name">Échafaudage roulant 4 m</div><div class="resa-meta">Pierre D. · 18–20 mai</div></div>
+          <div class="badge badge-done">Terminée</div>
+          <div class="resa-amt">+51,30€</div>
+        </div>
+        <div class="actions">
+          <button class="btn-sm" onclick="toast('✓ Réservation acceptée !')">✓ Accepter</button>
+          <button class="btn-sm danger" onclick="toast('✗ Réservation refusée')">✗ Refuser</button>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:16px;">
+        <div class="card">
+          <h2>Revenus — mai 2025</h2>
+          <div class="rev-row"><span class="l">Locations (12)</span><span class="v">342,00 €</span></div>
+          <div class="rev-row"><span class="l">Livraisons</span><span class="v">45,00 €</span></div>
+          <div class="rev-row"><span class="l">Commission kiloue (5%)</span><span class="v" style="color:var(--teal);">− 19,35 €</span></div>
+          <div class="rev-total"><span>Virement reçu</span><span class="big">367,65 €</span></div>
+          <div style="margin-top:12px;padding:10px;background:var(--teal-light);border-radius:7px;font-size:12px;color:var(--teal2);">🏦 Prochain virement le <strong>5 juin 2025</strong></div>
+        </div>
+        <div class="card">
+          <h2>Certification</h2>
+          <div style="margin-bottom:12px;">
+            <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--ink2);margin-bottom:6px;"><span>Progression</span><span style="color:var(--teal);font-weight:600;">3/5</span></div>
+            <div style="background:var(--border);border-radius:4px;height:5px;overflow:hidden;"><div style="background:var(--teal);height:100%;width:60%;border-radius:4px;"></div></div>
+          </div>
+          <div class="certif-step cs-done"><div class="cs-icon done">✓</div><div class="cs-txt"><strong>Téléphone vérifié</strong><span>SMS confirmé</span></div></div>
+          <div class="certif-step cs-done"><div class="cs-icon done">✓</div><div class="cs-txt"><strong>RIB enregistré</strong><span>Virements actifs</span></div></div>
+          <div class="certif-step cs-done"><div class="cs-icon done">✓</div><div class="cs-txt"><strong>1ère location réussie</strong><span>4,8★</span></div></div>
+          <div class="certif-step cs-cur"><div class="cs-icon cur">!</div><div class="cs-txt"><strong>Pièce d'identité</strong><span>En attente</span></div><span class="cs-action">Faire →</span></div>
+          <div class="certif-step cs-todo"><div class="cs-icon todo">5</div><div class="cs-txt"><strong>Justificatif domicile</strong><span>À venir</span></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:18px;">
+      <h2>Mes annonces <a href="publier.html">+ Nouvelle</a></h2>
+      <div class="ann-item">
+        <img class="ann-img" src="https://images.unsplash.com/photo-1617953141905-b27fb1f9a1b0?w=100&q=80" alt="">
+        <div class="ann-info"><div class="ann-name">Tronçonneuse Stihl MS 250</div><div class="ann-meta"><span><span class="dot-on"></span>Active</span><span>📍 Ajaccio · 30km</span><span>💶 25€/j</span><span>👁 148 vues</span></div></div>
+        <div class="ann-acts">
+          <button class="btn-sm" onclick="window.location.href='annonce.html'">Voir</button>
+          <button class="btn-sm" onclick="toast('Annonce modifiée')">Modifier</button>
+          <button class="btn-sm danger" onclick="toast('Annonce mise en pause')">Pause</button>
+        </div>
+      </div>
+      <div class="ann-item">
+        <img class="ann-img" src="https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=100&q=80" alt="">
+        <div class="ann-info"><div class="ann-name">Lot 50 chaises blanches</div><div class="ann-meta"><span><span class="dot-on"></span>Active</span><span>📍 Ajaccio · 20km</span><span>💶 40€/j</span><span>👁 72 vues</span></div></div>
+        <div class="ann-acts">
+          <button class="btn-sm" onclick="window.location.href='annonce.html'">Voir</button>
+          <button class="btn-sm" onclick="toast('Annonce modifiée')">Modifier</button>
+          <button class="btn-sm danger" onclick="toast('Annonce mise en pause')">Pause</button>
+        </div>
+      </div>
+      <div class="ann-item">
+        <img class="ann-img" src="https://images.unsplash.com/photo-1504148455328-c376907d081c?w=100&q=80" alt="">
+        <div class="ann-info"><div class="ann-name">Échafaudage roulant 4 m</div><div class="ann-meta"><span><span class="dot-off"></span>En pause</span><span>📍 Ajaccio · 15km</span><span>💶 18€/j</span><span>👁 28 vues</span></div></div>
+        <div class="ann-acts">
+          <button class="btn-sm" onclick="toast('Annonce réactivée !')">Réactiver</button>
+          <button class="btn-sm danger" onclick="toast('Annonce supprimée')">Supprimer</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Évolution des revenus (6 mois)</h2>
+      <div class="chart">
+        <div class="bar-g"><div class="bar" style="height:37%"></div><div class="bar-val">120€</div><div class="bar-lbl">Déc</div></div>
+        <div class="bar-g"><div class="bar" style="height:51%"></div><div class="bar-val">165€</div><div class="bar-lbl">Jan</div></div>
+        <div class="bar-g"><div class="bar" style="height:44%"></div><div class="bar-val">144€</div><div class="bar-lbl">Fév</div></div>
+        <div class="bar-g"><div class="bar" style="height:60%"></div><div class="bar-val">195€</div><div class="bar-lbl">Mar</div></div>
+        <div class="bar-g"><div class="bar" style="height:85%"></div><div class="bar-val">275€</div><div class="bar-lbl">Avr</div></div>
+        <div class="bar-g"><div class="bar active" style="height:100%"></div><div class="bar-val" style="color:var(--teal);font-weight:600;">324€</div><div class="bar-lbl" style="color:var(--teal);">Mai</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+<script>
+  function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.display='block';setTimeout(()=>t.style.display='none',3000);}
+</script>
+</body>
+</html>
