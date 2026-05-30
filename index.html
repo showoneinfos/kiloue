@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+<script>
+  if(/Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) || window.innerWidth < 768){
+    window.location.replace('mobile.html');
+  }
+</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>kiloue.com — Location de matériel entre particuliers</title>
@@ -146,17 +151,41 @@
   .footer-copy{border-top:1px solid #333;padding:16px 24px;font-size:12px;color:var(--ink3);text-align:center;}
 
   @media(max-width:768px){
-    nav{padding:0 16px;gap:10px;}
+    /* NAVBAR MOBILE : 2 lignes */
+    nav{padding:0;}
+    .nav-top{
+      flex-wrap:wrap;
+      padding:10px 16px 10px;
+      gap:8px;
+      height:auto;
+    }
+    .logo{flex:0 0 auto;}
+    .nav-actions{
+      display:flex !important;
+      gap:6px;
+      margin-left:auto;
+    }
+    .btn-login{font-size:12px !important;padding:7px 10px !important;}
+    .btn-sell{font-size:12px !important;padding:7px 12px !important;}
+    /* Barre de recherche : ligne 2, pleine largeur */
+    .nav-search{
+      order:3;
+      flex:0 0 100%;
+      max-width:100%;
+    }
     .nav-cats{display:none;}
-    .banner{height:280px;}
-    .banner-content{left:20px;}
-    .banner-content h1{font-size:22px;}
+    /* RESTE DU SITE */
+    .banner{height:260px;}
+    .banner-content{left:20px;max-width:260px;}
+    .banner-content h1{font-size:20px;}
     .section{padding:24px 16px;}
     .how-grid{grid-template-columns:1fr;}
     .certif-banner{grid-template-columns:1fr;margin:0 16px 24px;}
     .sim-inner{grid-template-columns:1fr;}
     footer{grid-template-columns:1fr 1fr;}
     .listings-grid{grid-template-columns:repeat(2,1fr);gap:10px;}
+    .trust-bar{gap:12px;padding:12px 16px;justify-content:flex-start;}
+    .all-cats-grid{grid-template-columns:repeat(2,1fr);}
   }
 </style>
 </head>
