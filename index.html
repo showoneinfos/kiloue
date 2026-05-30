@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>kiloue.com — Location de matériel entre particuliers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --teal:#00A693;--teal2:#008577;--teal-light:#E8F7F5;
+    --ink:#1A1A1A;--ink2:#666;--ink3:#999;
+    --border:#E5E5E5;--bg:#FAFAFA;
+    --white:#fff;
+    --sans:'Inter',system-ui,sans-serif;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{font-family:var(--sans);background:var(--white);color:var(--ink);overflow-x:hidden;}
+
+  /* NAV */
+  nav{position:sticky;top:0;z-index:100;background:var(--white);border-bottom:1px solid var(--border);height:60px;display:flex;align-items:center;padding:0 24px;gap:16px;}
+  .logo{font-size:22px;font-weight:700;color:var(--teal);text-decoration:none;letter-spacing:-0.5px;margin-right:8px;white-space:nowrap;}
+  .logo span{color:var(--ink);}
+  .nav-search{flex:1;max-width:480px;display:flex;align-items:center;background:var(--bg);border:1.5px solid var(--border);border-radius:6px;padding:0 12px;height:40px;gap:8px;}
+  .nav-search svg{width:16px;height:16px;fill:none;stroke:var(--ink3);stroke-width:2;flex-shrink:0;}
+  .nav-search input{border:none;outline:none;background:transparent;font-family:var(--sans);font-size:14px;color:var(--ink);flex:1;min-width:0;}
+  .nav-search input::placeholder{color:var(--ink3);}
+  .nav-cats{display:flex;gap:4px;overflow-x:auto;flex:1;}
+  .nav-cats::-webkit-scrollbar{display:none;}
+  .nav-cat{padding:0 14px;height:44px;display:inline-flex;align-items:center;font-size:13px;font-weight:500;color:var(--ink2);cursor:pointer;white-space:nowrap;background:transparent;border:none;border-bottom:2px solid transparent;transition:all .15s;}
+  .nav-cat:hover{color:var(--teal);border-bottom-color:var(--teal);}
+  .cat-drop{position:relative;display:inline-flex;}
+  .nav-cats{border-top:1px solid var(--border);display:flex;align-items:center;padding:0 24px;gap:0;overflow-x:auto;height:44px;position:relative;}
+  .mega-cols{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;}
+  .mega-col-title{font-size:11px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px;padding:4px 8px;}
+  .mega-link{display:block;padding:7px 10px;border-radius:6px;font-size:13px;color:var(--ink2);cursor:pointer;text-decoration:none;transition:all .15s;}
+  .mega-link:hover{background:var(--teal-light);color:var(--teal);}
+  .mega-see-all{display:inline-flex;align-items:center;gap:5px;margin-top:14px;padding:8px 16px;border-radius:6px;background:var(--teal);color:#fff;font-size:13px;font-weight:600;cursor:pointer;border:none;font-family:var(--sans);}
+  .nav-actions{display:flex;gap:8px;align-items:center;flex-shrink:0;}
+  .btn-login{padding:8px 16px;border-radius:6px;border:1.5px solid var(--border);background:var(--white);font-size:13px;font-weight:500;font-family:var(--sans);color:var(--ink);cursor:pointer;white-space:nowrap;}
+  .btn-login:hover{border-color:var(--teal);color:var(--teal);}
+  .btn-sell{padding:8px 18px;border-radius:6px;border:none;background:var(--teal);font-size:13px;font-weight:600;font-family:var(--sans);color:var(--white);cursor:pointer;white-space:nowrap;}
+  .btn-sell:hover{background:var(--teal2);}
+
+  /* BANNER */
+  .banner{position:relative;height:420px;overflow:hidden;}
+  .banner-img{width:100%;height:100%;object-fit:cover;display:block;}
+  .banner-overlay{position:absolute;inset:0;background:linear-gradient(to right,rgba(0,0,0,.55) 0%,rgba(0,0,0,.15) 60%,transparent 100%);}
+  .banner-content{position:absolute;top:50%;left:60px;transform:translateY(-50%);max-width:480px;}
+  .banner-content h1{font-size:36px;font-weight:700;color:#fff;line-height:1.2;margin-bottom:12px;letter-spacing:-0.5px;}
+  .banner-content p{font-size:15px;color:rgba(255,255,255,.85);margin-bottom:24px;line-height:1.6;}
+  .banner-btns{display:flex;gap:12px;}
+  .btn-banner-main{padding:13px 28px;border-radius:6px;background:var(--teal);color:#fff;border:none;font-size:15px;font-weight:600;font-family:var(--sans);cursor:pointer;}
+  .btn-banner-main:hover{background:var(--teal2);}
+  .btn-banner-ghost{padding:12px 24px;border-radius:6px;background:transparent;color:#fff;border:2px solid rgba(255,255,255,.7);font-size:14px;font-family:var(--sans);cursor:pointer;}
+  .btn-banner-ghost:hover{background:rgba(255,255,255,.1);}
+
+  /* TRUST BAR */
+  .trust-bar{background:var(--teal-light);border-bottom:1px solid #C8EEEA;padding:10px 24px;display:flex;justify-content:center;gap:40px;flex-wrap:wrap;}
+  .trust-item{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--teal2);font-weight:500;}
+  .trust-item svg{width:15px;height:15px;fill:none;stroke:var(--teal);stroke-width:2;}
+
+  /* SECTION */
+  .section{padding:36px 24px;}
+  .section-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:20px;}
+  .section-title{font-size:20px;font-weight:700;color:var(--ink);letter-spacing:-0.3px;}
+  .section-more{font-size:13px;color:var(--teal);text-decoration:none;font-weight:500;}
+  .section-more:hover{text-decoration:underline;}
+
+  /* CATS */
+  .cats-scroll{display:flex;gap:10px;overflow-x:auto;padding-bottom:4px;}
+  .cats-scroll::-webkit-scrollbar{display:none;}
+  .cat-chip{display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px 20px;border-radius:10px;border:1.5px solid var(--border);background:var(--white);cursor:pointer;min-width:110px;transition:all .15s;text-decoration:none;}
+  .cat-chip:hover{border-color:var(--teal);background:var(--teal-light);}
+  .cat-chip img{width:48px;height:48px;object-fit:cover;border-radius:8px;}
+  .cat-chip span{font-size:12px;font-weight:500;color:var(--ink2);white-space:nowrap;}
+  .cat-chip:hover span{color:var(--teal);}
+
+  /* LISTINGS GRID */
+  .listings-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;}
+  .listing-card{cursor:pointer;border-radius:8px;overflow:hidden;transition:transform .15s;}
+  .listing-card:hover{transform:translateY(-2px);}
+  .listing-card:hover .lc-name{color:var(--teal);}
+  .lc-img{width:100%;aspect-ratio:1;object-fit:cover;display:block;background:var(--bg);}
+  .lc-body{padding:8px 4px;}
+  .lc-name{font-size:13px;font-weight:500;color:var(--ink);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:color .15s;}
+  .lc-meta{font-size:12px;color:var(--ink3);margin-bottom:4px;}
+  .lc-bot{display:flex;align-items:center;justify-content:space-between;}
+  .lc-price{font-size:15px;font-weight:700;color:var(--ink);}
+  .lc-badge{font-size:10px;padding:2px 8px;border-radius:20px;font-weight:500;}
+  .badge-livr{background:var(--teal-light);color:var(--teal2);}
+  .badge-cert{background:#FFF3E0;color:#E65100;}
+  .lc-fav{position:absolute;top:8px;right:8px;width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.9);display:flex;align-items:center;justify-content:center;cursor:pointer;border:none;}
+  .lc-fav svg{width:16px;height:16px;fill:none;stroke:var(--ink2);stroke-width:2;}
+  .lc-fav:hover svg{stroke:var(--teal);fill:var(--teal-light);}
+  .lc-wrap{position:relative;}
+
+  /* HOW */
+  .how-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
+  .how-step{text-align:center;padding:28px 20px;}
+  .how-icon{width:64px;height:64px;border-radius:50%;background:var(--teal-light);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;}
+  .how-icon svg{width:28px;height:28px;fill:none;stroke:var(--teal);stroke-width:2;}
+  .how-step h3{font-size:15px;font-weight:600;color:var(--ink);margin-bottom:8px;}
+  .how-step p{font-size:13px;color:var(--ink2);line-height:1.7;}
+
+  /* CERTIF BANNER */
+  .certif-banner{margin:0 24px 36px;border-radius:12px;overflow:hidden;display:grid;grid-template-columns:1fr 1fr;}
+  .cb-left{background:var(--teal);padding:40px 36px;}
+  .cb-left h2{font-size:24px;font-weight:700;color:#fff;margin-bottom:10px;line-height:1.2;}
+  .cb-left p{font-size:14px;color:rgba(255,255,255,.85);line-height:1.7;margin-bottom:24px;}
+  .cb-steps{display:flex;flex-direction:column;gap:10px;}
+  .cb-step{display:flex;align-items:center;gap:10px;font-size:13px;color:rgba(255,255,255,.9);}
+  .cb-step svg{width:16px;height:16px;fill:none;stroke:rgba(255,255,255,.7);stroke-width:2;flex-shrink:0;}
+  .cb-right{background:var(--bg);padding:40px 36px;display:flex;flex-direction:column;justify-content:center;gap:14px;}
+  .cb-right h3{font-size:18px;font-weight:700;color:var(--ink);margin-bottom:4px;}
+  .cb-right p{font-size:13px;color:var(--ink2);line-height:1.6;margin-bottom:8px;}
+  .btn-certif{padding:12px 24px;border-radius:6px;background:var(--teal);color:#fff;border:none;font-size:14px;font-weight:600;font-family:var(--sans);cursor:pointer;width:fit-content;}
+  .btn-certif:hover{background:var(--teal2);}
+
+  /* SIMULATOR */
+  .sim-section{background:var(--bg);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:36px 24px;}
+  .sim-inner{max-width:700px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;}
+  .sim-text h2{font-size:22px;font-weight:700;color:var(--ink);margin-bottom:10px;letter-spacing:-0.3px;}
+  .sim-text p{font-size:14px;color:var(--ink2);line-height:1.75;}
+  .sim-box{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:24px;}
+  .sim-lbl{font-size:13px;color:var(--ink2);margin-bottom:6px;}
+  .sim-lbl strong{color:var(--teal);font-size:18px;}
+  input[type=range]{width:100%;accent-color:var(--teal);margin-bottom:18px;height:4px;}
+  .sim-row{display:flex;justify-content:space-between;font-size:13px;padding:7px 0;border-bottom:1px solid var(--bg);}
+  .sim-row .l{color:var(--ink2);}
+  .sim-row .v{font-weight:600;color:var(--ink);}
+  .sim-row .vt{color:var(--teal);}
+  .sim-total{display:flex;justify-content:space-between;align-items:center;padding-top:12px;margin-top:4px;border-top:2px solid var(--border);}
+  .sim-total span{font-size:14px;font-weight:600;color:var(--ink);}
+  .sim-total .big{font-size:24px;font-weight:700;color:var(--teal);}
+
+  /* FOOTER */
+  footer{background:var(--ink);padding:36px 24px;display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:24px;}
+  .footer-col h4{font-size:13px;font-weight:600;color:var(--white);margin-bottom:12px;}
+  .footer-col a{display:block;font-size:13px;color:var(--ink3);text-decoration:none;margin-bottom:7px;}
+  .footer-col a:hover{color:var(--white);}
+  .footer-logo{font-size:20px;font-weight:700;color:var(--teal);}
+  .footer-logo span{color:var(--white);}
+  .footer-copy{border-top:1px solid #333;padding:16px 24px;font-size:12px;color:var(--ink3);text-align:center;}
+
+  @media(max-width:768px){
+    nav{padding:0 16px;gap:10px;}
+    .nav-cats{display:none;}
+    .banner{height:280px;}
+    .banner-content{left:20px;}
+    .banner-content h1{font-size:22px;}
+    .section{padding:24px 16px;}
+    .how-grid{grid-template-columns:1fr;}
+    .certif-banner{grid-template-columns:1fr;margin:0 16px 24px;}
+    .sim-inner{grid-template-columns:1fr;}
+    footer{grid-template-columns:1fr 1fr;}
+    .listings-grid{grid-template-columns:repeat(2,1fr);gap:10px;}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="logo" href="categories.html">kiloue<span>.com</span></a>
+  <div class="nav-search">
+    <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input type="text" placeholder="Tronçonneuse, tables, remorque…">
+  </div>
+  <div class="nav-cats" id="nav-cats">
+    <button class="nav-cat" onclick="window.location.href='categories.html'">Tout voir</button>
+    <div class="cat-drop" onmouseenter="openDrop('vehicules')" onmouseleave="closeDrop()"><button class="nav-cat">🚗 Véhicules</button></div>
+    <div class="cat-drop" onmouseenter="openDrop('nautisme')" onmouseleave="closeDrop()"><button class="nav-cat">🚤 Nautisme</button></div>
+    <div class="cat-drop" onmouseenter="openDrop('bricolage')" onmouseleave="closeDrop()"><button class="nav-cat">🔨 Bricolage</button></div>
+    <div class="cat-drop" onmouseenter="openDrop('jardinage')" onmouseleave="closeDrop()"><button class="nav-cat">🌳 Jardinage</button></div>
+    <div class="cat-drop" onmouseenter="openDrop('btp')" onmouseleave="closeDrop()"><button class="nav-cat">🏗️ BTP</button></div>
+    <div class="cat-drop" onmouseenter="openDrop('agricole')" onmouseleave="closeDrop()"><button class="nav-cat">🚜 Agricole</button></div>
+    <div class="cat-drop" onmouseenter="openDrop('maison')" onmouseleave="closeDrop()"><button class="nav-cat">🏠 Maison</button></div>
+    <div class="cat-drop" onmouseenter="openDrop('evenementiel')" onmouseleave="closeDrop()"><button class="nav-cat">🎉 Événementiel</button></div>
+    <div class="cat-drop" onmouseenter="openDrop('sport')" onmouseleave="closeDrop()"><button class="nav-cat">⚽ Sport</button></div>
+    <div class="cat-drop" onmouseenter="openDrop('hightech')" onmouseleave="closeDrop()"><button class="nav-cat">💻 High-Tech</button></div>
+    <div class="cat-drop" onmouseenter="openDrop('mode')" onmouseleave="closeDrop()"><button class="nav-cat">👗 Mode</button></div>
+    <div class="cat-drop" onmouseenter="openDrop('animaux')" onmouseleave="closeDrop()"><button class="nav-cat">🐶 Animaux</button></div>
+    <div class="cat-drop" onmouseenter="openDrop('divers')" onmouseleave="closeDrop()"><button class="nav-cat">📦 Divers</button></div>
+  </div>
+  <!-- MEGA MENU -->
+  <div id="mega-menu" onmouseenter="keepDrop()" onmouseleave="closeDrop()" style="display:none;position:absolute;left:0;right:0;background:#fff;border-top:2px solid var(--teal);border-bottom:1px solid var(--border);box-shadow:0 8px 32px rgba(0,0,0,.1);z-index:500;padding:24px 40px;">
+    <div id="mega-content"></div>
+  </div>
+  <div class="nav-actions">
+    <button class="btn-login" onclick="window.location.href='inscription.html'">S'inscrire | Se connecter</button>
+    <button class="btn-sell" onclick="window.location.href='publier.html'">Déposer une annonce</button>
+  </div>
+</nav>
+
+<!-- BANNER -->
+<div class="banner">
+  <img class="banner-img" src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1400&q=80" alt="Location de matériel">
+  <div class="banner-overlay"></div>
+  <div class="banner-content">
+    <h1>Louez le matériel dont vous avez besoin, près de chez vous</h1>
+    <p>Tronçonneuse, motoculteur, tables, remorques… Au prix fixé par votre voisin.</p>
+    <div class="banner-btns">
+      <button class="btn-banner-main" onclick="window.location.href='categories.html'">Parcourir les annonces</button>
+      <button class="btn-banner-ghost" onclick="window.location.href='publier.html'">Proposer du matériel</button>
+    </div>
+  </div>
+</div>
+
+<!-- TRUST -->
+<div class="trust-bar">
+  <div class="trust-item"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Loueurs vérifiés & certifiés</div>
+  <div class="trust-item"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Paiement sécurisé</div>
+  <div class="trust-item"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Zone de livraison au choix</div>
+  <div class="trust-item"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Avis vérifiés</div>
+  <div class="trust-item"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Commission 5% seulement</div>
+</div>
+
+<!-- CATEGORIES -->
+<div class="section">
+  <div class="section-head">
+    <div class="section-title">Parcourir par catégorie</div>
+  </div>
+  <div class="cats-scroll">
+    <a class="cat-chip" href="categories.html">
+      <img src="https://images.unsplash.com/photo-1617953141905-b27fb1f9a1b0?w=100&q=80" alt="Jardinage">
+      <span>Jardinage</span>
+    </a>
+    <a class="cat-chip" href="categories.html">
+      <img src="https://images.unsplash.com/photo-1504148455328-c376907d081c?w=100&q=80" alt="Bricolage">
+      <span>Bricolage</span>
+    </a>
+    <a class="cat-chip" href="categories.html">
+      <img src="https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=100&q=80" alt="Évènementiel">
+      <span>Évènementiel</span>
+    </a>
+    <a class="cat-chip" href="categories.html">
+      <img src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=100&q=80" alt="Agricole">
+      <span>Agricole</span>
+    </a>
+    <a class="cat-chip" href="categories.html">
+      <img src="https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=100&q=80" alt="Transport">
+      <span>Transport</span>
+    </a>
+    <a class="cat-chip" href="categories.html">
+      <img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=100&q=80" alt="Mobilier">
+      <span>Mobilier</span>
+    </a>
+    <a class="cat-chip" href="categories.html">
+      <img src="https://images.unsplash.com/photo-1572981779307-38b8cabb2407?w=100&q=80" alt="Outillage">
+      <span>Outillage pro</span>
+    </a>
+    <a class="cat-chip" href="categories.html">
+      <img src="https://images.unsplash.com/photo-1562259949-e8e7689d7828?w=100&q=80" alt="Électroportatif">
+      <span>Électroportatif</span>
+    </a>
+  </div>
+</div>
+
+<!-- ANNONCES -->
+<div class="section" id="annonces">
+  <div class="section-head">
+    <div class="section-title">Annonces près de vous · Ajaccio</div>
+    <a class="section-more" href="categories.html">Voir tout →</a>
+  </div>
+  <div class="listings-grid">
+
+    <div class="listing-card" onclick="window.location.href='annonce.html'">
+      <div class="lc-wrap">
+        <img class="lc-img" src="https://images.unsplash.com/photo-1617953141905-b27fb1f9a1b0?w=400&q=80" alt="Tronçonneuse">
+        <button class="lc-fav"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+      </div>
+      <div class="lc-body">
+        <div class="lc-name">Tronçonneuse Stihl MS 250</div>
+        <div class="lc-meta">Ajaccio · 4 km · ⭐ 4,9</div>
+        <div class="lc-bot">
+          <div class="lc-price">25 €<span style="font-size:12px;font-weight:400;color:var(--ink3);">/jour</span></div>
+          <div class="lc-badge badge-livr">Livraison</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="listing-card" onclick="window.location.href='annonce.html'">
+      <div class="lc-wrap">
+        <img class="lc-img" src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=400&q=80" alt="Motoculteur">
+        <button class="lc-fav"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+      </div>
+      <div class="lc-body">
+        <div class="lc-name">Motoculteur Honda F220</div>
+        <div class="lc-meta">Ajaccio · 8 km · ⭐ 4,7</div>
+        <div class="lc-bot">
+          <div class="lc-price">35 €<span style="font-size:12px;font-weight:400;color:var(--ink3);">/jour</span></div>
+          <div class="lc-badge badge-cert">Certifié</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="listing-card" onclick="window.location.href='annonce.html'">
+      <div class="lc-wrap">
+        <img class="lc-img" src="https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=400&q=80" alt="Chaises">
+        <button class="lc-fav"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+      </div>
+      <div class="lc-body">
+        <div class="lc-name">Lot 50 chaises blanches</div>
+        <div class="lc-meta">Mezzavia · 12 km · ⭐ 5,0</div>
+        <div class="lc-bot">
+          <div class="lc-price">40 €<span style="font-size:12px;font-weight:400;color:var(--ink3);">/jour</span></div>
+          <div class="lc-badge badge-livr">+20€ livr.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="listing-card" onclick="window.location.href='annonce.html'">
+      <div class="lc-wrap">
+        <img class="lc-img" src="https://images.unsplash.com/photo-1504148455328-c376907d081c?w=400&q=80" alt="Échafaudage">
+        <button class="lc-fav"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+      </div>
+      <div class="lc-body">
+        <div class="lc-name">Échafaudage roulant 4 m</div>
+        <div class="lc-meta">Ajaccio · 16 km · ⭐ 4,6</div>
+        <div class="lc-bot">
+          <div class="lc-price">18 €<span style="font-size:12px;font-weight:400;color:var(--ink3);">/jour</span></div>
+          <div class="lc-badge badge-cert">Certifié</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="listing-card" onclick="window.location.href='annonce.html'">
+      <div class="lc-wrap">
+        <img class="lc-img" src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&q=80" alt="Chapiteau">
+        <button class="lc-fav"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+      </div>
+      <div class="lc-body">
+        <div class="lc-name">Chapiteau 6 × 9 m</div>
+        <div class="lc-meta">Ajaccio · 6 km · ⭐ 4,8</div>
+        <div class="lc-bot">
+          <div class="lc-price">120 €<span style="font-size:12px;font-weight:400;color:var(--ink3);">/jour</span></div>
+          <div class="lc-badge badge-livr">Livraison incluse</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="listing-card" onclick="window.location.href='annonce.html'">
+      <div class="lc-wrap">
+        <img class="lc-img" src="https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=400&q=80" alt="Remorque">
+        <button class="lc-fav"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+      </div>
+      <div class="lc-body">
+        <div class="lc-name">Remorque benne 750 kg</div>
+        <div class="lc-meta">Ajaccio · 2 km · ⭐ 4,5</div>
+        <div class="lc-bot">
+          <div class="lc-price">22 €<span style="font-size:12px;font-weight:400;color:var(--ink3);">/jour</span></div>
+          <div class="lc-badge badge-cert">Sans caution</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="listing-card" onclick="window.location.href='annonce.html'">
+      <div class="lc-wrap">
+        <img class="lc-img" src="https://images.unsplash.com/photo-1572981779307-38b8cabb2407?w=400&q=80" alt="Perceuse">
+        <button class="lc-fav"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+      </div>
+      <div class="lc-body">
+        <div class="lc-name">Perceuse colonne Metabo</div>
+        <div class="lc-meta">Ajaccio · 5 km · ⭐ 4,9</div>
+        <div class="lc-bot">
+          <div class="lc-price">12 €<span style="font-size:12px;font-weight:400;color:var(--ink3);">/jour</span></div>
+          <div class="lc-badge badge-livr">Sur place</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="listing-card" onclick="window.location.href='annonce.html'">
+      <div class="lc-wrap">
+        <img class="lc-img" src="https://images.unsplash.com/photo-1562259949-e8e7689d7828?w=400&q=80" alt="Nettoyeur">
+        <button class="lc-fav"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+      </div>
+      <div class="lc-body">
+        <div class="lc-name">Nettoyeur haute pression</div>
+        <div class="lc-meta">Ajaccio · 3 km · ⭐ 4,7</div>
+        <div class="lc-bot">
+          <div class="lc-price">15 €<span style="font-size:12px;font-weight:400;color:var(--ink3);">/jour</span></div>
+          <div class="lc-badge badge-cert">Certifié</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<div class="section" style="background:var(--bg);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
+  <div class="section-head"><div class="section-title">Comment ça marche ?</div></div>
+  <div class="how-grid">
+    <div class="how-step">
+      <div class="how-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
+      <h3>Cherchez près de vous</h3>
+      <p>Entrez ce dont vous avez besoin. Chaque loueur définit sa propre zone maximale. Vous ne voyez que ce qui est accessible.</p>
+    </div>
+    <div class="how-step">
+      <div class="how-icon"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+      <h3>Réservez & payez en ligne</h3>
+      <p>Choisissez vos dates, confirmez la caution. Paiement 100% sécurisé. La commission de 5% est déduite automatiquement.</p>
+    </div>
+    <div class="how-step">
+      <div class="how-icon"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <h3>Louez, rendez, évaluez</h3>
+      <p>Récupérez ou faites livrer le matériel. Après retour, la caution est remboursée et vous laissez un avis vérifié.</p>
+    </div>
+  </div>
+</div>
+
+<!-- CERTIF -->
+<div class="certif-banner">
+  <div class="cb-left">
+    <h2>Devenez loueur certifié kiloue.com</h2>
+    <p>Le badge certifié vous donne 4× plus de visibilité et rassure les locataires. Obtenez-le en 5 étapes simples.</p>
+    <div class="cb-steps">
+      <div class="cb-step"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Téléphone vérifié par SMS</div>
+      <div class="cb-step"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Pièce d'identité + selfie</div>
+      <div class="cb-step"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Justificatif de domicile</div>
+      <div class="cb-step"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>RIB pour les virements</div>
+      <div class="cb-step"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>1ère évaluation ≥ 4★</div>
+    </div>
+  </div>
+  <div class="cb-right">
+    <div>
+      <h3>Prêt à louer votre matériel ?</h3>
+      <p>Créez votre annonce en 5 minutes. Aucun abonnement, aucun frais caché. Vous gardez 95% de chaque location.</p>
+    </div>
+    <button class="btn-certif" onclick="window.location.href='inscription.html'">Créer mon compte →</button>
+    <button class="btn-certif" style="background:transparent;color:var(--teal);border:1.5px solid var(--teal);padding:11px 24px;" onclick="window.location.href='publier.html'">Déposer une annonce</button>
+  </div>
+</div>
+
+<!-- SIMULATEUR -->
+<div class="sim-section">
+  <div class="sim-inner">
+    <div class="sim-text">
+      <h2>Vous fixez le prix.<br>On prend 5%, pas plus.</h2>
+      <p>Aucun abonnement, aucun frais caché. La commission est déduite automatiquement. Vous recevez votre virement sous 24h après chaque location.</p>
+    </div>
+    <div class="sim-box">
+      <div class="sim-lbl">Tarif journalier : <strong id="slbl">40 €</strong></div>
+      <input type="range" min="5" max="300" value="40" step="1" id="sl">
+      <div class="sim-row"><span class="l">Tarif affiché</span><span class="v" id="sa">40,00 €</span></div>
+      <div class="sim-row"><span class="l">Commission kiloue (5%)</span><span class="v vt" id="sc">− 2,00 €</span></div>
+      <div class="sim-total"><span>Vous recevez</span><span class="big" id="sn">38,00 €</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-col">
+    <div class="footer-logo">kiloue<span>.com</span></div>
+    <p style="font-size:12px;color:var(--ink3);margin-top:10px;line-height:1.6;">Location de matériel entre particuliers. Partout en France.</p>
+  </div>
+  <div class="footer-col">
+    <h4>Parcourir</h4>
+    <a href="categories.html">Jardinage & Forêt</a>
+    <a href="categories.html">Bricolage & BTP</a>
+    <a href="categories.html">Évènementiel</a>
+    <a href="categories.html">Agricole</a>
+    <a href="categories.html">Transport</a>
+  </div>
+  <div class="footer-col">
+    <h4>Loueurs</h4>
+    <a href="publier.html">Déposer une annonce</a>
+    <a href="inscription.html">Devenir certifié</a>
+    <a href="profil.html">Mon espace</a>
+    <a href="categories.html">Comment ça marche</a>
+  </div>
+  <div class="footer-col">
+    <h4>kiloue.com</h4>
+    <a href="categories.html">À propos</a>
+    <a href="categories.html">CGU</a>
+    <a href="categories.html">Confidentialité</a>
+    <a href="categories.html">Contact</a>
+  </div>
+</footer>
+<div class="footer-copy">© 2025 kiloue.com — Tous droits réservés</div>
+
+<script>
+  const sl = document.getElementById('sl');
+  function upd(){
+    const v = parseInt(sl.value);
+    const c = (v*.05).toFixed(2);
+    const n = (v - c).toFixed(2);
+    document.getElementById('slbl').textContent = v + ' €';
+    document.getElementById('sa').textContent = v.toFixed(2) + ' €';
+    document.getElementById('sc').textContent = '− ' + c + ' €';
+    document.getElementById('sn').textContent = n + ' €';
+  }
+  sl.addEventListener('input', upd);
+
+  document.querySelectorAll('.nav-cat').forEach(c => c.addEventListener('click', function(){
+    document.querySelectorAll('.nav-cat').forEach(x => x.classList.remove('active'));
+    this.classList.add('active');
+  }));
+
+  document.querySelectorAll('.lc-fav').forEach(btn => btn.addEventListener('click', function(e){
+    e.stopPropagation();
+    this.querySelector('svg').style.fill = this.querySelector('svg').style.fill ? '' : 'var(--teal)';
+    this.querySelector('svg').style.stroke = this.querySelector('svg').style.stroke === 'var(--teal)' ? 'var(--ink2)' : 'var(--teal)';
+  }));
+</script>
+
+<script>
+const MEGA = {
+  vehicules:{title:'🚗 Véhicules',subs:['Voitures','Utilitaires','Motos','Scooters','Vélos','Vélos électriques','Trottinettes électriques','Quads','Buggys','Camping-cars','Caravanes','Remorques','Autres']},
+  nautisme:{title:'🚤 Nautisme',subs:['Bateaux à moteur','Voiliers','Jet-skis','Kayaks','Canoës','Paddles','Pédalos','Équipements de pêche','Équipements de plongée','Remorques bateau','Autres']},
+  bricolage:{title:'🔨 Bricolage & Outillage',subs:['Perçage','Découpe','Ponçage','Soudure','Peinture','Outillage manuel','Outillage électrique','Échelles','Échafaudages','Nettoyage professionnel','Détecteurs et mesure','Autres']},
+  jardinage:{title:'🌳 Jardinage',subs:['Tondeuses','Tronçonneuses','Taille-haies','Débroussailleuses','Motobineuses','Broyeurs de végétaux','Souffleurs','Scarificateurs','Outils de jardin','Arrosage','Autres']},
+  btp:{title:'🏗️ BTP & Chantier',subs:['Mini-pelles','Nacelles','Compacteurs','Bétonnières','Groupes électrogènes','Marteaux-piqueurs','Lasers de chantier','Matériel de coffrage','Matériel de levage','Équipement de sécurité','Autres']},
+  agricole:{title:'🚜 Matériel Agricole',subs:['Tracteurs','Micro-tracteurs','Remorques agricoles','Broyeurs agricoles','Charrues','Pulvérisateurs','Semoirs','Matériel d\'irrigation','Récolte et entretien','Équipements d\'élevage','Autres']},
+  maison:{title:'🏠 Maison & Équipement',subs:['Électroménager','Chauffage','Climatisation','Nettoyage','Déshumidificateurs','Mobilier','Déménagement','Décoration','Bricolage domestique','Autres']},
+  evenementiel:{title:'🎉 Événementiel',subs:['Tables','Chaises','Barnums','Tentes de réception','Vaisselle','Décoration événementielle','Structures gonflables','Machines festives','Matériel mariage','Matériel anniversaire','Sonorisation','Éclairage','Autres']},
+  sport:{title:'⚽ Sport & Loisirs',subs:['Fitness & Musculation','Cyclisme','Sports nautiques','Sports d\'hiver','Sports collectifs','Sports de combat','Sports de raquette','Randonnée','Camping','Chasse','Pêche','Autres']},
+  hightech:{title:'💻 High-Tech & Multimédia',subs:['Ordinateurs','Tablettes','Smartphones','Consoles de jeux','Réalité virtuelle','Appareils photo','Caméras','Drones','Vidéoprojecteurs','Imprimantes','Écrans','Accessoires informatiques','Autres']},
+  mode:{title:'👗 Mode & Accessoires',subs:['Robes de soirée','Costumes','Vêtements homme','Vêtements femme','Vêtements enfant','Sacs de luxe','Bijoux','Montres','Chaussures','Accessoires de mode','Autres']},
+  animaux:{title:'🐶 Animaux',subs:['Cages','Niches','Clôtures mobiles','Remorques pour animaux','Matériel d\'équitation','Transport animalier','Matériel d\'élevage','Accessoires pour chiens','Accessoires pour chats','Autres']},
+  divers:{title:'📦 Divers',subs:['Instruments de musique','Équipements pour animaux','Matériel médical','Déguisements','Livres et collections','Jeux de société','Voyage et bagagerie','Matériel scolaire','Objets de collection','Autres']},
+};
+
+let dropTimeout;
+let megaOpen = false;
+
+function openDrop(cat) {
+  clearTimeout(dropTimeout);
+  const d = MEGA[cat];
+  if (!d) return;
+  const cols = 4;
+  const perCol = Math.ceil(d.subs.length / cols);
+  let colsHtml = '';
+  for (let c = 0; c < cols; c++) {
+    const items = d.subs.slice(c * perCol, (c + 1) * perCol);
+    if (!items.length) break;
+    colsHtml += `<div>${items.map(s => `<a class="mega-link" onclick="window.location.href='categories.html?cat=${cat}'">${s}</a>`).join('')}</div>`;
+  }
+  document.getElementById('mega-content').innerHTML = `
+    <div style="margin-bottom:14px;font-size:15px;font-weight:700;color:var(--ink);">${d.title}</div>
+    <div class="mega-cols">${colsHtml}</div>
+    <div style="margin-top:16px;border-top:1px solid var(--border);padding-top:14px;">
+      <button class="mega-see-all" onclick="window.location.href='categories.html?cat=${cat}'">Voir toutes les annonces →</button>
+    </div>`;
+  document.getElementById('mega-menu').style.display = 'block';
+  megaOpen = true;
+}
+
+function keepDrop() {
+  clearTimeout(dropTimeout);
+}
+
+function closeDrop() {
+  dropTimeout = setTimeout(() => {
+    document.getElementById('mega-menu').style.display = 'none';
+    megaOpen = false;
+  }, 200);
+}
+</script>
+
+<script>
+function doSearch(){
+  const q = document.getElementById('main-search')?.value || '';
+  if(q.trim()) window.location.href = 'recherche.html?q=' + encodeURIComponent(q.trim());
+  else window.location.href = 'recherche.html';
+}
+</script>
+</body>
+</html>
