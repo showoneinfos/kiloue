@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Déposer une annonce — kiloue.com</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --sand:#FDFAF5; --sand1:#F5EFE3; --sand2:#E8DCC8; --sand3:#CFC0A0;
+    --wood:#A0652A; --wood2:#7A4A1E; --wood3:#4E2D0C;
+    --terra:#D4622A; --terra2:#A84A1A;
+    --ink:#1E1208; --ink2:#6B4E2E;
+    --green:#3D6B35; --green2:#2A4D24;
+    --serif:'Playfair Display',Georgia,serif;
+    --sans:'DM Sans',system-ui,sans-serif;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:var(--sans);background:var(--sand);color:var(--ink);}
+
+  /* NAV */
+  nav{position:sticky;top:0;z-index:100;background:rgba(253,250,245,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--sand2);display:flex;align-items:center;justify-content:space-between;padding:0 40px;height:64px;}
+  .logo{font-family:var(--serif);font-size:22px;font-weight:700;color:var(--ink);text-decoration:none;display:flex;align-items:center;gap:10px;}
+  .logo-icon{width:34px;height:34px;background:var(--terra);border-radius:9px;display:flex;align-items:center;justify-content:center;}
+  .logo-icon svg{width:18px;height:18px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;}
+  .logo em{color:var(--terra);font-style:normal;}
+  .nav-right{display:flex;gap:10px;}
+  .btn-ghost{padding:7px 16px;border-radius:8px;border:1.5px solid var(--sand3);background:transparent;font-size:13px;font-family:var(--sans);cursor:pointer;color:var(--ink2);}
+  .btn-ghost:hover{background:var(--sand1);}
+  .btn-fill{padding:8px 18px;border-radius:8px;border:none;background:var(--terra);font-size:13px;font-weight:500;font-family:var(--sans);color:#fff;cursor:pointer;}
+  .btn-fill:hover{background:var(--terra2);}
+
+  /* BREADCRUMB */
+  .breadcrumb{padding:14px 40px;font-size:13px;color:var(--ink2);display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--sand2);}
+  .breadcrumb a{color:var(--ink2);text-decoration:none;}
+  .breadcrumb a:hover{color:var(--terra);}
+  .breadcrumb svg{width:14px;height:14px;fill:none;stroke:var(--sand3);stroke-width:2;}
+
+  /* LAYOUT */
+  .page-wrap{max-width:960px;margin:0 auto;padding:40px 40px 80px;display:grid;grid-template-columns:1fr 300px;gap:40px;align-items:start;}
+
+  /* STEPS BAR */
+  .steps-bar{grid-column:1/-1;display:flex;align-items:center;gap:0;margin-bottom:8px;}
+  .step-item{display:flex;align-items:center;gap:10px;flex:1;}
+  .step-item:last-child{flex:0;}
+  .step-num{width:32px;height:32px;border-radius:50%;border:2px solid var(--sand2);background:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;color:var(--ink2);flex-shrink:0;transition:all .2s;}
+  .step-num.active{border-color:var(--terra);background:var(--terra);color:#fff;}
+  .step-num.done{border-color:var(--green);background:var(--green);color:#fff;}
+  .step-label{font-size:12px;color:var(--ink2);}
+  .step-label.active{color:var(--terra);font-weight:500;}
+  .step-line{flex:1;height:1px;background:var(--sand2);margin:0 12px;}
+  .step-line.done{background:var(--green);}
+
+  /* FORM CARD */
+  .form-card{background:#fff;border:1px solid var(--sand2);border-radius:16px;padding:28px;}
+  .form-section{margin-bottom:28px;}
+  .form-section-title{font-size:16px;font-weight:500;color:var(--ink);margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--sand2);display:flex;align-items:center;gap:8px;}
+  .form-section-title svg{width:18px;height:18px;fill:none;stroke:var(--terra);stroke-width:2;}
+  .field{margin-bottom:16px;}
+  .field label{display:block;font-size:12px;font-weight:500;color:var(--ink2);margin-bottom:6px;text-transform:uppercase;letter-spacing:.4px;}
+  .field input,.field select,.field textarea{width:100%;border:1.5px solid var(--sand2);border-radius:10px;padding:11px 14px;font-size:14px;font-family:var(--sans);color:var(--ink);background:#fff;transition:border-color .15s;outline:none;}
+  .field input:focus,.field select:focus,.field textarea:focus{border-color:var(--terra);}
+  .field textarea{min-height:100px;resize:vertical;line-height:1.6;}
+  .field-hint{font-size:11px;color:var(--ink2);margin-top:5px;}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
+
+  /* CATS GRID */
+  .cats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+  .cat-btn{padding:14px 8px;border-radius:10px;border:1.5px solid var(--sand2);background:transparent;cursor:pointer;text-align:center;transition:all .15s;font-family:var(--sans);}
+  .cat-btn:hover{border-color:var(--terra);background:var(--sand1);}
+  .cat-btn.selected{border-color:var(--terra);background:#FDF0EA;}
+  .cat-btn .cat-icon{font-size:22px;display:block;margin-bottom:6px;}
+  .cat-btn .cat-name{font-size:11px;color:var(--ink2);}
+  .cat-btn.selected .cat-name{color:var(--terra);font-weight:500;}
+
+  /* TOGGLE */
+  .toggle-row{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--sand1);}
+  .toggle-row:last-child{border-bottom:none;}
+  .tgl-info .tgl-lbl{font-size:14px;color:var(--ink);font-weight:500;}
+  .tgl-info .tgl-sub{font-size:12px;color:var(--ink2);margin-top:2px;}
+  .tgl{width:42px;height:24px;border-radius:12px;background:var(--sand2);position:relative;cursor:pointer;transition:background .2s;flex-shrink:0;}
+  .tgl.on{background:var(--terra);}
+  .tgl::after{content:'';position:absolute;width:18px;height:18px;border-radius:50%;background:#fff;top:3px;left:3px;transition:transform .2s;}
+  .tgl.on::after{transform:translateX(18px);}
+
+  /* PHOTO UPLOAD */
+  .photo-zone{border:2px dashed var(--sand3);border-radius:12px;padding:32px;text-align:center;cursor:pointer;transition:all .2s;}
+  .photo-zone:hover{border-color:var(--terra);background:var(--sand1);}
+  .photo-zone svg{width:36px;height:36px;fill:none;stroke:var(--sand3);stroke-width:1.5;margin-bottom:10px;}
+  .photo-zone p{font-size:13px;color:var(--ink2);}
+  .photo-zone span{font-size:12px;color:var(--sand3);}
+  .photo-previews{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;}
+  .photo-preview{width:72px;height:72px;border-radius:8px;background:var(--sand1);border:1px solid var(--sand2);display:flex;align-items:center;justify-content:center;font-size:24px;position:relative;cursor:pointer;}
+  .photo-preview .remove{position:absolute;top:-6px;right:-6px;width:18px;height:18px;border-radius:50%;background:var(--terra);color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center;border:none;cursor:pointer;}
+
+  /* ZONE MAP */
+  .zone-preview{background:var(--sand1);border-radius:10px;padding:16px;margin-top:10px;display:flex;align-items:center;gap:12px;}
+  .zone-circle{width:48px;height:48px;border-radius:50%;border:2px dashed var(--terra);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .zone-circle svg{width:20px;height:20px;fill:none;stroke:var(--terra);stroke-width:2;}
+  .zone-text{font-size:13px;color:var(--ink2);}
+  .zone-text strong{color:var(--ink);display:block;font-size:14px;}
+
+  /* PREVIEW CARD (right) */
+  .preview-card{background:#fff;border:1px solid var(--sand2);border-radius:16px;padding:20px;position:sticky;top:84px;}
+  .preview-title{font-size:13px;font-weight:500;color:var(--ink2);margin-bottom:14px;text-transform:uppercase;letter-spacing:.5px;}
+  .preview-thumb{height:110px;background:var(--sand1);border-radius:10px;border:1px solid var(--sand2);display:flex;align-items:center;justify-content:center;font-size:48px;margin-bottom:12px;}
+  .preview-name{font-size:15px;font-weight:500;color:var(--ink);margin-bottom:4px;}
+  .preview-loc{font-size:12px;color:var(--ink2);display:flex;align-items:center;gap:4px;margin-bottom:10px;}
+  .preview-loc svg{width:12px;height:12px;fill:none;stroke:var(--terra);stroke-width:2;}
+  .preview-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;}
+  .preview-tag{font-size:10px;padding:2px 8px;border-radius:20px;background:var(--sand1);color:var(--ink2);border:1px solid var(--sand2);}
+  .preview-tag.green{background:#EAF2E8;color:var(--green2);}
+  .preview-price{font-size:22px;font-weight:500;color:var(--terra);}
+  .preview-price small{font-size:13px;color:var(--ink2);font-weight:400;}
+  .commission-box{background:var(--sand1);border-radius:10px;padding:14px;margin-top:14px;}
+  .comm-row{display:flex;justify-content:space-between;font-size:13px;padding:4px 0;}
+  .comm-row .l{color:var(--ink2);}
+  .comm-row .v{font-weight:500;color:var(--ink);}
+  .comm-total{display:flex;justify-content:space-between;font-size:14px;font-weight:500;border-top:1px solid var(--sand2);margin-top:6px;padding-top:8px;}
+  .comm-total .big{color:var(--green);font-size:17px;}
+
+  /* SUBMIT */
+  .submit-wrap{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;padding-top:20px;border-top:1px solid var(--sand2);}
+  .btn-back{padding:12px 24px;border-radius:10px;border:1.5px solid var(--sand3);background:transparent;font-size:14px;font-family:var(--sans);cursor:pointer;color:var(--ink2);}
+  .btn-next{padding:13px 36px;border-radius:10px;background:var(--terra);color:#fff;border:none;font-size:15px;font-weight:500;font-family:var(--sans);cursor:pointer;transition:background .15s;display:flex;align-items:center;gap:8px;}
+  .btn-next:hover{background:var(--terra2);}
+  .btn-next svg{width:16px;height:16px;fill:none;stroke:#fff;stroke-width:2;}
+
+  /* SUCCESS */
+  .success-overlay{display:none;position:fixed;inset:0;background:rgba(30,18,8,.5);z-index:200;align-items:center;justify-content:center;}
+  .success-box{background:#fff;border-radius:20px;padding:40px;max-width:440px;width:90%;text-align:center;}
+  .success-icon{width:64px;height:64px;border-radius:50%;background:#EAF2E8;display:flex;align-items:center;justify-content:center;margin:0 auto 18px;}
+  .success-icon svg{width:32px;height:32px;fill:none;stroke:var(--green);stroke-width:2;}
+  .success-box h2{font-family:var(--serif);font-size:24px;font-weight:700;color:var(--ink);margin-bottom:10px;}
+  .success-box p{font-size:14px;color:var(--ink2);line-height:1.7;margin-bottom:24px;}
+  .btn-success{width:100%;padding:14px;border-radius:10px;background:var(--terra);color:#fff;border:none;font-family:var(--sans);font-size:15px;font-weight:500;cursor:pointer;}
+
+  @media(max-width:768px){
+    nav{padding:0 16px;}
+    .breadcrumb{padding:10px 16px;}
+    .page-wrap{grid-template-columns:1fr;padding:20px 16px 80px;}
+    .steps-bar{overflow-x:auto;padding-bottom:4px;}
+    .row2,.row3{grid-template-columns:1fr;}
+    .cats-grid{grid-template-columns:repeat(3,1fr);}
+    .preview-card{display:none;}
+    .submit-wrap{grid-column:1;position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--sand2);padding:16px 20px;z-index:50;}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="logo" href="index.html">
+    <div class="logo-icon">
+      <svg viewBox="0 0 24 24"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>
+    </div>
+    ki<em>loue</em>
+  </a>
+  <div class="nav-right">
+    <button class="btn-ghost">Se connecter</button>
+    <button class="btn-fill">Mon compte</button>
+  </div>
+</nav>
+
+<div class="breadcrumb">
+  <a href="index.html">Accueil</a>
+  <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+  Déposer une annonce
+</div>
+
+<div class="page-wrap">
+
+  <!-- STEPS -->
+  <div class="steps-bar">
+    <div class="step-item">
+      <div class="step-num done" id="sn1">
+        <svg width="14" height="14" fill="none" stroke="#fff" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <div class="step-label active" id="sl1">Catégorie</div>
+    </div>
+    <div class="step-line done" id="sl-1"></div>
+    <div class="step-item">
+      <div class="step-num active" id="sn2">2</div>
+      <div class="step-label active" id="sl2">Matériel</div>
+    </div>
+    <div class="step-line" id="sl-2"></div>
+    <div class="step-item">
+      <div class="step-num" id="sn3">3</div>
+      <div class="step-label" id="sl3">Tarifs & zone</div>
+    </div>
+    <div class="step-line" id="sl-3"></div>
+    <div class="step-item">
+      <div class="step-num" id="sn4">4</div>
+      <div class="step-label" id="sl4">Photos</div>
+    </div>
+    <div class="step-line" id="sl-4"></div>
+    <div class="step-item">
+      <div class="step-num" id="sn5">5</div>
+      <div class="step-label" id="sl5">Confirmation</div>
+    </div>
+  </div>
+
+  <!-- MAIN FORM -->
+  <div>
+
+    <!-- STEP 1 : CATEGORIE -->
+    <div class="form-card" id="step-1" style="display:none;">
+      <div class="form-section">
+        <div class="form-section-title">
+          <svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h7"/></svg>
+          Choisissez une catégorie
+        </div>
+        <div class="cats-grid">
+          <button class="cat-btn selected" onclick="selectCat(this,'🌿','Jardinage & Forêt')">
+            <span class="cat-icon">🌿</span>
+            <span class="cat-name">Jardinage & Forêt</span>
+          </button>
+          <button class="cat-btn" onclick="selectCat(this,'🔧','Bricolage & BTP')">
+            <span class="cat-icon">🔧</span>
+            <span class="cat-name">Bricolage & BTP</span>
+          </button>
+          <button class="cat-btn" onclick="selectCat(this,'🎪','Évènementiel')">
+            <span class="cat-icon">🎪</span>
+            <span class="cat-name">Évènementiel</span>
+          </button>
+          <button class="cat-btn" onclick="selectCat(this,'🚜','Agricole')">
+            <span class="cat-icon">🚜</span>
+            <span class="cat-name">Agricole</span>
+          </button>
+          <button class="cat-btn" onclick="selectCat(this,'🚛','Transport')">
+            <span class="cat-icon">🚛</span>
+            <span class="cat-name">Transport</span>
+          </button>
+          <button class="cat-btn" onclick="selectCat(this,'🧰','Outillage pro')">
+            <span class="cat-icon">🧰</span>
+            <span class="cat-name">Outillage pro</span>
+          </button>
+          <button class="cat-btn" onclick="selectCat(this,'🪑','Mobilier')">
+            <span class="cat-icon">🪑</span>
+            <span class="cat-name">Mobilier</span>
+          </button>
+          <button class="cat-btn" onclick="selectCat(this,'⚡','Électroportatif')">
+            <span class="cat-icon">⚡</span>
+            <span class="cat-name">Électroportatif</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 2 : MATERIEL -->
+    <div class="form-card" id="step-2">
+      <div class="form-section">
+        <div class="form-section-title">
+          <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          Décrivez votre matériel
+        </div>
+        <div class="field">
+          <label>Titre de l'annonce *</label>
+          <input type="text" id="f-titre" placeholder="Ex : Tronçonneuse Stihl MS 250 — excellent état" oninput="updatePreview()">
+          <div class="field-hint">Soyez précis : marque, modèle, état. Max 80 caractères.</div>
+        </div>
+        <div class="field">
+          <label>Description *</label>
+          <textarea id="f-desc" placeholder="Décrivez l'état du matériel, ce qui est inclus (accessoires, protection…), les conditions d'utilisation particulières…" oninput="updatePreview()"></textarea>
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label>Marque</label>
+            <input type="text" id="f-marque" placeholder="Stihl, Honda, Husqvarna…">
+          </div>
+          <div class="field">
+            <label>Modèle</label>
+            <input type="text" id="f-modele" placeholder="MS 250, F220…">
+          </div>
+        </div>
+        <div class="field">
+          <label>État du matériel *</label>
+          <select id="f-etat">
+            <option value="">Sélectionner…</option>
+            <option>Neuf / jamais utilisé</option>
+            <option>Très bon état</option>
+            <option>Bon état</option>
+            <option>État correct</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 3 : TARIFS -->
+    <div class="form-card" id="step-3" style="display:none;">
+      <div class="form-section">
+        <div class="form-section-title">
+          <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          Tarifs
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label>Prix à la journée (€) *</label>
+            <input type="number" id="f-prix" placeholder="25" min="1" oninput="updatePreview()">
+          </div>
+          <div class="field">
+            <label>Prix demi-journée (€)</label>
+            <input type="number" id="f-prix-demi" placeholder="15" min="1">
+            <div class="field-hint">Optionnel</div>
+          </div>
+        </div>
+        <div class="field">
+          <label>Caution demandée (€)</label>
+          <input type="number" id="f-caution" placeholder="Laisser vide si aucune caution" min="0" oninput="updatePreview()">
+          <div class="field-hint">La caution est remboursée automatiquement après retour conforme.</div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="form-section-title">
+          <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Zone de location
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label>Votre ville *</label>
+            <input type="text" id="f-ville" placeholder="Ajaccio" oninput="updatePreview()">
+          </div>
+          <div class="field">
+            <label>Rayon maximum *</label>
+            <select id="f-rayon" onchange="updatePreview()">
+              <option>10 km</option>
+              <option selected>30 km</option>
+              <option>50 km</option>
+              <option>Toute la France</option>
+            </select>
+          </div>
+        </div>
+        <div class="zone-preview">
+          <div class="zone-circle">
+            <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          </div>
+          <div class="zone-text">
+            <strong id="zone-label">Votre ville + 30 km autour</strong>
+            Les locataires en dehors de cette zone ne verront pas votre annonce.
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="form-section-title">
+          <svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+          Options
+        </div>
+        <div class="toggle-row">
+          <div class="tgl-info">
+            <div class="tgl-lbl">Livraison à domicile proposée</div>
+            <div class="tgl-sub">Précisez un supplément de livraison ci-dessous</div>
+          </div>
+          <div class="tgl" id="tgl-livraison" onclick="toggleOpt(this,'livraison-extra')"></div>
+        </div>
+        <div id="livraison-extra" style="display:none;padding:12px 0;">
+          <div class="field">
+            <label>Supplément livraison (€)</label>
+            <input type="number" placeholder="15" min="0">
+          </div>
+        </div>
+        <div class="toggle-row">
+          <div class="tgl-info">
+            <div class="tgl-lbl">Disponible immédiatement</div>
+            <div class="tgl-sub">Le matériel est libre dès aujourd'hui</div>
+          </div>
+          <div class="tgl on" id="tgl-dispo" onclick="this.classList.toggle('on')"></div>
+        </div>
+        <div class="toggle-row">
+          <div class="tgl-info">
+            <div class="tgl-lbl">Location le week-end uniquement</div>
+            <div class="tgl-sub">Votre annonce sera prioritaire le samedi et dimanche</div>
+          </div>
+          <div class="tgl" id="tgl-we" onclick="this.classList.toggle('on')"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 4 : PHOTOS -->
+    <div class="form-card" id="step-4" style="display:none;">
+      <div class="form-section">
+        <div class="form-section-title">
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          Photos de votre matériel
+        </div>
+        <div class="photo-zone" onclick="document.getElementById('photo-input').click()">
+          <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          <p>Glissez vos photos ici ou cliquez pour parcourir</p>
+          <span>JPG, PNG · Max 5 Mo par photo · 3 photos minimum</span>
+          <input type="file" id="photo-input" multiple accept="image/*" style="display:none" onchange="handlePhotos(this)">
+        </div>
+        <div class="photo-previews" id="photo-previews">
+          <div class="photo-preview">🪚<button class="remove" onclick="removePhoto(this)">×</button></div>
+          <div class="photo-preview">⚙️<button class="remove" onclick="removePhoto(this)">×</button></div>
+        </div>
+        <div class="field-hint" style="margin-top:10px;">Les annonces avec 3+ photos reçoivent 4× plus de demandes. Montrez le matériel sous différents angles.</div>
+      </div>
+    </div>
+
+    <!-- STEP 5 : CONFIRMATION -->
+    <div class="form-card" id="step-5" style="display:none;">
+      <div class="form-section">
+        <div class="form-section-title">
+          <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          Récapitulatif de votre annonce
+        </div>
+        <div style="background:var(--sand1);border-radius:12px;padding:20px;margin-bottom:16px;">
+          <div style="font-size:18px;font-weight:500;color:var(--ink);margin-bottom:8px;" id="recap-titre">Tronçonneuse Stihl MS 250</div>
+          <div style="display:flex;gap:16px;font-size:13px;color:var(--ink2);flex-wrap:wrap;">
+            <span id="recap-cat">🌿 Jardinage & Forêt</span>
+            <span id="recap-ville">📍 Ajaccio · 30 km</span>
+            <span id="recap-prix">💶 25€ / jour</span>
+          </div>
+        </div>
+        <div class="toggle-row" style="border:1px solid var(--sand2);border-radius:10px;padding:14px;margin-bottom:12px;">
+          <div class="tgl-info">
+            <div class="tgl-lbl">J'accepte les conditions générales d'utilisation</div>
+            <div class="tgl-sub" style="color:var(--terra);cursor:pointer;">Lire les CGU kiloue.com →</div>
+          </div>
+          <div class="tgl" id="tgl-cgu" onclick="this.classList.toggle('on');checkCGU()"></div>
+        </div>
+        <div class="toggle-row" style="border:1px solid var(--sand2);border-radius:10px;padding:14px;">
+          <div class="tgl-info">
+            <div class="tgl-lbl">Je certifie être propriétaire de ce matériel</div>
+            <div class="tgl-sub">En cochant ceci, vous confirmez avoir le droit de louer ce bien.</div>
+          </div>
+          <div class="tgl" id="tgl-proprio" onclick="this.classList.toggle('on');checkCGU()"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- PREVIEW CARD -->
+  <div>
+    <div class="preview-card">
+      <div class="preview-title">Aperçu de votre annonce</div>
+      <div class="preview-thumb" id="prev-thumb">🌿</div>
+      <div class="preview-name" id="prev-name">Nom de votre matériel</div>
+      <div class="preview-loc" id="prev-loc">
+        <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        Votre ville
+      </div>
+      <div class="preview-tags">
+        <div class="preview-tag green" id="prev-livraison" style="display:none;">Livraison possible</div>
+        <div class="preview-tag" id="prev-caution">Sans caution</div>
+      </div>
+      <div class="preview-price" id="prev-price">— <small>/ jour</small></div>
+      <div class="commission-box">
+        <div style="font-size:11px;color:var(--ink2);margin-bottom:8px;text-transform:uppercase;letter-spacing:.4px;">Vos revenus estimés</div>
+        <div class="comm-row"><span class="l">Tarif affiché</span><span class="v" id="comm-brut">—</span></div>
+        <div class="comm-row"><span class="l">Commission (5%)</span><span class="v" style="color:var(--terra);" id="comm-fee">—</span></div>
+        <div class="comm-total"><span>Vous recevez</span><span class="big" id="comm-net">—</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUBMIT BAR -->
+  <div class="submit-wrap">
+    <button class="btn-back" id="btn-back" onclick="prevStep()" style="visibility:hidden;">← Retour</button>
+    <button class="btn-next" id="btn-next" onclick="nextStep()">
+      Continuer
+      <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    </button>
+  </div>
+
+</div>
+
+<!-- SUCCESS MODAL -->
+<div class="success-overlay" id="success-overlay" style="display:none;">
+  <div class="success-box">
+    <div class="success-icon">
+      <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+    </div>
+    <h2>Annonce publiée !</h2>
+    <p>Votre annonce est maintenant en ligne sur kiloue.com. Vous serez notifié dès qu'un locataire vous contacte.</p>
+    <div style="background:var(--sand1);border-radius:10px;padding:14px;font-size:13px;color:var(--ink2);margin-bottom:20px;text-align:left;">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+        <span style="width:8px;height:8px;border-radius:50%;background:var(--green);display:inline-block;"></span>
+        Annonce visible immédiatement
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+        <span style="width:8px;height:8px;border-radius:50%;background:var(--terra);display:inline-block;"></span>
+        Certification recommandée pour +4× de visibilité
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span style="width:8px;height:8px;border-radius:50%;background:var(--wood);display:inline-block;"></span>
+        Vous recevrez vos premiers virements sous 24h après location
+      </div>
+    </div>
+    <button class="btn-success" onclick="window.location.href='index.html'">Voir mon annonce en ligne</button>
+  </div>
+</div>
+
+<script>
+  let currentStep = 2;
+  let selectedCatIcon = '🌿';
+  let selectedCatName = 'Jardinage & Forêt';
+
+  function goToStep(n) {
+    for (let i = 1; i <= 5; i++) {
+      const el = document.getElementById('step-' + i);
+      if (el) el.style.display = i === n ? 'block' : 'none';
+      const sn = document.getElementById('sn' + i);
+      const sl = document.getElementById('sl' + i);
+      if (i < n) {
+        sn.classList.add('done'); sn.classList.remove('active');
+        sn.innerHTML = '<svg width="14" height="14" fill="none" stroke="#fff" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>';
+        sl.classList.add('active');
+        const line = document.getElementById('sl-' + i);
+        if (line) line.classList.add('done');
+      } else if (i === n) {
+        sn.classList.add('active'); sn.classList.remove('done');
+        sn.textContent = i;
+        sl.classList.add('active');
+      } else {
+        sn.classList.remove('active', 'done');
+        sn.textContent = i;
+        sl.classList.remove('active');
+        const line = document.getElementById('sl-' + i);
+        if (line) line.classList.remove('done');
+      }
+    }
+    document.getElementById('btn-back').style.visibility = n > 1 ? 'visible' : 'hidden';
+    const btnNext = document.getElementById('btn-next');
+    if (n === 5) {
+      btnNext.innerHTML = 'Publier l\'annonce <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#fff" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>';
+    } else {
+      btnNext.innerHTML = 'Continuer <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#fff" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>';
+    }
+    currentStep = n;
+    updateRecap();
+    window.scrollTo(0, 0);
+  }
+
+  function nextStep() {
+    if (currentStep === 5) {
+      publishAnnonce();
+    } else {
+      goToStep(currentStep + 1);
+    }
+  }
+
+  function prevStep() {
+    if (currentStep > 1) goToStep(currentStep - 1);
+  }
+
+  function selectCat(el, icon, name) {
+    document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('selected'));
+    el.classList.add('selected');
+    selectedCatIcon = icon;
+    selectedCatName = name;
+    document.getElementById('prev-thumb').textContent = icon;
+    updatePreview();
+  }
+
+  function toggleOpt(tgl, targetId) {
+    tgl.classList.toggle('on');
+    const el = document.getElementById(targetId);
+    if (el) el.style.display = tgl.classList.contains('on') ? 'block' : 'none';
+    document.getElementById('prev-livraison').style.display = tgl.classList.contains('on') ? 'flex' : 'none';
+  }
+
+  function updatePreview() {
+    const titre = document.getElementById('f-titre')?.value || '';
+    const ville = document.getElementById('f-ville')?.value || '';
+    const rayon = document.getElementById('f-rayon')?.value || '30 km';
+    const prix = parseFloat(document.getElementById('f-prix')?.value) || 0;
+    const caution = document.getElementById('f-caution')?.value;
+
+    document.getElementById('prev-name').textContent = titre || 'Nom de votre matériel';
+    document.getElementById('prev-loc').innerHTML = `<svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="#D4622A" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> ${ville || 'Votre ville'} · ${rayon}`;
+    document.getElementById('zone-label').textContent = (ville || 'Votre ville') + ' + ' + rayon + ' autour';
+
+    if (prix > 0) {
+      const fee = (prix * 0.05).toFixed(2);
+      const net = (prix - fee).toFixed(2);
+      document.getElementById('prev-price').innerHTML = prix + '€ <small>/ jour</small>';
+      document.getElementById('comm-brut').textContent = prix.toFixed(2) + ' €';
+      document.getElementById('comm-fee').textContent = '− ' + fee + ' €';
+      document.getElementById('comm-net').textContent = net + ' €';
+    } else {
+      document.getElementById('prev-price').innerHTML = '— <small>/ jour</small>';
+      document.getElementById('comm-brut').textContent = '—';
+      document.getElementById('comm-fee').textContent = '—';
+      document.getElementById('comm-net').textContent = '—';
+    }
+
+    document.getElementById('prev-caution').textContent = caution ? 'Caution ' + caution + '€' : 'Sans caution';
+  }
+
+  function updateRecap() {
+    const titre = document.getElementById('f-titre')?.value || 'Non renseigné';
+    const ville = document.getElementById('f-ville')?.value || '—';
+    const rayon = document.getElementById('f-rayon')?.value || '30 km';
+    const prix = document.getElementById('f-prix')?.value || '—';
+    document.getElementById('recap-titre').textContent = titre;
+    document.getElementById('recap-cat').textContent = selectedCatIcon + ' ' + selectedCatName;
+    document.getElementById('recap-ville').textContent = '📍 ' + ville + ' · ' + rayon;
+    document.getElementById('recap-prix').textContent = '💶 ' + (prix !== '—' ? prix + '€ / jour' : '—');
+  }
+
+  function handlePhotos(input) {
+    const container = document.getElementById('photo-previews');
+    Array.from(input.files).forEach(file => {
+      const reader = new FileReader();
+      reader.onload = e => {
+        const div = document.createElement('div');
+        div.className = 'photo-preview';
+        div.style.backgroundImage = `url(${e.target.result})`;
+        div.style.backgroundSize = 'cover';
+        div.style.backgroundPosition = 'center';
+        div.innerHTML = '<button class="remove" onclick="removePhoto(this)">×</button>';
+        container.appendChild(div);
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  function removePhoto(btn) {
+    btn.parentElement.remove();
+  }
+
+  function checkCGU() {
+    const cgu = document.getElementById('tgl-cgu').classList.contains('on');
+    const proprio = document.getElementById('tgl-proprio').classList.contains('on');
+    document.getElementById('btn-next').style.opacity = (cgu && proprio) ? '1' : '.5';
+  }
+
+  function publishAnnonce() {
+    const overlay = document.getElementById('success-overlay');
+    overlay.style.display = 'flex';
+  }
+
+  // Init
+  goToStep(1);
+  document.getElementById('btn-next').style.opacity = '1';
+</script>
+</body>
+</html>
