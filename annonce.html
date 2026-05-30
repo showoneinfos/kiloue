@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tronçonneuse Stihl MS 250 — kiloue.com</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --teal:#00A693;--teal2:#008577;--teal-light:#E8F7F5;
+    --ink:#1A1A1A;--ink2:#666;--ink3:#999;
+    --border:#E5E5E5;--bg:#FAFAFA;--white:#fff;
+    --sans:'Inter',system-ui,sans-serif;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:var(--sans);background:var(--bg);color:var(--ink);}
+
+  nav{position:sticky;top:0;z-index:100;background:var(--white);border-bottom:1px solid var(--border);height:60px;display:flex;align-items:center;padding:0 24px;gap:16px;}
+  .logo{font-size:22px;font-weight:700;color:var(--teal);text-decoration:none;white-space:nowrap;}
+  .logo span{color:var(--ink);}
+  .nav-actions{margin-left:auto;display:flex;gap:8px;}
+  .btn-login{padding:8px 16px;border-radius:6px;border:1.5px solid var(--border);background:var(--white);font-size:13px;font-weight:500;font-family:var(--sans);color:var(--ink);cursor:pointer;}
+  .btn-login:hover{border-color:var(--teal);color:var(--teal);}
+  .btn-sell{padding:8px 18px;border-radius:6px;border:none;background:var(--teal);font-size:13px;font-weight:600;font-family:var(--sans);color:var(--white);cursor:pointer;}
+  .btn-sell:hover{background:var(--teal2);}
+
+  .breadcrumb{padding:12px 24px;font-size:13px;color:var(--ink2);display:flex;align-items:center;gap:6px;background:var(--white);border-bottom:1px solid var(--border);}
+  .breadcrumb a{color:var(--ink2);text-decoration:none;}
+  .breadcrumb a:hover{color:var(--teal);}
+  .breadcrumb svg{width:12px;height:12px;fill:none;stroke:var(--ink3);stroke-width:2;}
+
+  .page-wrap{max-width:1100px;margin:0 auto;padding:28px 24px 60px;display:grid;grid-template-columns:1fr 360px;gap:40px;align-items:start;}
+
+  /* GALLERY */
+  .gallery-main{border-radius:12px;overflow:hidden;aspect-ratio:4/3;margin-bottom:10px;cursor:pointer;}
+  .gallery-main img{width:100%;height:100%;object-fit:cover;display:block;}
+  .gallery-thumbs{display:flex;gap:8px;}
+  .g-thumb{width:80px;height:80px;border-radius:8px;overflow:hidden;cursor:pointer;border:2px solid transparent;flex-shrink:0;}
+  .g-thumb.active,.g-thumb:hover{border-color:var(--teal);}
+  .g-thumb img{width:100%;height:100%;object-fit:cover;}
+
+  /* TITLE */
+  .title-row{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin:20px 0 10px;}
+  .title-row h1{font-size:22px;font-weight:700;color:var(--ink);line-height:1.2;}
+  .fav-btn{width:40px;height:40px;border-radius:50%;border:1.5px solid var(--border);background:var(--white);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;}
+  .fav-btn svg{width:20px;height:20px;fill:none;stroke:var(--ink2);stroke-width:2;}
+  .fav-btn:hover svg{stroke:var(--teal);}
+  .meta-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px;}
+  .meta-loc{font-size:13px;color:var(--ink2);display:flex;align-items:center;gap:4px;}
+  .meta-loc svg{width:14px;height:14px;fill:none;stroke:var(--teal);stroke-width:2;}
+  .meta-stars{font-size:13px;color:var(--ink2);}
+  .meta-cat{font-size:12px;padding:3px 10px;border-radius:20px;background:var(--teal-light);color:var(--teal2);font-weight:500;}
+  .cert-badge{display:inline-flex;align-items:center;gap:5px;background:#FFF8E1;color:#F57F17;font-size:12px;font-weight:600;padding:4px 12px;border-radius:20px;}
+  .cert-badge svg{width:13px;height:13px;fill:none;stroke:#F57F17;stroke-width:2.5;}
+
+  /* TAGS */
+  .tags{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;}
+  .tag{display:flex;align-items:center;gap:5px;padding:6px 14px;border-radius:20px;border:1px solid var(--border);font-size:12px;color:var(--ink2);background:var(--white);}
+  .tag svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:2;}
+  .tag.green{background:var(--teal-light);color:var(--teal2);border-color:#C8EEEA;}
+
+  /* SECTIONS */
+  .sec{margin-bottom:24px;padding-bottom:24px;border-bottom:1px solid var(--border);}
+  .sec:last-child{border:none;}
+  .sec h2{font-size:16px;font-weight:600;color:var(--ink);margin-bottom:12px;}
+  .sec p{font-size:14px;color:var(--ink2);line-height:1.8;}
+  .rules{display:flex;flex-direction:column;gap:8px;}
+  .rule{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--ink2);}
+  .rule svg{width:16px;height:16px;flex-shrink:0;}
+  .rule.ok svg{fill:none;stroke:var(--teal);stroke-width:2;}
+  .rule.no svg{fill:none;stroke:#E53935;stroke-width:2;}
+
+  /* OWNER */
+  .owner{display:flex;align-items:center;gap:14px;padding:16px;background:var(--white);border:1px solid var(--border);border-radius:10px;}
+  .owner-av{width:50px;height:50px;border-radius:50%;object-fit:cover;}
+  .owner-name{font-size:15px;font-weight:600;color:var(--ink);margin-bottom:3px;}
+  .owner-meta{font-size:12px;color:var(--ink2);}
+  .owner-cert{display:inline-flex;align-items:center;gap:4px;background:var(--teal-light);color:var(--teal2);font-size:11px;font-weight:500;padding:2px 8px;border-radius:20px;margin-top:4px;}
+  .owner-cert svg{width:10px;height:10px;fill:none;stroke:var(--teal);stroke-width:2.5;}
+  .btn-msg{margin-left:auto;padding:9px 18px;border-radius:8px;border:1.5px solid var(--border);background:var(--white);font-size:13px;font-family:var(--sans);cursor:pointer;color:var(--ink2);}
+  .btn-msg:hover{border-color:var(--teal);color:var(--teal);}
+
+  /* AVIS */
+  .avis-list{display:flex;flex-direction:column;gap:14px;}
+  .avis{padding:14px;background:var(--bg);border-radius:10px;}
+  .avis-top{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+  .avis-av{width:34px;height:34px;border-radius:50%;object-fit:cover;}
+  .avis-name{font-size:13px;font-weight:500;color:var(--ink);}
+  .avis-date{font-size:11px;color:var(--ink3);}
+  .avis-stars{margin-left:auto;font-size:13px;color:#F57F17;}
+  .avis p{font-size:13px;color:var(--ink2);line-height:1.6;}
+
+  /* BOOKING CARD */
+  .booking{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:24px;position:sticky;top:76px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
+  .price-main{font-size:28px;font-weight:700;color:var(--ink);margin-bottom:2px;}
+  .price-main small{font-size:15px;font-weight:400;color:var(--ink2);}
+  .price-half{font-size:13px;color:var(--ink2);margin-bottom:18px;}
+  .dates{display:grid;grid-template-columns:1fr 1fr;border:1.5px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:12px;}
+  .date-f{padding:11px 14px;}
+  .date-f:first-child{border-right:1px solid var(--border);}
+  .date-f label{display:block;font-size:10px;font-weight:600;color:var(--ink);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+  .date-f input{border:none;outline:none;font-family:var(--sans);font-size:13px;color:var(--ink);background:transparent;width:100%;cursor:pointer;}
+  .delivery-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin-bottom:14px;}
+  .dr-label{font-size:13px;color:var(--ink);font-weight:500;}
+  .dr-sub{font-size:11px;color:var(--ink2);}
+  .tgl{width:42px;height:24px;border-radius:12px;background:var(--border);position:relative;cursor:pointer;transition:background .2s;flex-shrink:0;}
+  .tgl.on{background:var(--teal);}
+  .tgl::after{content:'';position:absolute;width:18px;height:18px;border-radius:50%;background:#fff;top:3px;left:3px;transition:transform .2s;}
+  .tgl.on::after{transform:translateX(18px);}
+  .recap{background:var(--bg);border-radius:8px;padding:14px;margin-bottom:14px;}
+  .recap-row{display:flex;justify-content:space-between;font-size:13px;padding:5px 0;}
+  .recap-row .l{color:var(--ink2);}
+  .recap-row .v{font-weight:500;color:var(--ink);}
+  .recap-row .vt{color:var(--teal);font-weight:500;}
+  .recap-divider{border:none;border-top:1px solid var(--border);margin:6px 0;}
+  .recap-total{display:flex;justify-content:space-between;align-items:center;padding-top:4px;}
+  .recap-total .tl{font-size:14px;font-weight:600;}
+  .recap-total .tv{font-size:18px;font-weight:700;color:var(--teal);}
+  .caution-note{font-size:12px;color:var(--ink2);text-align:center;margin-bottom:12px;}
+  .btn-reserve{width:100%;padding:14px;border-radius:8px;background:var(--teal);color:#fff;border:none;font-family:var(--sans);font-size:15px;font-weight:600;cursor:pointer;margin-bottom:10px;}
+  .btn-reserve:hover{background:var(--teal2);}
+  .secure{display:flex;align-items:center;justify-content:center;gap:5px;font-size:12px;color:var(--ink2);}
+  .secure svg{width:13px;height:13px;fill:none;stroke:var(--teal);stroke-width:2;}
+  .zone-note{display:flex;gap:8px;padding:10px 12px;background:var(--teal-light);border-radius:8px;margin-top:12px;font-size:12px;color:var(--teal2);line-height:1.5;}
+  .zone-note svg{width:14px;height:14px;fill:none;stroke:var(--teal);stroke-width:2;flex-shrink:0;margin-top:1px;}
+
+  /* MODAL */
+  .modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:200;align-items:center;justify-content:center;}
+  .modal{background:#fff;border-radius:14px;padding:32px;max-width:400px;width:90%;text-align:center;}
+  .modal-icon{width:60px;height:60px;border-radius:50%;background:var(--teal-light);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;}
+  .modal-icon svg{width:28px;height:28px;fill:none;stroke:var(--teal);stroke-width:2;}
+  .modal h2{font-size:20px;font-weight:700;color:var(--ink);margin-bottom:8px;}
+  .modal p{font-size:14px;color:var(--ink2);line-height:1.6;margin-bottom:20px;}
+  .modal-recap{background:var(--bg);border-radius:8px;padding:14px;text-align:left;font-size:13px;margin-bottom:18px;}
+  .modal-recap div{display:flex;justify-content:space-between;padding:4px 0;color:var(--ink2);}
+  .modal-recap div span:last-child{font-weight:600;color:var(--ink);}
+  .btn-modal{width:100%;padding:13px;border-radius:8px;background:var(--teal);color:#fff;border:none;font-family:var(--sans);font-size:14px;font-weight:600;cursor:pointer;}
+
+  @media(max-width:900px){
+    nav{padding:0 16px;}
+    .breadcrumb{padding:10px 16px;}
+    .page-wrap{grid-template-columns:1fr;padding:16px 16px 120px;}
+    .booking{position:fixed;bottom:0;left:0;right:0;border-radius:14px 14px 0 0;padding:16px;z-index:50;border-top:1px solid var(--border);}
+    .dates,.delivery-row,.recap,.caution-note,.secure,.zone-note{display:none;}
+    .price-half{display:none;}
+    .mobile-booking-row{display:flex;align-items:center;justify-content:space-between;}
+  }
+  @media(min-width:901px){.mobile-booking-row{display:none;}}
+</style>
+</head>
+<body>
+<nav>
+  <a class="logo" href="index.html">kiloue<span>.com</span></a>
+  <div class="nav-actions">
+    <button class="btn-login" onclick="window.location.href='inscription.html'">S'inscrire | Se connecter</button>
+    <button class="btn-sell" onclick="window.location.href='publier.html'">Déposer une annonce</button>
+  </div>
+</nav>
+
+<div class="breadcrumb">
+  <a href="index.html">Accueil</a>
+  <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+  <a href="#">Jardinage & Forêt</a>
+  <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+  Tronçonneuse Stihl MS 250
+</div>
+
+<div class="page-wrap">
+  <div>
+    <div class="gallery-main" id="gallery-main">
+      <img src="https://images.unsplash.com/photo-1617953141905-b27fb1f9a1b0?w=800&q=80" alt="Tronçonneuse" id="main-img">
+    </div>
+    <div class="gallery-thumbs">
+      <div class="g-thumb active" onclick="switchImg(this,'https://images.unsplash.com/photo-1617953141905-b27fb1f9a1b0?w=800&q=80')"><img src="https://images.unsplash.com/photo-1617953141905-b27fb1f9a1b0?w=200&q=80" alt=""></div>
+      <div class="g-thumb" onclick="switchImg(this,'https://images.unsplash.com/photo-1504148455328-c376907d081c?w=800&q=80')"><img src="https://images.unsplash.com/photo-1504148455328-c376907d081c?w=200&q=80" alt=""></div>
+      <div class="g-thumb" onclick="switchImg(this,'https://images.unsplash.com/photo-1572981779307-38b8cabb2407?w=800&q=80')"><img src="https://images.unsplash.com/photo-1572981779307-38b8cabb2407?w=200&q=80" alt=""></div>
+    </div>
+
+    <div class="title-row">
+      <h1>Tronçonneuse Stihl MS 250</h1>
+      <button class="fav-btn"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+    </div>
+    <div class="meta-row">
+      <div class="meta-loc"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Ajaccio · 4 km de vous</div>
+      <div class="meta-stars">⭐ 4,9 · 14 avis</div>
+      <div class="meta-cat">Jardinage & Forêt</div>
+      <div class="cert-badge"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>Loueur certifié</div>
+    </div>
+
+    <div class="tags">
+      <div class="tag green"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Livraison possible</div>
+      <div class="tag"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Caution 150€</div>
+      <div class="tag"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Demi-journée dispo</div>
+      <div class="tag"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Disponible maintenant</div>
+    </div>
+
+    <div class="sec">
+      <h2>Description</h2>
+      <p>Tronçonneuse Stihl MS 250 en excellent état, chaîne neuve changée en 2024. Parfaite pour les coupes moyennes : bois de chauffage, élagage, abattage de petits arbres. Puissance moteur 3,0 ch, guide de 40 cm. Casque de protection, lunettes et gants fournis. Carburant non inclus (mélange 2 temps).</p>
+    </div>
+
+    <div class="sec">
+      <h2>Règles de location</h2>
+      <div class="rules">
+        <div class="rule ok"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Retrait sur place à Ajaccio (quartier des Cannes)</div>
+        <div class="rule ok"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Livraison possible jusqu'à 30 km (+15€)</div>
+        <div class="rule ok"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Caution de 150€ remboursée après retour conforme</div>
+        <div class="rule no"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Carburant non inclus</div>
+        <div class="rule no"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Pas de location le dimanche</div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <h2>À propos du loueur</h2>
+      <div class="owner">
+        <img class="owner-av" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80" alt="Jean-Pierre">
+        <div>
+          <div class="owner-name">Jean-Pierre M.</div>
+          <div class="owner-meta">Membre depuis janvier 2024 · Ajaccio</div>
+          <div class="owner-cert"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>Identité vérifiée</div>
+        </div>
+        <button class="btn-msg">Contacter</button>
+      </div>
+    </div>
+
+    <div class="sec">
+      <h2>Avis (14)</h2>
+      <div class="avis-list">
+        <div class="avis">
+          <div class="avis-top">
+            <img class="avis-av" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&q=80" alt="Marie-Laure">
+            <div><div class="avis-name">Marie-Laure</div><div class="avis-date">Avril 2025</div></div>
+            <div class="avis-stars">★★★★★</div>
+          </div>
+          <p>Très bon matériel, Jean-Pierre est très réactif. La tronçonneuse était propre et prête à l'emploi. Livraison rapide. Je recommande !</p>
+        </div>
+        <div class="avis">
+          <div class="avis-top">
+            <img class="avis-av" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&q=80" alt="Antoine">
+            <div><div class="avis-name">Antoine T.</div><div class="avis-date">Mars 2025</div></div>
+            <div class="avis-stars">★★★★★</div>
+          </div>
+          <p>Parfait pour couper mon bois de chauffage. Matériel en parfait état. Très bonne expérience !</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BOOKING -->
+  <div>
+    <div class="booking">
+      <div class="mobile-booking-row">
+        <div><div class="price-main">25 € <small>/jour</small></div></div>
+        <button class="btn-reserve" style="width:auto;padding:11px 22px;font-size:14px;" onclick="showModal()">Réserver</button>
+      </div>
+      <div class="price-main">25 € <small>/jour</small></div>
+      <div class="price-half">Demi-journée disponible à 15€</div>
+      <div class="dates">
+        <div class="date-f"><label>Début</label><input type="date" id="d1" onchange="calc()"></div>
+        <div class="date-f"><label>Fin</label><input type="date" id="d2" onchange="calc()"></div>
+      </div>
+      <div class="delivery-row">
+        <div><div class="dr-label">Livraison à domicile</div><div class="dr-sub" id="deliv-price-label">Supplément +20€</div></div>
+        <div class="tgl" id="tgl" onclick="toggleDel()"></div>
+      </div>
+      <div class="recap">
+        <div class="recap-row"><span class="l" id="r-days">Sélectionnez des dates</span><span class="v" id="r-price">—</span></div>
+        <div class="recap-row" id="r-del-row" style="display:none;"><span class="l">Livraison</span><span class="v" id="r-del-price">+20,00 €</span></div>
+        <div class="recap-row"><span class="l">Commission kiloue (5%)</span><span class="v vt" id="r-comm">—</span></div>
+        <hr class="recap-divider">
+        <div class="recap-total"><span class="tl">Total</span><span class="tv" id="r-total">—</span></div>
+      </div>
+      <div class="caution-note">Caution de <strong>150€</strong> remboursée après retour conforme</div>
+      <button class="btn-reserve" onclick="showModal()">Réserver maintenant</button>
+      <div class="secure"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Paiement 100% sécurisé · kiloue.com</div>
+      <div class="zone-note"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Zone de location : Ajaccio et alentours jusqu'à 30 km. Livraison disponible (supplément fixé par le loueur).</div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="modal" style="display:none;">
+  <div class="modal">
+    <div class="modal-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+    <h2>Réservation confirmée !</h2>
+    <p>Jean-Pierre M. a été notifié et vous contactera sous 2h pour confirmer les détails.</p>
+    <div class="modal-recap">
+      <div><span>Tronçonneuse Stihl MS 250</span><span>25,00 €</span></div>
+      <div><span>Commission kiloue (5%)</span><span>1,25 €</span></div>
+      <div style="border-top:1px solid var(--border);margin-top:6px;padding-top:8px;font-weight:600;"><span>Total prélevé</span><span style="color:var(--teal)">26,25 €</span></div>
+    </div>
+    <button class="btn-modal" onclick="hideModal()">Fermer</button>
+  </div>
+</div>
+
+<script>
+  let deliv=false;
+  const DELIVERY_PRICE = 20; // Prix livraison fixé par le loueur
+  const today=new Date(),tom=new Date(today);tom.setDate(tom.getDate()+1);
+  const fmt=d=>d.toISOString().split('T')[0];
+  document.getElementById('d1').value=fmt(today);
+  document.getElementById('d2').value=fmt(tom);
+  calc();
+
+  function calc(){
+    const s=document.getElementById('d1').value,e=document.getElementById('d2').value;
+    if(!s||!e)return;
+    const days=Math.max(1,Math.round((new Date(e)-new Date(s))/86400000));
+    const base=days*25,del=deliv?DELIVERY_PRICE:0,sub=base+del;
+    const comm=+(sub*.05).toFixed(2),total=+(sub+comm).toFixed(2);
+    document.getElementById('r-days').textContent=days+'j × 25€';
+    document.getElementById('r-price').textContent=base.toFixed(2)+' €';
+    document.getElementById('r-comm').textContent='+ '+comm.toFixed(2)+' €';
+    document.getElementById('r-total').textContent=total.toFixed(2)+' €';
+  }
+  function toggleDel(){
+    deliv=!deliv;
+    document.getElementById('tgl').classList.toggle('on',deliv);
+    document.getElementById('r-del-row').style.display=deliv?'flex':'none';
+    calc();
+  }
+  function switchImg(el,src){
+    document.querySelectorAll('.g-thumb').forEach(t=>t.classList.remove('active'));
+    el.classList.add('active');
+    document.getElementById('main-img').src=src;
+  }
+  function showModal(){document.getElementById('modal').style.display='flex';}
+  function hideModal(){document.getElementById('modal').style.display='none';}
+  document.getElementById('modal').addEventListener('click',function(e){if(e.target===this)hideModal();});
+</script>
+</body>
+</html>
