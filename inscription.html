@@ -276,6 +276,40 @@
   function fmtIBAN(inp){let v=inp.value.replace(/\s/g,'').toUpperCase();inp.value=v.replace(/(.{4})/g,'$1 ').trim();}
   function togglePwd(){const i=document.getElementById('pwd');i.type=i.type==='password'?'text':'password';}
   function showSuccess(){for(let i=1;i<=4;i++){const el=document.getElementById('s'+i);if(el)el.style.display='none';}document.getElementById('mode-sw').style.display='none';document.getElementById('success').style.display='block';}
+
+
+  // ── INSCRIPTION SUPABASE ──
+  const SUPA_URL = 'https://nsvosbuxkpnoasfilyqy.supabase.co';
+  const SUPA_KEY = 'sb_publishable_wo38CE1P1LBNIXU25yNyXw_j2df6bkRZTGDHBxg_C7VGCA';
+  const db = supabase.createClient(SUPA_URL, SUPA_KEY);
+
+  async function inscrire() {
+    const prenom = document.getElementById('prenom').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const pwd = document.getElementById('pwd').value;
+
+    if (!prenom || !email || !pwd) { alert('Remplissez tous les champs.'); return; }
+    if (pwd.length < 6) { alert('Mot de passe : 6 caractères minimum.'); return; }
+
+    const btn = document.getElementById('btn-s1');
+    btn.textContent = '⏳ Création...';
+    btn.disabled = true;
+
+    try {
+      const { data, error } = await db.auth.signUp({ email, password: pwd, options: { data: { prenom } } });
+      if (error) throw error;
+      btn.textContent = 'Continuer →';
+      btn.disabled = false;
+      go(2);
+    } catch(e) {
+      btn.textContent = 'Créer mon compte →';
+      btn.disabled = false;
+      let msg = e.message || 'Erreur';
+      if (msg.includes('already')) msg = 'Cet email est déjà utilisé.';
+      if (msg.includes('Password')) msg = 'Mot de passe trop court (6 min).';
+      alert('Erreur : ' + msg);
+    }
+  }
 </script>
 </body>
 </html>
