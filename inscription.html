@@ -152,7 +152,7 @@
         </div>
         <div class="form-title">Créer un compte</div>
         <div class="form-sub">Gratuit et sans engagement. Prêt en 2 minutes.</div>
-        <button class="btn-google">
+        <button class="btn-google" onclick="signInWithGoogle()">
           <svg width="20" height="20" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
           Continuer avec Google
         </button>
@@ -166,7 +166,7 @@
           <div class="pwd-wrap"><input type="password" id="pwd" placeholder="8 caractères minimum"><button class="eye-btn" onclick="togglePwd()" type="button"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
         </div>
         <div class="check-row"><input type="checkbox" id="cgu" onchange="chk1()"><label for="cgu">J'accepte les <a href="#">conditions générales</a> et la <a href="#">politique de confidentialité</a></label></div>
-        <button class="btn-main" id="btn-s1" onclick="inscrire()" disabled>Créer mon compte →</button>
+        <button class="btn-main" id="btn-s1" onclick="inscrire()" style="opacity:0.5;">Créer mon compte →</button>
         <div id="auth-error" style="display:none;background:#FEE;border:1px solid #FCC;border-radius:8px;padding:10px 14px;font-size:13px;color:#C00;margin-top:10px;"></div>
         <div id="auth-loading" style="display:none;text-align:center;padding:10px;font-size:13px;color:var(--ink2);">⏳ Création du compte en cours...</div>
       </div>
@@ -264,7 +264,15 @@
 
 <script>
   function setMode(m){document.getElementById('btn-louer').classList.toggle('active',m==='louer');document.getElementById('btn-proposer').classList.toggle('active',m==='proposer');}
-  function chk1(){const ok=document.getElementById('cgu').checked&&document.getElementById('prenom').value&&document.getElementById('email').value;document.getElementById('btn-s1').disabled=!ok;}
+  function chk1(){
+    const cgu = document.getElementById('cgu').checked;
+    const prenom = document.getElementById('prenom').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const ok = cgu && prenom && email;
+    const btn = document.getElementById('btn-s1');
+    btn.disabled = !ok;
+    btn.style.opacity = ok ? '1' : '0.5';
+  }
   function go(n){
     for(let i=1;i<=4;i++){const el=document.getElementById('s'+i);if(el)el.style.display=i===n?'block':'none';}
     document.getElementById('mode-sw').style.display=n===1?'flex':'none';
@@ -308,6 +316,18 @@
       if (msg.includes('already')) msg = 'Cet email est déjà utilisé.';
       if (msg.includes('Password')) msg = 'Mot de passe trop court (6 min).';
       alert('Erreur : ' + msg);
+    }
+  }
+
+  async function signInWithGoogle() {
+    try {
+      const { data, error } = await db.auth.signInWithOAuth({
+        provider: 'google',
+        options: { redirectTo: window.location.origin + '/profil.html' }
+      });
+      if (error) throw error;
+    } catch(e) {
+      alert('Erreur Google : ' + e.message);
     }
   }
 </script>
