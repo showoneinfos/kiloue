@@ -106,6 +106,9 @@
   #toast{display:none;position:fixed;bottom:24px;right:24px;background:var(--ink);color:#fff;padding:11px 18px;border-radius:8px;font-size:13px;z-index:300;}
   @media(max-width:900px){.sidebar{display:none;}.content{padding:16px;}.stats{grid-template-columns:1fr 1fr;}.two-col{grid-template-columns:1fr;}.topbar{padding:0 16px;}}
 </style>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
 </head>
 <body>
 <div class="sidebar">
@@ -262,6 +265,49 @@
 <div id="toast"></div>
 <script>
   function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.display='block';setTimeout(()=>t.style.display='none',3000);}
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+  try {
+    const user = await getUtilisateurConnecte();
+    if (!user) { window.location.href = 'inscription.html'; return; }
+
+    const profil = await getMonProfil();
+    if (!profil) return;
+
+    // Mettre à jour l'UI avec les vraies données
+    const nom = (profil.prenom || '') + ' ' + (profil.nom || '');
+    document.querySelector('.user-name') && (document.querySelector('.user-name').textContent = nom.trim() || 'Mon profil');
+    document.querySelector('.user-cert') && (document.querySelector('.user-cert').textContent = profil.est_certifie ? '✓ Certifié' : 'Non certifié');
+
+    // Initiales avatar
+    const initiales = ((profil.prenom || '?')[0] + (profil.nom || '?')[0]).toUpperCase();
+    document.querySelectorAll('.user-av').forEach(av => {
+      if (!av.src || av.src.includes('unsplash')) {
+        av.src = profil.avatar_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(nom)}&background=00A693&color=fff&size=80`;
+      }
+    });
+
+    // Mes annonces
+    const annonces = await getMesAnnonces();
+    const statNb = document.querySelector('.stat-val');
+    // Mettre à jour les stats si besoin
+
+    // Bouton déconnexion
+    const btnDeco = document.createElement('button');
+    btnDeco.textContent = 'Se déconnecter';
+    btnDeco.style.cssText = 'width:100%;padding:10px;border-radius:8px;border:1.5px solid var(--border);background:transparent;font-size:13px;color:var(--ink2);cursor:pointer;margin-top:12px;font-family:var(--sans);';
+    btnDeco.onclick = async () => {
+      await deconnecterUtilisateur();
+      window.location.href = 'index.html';
+    };
+    document.querySelector('.sidebar-bottom')?.appendChild(btnDeco);
+
+  } catch(e) {
+    console.error('Erreur profil:', e);
+  }
+});
 </script>
 </body>
 </html>

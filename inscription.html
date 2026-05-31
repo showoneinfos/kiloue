@@ -107,6 +107,10 @@
   .cp-d.todo{background:var(--border);}
   @media(max-width:900px){nav{padding:0 16px;}.page{grid-template-columns:1fr;}.left{display:none;}.right{padding:28px 20px;}}
 </style>
+
+  <!-- Supabase SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
 </head>
 <body>
 <nav>
@@ -162,7 +166,9 @@
           <div class="pwd-wrap"><input type="password" id="pwd" placeholder="8 caractères minimum"><button class="eye-btn" onclick="togglePwd()" type="button"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
         </div>
         <div class="check-row"><input type="checkbox" id="cgu" onchange="chk1()"><label for="cgu">J'accepte les <a href="#">conditions générales</a> et la <a href="#">politique de confidentialité</a></label></div>
-        <button class="btn-main" id="btn-s1" onclick="go(2)" disabled>Créer mon compte →</button>
+        <button class="btn-main" id="btn-s1" onclick="inscrire()" disabled>Créer mon compte →</button>
+        <div id="auth-error" style="display:none;background:#FEE;border:1px solid #FCC;border-radius:8px;padding:10px 14px;font-size:13px;color:#C00;margin-top:10px;"></div>
+        <div id="auth-loading" style="display:none;text-align:center;padding:10px;font-size:13px;color:var(--ink2);">⏳ Création du compte en cours...</div>
       </div>
 
       <!-- S2 -->

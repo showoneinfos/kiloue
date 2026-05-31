@@ -122,6 +122,9 @@
     .nav-bar{position:fixed;bottom:0;left:0;right:0;background:var(--white);border-top:1px solid var(--border);padding:14px 20px;z-index:50;}
   }
 </style>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
 </head>
 <body>
 <nav>
@@ -301,7 +304,7 @@
 
 <script>
   let cur=1,catImg='https://images.unsplash.com/photo-1617953141905-b27fb1f9a1b0?w=400&q=80';
-  function selCat(el,name,img){
+  function selCat(el,name,img){ catName = name;
     document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('sel'));
     el.classList.add('sel');catImg=img;
     document.getElementById('prev-img-el').src=img;
@@ -349,13 +352,80 @@
     const ok=document.getElementById('tgl-cgu').classList.contains('on')&&document.getElementById('tgl-own').classList.contains('on');
     document.getElementById('btn-next').style.opacity=ok?'1':'.5';
   }
-  function publish(){
-    document.getElementById('form-area').style.display='none';
-    document.querySelector('.preview-card') && (document.querySelector('.preview-card').style.display='none');
-    document.getElementById('steps-bar').style.display='none';
-    document.querySelector('.nav-bar').style.display='none';
-    document.getElementById('success').style.display='block';
+  async function publish(){
+    const btn = document.getElementById('btn-next');
+    btn.textContent = '⏳ Publication...';
+    btn.disabled = true;
+
+    try {
+      // Vérifier connexion
+      const user = await getUtilisateurConnecte();
+      if (!user) { window.location.href = 'inscription.html'; return; }
+
+      // Récupérer les valeurs du formulaire
+      const titre = document.getElementById('f-titre')?.value || '';
+      const desc = document.getElementById('f-desc')?.value || '';
+      const prix = parseFloat(document.getElementById('f-prix')?.value) || 0;
+      const caution = parseFloat(document.getElementById('f-caution')?.value) || 0;
+      const ville = document.getElementById('f-ville')?.value || '';
+      const rayon = parseInt(document.getElementById('f-rayon')?.value) || 30;
+      const livraison = document.getElementById('tgl-liv')?.classList.contains('on') || false;
+      const prixLiv = parseFloat(document.getElementById('f-livraison-prix')?.value) || 0;
+
+      if (!titre || !prix || !ville) {
+        alert('Veuillez remplir le titre, le prix et la ville.');
+        btn.textContent = 'Publier l'annonce ✓';
+        btn.disabled = false;
+        return;
+      }
+
+      // Upload photos si présentes
+      let photoUrls = [];
+      const previews = document.querySelectorAll('#previews .preview-thumb img');
+      for (const img of previews) {
+        if (img.src.startsWith('blob:') || img.src.startsWith('data:')) {
+          // Photo uploadée par l'utilisateur - on garde l'URL pour l'instant
+          photoUrls.push(img.src);
+        } else if (img.src.startsWith('http')) {
+          photoUrls.push(img.src);
+        }
+      }
+
+      // Créer l'annonce dans Supabase
+      const annonce = {
+        titre,
+        description: desc,
+        categorie: catName || 'Divers',
+        prix_jour: prix,
+        caution,
+        ville,
+        rayon_km: rayon,
+        livraison,
+        prix_livraison: prixLiv,
+        photos: photoUrls,
+        disponible: true
+      };
+
+      await creerAnnonce(annonce);
+
+      // Succès
+      document.getElementById('form-area').style.display='none';
+      document.querySelector('.preview-card') && (document.querySelector('.preview-card').style.display='none');
+      document.getElementById('steps-bar').style.display='none';
+      document.querySelector('.nav-bar').style.display='none';
+      document.getElementById('success').style.display='block';
+
+    } catch(e) {
+      console.error(e);
+      alert('Erreur : ' + (e.message || 'Impossible de publier l'annonce.'));
+      btn.textContent = 'Publier l'annonce ✓';
+      btn.disabled = false;
+    }
   }
+
+  // Variable catégorie sélectionnée
+  let catName = 'Divers';
+  const origSelCat = window.selCat;
   function toggleLivraison(el){
     el.classList.toggle('on');
     document.getElementById('livraison-price-wrap').style.display = el.classList.contains('on') ? 'block' : 'none';
@@ -372,6 +442,17 @@
     });
   }
   go(1);
+
+  // Vérifier auth au chargement
+  document.addEventListener('DOMContentLoaded', async () => {
+    const user = await getUtilisateurConnecte();
+    if (!user) {
+      const banner = document.createElement('div');
+      banner.style.cssText = 'background:#FFF8E1;border-bottom:1px solid #FFE082;padding:10px 24px;font-size:13px;color:#F57F17;text-align:center;';
+      banner.innerHTML = '⚠️ <strong>Connectez-vous</strong> pour publier une annonce — <a href="inscription.html" style="color:var(--teal);font-weight:600;">S'inscrire / Se connecter →</a>';
+      document.body.insertBefore(banner, document.body.firstChild);
+    }
+  });
 </script>
 </body>
 </html>

@@ -188,6 +188,9 @@
     .all-cats-grid{grid-template-columns:repeat(2,1fr);}
   }
 </style>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
 </head>
 <body>
 
@@ -596,6 +599,49 @@ function doSearch(){
   if(q.trim()) window.location.href = 'recherche.html?q=' + encodeURIComponent(q.trim());
   else window.location.href = 'recherche.html';
 }
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+  try {
+    // Charger les vraies annonces depuis Supabase
+    const annonces = await getAnnonces();
+
+    if (annonces && annonces.length > 0) {
+      const grid = document.querySelector('.listings-grid');
+      if (grid) {
+        grid.innerHTML = annonces.map(a => {
+          const photo = a.photos && a.photos.length > 0 ? a.photos[0] : 'https://images.unsplash.com/photo-1617953141905-b27fb1f9a1b0?w=400&q=80';
+          const certif = a.utilisateurs?.est_certifie ? '<div class="cert-tag"><svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="#fff" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Certifié</div>' : '';
+          return `<div class="listing-card reveal" onclick="window.location.href='annonce.html?id=${a.id}'" style="cursor:pointer;">
+            <div class="lc-thumb" style="background-image:url(${photo});background-size:cover;background-position:center;">
+              ${certif}
+            </div>
+            <div class="lc-body">
+              <div class="lc-name">${a.titre}</div>
+              <div class="lc-loc"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#D4622A" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>${a.ville}</div>
+              <div class="lc-bottom">
+                <div class="lc-price">${a.prix_jour}€ <small>/jour</small></div>
+                <div class="lc-pill ${a.livraison ? 'green' : 'sand'}">${a.livraison ? 'Livraison' : 'Sur place'}</div>
+              </div>
+            </div>
+          </div>`;
+        }).join('');
+      }
+    }
+
+    // Vérifier si connecté pour adapter le nav
+    const user = await getUtilisateurConnecte();
+    if (user) {
+      const btnLogin = document.querySelector('.btn-ghost');
+      const btnSell = document.querySelector('.btn-fill');
+      if (btnLogin) { btnLogin.textContent = 'Mon compte'; btnLogin.onclick = () => window.location.href = 'profil.html'; }
+    }
+
+  } catch(e) {
+    console.error('Erreur chargement annonces:', e);
+  }
+});
 </script>
 </body>
 </html>
