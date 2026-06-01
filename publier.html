@@ -515,7 +515,7 @@ function upd(){ if(window._upd) window._upd(); }
 
       if (!titre || !prix || !ville) {
         alert('Veuillez remplir le titre, le prix et la ville.');
-        btn.textContent = 'Publier l'annonce ✓';
+        btn.textContent = 'Publier l\'annonce ✓';
         btn.disabled = false;
         return;
       }
@@ -560,7 +560,7 @@ function upd(){ if(window._upd) window._upd(); }
     } catch(e) {
       console.error(e);
       alert('Erreur : ' + (e.message || 'Impossible de publier l'annonce.'));
-      btn.textContent = 'Publier l'annonce ✓';
+      btn.textContent = 'Publier l\'annonce ✓';
       btn.disabled = false;
     }
   }
