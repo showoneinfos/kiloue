@@ -18,6 +18,10 @@ function OC(key,emoji,name){
   if(confirm)confirm.style.display='none';
   l1.style.display='none';
   l2.style.display='block';
+  // Mettre à jour le badge catégorie
+  var badge=document.getElementById('cat-badge');
+  var badgeName=document.getElementById('cat-badge-name');
+  if(badge&&badgeName){badge.style.display='block';badgeName.textContent=emoji+' '+name;}
 }
 function SEL(btn){
   document.querySelectorAll('#pub-sous-cats button').forEach(function(b){
@@ -28,6 +32,8 @@ function SEL(btn){
   var c=document.getElementById('pub-confirm-sous');
   if(n)n.textContent=btn.textContent;
   if(c)c.style.display='block';
+  var bs=document.getElementById('cat-badge-sous');
+  if(bs)bs.textContent=btn.textContent;
 }
 function BACK(){
   document.getElementById('pub-l1').style.display='block';
@@ -237,6 +243,10 @@ function upd(){ if(window._upd) window._upd(); }
     </div>
 <div id="s2" class="card" style="display:none;">
       <div class="card-title"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Décrivez votre matériel</div>
+      <div id="cat-badge" style="display:none;margin-bottom:16px;padding:8px 14px;background:var(--teal-light);border-radius:8px;font-size:13px;color:var(--teal2);">
+        Catégorie : <strong id="cat-badge-name"></strong> · <strong id="cat-badge-sous"></strong>
+        <a href="#" onclick="go(1);return false;" style="margin-left:10px;color:var(--teal);font-size:12px;">Modifier</a>
+      </div>
       <div class="field"><label>Titre *</label><input type="text" id="f-titre" placeholder="Ex : Tronçonneuse Stihl MS 250 — excellent état" oninput="upd()"></div>
       <div class="field"><label>Description *</label><textarea id="f-desc" placeholder="État, accessoires inclus, conditions particulières…"></textarea></div>
       <div class="row2">
