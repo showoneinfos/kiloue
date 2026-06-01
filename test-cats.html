@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><title>Test cats</title></head>
+<body>
+
+<div id="l1">
+  <div onclick="ouvrir('jardinage','🌳','Jardinage')" style="padding:14px;border:1px solid #ccc;cursor:pointer;margin:4px;">🌳 Jardinage ›</div>
+  <div onclick="ouvrir('bricolage','🔨','Bricolage')" style="padding:14px;border:1px solid #ccc;cursor:pointer;margin:4px;">🔨 Bricolage ›</div>
+</div>
+
+<div id="l2" style="display:none;">
+  <button onclick="retour()">← Retour</button>
+  <h3 id="titre"></h3>
+  <div id="sous"></div>
+</div>
+
+<script>
+var SUBS = {
+  jardinage: ['Tondeuses','Tronçonneuses','Taille-haies','Débroussailleuses','Autres'],
+  bricolage: ['Perçage','Découpe','Soudure','Échafaudages','Autres']
+};
+
+function ouvrir(key, emoji, name) {
+  document.getElementById('titre').textContent = emoji + ' ' + name;
+  var subs = SUBS[key] || [];
+  document.getElementById('sous').innerHTML = subs.map(function(s) {
+    return '<button style="margin:4px;padding:7px 14px;border-radius:20px;border:1px solid #ccc;cursor:pointer;">' + s + '</button>';
+  }).join('');
+  document.getElementById('l1').style.display = 'none';
+  document.getElementById('l2').style.display = 'block';
+}
+
+function retour() {
+  document.getElementById('l1').style.display = 'block';
+  document.getElementById('l2').style.display = 'none';
+}
+</script>
+</body>
+</html>
