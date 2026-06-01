@@ -35,9 +35,20 @@ function BACK(){
 }
 // go/next/prev seront définis dans le script principal
 // On les enveloppe pour éviter "not defined"
-function go(n){ if(window._go) window._go(n); }
-function next(){ if(window._next) window._next(); }
-function prev(){ if(window._prev) window._prev(); }
+function go(n){
+  for(var i=1;i<=5;i++){
+    var s=document.getElementById('s'+i);
+    if(s)s.style.display=i===n?'block':'none';
+  }
+  var bn=document.getElementById('btn-next');
+  if(bn)bn.textContent=n===5?'Publier l\'annonce':'Continuer →';
+  var bb=document.getElementById('btn-back');
+  if(bb)bb.style.visibility=n>1?'visible':'hidden';
+  window.__cur=n;
+  window.scrollTo(0,0);
+}
+function next(){ if(window._next) window._next(); else go((window.__cur||1)+1); }
+function prev(){ if(window._prev) window._prev(); else go((window.__cur||1)-1); }
 function publish(){ if(window._publish) window._publish(); }
 function upd(){ if(window._upd) window._upd(); }
 </script>
