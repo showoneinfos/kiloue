@@ -39,6 +39,40 @@ function BACK(){
   document.getElementById('pub-l1').style.display='block';
   document.getElementById('pub-l2').style.display='none';
 }
+function handleFiles(input){
+  var c=document.getElementById('previews');
+  if(!c) return;
+  c.querySelectorAll('.preview-thumb.demo').forEach(function(el){el.remove();});
+  Array.from(input.files).forEach(function(f){
+    if(!f.type.startsWith('image/')) return;
+    var r=new FileReader();
+    r.onload=function(e){
+      var img=document.createElement('img');
+      img.src=e.target.result;
+      img.style.cssText='width:100%;height:100%;object-fit:cover;border-radius:8px;';
+      var btn=document.createElement('button');
+      btn.textContent='×';
+      btn.style.cssText='position:absolute;top:2px;right:2px;width:18px;height:18px;border-radius:50%;background:#00A693;color:#fff;font-size:10px;border:none;cursor:pointer;';
+      btn.onclick=function(){this.parentElement.remove();};
+      var d=document.createElement('div');
+      d.className='preview-thumb';
+      d.style.cssText='position:relative;';
+      d.appendChild(img);
+      d.appendChild(btn);
+      c.appendChild(d);
+      var prev=document.getElementById('prev-img-el');
+      if(prev && c.querySelectorAll('.preview-thumb:not(.demo)').length===1){
+        prev.src=e.target.result;
+      }
+    };
+    r.readAsDataURL(f);
+  });
+}
+// Attacher l'événement file input dès que DOM prêt
+document.addEventListener('DOMContentLoaded', function(){
+  var fi = document.getElementById('file-in');
+  if(fi) fi.addEventListener('change', function(){ handleFiles(this); });
+});
 function toggleDemi(el){
   el.classList.toggle('on');
   var wrap=document.getElementById('demi-price-wrap');
@@ -325,7 +359,7 @@ function upd(){ if(window._upd) window._upd(); }
         <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
         <p style="font-size:14px;font-weight:500;">Cliquez pour ajouter des photos</p>
         <span style="font-size:12px;color:#999;">JPG, PNG · Max 5 Mo chacune</span>
-        <input type="file" id="file-in" multiple accept="image/*" style="position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;" onchange="handleFiles(this)">
+        <input type="file" id="file-in" multiple accept="image/*" style="position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;">
       </div>
       <div class="previews" id="previews">
         <div class="preview-thumb demo"><img src="https://images.unsplash.com/photo-1617953141905-b27fb1f9a1b0?w=200&q=80" alt=""><button onclick="this.parentElement.remove()">×</button></div>
