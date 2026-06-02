@@ -8,7 +8,7 @@
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tronçonneuse Stihl MS 250 — kiloue.com</title>
+<title>kiloue.com</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -167,24 +167,20 @@
 <div class="breadcrumb">
   <a href="index.html">Accueil</a>
   <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
-  <a href="#">Jardinage & Forêt</a>
+  <a href="#" id="bc-cat">—</a>
   <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
-  Tronçonneuse Stihl MS 250
+  <span id="bc-titre">—</span>
 </div>
 
 <div class="page-wrap">
   <div>
     <div class="gallery-main" id="gallery-main">
-      <img src="https://images.unsplash.com/photo-1617953141905-b27fb1f9a1b0?w=800&q=80" alt="Tronçonneuse" id="main-img">
+      <img src="" alt="" id="main-img" style="background:#f0f0f0;">
     </div>
-    <div class="gallery-thumbs">
-      <div class="g-thumb active" onclick="switchImg(this,'https://images.unsplash.com/photo-1617953141905-b27fb1f9a1b0?w=800&q=80')"><img src="https://images.unsplash.com/photo-1617953141905-b27fb1f9a1b0?w=200&q=80" alt=""></div>
-      <div class="g-thumb" onclick="switchImg(this,'https://images.unsplash.com/photo-1504148455328-c376907d081c?w=800&q=80')"><img src="https://images.unsplash.com/photo-1504148455328-c376907d081c?w=200&q=80" alt=""></div>
-      <div class="g-thumb" onclick="switchImg(this,'https://images.unsplash.com/photo-1572981779307-38b8cabb2407?w=800&q=80')"><img src="https://images.unsplash.com/photo-1572981779307-38b8cabb2407?w=200&q=80" alt=""></div>
-    </div>
+    <div class="gallery-thumbs" id="gallery-thumbs"></div>
 
     <div class="title-row">
-      <h1>Tronçonneuse Stihl MS 250</h1>
+      <h1 id="annonce-titre">—</h1>
       <button class="fav-btn"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
     </div>
     <div class="meta-row">
@@ -355,8 +351,14 @@
 
         // Titre
         document.title=a.titre+' — kiloue.com';
-        var h1=document.querySelector('h1');
+        // Titre
+        var h1=document.getElementById('annonce-titre');
         if(h1) h1.textContent=a.titre;
+        // Breadcrumb
+        var bcCat=document.getElementById('bc-cat');
+        var bcTitre=document.getElementById('bc-titre');
+        if(bcCat) bcCat.textContent=a.categorie||'—';
+        if(bcTitre) bcTitre.textContent=a.titre;
 
         // Photos
         if(a.photos&&a.photos.length>0){
@@ -364,15 +366,19 @@
           var mainImg=document.getElementById('main-img');
           if(mainImg) mainImg.src=a.photos[0];
           // Miniatures - remplacer les 3 thumbs
-          var thumbDivs=document.querySelectorAll('.gallery-thumbs .g-thumb');
-          thumbDivs.forEach(function(div,i){
-            if(a.photos[i]){
-              var img=div.querySelector('img');
-              if(img) img.src=a.photos[i];
-              // Mettre à jour onclick
-              div.setAttribute('onclick','switchImg(this,"'+a.photos[i]+'")');
-            }
-          });
+          var gallery=document.getElementById('gallery-thumbs');
+          if(gallery){
+            gallery.innerHTML='';
+            a.photos.forEach(function(url,i){
+              var div=document.createElement('div');
+              div.className='g-thumb'+(i===0?' active':'');
+              div.setAttribute('onclick','switchImg(this,"'+url+'")');
+              var img=document.createElement('img');
+              img.src=url; img.alt='';
+              div.appendChild(img);
+              gallery.appendChild(div);
+            });
+          }
         }
 
         // Prix
