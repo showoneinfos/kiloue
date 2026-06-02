@@ -370,7 +370,7 @@
               var img=div.querySelector('img');
               if(img) img.src=a.photos[i];
               // Mettre à jour onclick
-              div.setAttribute('onclick','switchImg(this,''+a.photos[i]+'')');
+              div.setAttribute('onclick','switchImg(this,"'+a.photos[i]+'")');
             }
           });
         }
