@@ -283,16 +283,7 @@
 </div>
 
 <script>
-const ANNONCES = [
-  {id:1,name:'Tronçonneuse Stihl MS 250',loc:'Ajaccio · 4 km',stars:'⭐ 4,9 · 14 avis',price:25,badge:'Livraison',bl:true,img:'https://images.unsplash.com/photo-1617953141905-b27fb1f9a1b0?w=400&q=80',desc:'Tronçonneuse en excellent état, chaîne neuve. Casque inclus.',cert:true},
-  {id:2,name:'Motoculteur Honda F220',loc:'Ajaccio · 8 km',stars:'⭐ 4,7 · 9 avis',price:35,badge:'Certifié',bl:false,img:'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=400&q=80',desc:'Motoculteur idéal pour potager et terrain jusqu\'à 500m².',cert:true},
-  {id:3,name:'Lot 50 chaises blanches',loc:'Mezzavia · 12 km',stars:'⭐ 5,0 · 22 avis',price:40,badge:'+20€ livr.',bl:true,img:'https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=400&q=80',desc:'50 chaises blanches parfaites pour mariages et événements.',cert:true},
-  {id:4,name:'Échafaudage roulant 4 m',loc:'Ajaccio · 16 km',stars:'⭐ 4,6 · 7 avis',price:18,badge:'Certifié',bl:false,img:'https://images.unsplash.com/photo-1504148455328-c376907d081c?w=400&q=80',desc:'Échafaudage aluminium léger, montage rapide, roulettes.',cert:false},
-  {id:5,name:'Chapiteau 6×9 m',loc:'Ajaccio · 6 km',stars:'⭐ 4,8 · 11 avis',price:120,badge:'Livraison',bl:true,img:'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&q=80',desc:'Chapiteau blanc professionnel, livraison et installation incluses.',cert:true},
-  {id:6,name:'Remorque benne 750 kg',loc:'Ajaccio · 2 km',stars:'⭐ 4,5 · 5 avis',price:22,badge:'Sans caution',bl:false,img:'https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=400&q=80',desc:'Remorque benne homologuée, peut être attelée sur tout véhicule.',cert:false},
-  {id:7,name:'Perceuse colonne Metabo',loc:'Ajaccio · 5 km',stars:'⭐ 4,9 · 18 avis',price:12,badge:'Sur place',bl:false,img:'https://images.unsplash.com/photo-1572981779307-38b8cabb2407?w=400&q=80',desc:'Perceuse à colonne précise, table réglable, mandrin 16mm.',cert:true},
-  {id:8,name:'Nettoyeur haute pression',loc:'Ajaccio · 3 km',stars:'⭐ 4,7 · 13 avis',price:15,badge:'Certifié',bl:false,img:'https://images.unsplash.com/photo-1562259949-e8e7689d7828?w=400&q=80',desc:'Karcher K5 Full Control, idéal terrasse, voiture, façades.',cert:true},
-];
+var ANNONCES = []; // Chargé depuis Supabase
 
 let currentView = 'grid';
 let liked = new Set();
@@ -411,6 +402,34 @@ if (q) {
 }
 
 renderCards();
+</script>
+
+<script>
+(function(){
+  var q = new URLSearchParams(window.location.search).get('q') || '';
+  if(q) {
+    document.getElementById('search-input').value = q;
+    document.getElementById('result-query').textContent = q;
+  }
+  
+  var s = document.createElement('script');
+  s.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js';
+  s.onload = function() {
+    var db = supabase.createClient(
+      'https://nsvosbuxkpnoasfilyqy.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5zdm9zYnV4a3Bub2FzZmlseXF5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAxODczOTcsImV4cCI6MjA5NTc2MzM5N30.pTuH4X8IQy0UJq8zUZ8t7I2WLMEUXae_8nWdtIFrpRE'
+    );
+    var query = db.from('annonces').select('*').eq('disponible', true);
+    if(q) query = query.ilike('titre', '%'+q+'%');
+    query.order('created_at', {ascending: false}).then(function(res) {
+      if(res.error || !res.data) return;
+      ANNONCES = res.data;
+      document.getElementById('result-count').textContent = res.data.length;
+      renderCards();
+    });
+  };
+  document.head.appendChild(s);
+})();
 </script>
 </body>
 </html>
