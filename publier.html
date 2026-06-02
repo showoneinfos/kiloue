@@ -126,7 +126,14 @@ function go(n){
   window.scrollTo(0,0);
   if(n===5) setTimeout(function(){ updRecap(); },50);
 }
-function next(){ if(window._next) window._next(); else go((window.__cur||1)+1); }
+function next(){
+  var cur = window.__cur || 1;
+  if(cur >= 5){
+    publish();
+  } else {
+    go(cur + 1);
+  }
+}
 function prev(){ if(window._prev) window._prev(); else go((window.__cur||1)-1); }
 function publish(){ if(window._publish) window._publish(); }
 function upd(){
