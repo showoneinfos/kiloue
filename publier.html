@@ -680,6 +680,9 @@ function upd(){
   }
 
   function openPubCat(key, emoji, name) {
+    window._catName = name;
+    window._catKey = key;
+    window._catEmoji = emoji;
     catName = name;
     document.getElementById('pub-cat-label').textContent = emoji + ' ' + name;
     var subs = PUB_SUBCATS[key] || [];
@@ -696,6 +699,7 @@ function upd(){
         this.style.background = '#00A693';
         this.style.borderColor = '#00A693';
         this.style.color = '#fff';
+        window._sousCat = this.textContent;
         document.getElementById('pub-sous-name').textContent = this.textContent;
         document.getElementById('pub-confirm-sous').style.display = 'block';
         upd();
