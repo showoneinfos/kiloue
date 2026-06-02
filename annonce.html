@@ -199,7 +199,7 @@
 
     <div class="sec">
       <h2>Description</h2>
-      <p>Tronçonneuse Stihl MS 250 en excellent état, chaîne neuve changée en 2024. Parfaite pour les coupes moyennes : bois de chauffage, élagage, abattage de petits arbres. Puissance moteur 3,0 ch, guide de 40 cm. Casque de protection, lunettes et gants fournis. Carburant non inclus (mélange 2 temps).</p>
+      <p id="annonce-desc" class="desc-text">—</p>
     </div>
 
     <div class="sec">
@@ -287,7 +287,7 @@
     <h2>Réservation confirmée !</h2>
     <p>Jean-Pierre M. a été notifié et vous contactera sous 2h pour confirmer les détails.</p>
     <div class="modal-recap">
-      <div><span>Tronçonneuse Stihl MS 250</span><span>25,00 €</span></div>
+      <div id="recap-ligne"><span id="recap-titre-court">—</span><span id="recap-prix-total">—</span></div>
       <div><span>Commission kiloue (5%)</span><span>1,25 €</span></div>
       <div style="border-top:1px solid var(--border);margin-top:6px;padding-top:8px;font-weight:600;"><span>Total prélevé</span><span style="color:var(--teal)">26,25 €</span></div>
     </div>
@@ -401,8 +401,8 @@
         if(cat) cat.textContent=a.categorie;
 
         // Description
-        var descPara=document.querySelector('.desc-text');
-        if(descPara&&a.description) descPara.textContent=a.description;
+        var descPara=document.getElementById('annonce-desc');
+        if(descPara) descPara.textContent=a.description||'Aucune description.';
 
         // Caution
         var cautionTag=document.querySelector('.tags .tag:nth-child(2)');
