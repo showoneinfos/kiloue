@@ -168,6 +168,10 @@
   <a href="index.html">Accueil</a>
   <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
   <a href="#" id="bc-cat">—</a>
+  <span id="bc-souscat-wrap" style="display:none;">
+    <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
+    <a href="#" id="bc-souscat">—</a>
+  </span>
   <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
   <span id="bc-titre">—</span>
 </div>
@@ -357,8 +361,14 @@
         // Breadcrumb
         var bcCat=document.getElementById('bc-cat');
         var bcTitre=document.getElementById('bc-titre');
+        var bcSousCat=document.getElementById('bc-souscat');
+        var bcSousCatWrap=document.getElementById('bc-souscat-wrap');
         if(bcCat) bcCat.textContent=a.categorie||'—';
         if(bcTitre) bcTitre.textContent=a.titre;
+        if(a.sous_categorie && bcSousCat && bcSousCatWrap){
+          bcSousCat.textContent=a.sous_categorie;
+          bcSousCatWrap.style.display='inline';
+        }
 
         // Photos
         if(a.photos&&a.photos.length>0){
