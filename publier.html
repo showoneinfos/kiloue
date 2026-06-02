@@ -103,7 +103,24 @@ function go(n){
 function next(){ if(window._next) window._next(); else go((window.__cur||1)+1); }
 function prev(){ if(window._prev) window._prev(); else go((window.__cur||1)-1); }
 function publish(){ if(window._publish) window._publish(); }
-function upd(){ if(window._upd) window._upd(); }
+function upd(){
+  var prix=parseFloat((document.getElementById('f-prix')||{}).value)||0;
+  var titre=(document.getElementById('f-titre')||{}).value||'';
+  var ville=(document.getElementById('f-ville')||{}).value||'';
+  var commission=Math.round(prix*5)/100;
+  var net=Math.round((prix-commission)*100)/100;
+  var pn=document.getElementById('prev-name');
+  var pp=document.getElementById('prev-price');
+  var eb=document.getElementById('e-brut');
+  var ef=document.getElementById('e-fee');
+  var en=document.getElementById('e-net');
+  if(pn)pn.textContent=titre||'Nom de votre matériel';
+  if(pp)pp.innerHTML=prix>0?prix+'€ <small>/jour</small>':'— /jour';
+  if(eb)eb.textContent=prix>0?prix.toFixed(2)+' €':'—';
+  if(ef)ef.textContent=prix>0?'− '+commission.toFixed(2)+' €':'—';
+  if(en){en.textContent=prix>0?net.toFixed(2)+' €':'—';en.style.color=prix>0?'#00A693':'#999';en.style.fontWeight=prix>0?'700':'400';}
+  if(window._upd)window._upd();
+}
 </script>
 
 <script>
