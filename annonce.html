@@ -312,9 +312,9 @@
     const s=document.getElementById('d1').value,e=document.getElementById('d2').value;
     if(!s||!e)return;
     const days=Math.max(1,Math.round((new Date(e)-new Date(s))/86400000));
-    const base=days*25,del=deliv?DELIVERY_PRICE:0,sub=base+del;
+    const pj=window.ANNONCE_PRIX||25,lp=window.ANNONCE_LIVRAISON||DELIVERY_PRICE||0;const base=days*pj,del=deliv?lp:0,sub=base+del;
     const comm=+(sub*.05).toFixed(2),total=+(sub+comm).toFixed(2);
-    document.getElementById('r-days').textContent=days+'j × 25€';
+    document.getElementById('r-days').textContent=days+'j × '+(window.ANNONCE_PRIX||25)+'€';
     document.getElementById('r-price').textContent=base.toFixed(2)+' €';
     document.getElementById('r-comm').textContent='+ '+comm.toFixed(2)+' €';
     document.getElementById('r-total').textContent=total.toFixed(2)+' €';
@@ -337,10 +337,8 @@
 
 <script>
 (function(){
-  // Récupérer l'ID depuis l'URL
-  var id = new URLSearchParams(window.location.search).get('id');
+  var id=new URLSearchParams(window.location.search).get('id');
   if(!id) return;
-
   var s=document.createElement('script');
   s.src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js';
   s.onload=function(){
@@ -350,60 +348,83 @@
     );
     db.from('annonces')
       .select('*, utilisateurs(prenom, nom, ville, est_certifie, avatar_url)')
-      .eq('id', id)
-      .single()
+      .eq('id',id).single()
       .then(function(res){
-        if(res.error || !res.data){ console.error('Annonce non trouvée'); return; }
-        var a = res.data;
-        var u = a.utilisateurs || {};
+        if(res.error||!res.data) return;
+        var a=res.data, u=a.utilisateurs||{};
 
-        // Titre et breadcrumb
-        document.title = a.titre + ' — kiloue.com';
-        var titleEl = document.querySelector('h1.listing-title, .lh-title, h1');
-        if(titleEl) titleEl.textContent = a.titre;
+        // Titre
+        document.title=a.titre+' — kiloue.com';
+        var h1=document.querySelector('h1');
+        if(h1) h1.textContent=a.titre;
 
-        // Photo principale
-        if(a.photos && a.photos.length > 0){
-          var mainImg = document.querySelector('.main-photo img, .gallery-main img, .listing-img');
-          if(mainImg) mainImg.src = a.photos[0];
-          // Galerie
-          var thumbs = document.querySelectorAll('.thumb-list img, .gallery-thumbs img');
-          thumbs.forEach(function(t,i){
-            if(a.photos[i]) t.src = a.photos[i];
+        // Photos
+        if(a.photos&&a.photos.length>0){
+          // Image principale
+          var mainImg=document.getElementById('main-img');
+          if(mainImg) mainImg.src=a.photos[0];
+          // Miniatures - remplacer les 3 thumbs
+          var thumbDivs=document.querySelectorAll('.gallery-thumbs .g-thumb');
+          thumbDivs.forEach(function(div,i){
+            if(a.photos[i]){
+              var img=div.querySelector('img');
+              if(img) img.src=a.photos[i];
+              // Mettre à jour onclick
+              div.setAttribute('onclick','switchImg(this,''+a.photos[i]+'')');
+            }
           });
         }
 
         // Prix
-        var priceEl = document.querySelector('.price-main, .listing-price, [class*="price"]');
-        if(priceEl) priceEl.innerHTML = a.prix_jour + ' <small>€/jour</small>';
+        var prices=document.querySelectorAll('.price-main');
+        prices.forEach(function(p){ p.innerHTML=a.prix_jour+' € <small>/jour</small>'; });
 
-        // Ville
-        var locEl = document.querySelector('.listing-loc, [class*="location"], [class*="ville"]');
-        if(locEl) locEl.textContent = a.ville;
-
-        // Description
-        var descEl = document.querySelector('.listing-desc, [class*="description"]');
-        if(descEl && a.description) descEl.textContent = a.description;
-
-        // Loueur
-        var ownerName = document.querySelector('.owner-name, [class*="owner"] .name');
-        if(ownerName) ownerName.textContent = (u.prenom||'') + ' ' + (u.nom||'');
-        var ownerCity = document.querySelector('.owner-city, [class*="owner"] .city');
-        if(ownerCity && u.ville) ownerCity.textContent = u.ville;
-
-        // Caution
-        var cautionEl = document.querySelector('[class*="caution"]');
-        if(cautionEl && a.caution) cautionEl.textContent = 'Caution de ' + a.caution + '€';
-
-        // Livraison
-        if(a.livraison && a.prix_livraison > 0){
-          var delivEl = document.querySelector('[class*="delivery"], [class*="livraison"]');
-          if(delivEl) delivEl.textContent = 'Supplément +' + a.prix_livraison + '€';
+        // Prix demi-journée
+        var half=document.querySelector('.price-half');
+        if(half){
+          if(a.prix_demi_journee) half.textContent='Demi-journée disponible à '+a.prix_demi_journee+'€';
+          else half.style.display='none';
         }
 
-        // Mettre à jour la variable DELIVERY_PRICE pour le calcul
-        if(typeof DELIVERY_PRICE !== 'undefined') window.DELIVERY_PRICE = a.prix_livraison || 0;
-      }).catch(function(e){ console.error('Erreur chargement annonce:', e); });
+        // Ville/localisation
+        var loc=document.querySelector('.meta-loc');
+        if(loc) loc.innerHTML='<svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>'+a.ville;
+
+        // Catégorie
+        var cat=document.querySelector('.meta-cat');
+        if(cat) cat.textContent=a.categorie;
+
+        // Description
+        var descPara=document.querySelector('.desc-text');
+        if(descPara&&a.description) descPara.textContent=a.description;
+
+        // Caution
+        var cautionTag=document.querySelector('.tags .tag:nth-child(2)');
+        if(cautionTag) cautionTag.innerHTML='<svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Caution '+a.caution+'€';
+
+        // Livraison tag
+        var livrTag=document.querySelector('.tags .tag.green');
+        if(livrTag){
+          if(!a.livraison) livrTag.style.display='none';
+          else if(a.prix_livraison>0) livrTag.innerHTML=livrTag.innerHTML+' (+'+a.prix_livraison+'€)';
+        }
+
+        // Livraison supplément dans réservation
+        var delivSub=document.querySelector('.dr-sub');
+        if(delivSub&&a.prix_livraison>0) delivSub.textContent='Supplément +'+a.prix_livraison+'€';
+
+        // Loueur
+        var ownerName=document.querySelector('.owner-name');
+        if(ownerName) ownerName.textContent=(u.prenom||'')+(u.nom?' '+u.nom:'');
+        var ownerCity=document.querySelector('.owner-city');
+        if(ownerCity&&u.ville) ownerCity.textContent=u.ville;
+
+        // Mise à jour du calcul prix
+        window.ANNONCE_PRIX=a.prix_jour;
+        window.ANNONCE_LIVRAISON=a.prix_livraison||0;
+        // Recalculer
+        if(typeof calc==='function') calc();
+      });
   };
   document.head.appendChild(s);
 })();
