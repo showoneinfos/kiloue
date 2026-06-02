@@ -152,10 +152,12 @@ function publish(){
     if(btn){btn.textContent='Publier l\'annonce';btn.disabled=false;}
     return;
   }
-  var photoUrls=[];
+  // Collecter les images (data URLs)
+  var imgElements=[];
   document.querySelectorAll('#previews .preview-thumb img').forEach(function(img){
-    if(img.src&&img.src.length>10)photoUrls.push(img.src);
+    if(img.src&&img.src.startsWith('data:'))imgElements.push(img.src);
   });
+
   var s=document.createElement('script');
   s.src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js';
   s.onload=function(){
@@ -166,27 +168,50 @@ function publish(){
     db.auth.getUser().then(function(r){
       var user=r.data&&r.data.user;
       if(!user){window.location.href='inscription.html';return;}
-      db.from('annonces').insert([{
-        user_id:user.id,titre:titre,description:desc,
-        categorie:categorie,prix_jour:prix,caution:caution,
-        ville:ville,rayon_km:rayon,livraison:livraison,
-        prix_livraison:prixLiv,photos:photoUrls,disponible:true
-      }]).then(function(r2){
-        if(r2.error){
-          alert('Erreur : '+r2.error.message);
+
+      // Uploader les photos dans Supabase Storage
+      var uploadPromises=imgElements.map(function(dataUrl,idx){
+        // Convertir data URL en Blob
+        var arr=dataUrl.split(',');
+        var mime=arr[0].match(/:(.*?);/)[1];
+        var bstr=atob(arr[1]);
+        var n=bstr.length;
+        var u8arr=new Uint8Array(n);
+        while(n--){u8arr[n]=bstr.charCodeAt(n);}
+        var blob=new Blob([u8arr],{type:mime});
+        var ext=mime.split('/')[1]||'jpg';
+        var path=user.id+'/'+Date.now()+'_'+idx+'.'+ext;
+        return db.storage.from('annonces-photos').upload(path,blob,{contentType:mime})
+          .then(function(res){
+            if(res.error){console.warn('Upload photo error:',res.error);return null;}
+            return db.storage.from('annonces-photos').getPublicUrl(path).data.publicUrl;
+          });
+      });
+
+      Promise.all(uploadPromises).then(function(urls){
+        var photoUrls=urls.filter(function(u){return u!=null;});
+        db.from('annonces').insert([{
+          user_id:user.id,titre:titre,description:desc,
+          categorie:categorie,prix_jour:prix,caution:caution,
+          ville:ville,rayon_km:rayon,livraison:livraison,
+          prix_livraison:prixLiv,photos:photoUrls,disponible:true
+        }]).then(function(r2){
+          if(r2.error){
+            alert('Erreur : '+r2.error.message);
+            if(btn){btn.textContent='Publier l\'annonce';btn.disabled=false;}
+            return;
+          }
+          var fa=document.getElementById('form-area');
+          var sb=document.getElementById('steps-bar');
+          var sc=document.getElementById('success');
+          if(fa)fa.style.display='none';
+          if(sb)sb.style.display='none';
+          if(sc)sc.style.display='block';
+          else{alert('Annonce publiée !');window.location.href='profil.html';}
+        }).catch(function(e){
+          alert('Erreur publication : '+e.message);
           if(btn){btn.textContent='Publier l\'annonce';btn.disabled=false;}
-          return;
-        }
-        var fa=document.getElementById('form-area');
-        var sb=document.getElementById('steps-bar');
-        var sc=document.getElementById('success');
-        if(fa)fa.style.display='none';
-        if(sb)sb.style.display='none';
-        if(sc)sc.style.display='block';
-        else{alert('Annonce publiée !');window.location.href='profil.html';}
-      }).catch(function(e){
-        alert('Erreur publication : '+e.message);
-        if(btn){btn.textContent='Publier l\'annonce';btn.disabled=false;}
+        });
       });
     }).catch(function(e){
       alert('Erreur auth : '+e.message);
