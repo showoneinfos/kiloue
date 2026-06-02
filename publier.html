@@ -388,6 +388,44 @@ function upd(){
   
 </head>
 <body>
+<!-- Overlay auth -->
+<div id="auth-check" style="position:fixed;inset:0;background:#fff;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;">
+  <div style="width:40px;height:40px;border:3px solid #E5E5E5;border-top-color:#00A693;border-radius:50%;animation:spin 0.8s linear infinite;"></div>
+  <div style="font-size:14px;color:#666;">Vérification...</div>
+</div>
+<style>@keyframes spin{to{transform:rotate(360deg)}}</style>
+<script>
+(function(){
+  var s=document.createElement('script');
+  s.src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js';
+  s.onload=function(){
+    var db=supabase.createClient(
+      'https://nsvosbuxkpnoasfilyqy.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5zdm9zYnV4a3Bub2FzZmlseXF5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAxODczOTcsImV4cCI6MjA5NTc2MzM5N30.pTuH4X8IQy0UJq8zUZ8t7I2WLMEUXae_8nWdtIFrpRE'
+    );
+    window._db_publier = db;
+    db.auth.getUser().then(function(r){
+      var overlay=document.getElementById('auth-check');
+      if(!r.data||!r.data.user){
+        // Pas connecté → inscription
+        sessionStorage.setItem('redirect_after_login','publier.html');
+        window.location.href='inscription.html';
+      } else {
+        // Connecté → afficher le formulaire
+        if(overlay) overlay.style.display='none';
+      }
+    }).catch(function(){
+      var overlay=document.getElementById('auth-check');
+      if(overlay) overlay.style.display='none';
+    });
+  };
+  s.onerror=function(){
+    var overlay=document.getElementById('auth-check');
+    if(overlay) overlay.style.display='none';
+  };
+  document.head.appendChild(s);
+})();
+</script>
 <nav>
   <a class="logo" href="index.html">kiloue<span>.com</span></a>
   <div class="nav-actions">
