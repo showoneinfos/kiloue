@@ -83,24 +83,26 @@
   .cat-chip span{font-size:12px;font-weight:500;color:var(--ink2);white-space:nowrap;}
   .cat-chip:hover span{color:var(--teal);}
 
-  /* LISTINGS GRID */
-  .listings-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;}
-  .listing-card{cursor:pointer;border-radius:8px;overflow:hidden;transition:transform .15s;}
-  .listing-card:hover{transform:translateY(-2px);}
-  .listing-card:hover .lc-name{color:var(--teal);}
-  .lc-img{width:100%;aspect-ratio:1;object-fit:cover;display:block;background:var(--bg);}
-  .lc-body{padding:8px 4px;}
-  .lc-name{font-size:13px;font-weight:500;color:var(--ink);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:color .15s;}
-  .lc-meta{font-size:12px;color:var(--ink3);margin-bottom:4px;}
-  .lc-bot{display:flex;align-items:center;justify-content:space-between;}
-  .lc-price{font-size:15px;font-weight:700;color:var(--ink);}
-  .lc-badge{font-size:10px;padding:2px 8px;border-radius:20px;font-weight:500;}
+  /* LISTINGS GRID — style Vinted */
+  .listings-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;}
+  .listing-card{cursor:pointer;background:transparent;border:none;transition:transform .15s;}
+  .listing-card:hover{transform:translateY(-3px);}
+  .lc-wrap{position:relative;border-radius:12px;overflow:hidden;background:var(--bg);}
+  .lc-img{width:100%;aspect-ratio:1/1;object-fit:cover;display:block;}
+  .lc-img-placeholder{width:100%;aspect-ratio:1/1;background:#f0f0f0;display:flex;align-items:center;justify-content:center;}
+  .lc-img-placeholder svg{width:40px;height:40px;stroke:#ccc;fill:none;}
+  .lc-fav{position:absolute;top:8px;right:8px;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.92);display:flex;align-items:center;justify-content:center;cursor:pointer;border:none;box-shadow:0 1px 4px rgba(0,0,0,.15);}
+  .lc-fav svg{width:16px;height:16px;fill:none;stroke:#666;stroke-width:2;}
+  .lc-fav:hover svg{stroke:#e53935;fill:#ffeaea;}
+  .lc-body{padding:8px 2px 4px;}
+  .lc-name{font-size:13px;font-weight:500;color:var(--ink);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .lc-meta{font-size:11px;color:var(--ink3);margin-bottom:4px;}
+  .lc-bot{display:flex;align-items:center;gap:6px;}
+  .lc-price{font-size:14px;font-weight:700;color:var(--ink);}
+  .lc-price small{font-size:10px;font-weight:400;color:var(--ink3);}
+  .lc-badge{font-size:10px;padding:2px 7px;border-radius:20px;font-weight:500;}
   .badge-livr{background:var(--teal-light);color:var(--teal2);}
   .badge-cert{background:#FFF3E0;color:#E65100;}
-  .lc-fav{position:absolute;top:8px;right:8px;width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.9);display:flex;align-items:center;justify-content:center;cursor:pointer;border:none;}
-  .lc-fav svg{width:16px;height:16px;fill:none;stroke:var(--ink2);stroke-width:2;}
-  .lc-fav:hover svg{stroke:var(--teal);fill:var(--teal-light);}
-  .lc-wrap{position:relative;}
 
   /* HOW */
   .how-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
@@ -611,18 +613,23 @@ document.addEventListener('DOMContentLoaded', async () => {
       const grid = document.querySelector('.listings-grid');
       if (grid) {
         grid.innerHTML = annonces.map(a => {
-          const photo = a.photos && a.photos.length > 0 ? a.photos[0] : 'https://images.unsplash.com/photo-1617953141905-b27fb1f9a1b0?w=400&q=80';
-          const certif = a.utilisateurs?.est_certifie ? '<div class="cert-tag"><svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="#fff" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Certifié</div>' : '';
-          return `<div class="listing-card reveal" onclick="window.location.href='annonce.html?id=${a.id}'" style="cursor:pointer;">
-            <div class="lc-thumb" style="background-image:url(${photo});background-size:cover;background-position:center;">
-              ${certif}
+          const photo = a.photos && a.photos.length > 0 ? a.photos[0] : null;
+          const imgHtml = photo 
+            ? `<img class="lc-img" src="${photo}" alt="${a.titre}" loading="lazy">`
+            : `<div class="lc-img-placeholder"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>`;
+          return `<div class="listing-card" onclick="window.location.href='annonce.html?id=${a.id}'">
+            <div class="lc-wrap">
+              ${imgHtml}
+              <button class="lc-fav" onclick="event.stopPropagation()">
+                <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+              </button>
             </div>
             <div class="lc-body">
               <div class="lc-name">${a.titre}</div>
-              <div class="lc-loc"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#D4622A" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>${a.ville}</div>
-              <div class="lc-bottom">
-                <div class="lc-price">${a.prix_jour}€ <small>/jour</small></div>
-                <div class="lc-pill ${a.livraison ? 'green' : 'sand'}">${a.livraison ? 'Livraison' : 'Sur place'}</div>
+              <div class="lc-meta">${a.ville}</div>
+              <div class="lc-bot">
+                <div class="lc-price">${a.prix_jour}€<small>/j</small></div>
+                ${a.livraison ? '<div class="lc-badge badge-livr">Livraison</div>' : ''}
               </div>
             </div>
           </div>`;

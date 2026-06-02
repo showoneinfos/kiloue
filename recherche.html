@@ -138,6 +138,24 @@
     .sidebar{display:none;}
     .listings-grid{grid-template-columns:repeat(2,1fr);gap:10px;}
   }
+
+  /* CARDS STYLE VINTED */
+  .lcard{cursor:pointer;background:transparent;border:none;transition:transform .15s;}
+  .lcard:hover{transform:translateY(-3px);}
+  .lcard-img-w{position:relative;border-radius:12px;overflow:hidden;background:#f0f0f0;}
+  .lcard-img{width:100%;aspect-ratio:1/1;object-fit:cover;display:block;}
+  .lcard-fav{position:absolute;top:8px;right:8px;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.92);display:flex;align-items:center;justify-content:center;cursor:pointer;border:none;box-shadow:0 1px 4px rgba(0,0,0,.15);}
+  .lcard-fav svg{width:16px;height:16px;fill:none;stroke:#666;stroke-width:2;}
+  .lcard-fav:hover svg{stroke:#e53935;}
+  .lcard-body{padding:8px 2px 4px;}
+  .lcard-name{font-size:13px;font-weight:500;color:var(--ink);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .lcard-meta{font-size:11px;color:var(--ink3);margin-bottom:4px;}
+  .lcard-bot{display:flex;align-items:center;gap:6px;}
+  .lcard-price{font-size:14px;font-weight:700;color:var(--ink);}
+  .lcard-price small{font-size:10px;font-weight:400;color:var(--ink3);}
+  .lcard-badge{font-size:10px;padding:2px 7px;border-radius:20px;font-weight:500;}
+  .bl{background:#E8F7F5;color:#008577;}
+  .bc{background:#FFF3E0;color:#E65100;}
 </style>
 </head>
 <body>
