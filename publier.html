@@ -8,6 +8,7 @@ function OC(key,emoji,name){
   window._catName = name;
   window._catEmoji = emoji;
   window._sousCat = '';
+  console.log('Catégorie choisie:', name, key);
   var l1=document.getElementById('pub-l1');
   var l2=document.getElementById('pub-l2');
   var titre=document.getElementById('pub-cat-label');
@@ -39,6 +40,7 @@ function SEL(btn){
   var bs=document.getElementById('cat-badge-sous');
   if(bs)bs.textContent=btn.textContent;
   window._sousCat = btn.textContent;
+  console.log('Sous-catégorie choisie:', btn.textContent);
 }
 function BACK(){
   document.getElementById('pub-l1').style.display='block';
