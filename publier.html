@@ -4,6 +4,7 @@
 <script>
 var SUBS={'vehicules':['Voitures','Utilitaires','Motos','Scooters','Vélos','Vélos électriques','Trottinettes','Quads','Camping-cars','Caravanes','Remorques','Autres'],'nautisme':['Bateaux à moteur','Voiliers','Jet-skis','Kayaks','Canoës','Paddles','Pédalos','Matériel de pêche','Matériel de plongée','Autres'],'bricolage':['Perçage','Découpe','Ponçage','Soudure','Peinture','Outillage manuel','Outillage électrique','Échelles','Échafaudages','Nettoyage','Autres'],'jardinage':['Tondeuses','Tronçonneuses','Taille-haies','Débroussailleuses','Motobineuses','Broyeurs','Souffleurs','Scarificateurs','Outils de jardin','Arrosage','Autres'],'btp':['Mini-pelles','Nacelles','Compacteurs','Bétonnières','Groupes électrogènes','Marteaux-piqueurs','Lasers de chantier','Matériel de levage','Autres'],'agricole':['Tracteurs','Micro-tracteurs','Remorques agricoles','Broyeurs','Charrues','Pulvérisateurs','Semoirs','Matériel irrigation','Autres'],'maison':['Électroménager','Chauffage','Climatisation','Nettoyage','Mobilier','Déménagement','Décoration','Autres'],'evenementiel':['Tables','Chaises','Barnums','Tentes','Vaisselle','Décoration','Gonflables','Machines festives','Mariage','Anniversaire','Sonorisation','Éclairage','Autres'],'sport':['Fitness','Cyclisme','Sports nautiques','Sports hiver','Sports collectifs','Arts martiaux','Raquette','Randonnée','Camping','Chasse','Pêche','Autres'],'hightech':['Ordinateurs','Tablettes','Smartphones','Consoles','VR','Appareils photo','Caméras','Drones','Vidéoprojecteurs','Imprimantes','Écrans','Autres'],'mode':['Robes de soirée','Costumes','Vêtements homme','Vêtements femme','Vêtements enfant','Sacs','Bijoux','Montres','Chaussures','Autres'],'animaux':['Cages','Niches','Clôtures','Remorques animaux','Équitation','Transport','Accessoires chiens','Accessoires chats','Autres'],'divers':['Instruments musique','Matériel médical','Déguisements','Livres','Jeux de société','Bagagerie','Autres']};
 function OC(key,emoji,name){
+  window._catName = emoji+' '+name;
   var l1=document.getElementById('pub-l1');
   var l2=document.getElementById('pub-l2');
   var titre=document.getElementById('pub-cat-label');
@@ -38,6 +39,30 @@ function SEL(btn){
 function BACK(){
   document.getElementById('pub-l1').style.display='block';
   document.getElementById('pub-l2').style.display='none';
+}
+function updRecap(){
+  var titre=(document.getElementById('f-titre')||{}).value||'Non renseigné';
+  var ville=(document.getElementById('f-ville')||{}).value||'—';
+  var rayon=(document.getElementById('f-rayon')||{}).value||'30 km';
+  var prix=(document.getElementById('f-prix')||{}).value||'';
+  var cat=window._catName||'—';
+  var sousCat=(document.getElementById('pub-sous-name')||{}).textContent||'—';
+  var livraison=(document.getElementById('tgl-liv')||{}).classList&&document.getElementById('tgl-liv').classList.contains('on')?'Oui':'Non';
+  var prixLiv=(document.getElementById('f-livraison-prix')||{}).value||'';
+  var caution=(document.getElementById('f-caution')||{}).value||'0';
+  var prixN=parseFloat(prix)||0;
+  var commission=(prixN*0.05).toFixed(2);
+  var net=(prixN*0.95).toFixed(2);
+  var rt=document.getElementById('r-titre');
+  var rm=document.getElementById('r-meta');
+  if(rt)rt.textContent=titre;
+  if(rm)rm.innerHTML=
+    '<div style="margin-bottom:6px;">📂 '+cat+' › '+sousCat+'</div>'+
+    '<div style="margin-bottom:6px;">📍 '+ville+' · '+rayon+'</div>'+
+    '<div style="margin-bottom:6px;">💶 '+(prixN>0?prixN+'€/jour':'—')+'</div>'+
+    '<div style="margin-bottom:6px;">🔒 Caution : '+(caution||'0')+'€</div>'+
+    '<div style="margin-bottom:6px;">🚚 Livraison : '+livraison+(livraison==='Oui'&&prixLiv?' (+'+prixLiv+'€)':'')+'</div>'+
+    (prixN>0?'<div style="color:#00A693;font-weight:600;margin-top:8px;">✓ Vous recevez : '+net+'€ <small style="font-weight:400;color:#666;">après commission (−'+commission+'€)</small></div>':'');
 }
 function handleFiles(input){
   var c=document.getElementById('previews');
@@ -99,6 +124,7 @@ function go(n){
   if(bb)bb.style.visibility=n>1?'visible':'hidden';
   window.__cur=n;
   window.scrollTo(0,0);
+  if(n===5) setTimeout(function(){ updRecap(); },50);
 }
 function next(){ if(window._next) window._next(); else go((window.__cur||1)+1); }
 function prev(){ if(window._prev) window._prev(); else go((window.__cur||1)-1); }
@@ -549,7 +575,7 @@ function upd(){
     }
     document.getElementById('btn-back').style.visibility=n>1?'visible':'hidden';
     document.getElementById('btn-next').textContent=n===5?'Publier l\'annonce ✓':'Continuer →';
-    if(n===5)updRecap();
+    if(n===5){ updRecap(); if(window.updRecap) window.updRecap(); }
     cur=n;window.scrollTo(0,0);
   }
   window._next = function next(){if(cur===5)publish();else go(cur+1);}
@@ -574,8 +600,23 @@ function upd(){
     const ville=document.getElementById('f-ville')?.value||'—';
     const rayon=document.getElementById('f-rayon')?.value||'30 km';
     const prix=document.getElementById('f-prix')?.value||'—';
-    document.getElementById('r-titre').textContent=titre;
-    document.getElementById('r-meta').innerHTML='<span>📍 '+ville+' · '+rayon+'</span><span>💶 '+(prix!=='—'?prix+'€/j':'—')+'</span>';
+    const cat=window._catName||'—';
+    const sousCat=document.getElementById('pub-sous-name')?.textContent||'—';
+    const livraison=document.getElementById('tgl-liv')?.classList.contains('on')?'Oui':'Non';
+    const prixLiv=document.getElementById('f-livraison-prix')?.value||'';
+    const caution=document.getElementById('f-caution')?.value||'0';
+    const commission=prix!=='—'?'− '+(parseFloat(prix)*0.05).toFixed(2)+' €':'—';
+    const net=prix!=='—'?(parseFloat(prix)*0.95).toFixed(2)+' €':'—';
+    const rt=document.getElementById('r-titre');
+    const rm=document.getElementById('r-meta');
+    if(rt)rt.textContent=titre;
+    if(rm)rm.innerHTML=
+      '<div style="margin-bottom:6px;">📂 '+cat+' › '+sousCat+'</div>'+
+      '<div style="margin-bottom:6px;">📍 '+ville+' · '+rayon+'</div>'+
+      '<div style="margin-bottom:6px;">💶 '+(prix!=='—'?prix+'€/jour':'—')+'</div>'+
+      '<div style="margin-bottom:6px;">🔒 Caution : '+caution+'€</div>'+
+      '<div style="margin-bottom:6px;">🚚 Livraison : '+livraison+(livraison==='Oui'&&prixLiv?' (+'+prixLiv+'€)':'')+'</div>'+
+      '<div style="color:#00A693;font-weight:600;">✓ Vous recevez : '+net+' <small style="font-weight:400;color:#666;">après commission kiloue ('+commission+')</small></div>';
   }
   function chkCGU(){
     const ok=document.getElementById('tgl-cgu').classList.contains('on')&&document.getElementById('tgl-own').classList.contains('on');
@@ -661,7 +702,31 @@ function upd(){
     el.classList.toggle('on');
     document.getElementById('livraison-price-wrap').style.display = el.classList.contains('on') ? 'block' : 'none';
   }
-  function handleFiles(input){
+  function updRecap(){
+  var titre=(document.getElementById('f-titre')||{}).value||'Non renseigné';
+  var ville=(document.getElementById('f-ville')||{}).value||'—';
+  var rayon=(document.getElementById('f-rayon')||{}).value||'30 km';
+  var prix=(document.getElementById('f-prix')||{}).value||'';
+  var cat=window._catName||'—';
+  var sousCat=(document.getElementById('pub-sous-name')||{}).textContent||'—';
+  var livraison=(document.getElementById('tgl-liv')||{}).classList&&document.getElementById('tgl-liv').classList.contains('on')?'Oui':'Non';
+  var prixLiv=(document.getElementById('f-livraison-prix')||{}).value||'';
+  var caution=(document.getElementById('f-caution')||{}).value||'0';
+  var prixN=parseFloat(prix)||0;
+  var commission=(prixN*0.05).toFixed(2);
+  var net=(prixN*0.95).toFixed(2);
+  var rt=document.getElementById('r-titre');
+  var rm=document.getElementById('r-meta');
+  if(rt)rt.textContent=titre;
+  if(rm)rm.innerHTML=
+    '<div style="margin-bottom:6px;">📂 '+cat+' › '+sousCat+'</div>'+
+    '<div style="margin-bottom:6px;">📍 '+ville+' · '+rayon+'</div>'+
+    '<div style="margin-bottom:6px;">💶 '+(prixN>0?prixN+'€/jour':'—')+'</div>'+
+    '<div style="margin-bottom:6px;">🔒 Caution : '+(caution||'0')+'€</div>'+
+    '<div style="margin-bottom:6px;">🚚 Livraison : '+livraison+(livraison==='Oui'&&prixLiv?' (+'+prixLiv+'€)':'')+'</div>'+
+    (prixN>0?'<div style="color:#00A693;font-weight:600;margin-top:8px;">✓ Vous recevez : '+net+'€ <small style="font-weight:400;color:#666;">après commission (−'+commission+'€)</small></div>':'');
+}
+function handleFiles(input){
     const c=document.getElementById('previews');
     c.querySelectorAll('.preview-thumb.demo').forEach(el=>el.remove());
     Array.from(input.files).forEach(function(f){
