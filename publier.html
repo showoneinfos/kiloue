@@ -136,77 +136,68 @@ function next(){
 }
 function prev(){ if(window._prev) window._prev(); else go((window.__cur||1)-1); }
 function publish(){
-  var btn = document.getElementById('btn-next');
-  if(btn){ btn.textContent = '⏳ Publication...'; btn.disabled = true; }
-
-  var titre = (document.getElementById('f-titre')||{}).value||'';
-  var desc = (document.getElementById('f-desc')||{}).value||'';
-  var prix = parseFloat((document.getElementById('f-prix')||{}).value)||0;
-  var caution = parseFloat((document.getElementById('f-caution')||{}).value)||0;
-  var ville = (document.getElementById('f-ville')||{}).value||'';
-  var rayon = parseInt((document.getElementById('f-rayon')||{}).value)||30;
-  var livraison = document.getElementById('tgl-liv')&&document.getElementById('tgl-liv').classList.contains('on');
-  var prixLiv = parseFloat((document.getElementById('f-livraison-prix')||{}).value)||0;
-  var categorie = window._catName || 'Divers';
-
-  if(!titre || !prix || !ville){
+  var btn=document.getElementById('btn-next');
+  if(btn){btn.textContent='⏳ Publication...';btn.disabled=true;}
+  var titre=(document.getElementById('f-titre')||{}).value||'';
+  var desc=(document.getElementById('f-desc')||{}).value||'';
+  var prix=parseFloat((document.getElementById('f-prix')||{}).value)||0;
+  var caution=parseFloat((document.getElementById('f-caution')||{}).value)||0;
+  var ville=(document.getElementById('f-ville')||{}).value||'';
+  var rayon=parseInt((document.getElementById('f-rayon')||{}).value)||30;
+  var livraison=!!(document.getElementById('tgl-liv')&&document.getElementById('tgl-liv').classList.contains('on'));
+  var prixLiv=parseFloat((document.getElementById('f-livraison-prix')||{}).value)||0;
+  var categorie=window._catName||'Divers';
+  if(!titre||!prix||!ville){
     alert('Veuillez remplir le titre, le prix et la ville.');
-    if(btn){ btn.textContent = 'Publier l'annonce'; btn.disabled = false; }
+    if(btn){btn.textContent='Publier l\'annonce';btn.disabled=false;}
     return;
   }
-
-  // Récupérer les photos
-  var photoUrls = [];
+  var photoUrls=[];
   document.querySelectorAll('#previews .preview-thumb img').forEach(function(img){
-    if(img.src && img.src.length > 10) photoUrls.push(img.src);
+    if(img.src&&img.src.length>10)photoUrls.push(img.src);
   });
-
-  // Supabase
-  import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm').then(function(mod){
-    var db = mod.createClient(
+  var s=document.createElement('script');
+  s.src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js';
+  s.onload=function(){
+    var db=supabase.createClient(
       'https://nsvosbuxkpnoasfilyqy.supabase.co',
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5zdm9zYnV4a3Bub2FzZmlseXF5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAxODczOTcsImV4cCI6MjA5NTc2MzM5N30.pTuH4X8IQy0UJq8zUZ8t7I2WLMEUXae_8nWdtIFrpRE'
     );
-    db.auth.getUser().then(function(res){
-      var user = res.data && res.data.user;
-      if(!user){ window.location.href='inscription.html'; return; }
+    db.auth.getUser().then(function(r){
+      var user=r.data&&r.data.user;
+      if(!user){window.location.href='inscription.html';return;}
       db.from('annonces').insert([{
-        user_id: user.id,
-        titre: titre,
-        description: desc,
-        categorie: categorie,
-        prix_jour: prix,
-        caution: caution,
-        ville: ville,
-        rayon_km: rayon,
-        livraison: livraison,
-        prix_livraison: prixLiv,
-        photos: photoUrls,
-        disponible: true
-      }]).then(function(res){
-        if(res.error){ 
-          alert('Erreur : ' + res.error.message);
-          if(btn){ btn.textContent = 'Publier l'annonce'; btn.disabled = false; }
+        user_id:user.id,titre:titre,description:desc,
+        categorie:categorie,prix_jour:prix,caution:caution,
+        ville:ville,rayon_km:rayon,livraison:livraison,
+        prix_livraison:prixLiv,photos:photoUrls,disponible:true
+      }]).then(function(r2){
+        if(r2.error){
+          alert('Erreur : '+r2.error.message);
+          if(btn){btn.textContent='Publier l\'annonce';btn.disabled=false;}
           return;
         }
-        // Succès
         var fa=document.getElementById('form-area');
         var sb=document.getElementById('steps-bar');
         var sc=document.getElementById('success');
-        var nb=document.querySelector('.nav-bar');
-        var pc=document.querySelector('.preview-card');
         if(fa)fa.style.display='none';
         if(sb)sb.style.display='none';
-        if(nb)nb.style.display='none';
-        if(pc)pc.style.display='none';
         if(sc)sc.style.display='block';
-        else { alert('Annonce publiée ! Redirection...'); window.location.href='profil.html'; }
+        else{alert('Annonce publiée !');window.location.href='profil.html';}
+      }).catch(function(e){
+        alert('Erreur publication : '+e.message);
+        if(btn){btn.textContent='Publier l\'annonce';btn.disabled=false;}
       });
+    }).catch(function(e){
+      alert('Erreur auth : '+e.message);
+      if(btn){btn.textContent='Publier l\'annonce';btn.disabled=false;}
     });
-  }).catch(function(e){
-    alert('Erreur de connexion : ' + e.message);
-    if(btn){ btn.textContent = 'Publier l'annonce'; btn.disabled = false; }
-  });
+  };
+  s.onerror=function(){
+    alert('Erreur de connexion internet.');
+    if(btn){btn.textContent='Publier l\'annonce';btn.disabled=false;}
+  };
+  document.head.appendChild(s);
 }
 function upd(){
   var prix=parseFloat((document.getElementById('f-prix')||{}).value)||0;
@@ -766,7 +757,7 @@ function upd(){
 
     } catch(e) {
       console.error(e);
-      alert('Erreur : ' + (e.message || 'Impossible de publier l'annonce.'));
+      alert('Erreur : ' + (e.message || 'Impossible de publier.'));
       btn.textContent = 'Publier l\'annonce ✓';
       btn.disabled = false;
     }
