@@ -34,7 +34,7 @@
   .nav-search input::placeholder{color:var(--ink3);}
   .nav-cats{display:flex;gap:4px;overflow-x:auto;flex:1;}
   .nav-cats::-webkit-scrollbar{display:none;}
-  .nav-cat{padding:0 14px;height:44px;display:inline-flex;align-items:center;font-size:13px;font-weight:500;color:var(--ink2);cursor:pointer;white-space:nowrap;background:transparent;border:none;border-bottom:2px solid transparent;transition:all .15s;}
+  .nav-cat{padding:0 14px;height:44px;display:inline-flex;align-items:center;font-size:14px;font-weight:400;color:var(--ink2);cursor:pointer;white-space:nowrap;background:transparent;border:none;border-bottom:2px solid transparent;transition:all .15s;text-decoration:none;}
   .nav-cat:hover{color:var(--teal);border-bottom-color:var(--teal);}
   .cat-drop{position:relative;display:inline-flex;}
   .nav-cats{border-top:1px solid var(--border);display:flex;align-items:center;padding:0 24px;gap:0;overflow-x:auto;height:44px;position:relative;}
@@ -201,44 +201,11 @@
     <input type="text" placeholder="Tronçonneuse, tables, remorque…">
   </div>
   <div class="nav-cats" id="nav-cats">
-    <button class="nav-cat" onclick="window.location.href='categories.html'">Tout voir</button>
-    <div class="cat-drop" onmouseenter="openDrop('vehicules')" onmouseleave="closeDrop()"><button class="nav-cat">🚗 Véhicules</button></div>
-    <div class="cat-drop" onmouseenter="openDrop('nautisme')" onmouseleave="closeDrop()"><button class="nav-cat">🚤 Nautisme</button></div>
-    <div class="cat-drop" onmouseenter="openDrop('bricolage')" onmouseleave="closeDrop()"><button class="nav-cat">🔨 Bricolage</button></div>
-    <div class="cat-drop" onmouseenter="openDrop('jardinage')" onmouseleave="closeDrop()"><button class="nav-cat">🌳 Jardinage</button></div>
-    <div class="cat-drop" onmouseenter="openDrop('btp')" onmouseleave="closeDrop()"><button class="nav-cat">🏗️ BTP</button></div>
-    <div class="cat-drop" onmouseenter="openDrop('agricole')" onmouseleave="closeDrop()"><button class="nav-cat">🚜 Agricole</button></div>
-    <div class="cat-drop" onmouseenter="openDrop('maison')" onmouseleave="closeDrop()"><button class="nav-cat">🏠 Maison</button></div>
-    <div class="cat-drop" onmouseenter="openDrop('evenementiel')" onmouseleave="closeDrop()"><button class="nav-cat">🎉 Événementiel</button></div>
-    <div class="cat-drop" onmouseenter="openDrop('sport')" onmouseleave="closeDrop()"><button class="nav-cat">⚽ Sport</button></div>
-    <div class="cat-drop" onmouseenter="openDrop('hightech')" onmouseleave="closeDrop()"><button class="nav-cat">💻 High-Tech</button></div>
-    <div class="cat-drop" onmouseenter="openDrop('mode')" onmouseleave="closeDrop()"><button class="nav-cat">👗 Mode</button></div>
-    <div class="cat-drop" onmouseenter="openDrop('animaux')" onmouseleave="closeDrop()"><button class="nav-cat">🐶 Animaux</button></div>
-    <div class="cat-drop" onmouseenter="openDrop('divers')" onmouseleave="closeDrop()"><button class="nav-cat">📦 Divers</button></div>
+    <a class="nav-cat" href="categories.html">Parcourir</a>
+    <a class="nav-cat" href="#comment-ca-marche">Comment ça marche</a>
+    <a class="nav-cat" href="#qui-sommes-nous">Qui sommes-nous</a>
+    <a class="nav-cat" href="#contact">Nous contacter</a>
   </div>
-  <!-- MEGA MENU -->
-  <div id="mega-menu" onmouseenter="keepDrop()" onmouseleave="closeDrop()" style="display:none;position:absolute;left:0;right:0;background:#fff;border-top:2px solid var(--teal);border-bottom:1px solid var(--border);box-shadow:0 8px 32px rgba(0,0,0,.1);z-index:500;padding:24px 40px;">
-    <div id="mega-content"></div>
-  </div>
-  <div class="nav-actions">
-    <button class="btn-login" onclick="window.location.href='inscription.html'">S'inscrire | Se connecter</button>
-    <button class="btn-sell" onclick="window.location.href='publier.html'">Déposer une annonce</button>
-  </div>
-</nav>
-
-<!-- BANNER -->
-<div class="banner">
-  <img class="banner-img" src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1400&q=80" alt="Location de matériel">
-  <div class="banner-overlay"></div>
-  <div class="banner-content">
-    <h1>Louez le matériel dont vous avez besoin, près de chez vous</h1>
-    <p>Tronçonneuse, motoculteur, tables, remorques… Au prix fixé par votre voisin.</p>
-    <div class="banner-btns">
-      <button class="btn-banner-main" onclick="window.location.href='categories.html'">Parcourir les annonces</button>
-      <button class="btn-banner-ghost" onclick="window.location.href='publier.html'">Proposer du matériel</button>
-    </div>
-  </div>
-</div>
 
 <!-- TRUST -->
 <div class="trust-bar">
@@ -465,6 +432,77 @@
 </div>
 
 <!-- FOOTER -->
+
+<!-- COMMENT CA MARCHE -->
+<div id="comment-ca-marche" style="padding:60px 24px;max-width:1200px;margin:0 auto;">
+  <h2 style="font-size:24px;font-weight:700;color:#1A1A1A;margin-bottom:8px;">Comment ça marche ?</h2>
+  <p style="font-size:15px;color:#666;margin-bottom:40px;">Louer ou proposer du matériel n'a jamais été aussi simple.</p>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:32px;">
+    <div style="text-align:center;">
+      <div style="width:56px;height:56px;border-radius:50%;background:#E8F7F5;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:24px;">🔍</div>
+      <div style="font-size:16px;font-weight:600;color:#1A1A1A;margin-bottom:8px;">1. Cherchez</div>
+      <div style="font-size:14px;color:#666;line-height:1.6;">Parcourez les annonces près de chez vous par catégorie ou avec la recherche.</div>
+    </div>
+    <div style="text-align:center;">
+      <div style="width:56px;height:56px;border-radius:50%;background:#E8F7F5;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:24px;">📅</div>
+      <div style="font-size:16px;font-weight:600;color:#1A1A1A;margin-bottom:8px;">2. Réservez</div>
+      <div style="font-size:14px;color:#666;line-height:1.6;">Choisissez vos dates, payez en ligne en toute sécurité. Le loueur confirme sous 24h.</div>
+    </div>
+    <div style="text-align:center;">
+      <div style="width:56px;height:56px;border-radius:50%;background:#E8F7F5;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:24px;">🤝</div>
+      <div style="font-size:16px;font-weight:600;color:#1A1A1A;margin-bottom:8px;">3. Profitez</div>
+      <div style="font-size:14px;color:#666;line-height:1.6;">Récupérez le matériel, utilisez-le, rendez-le. La caution est libérée automatiquement.</div>
+    </div>
+    <div style="text-align:center;">
+      <div style="width:56px;height:56px;border-radius:50%;background:#E8F7F5;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:24px;">💸</div>
+      <div style="font-size:16px;font-weight:600;color:#1A1A1A;margin-bottom:8px;">4. Gagnez</div>
+      <div style="font-size:14px;color:#666;line-height:1.6;">Loueurs : recevez votre virement sous 24h après la location. Commission 5% seulement.</div>
+    </div>
+  </div>
+</div>
+
+<!-- QUI SOMMES NOUS -->
+<div id="qui-sommes-nous" style="padding:60px 24px;background:#fff;border-top:1px solid #E5E5E5;">
+  <div style="max-width:800px;margin:0 auto;text-align:center;">
+    <h2 style="font-size:24px;font-weight:700;color:#1A1A1A;margin-bottom:16px;">Qui sommes-nous ?</h2>
+    <p style="font-size:15px;color:#666;line-height:1.8;margin-bottom:20px;">
+      kiloue.com est une plateforme de location de matériel entre particuliers, née en Corse. Notre mission : permettre à chacun de louer ce dont il a besoin près de chez lui, au prix fixé par son voisin.
+    </p>
+    <p style="font-size:15px;color:#666;line-height:1.8;">
+      Tronçonneuses, remorques, tables de réception, matériel agricole... Tout ce qui dort dans un garage peut générer des revenus pour son propriétaire, et économiser de l'argent pour son locataire. C'est ça, l'économie du partage locale.
+    </p>
+    <div style="margin-top:32px;display:flex;justify-content:center;gap:40px;flex-wrap:wrap;">
+      <div><div style="font-size:28px;font-weight:700;color:#00A693;">5%</div><div style="font-size:13px;color:#666;">Commission seulement</div></div>
+      <div><div style="font-size:28px;font-weight:700;color:#00A693;">100%</div><div style="font-size:13px;color:#666;">Paiement sécurisé</div></div>
+      <div><div style="font-size:28px;font-weight:700;color:#00A693;">Corse</div><div style="font-size:13px;color:#666;">Né en Corse</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- CONTACT -->
+<div id="contact" style="padding:60px 24px;max-width:600px;margin:0 auto;text-align:center;">
+  <h2 style="font-size:24px;font-weight:700;color:#1A1A1A;margin-bottom:8px;">Nous contacter</h2>
+  <p style="font-size:15px;color:#666;margin-bottom:32px;">Une question ? Une suggestion ? On vous répond sous 24h.</p>
+  <div style="background:#fff;border:1px solid #E5E5E5;border-radius:12px;padding:32px;text-align:left;">
+    <div style="margin-bottom:16px;">
+      <label style="display:block;font-size:12px;font-weight:600;color:#666;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">Votre nom</label>
+      <input type="text" placeholder="Jean Dupont" style="width:100%;border:1.5px solid #E5E5E5;border-radius:8px;padding:10px 14px;font-size:14px;font-family:inherit;outline:none;">
+    </div>
+    <div style="margin-bottom:16px;">
+      <label style="display:block;font-size:12px;font-weight:600;color:#666;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">Email</label>
+      <input type="email" placeholder="jean@exemple.fr" style="width:100%;border:1.5px solid #E5E5E5;border-radius:8px;padding:10px 14px;font-size:14px;font-family:inherit;outline:none;">
+    </div>
+    <div style="margin-bottom:20px;">
+      <label style="display:block;font-size:12px;font-weight:600;color:#666;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">Message</label>
+      <textarea placeholder="Votre message..." rows="4" style="width:100%;border:1.5px solid #E5E5E5;border-radius:8px;padding:10px 14px;font-size:14px;font-family:inherit;outline:none;resize:none;"></textarea>
+    </div>
+    <button onclick="alert('Message envoyé ! Nous vous répondrons sous 24h.')" style="width:100%;padding:12px;border-radius:8px;background:#00A693;color:#fff;border:none;font-size:15px;font-weight:600;font-family:inherit;cursor:pointer;">Envoyer le message</button>
+  </div>
+  <div style="margin-top:24px;font-size:13px;color:#999;">
+    Ou par email : <a href="mailto:contact@kiloue.com" style="color:#00A693;">contact@kiloue.com</a>
+  </div>
+</div>
+
 <footer>
   <div class="footer-col">
     <div class="footer-logo">kiloue<span>.com</span></div>
@@ -520,59 +558,7 @@
   }));
 </script>
 
-<script>
-const MEGA = {
-  vehicules:{title:'🚗 Véhicules',subs:['Voitures','Utilitaires','Motos','Scooters','Vélos','Vélos électriques','Trottinettes électriques','Quads','Buggys','Camping-cars','Caravanes','Remorques','Autres']},
-  nautisme:{title:'🚤 Nautisme',subs:['Bateaux à moteur','Voiliers','Jet-skis','Kayaks','Canoës','Paddles','Pédalos','Équipements de pêche','Équipements de plongée','Remorques bateau','Autres']},
-  bricolage:{title:'🔨 Bricolage & Outillage',subs:['Perçage','Découpe','Ponçage','Soudure','Peinture','Outillage manuel','Outillage électrique','Échelles','Échafaudages','Nettoyage professionnel','Détecteurs et mesure','Autres']},
-  jardinage:{title:'🌳 Jardinage',subs:['Tondeuses','Tronçonneuses','Taille-haies','Débroussailleuses','Motobineuses','Broyeurs de végétaux','Souffleurs','Scarificateurs','Outils de jardin','Arrosage','Autres']},
-  btp:{title:'🏗️ BTP & Chantier',subs:['Mini-pelles','Nacelles','Compacteurs','Bétonnières','Groupes électrogènes','Marteaux-piqueurs','Lasers de chantier','Matériel de coffrage','Matériel de levage','Équipement de sécurité','Autres']},
-  agricole:{title:'🚜 Matériel Agricole',subs:['Tracteurs','Micro-tracteurs','Remorques agricoles','Broyeurs agricoles','Charrues','Pulvérisateurs','Semoirs','Matériel d\'irrigation','Récolte et entretien','Équipements d\'élevage','Autres']},
-  maison:{title:'🏠 Maison & Équipement',subs:['Électroménager','Chauffage','Climatisation','Nettoyage','Déshumidificateurs','Mobilier','Déménagement','Décoration','Bricolage domestique','Autres']},
-  evenementiel:{title:'🎉 Événementiel',subs:['Tables','Chaises','Barnums','Tentes de réception','Vaisselle','Décoration événementielle','Structures gonflables','Machines festives','Matériel mariage','Matériel anniversaire','Sonorisation','Éclairage','Autres']},
-  sport:{title:'⚽ Sport & Loisirs',subs:['Fitness & Musculation','Cyclisme','Sports nautiques','Sports d\'hiver','Sports collectifs','Sports de combat','Sports de raquette','Randonnée','Camping','Chasse','Pêche','Autres']},
-  hightech:{title:'💻 High-Tech & Multimédia',subs:['Ordinateurs','Tablettes','Smartphones','Consoles de jeux','Réalité virtuelle','Appareils photo','Caméras','Drones','Vidéoprojecteurs','Imprimantes','Écrans','Accessoires informatiques','Autres']},
-  mode:{title:'👗 Mode & Accessoires',subs:['Robes de soirée','Costumes','Vêtements homme','Vêtements femme','Vêtements enfant','Sacs de luxe','Bijoux','Montres','Chaussures','Accessoires de mode','Autres']},
-  animaux:{title:'🐶 Animaux',subs:['Cages','Niches','Clôtures mobiles','Remorques pour animaux','Matériel d\'équitation','Transport animalier','Matériel d\'élevage','Accessoires pour chiens','Accessoires pour chats','Autres']},
-  divers:{title:'📦 Divers',subs:['Instruments de musique','Équipements pour animaux','Matériel médical','Déguisements','Livres et collections','Jeux de société','Voyage et bagagerie','Matériel scolaire','Objets de collection','Autres']},
-};
 
-let dropTimeout;
-let megaOpen = false;
-
-function openDrop(cat) {
-  clearTimeout(dropTimeout);
-  const d = MEGA[cat];
-  if (!d) return;
-  const cols = 4;
-  const perCol = Math.ceil(d.subs.length / cols);
-  let colsHtml = '';
-  for (let c = 0; c < cols; c++) {
-    const items = d.subs.slice(c * perCol, (c + 1) * perCol);
-    if (!items.length) break;
-    colsHtml += `<div>${items.map(s => `<a class="mega-link" onclick="window.location.href='categories.html?cat=${cat}'">${s}</a>`).join('')}</div>`;
-  }
-  document.getElementById('mega-content').innerHTML = `
-    <div style="margin-bottom:14px;font-size:15px;font-weight:700;color:var(--ink);">${d.title}</div>
-    <div class="mega-cols">${colsHtml}</div>
-    <div style="margin-top:16px;border-top:1px solid var(--border);padding-top:14px;">
-      <button class="mega-see-all" onclick="window.location.href='categories.html?cat=${cat}'">Voir toutes les annonces →</button>
-    </div>`;
-  document.getElementById('mega-menu').style.display = 'block';
-  megaOpen = true;
-}
-
-function keepDrop() {
-  clearTimeout(dropTimeout);
-}
-
-function closeDrop() {
-  dropTimeout = setTimeout(() => {
-    document.getElementById('mega-menu').style.display = 'none';
-    megaOpen = false;
-  }, 200);
-}
-</script>
 
 <script>
 function doSearch(){
