@@ -45,7 +45,6 @@
   .stat-lbl svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:2;}
   .stat-val{font-size:26px;font-weight:700;color:var(--ink);}
   .stat-chg{font-size:12px;margin-top:4px;color:var(--ink2);}
-  .up{color:var(--teal);}
   .stat.hl{background:var(--teal);border-color:var(--teal);}
   .stat.hl .stat-lbl{color:rgba(255,255,255,.7);}
   .stat.hl .stat-val{color:#fff;}
@@ -53,9 +52,9 @@
   .card{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:18px;margin-bottom:18px;}
   .card h2{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;}
   .card h2 a{font-size:12px;color:var(--teal);text-decoration:none;font-weight:400;}
-  /* RÉSERVATIONS */
   .resa-item{border:1.5px solid var(--border);border-radius:12px;padding:16px;margin-bottom:12px;background:var(--white);}
   .resa-item.wait{border-color:#FFB300;background:#FFFBF0;}
+  .resa-item.acceptee{border-color:#2196F3;background:#E3F2FD;}
   .resa-item.confirmee{border-color:#00A693;background:#E8F7F5;}
   .resa-item.annulee{border-color:#E0E0E0;background:#FAFAFA;opacity:.75;}
   .resa-top{display:flex;align-items:center;gap:14px;margin-bottom:10px;}
@@ -66,6 +65,7 @@
   .resa-amt{font-size:18px;font-weight:700;color:var(--teal);white-space:nowrap;text-align:right;}
   .badge{font-size:12px;padding:4px 12px;border-radius:20px;font-weight:600;white-space:nowrap;display:inline-block;margin-bottom:4px;}
   .badge-wait{background:#FFB300;color:#fff;}
+  .badge-acceptee{background:#2196F3;color:#fff;}
   .badge-ok{background:var(--teal);color:#fff;}
   .badge-done{background:#E0E0E0;color:#666;}
   .badge-annulee{background:#FFCDD2;color:#C62828;}
@@ -75,9 +75,10 @@
   .btn-accept:hover{background:#008577;}
   .btn-refuse{padding:12px;border-radius:10px;font-size:14px;font-weight:700;font-family:var(--sans);cursor:pointer;border:2px solid #E53935;background:#fff;color:#E53935;transition:all .15s;}
   .btn-refuse:hover{background:#E53935;color:#fff;}
-  .btn-cancel{padding:10px;border-radius:10px;font-size:13px;font-weight:600;font-family:var(--sans);cursor:pointer;border:1.5px solid #E53935;background:#fff;color:#E53935;transition:all .15s;}
+  .btn-cancel{padding:10px;border-radius:10px;font-size:13px;font-weight:600;font-family:var(--sans);cursor:pointer;border:1.5px solid #E53935;background:#fff;color:#E53935;}
   .btn-cancel:hover{background:#FFF0F0;}
-  /* ANNONCES */
+  .btn-pay-now{padding:12px;border-radius:10px;font-size:14px;font-weight:700;font-family:var(--sans);cursor:pointer;border:none;background:#2196F3;color:#fff;animation:pulse 2s infinite;}
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.8;}}
   .ann-item{display:flex;align-items:center;gap:12px;padding:12px;background:var(--bg);border-radius:8px;margin-bottom:8px;}
   .ann-img{width:52px;height:52px;border-radius:8px;object-fit:cover;flex-shrink:0;background:#e0e0e0;}
   .ann-info{flex:1;}
@@ -93,7 +94,7 @@
   .empty p{font-size:14px;margin-bottom:12px;}
   .empty a{color:var(--teal);font-weight:600;text-decoration:none;}
   .loading{text-align:center;padding:30px;color:var(--ink3);font-size:13px;}
-  #toast{display:none;position:fixed;bottom:24px;right:24px;background:var(--ink);color:#fff;padding:11px 18px;border-radius:8px;font-size:13px;z-index:300;}
+  #toast{display:none;position:fixed;bottom:24px;right:24px;background:var(--ink);color:#fff;padding:11px 18px;border-radius:8px;font-size:13px;z-index:300;max-width:320px;}
   @media(max-width:900px){.sidebar{display:none;}.content{padding:16px;}.stats{grid-template-columns:1fr 1fr;}.topbar{padding:0 16px;}}
 </style>
 </head>
@@ -144,7 +145,7 @@
         <div class="stat hl">
           <div class="stat-lbl"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Revenus totaux</div>
           <div class="stat-val" id="stat-revenus">—</div>
-          <div class="stat-chg" id="stat-revenus-sub">locations confirmées</div>
+          <div class="stat-chg" id="stat-revenus-sub">locations payées</div>
         </div>
         <div class="stat">
           <div class="stat-lbl"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Réservations reçues</div>
@@ -205,66 +206,71 @@
 const SUPA_URL = 'https://nsvosbuxkpnoasfilyqy.supabase.co';
 const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5zdm9zYnV4a3Bub2FzZmlseXF5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAxODczOTcsImV4cCI6MjA5NTc2MzM5N30.pTuH4X8IQy0UJq8zUZ8t7I2WLMEUXae_8nWdtIFrpRE';
 
-let db;
-let currentUser; // ← GLOBAL, disponible partout
+let db, currentUser;
 
-/* ─── UTILS ─── */
 function toast(msg){
   const t=document.getElementById('toast');
   t.textContent=msg;t.style.display='block';
-  setTimeout(()=>t.style.display='none',3500);
+  setTimeout(()=>t.style.display='none',4000);
 }
 function fmt(date){
   if(!date) return '';
   return new Date(date).toLocaleDateString('fr-FR',{day:'numeric',month:'short',year:'numeric'});
 }
 function badgeHtml(s){
-  if(s==='en_attente') return '<span class="badge badge-wait">En attente</span>';
-  if(s==='confirmee')  return '<span class="badge badge-ok">Confirmée</span>';
-  if(s==='annulee')    return '<span class="badge badge-annulee">Annulée</span>';
+  if(s==='en_attente')  return '<span class="badge badge-wait">En attente</span>';
+  if(s==='acceptee')    return '<span class="badge badge-acceptee">Acceptée — Paiement attendu</span>';
+  if(s==='payee')       return '<span class="badge badge-ok">Payée</span>';
+  if(s==='confirmee')   return '<span class="badge badge-ok">Confirmée</span>';
+  if(s==='annulee')     return '<span class="badge badge-annulee">Annulée</span>';
   return '<span class="badge badge-done">Terminée</span>';
 }
-function imgOrPlaceholder(photos, cls){
-  if(photos && photos.length > 0)
+function imgOrPlaceholder(photos,cls){
+  if(photos&&photos.length>0)
     return '<img class="'+cls+'" src="'+photos[0]+'" alt="" onerror="this.style.display=\'none\'">';
-  return '<div class="'+cls+'" style="background:#f0f0f0;display:flex;align-items:center;justify-content:center;font-size:20px;">📦</div>';
+  return '<div class="'+cls+'" style="background:#f0f0f0;display:flex;align-items:center;justify-content:center;">📦</div>';
 }
 
-/* ─── NAVIGATION ─── */
-const SECTIONS = ['dashboard','annonces','reservations','locations'];
-const TITLES = {dashboard:'Tableau de bord',annonces:'Mes annonces',reservations:'Réservations reçues',locations:'Mes locations'};
+const SECTIONS=['dashboard','annonces','reservations','locations'];
+const TITLES={dashboard:'Tableau de bord',annonces:'Mes annonces',reservations:'Réservations reçues',locations:'Mes locations'};
 
 function showSection(name){
   SECTIONS.forEach(s=>{
-    document.getElementById('section-'+s).classList.toggle('active', s===name);
+    document.getElementById('section-'+s).classList.toggle('active',s===name);
     const nav=document.getElementById('nav-'+s);
-    if(nav) nav.classList.toggle('active', s===name);
+    if(nav) nav.classList.toggle('active',s===name);
   });
-  document.getElementById('topbar-title').textContent = TITLES[name]||'';
+  document.getElementById('topbar-title').textContent=TITLES[name]||'';
 }
 
-/* ─── RENDER RÉSERVATION REÇUE (loueur) ─── */
+/* ── RENDER RÉSERVATION REÇUE (loueur) ── */
 function renderResaRecue(r){
   const a=r.annonces||{}, loc=r.utilisateurs||{};
   const photo=imgOrPlaceholder(a.photos,'resa-img');
   const locNom=[loc.prenom,loc.nom?loc.nom[0]+'.':''].filter(Boolean).join(' ')||'Locataire';
   const net=(r.prix_total||0)-(r.commission||0);
-  const isWait=r.statut==='en_attente';
-  const isConfirmed=r.statut==='confirmee';
 
   let actions='';
-  if(isWait){
+  if(r.statut==='en_attente'){
     actions=`<div class="resa-actions">
-      <button class="btn-accept" onclick="confirmerResa('${r.id}','${r.locataire_id}','${r.annonce_id}')">✓ Accepter</button>
+      <button class="btn-accept" onclick="accepterResa('${r.id}','${r.locataire_id}','${r.annonce_id||''}')">✓ Accepter</button>
       <button class="btn-refuse" onclick="refuserResa('${r.id}')">✗ Refuser</button>
     </div>`;
-  } else if(isConfirmed){
-    actions=`<div class="resa-actions one" style="margin-top:10px;">
-      <button class="btn-cancel" onclick="annulerResa('${r.id}','loueur')">Annuler cette réservation</button>
+  } else if(r.statut==='acceptee'){
+    actions=`<div style="margin-top:10px;padding:10px 14px;background:#E3F2FD;border-radius:8px;font-size:13px;color:#1565C0;">
+      En attente du paiement du locataire…
+    </div>
+    <div class="resa-actions one" style="margin-top:8px;">
+      <button class="btn-cancel" onclick="annulerResa('${r.id}','loueur')">Annuler (pénalité 10%)</button>
+    </div>`;
+  } else if(r.statut==='payee'||r.statut==='confirmee'){
+    actions=`<div style="margin-top:8px;display:flex;gap:10px;flex-wrap:wrap;">
+      <a href="messages.html?annonce_id=${a.id||''}&avec=${r.locataire_id||''}" style="font-size:12px;color:var(--teal);text-decoration:none;">Envoyer un message →</a>
+      <button class="btn-cancel" style="margin-left:auto;" onclick="annulerResa('${r.id}','loueur')">Annuler (pénalité 10%)</button>
     </div>`;
   }
 
-  return `<div class="resa-item ${r.statut==='en_attente'?'wait':r.statut==='confirmee'?'confirmee':r.statut==='annulee'?'annulee':''}" id="resa-${r.id}">
+  return `<div class="resa-item ${r.statut==='en_attente'?'wait':r.statut==='acceptee'?'acceptee':r.statut==='payee'||r.statut==='confirmee'?'confirmee':r.statut==='annulee'?'annulee':''}" id="resa-${r.id}">
     <div class="resa-top">
       ${photo}
       <div class="resa-info">
@@ -281,14 +287,34 @@ function renderResaRecue(r){
   </div>`;
 }
 
-/* ─── RENDER LOCATION FAITE (locataire) ─── */
+/* ── RENDER LOCATION FAITE (locataire) ── */
 function renderMaLocation(r){
   const a=r.annonces||{}, lou=r.loueurs||{};
   const photo=imgOrPlaceholder(a.photos,'resa-img');
   const louNom=[lou.prenom,lou.nom?lou.nom[0]+'.':''].filter(Boolean).join(' ')||'Loueur';
-  const canCancel=r.statut==='en_attente'||r.statut==='confirmee';
 
-  return `<div class="resa-item ${r.statut==='en_attente'?'wait':r.statut==='confirmee'?'confirmee':r.statut==='annulee'?'annulee':''}" id="loc-${r.id}">
+  let actions='';
+  if(r.statut==='acceptee'){
+    // Locataire doit payer
+    actions=`<div style="margin-top:10px;padding:12px 14px;background:#E3F2FD;border-radius:8px;">
+      <div style="font-size:13px;color:#1565C0;font-weight:600;margin-bottom:8px;">Le loueur a accepté votre demande ! Finalisez votre réservation.</div>
+      <button class="btn-pay-now" onclick="window.location.href='paiement.html?reservation_id=${r.id}'">
+        Payer maintenant — ${r.prix_total?r.prix_total.toFixed(2)+' €':''}
+      </button>
+    </div>`;
+  } else if(r.statut==='en_attente'){
+    actions=`<div style="margin-top:8px;display:flex;gap:10px;align-items:center;">
+      <button class="btn-cancel" onclick="annulerResa('${r.id}','locataire')">Annuler ma demande</button>
+    </div>`;
+  } else if(r.statut==='payee'||r.statut==='confirmee'){
+    actions=`<div style="margin-top:8px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+      ${a.id?`<a href="annonce.html?id=${a.id}" style="font-size:12px;color:var(--teal);text-decoration:none;">Voir l'annonce →</a>`:''}
+      <a href="messages.html?annonce_id=${a.id||''}&avec=${r.loueur_id||''}" style="font-size:12px;color:var(--teal);text-decoration:none;">Envoyer un message →</a>
+      <button class="btn-cancel" style="margin-left:auto;" onclick="annulerResa('${r.id}','locataire')">Annuler (8% retenus)</button>
+    </div>`;
+  }
+
+  return `<div class="resa-item ${r.statut==='en_attente'?'wait':r.statut==='acceptee'?'acceptee':r.statut==='payee'||r.statut==='confirmee'?'confirmee':r.statut==='annulee'?'annulee':''}" id="loc-${r.id}">
     <div class="resa-top">
       ${photo}
       <div class="resa-info">
@@ -302,15 +328,11 @@ function renderMaLocation(r){
         <div class="resa-amt">${r.prix_total?r.prix_total.toFixed(2)+' €':''}</div>
       </div>
     </div>
-    <div style="margin-top:8px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
-      ${a.id?`<a href="annonce.html?id=${a.id}" style="font-size:12px;color:var(--teal);text-decoration:none;">Voir l'annonce →</a>`:''}
-      ${r.statut==='confirmee'?`<a href="messages.html?annonce_id=${a.id||''}&avec=${r.loueur_id||''}" style="font-size:12px;color:var(--teal);text-decoration:none;margin-left:8px;">Envoyer un message →</a>`:''}
-      ${canCancel?`<button class="btn-cancel" style="margin-left:auto;" onclick="annulerResa('${r.id}','locataire')">Annuler ma réservation</button>`:''}
-    </div>
+    ${actions}
   </div>`;
 }
 
-/* ─── RENDER ANNONCE ─── */
+/* ── RENDER ANNONCE ── */
 function renderAnnonce(a){
   const photo=imgOrPlaceholder(a.photos,'ann-img');
   const dispo=a.disponible;
@@ -334,68 +356,72 @@ function renderAnnonce(a){
   </div>`;
 }
 
-/* ─── ACTIONS ─── */
+/* ── ACTIONS ── */
 
-/* Accepter une réservation + envoyer message auto */
-async function confirmerResa(id, locataireId, annonceId){
-  const {error} = await db.from('reservations').update({statut:'confirmee'}).eq('id',id);
-  if(error){ toast('Erreur : '+error.message); return; }
+/* Accepter → statut "acceptee" + message au locataire avec lien paiement */
+async function accepterResa(id, locataireId, annonceId){
+  const {error}=await db.from('reservations').update({statut:'acceptee'}).eq('id',id);
+  if(error){toast('Erreur : '+error.message);return;}
 
-  // Récupérer titre annonce + téléphone du loueur
-  const [{data:ann},{data:profil}] = await Promise.all([
+  // Récupérer infos
+  const [{data:ann},{data:profil}]=await Promise.all([
     db.from('annonces').select('titre').eq('id',annonceId).single(),
     db.from('utilisateurs').select('prenom,telephone').eq('id',currentUser.id).single()
   ]);
 
-  const tel = profil?.telephone || 'non renseigné';
-  const titre = ann?.titre || 'le matériel';
-  const msg = 'Bonjour ! Votre réservation pour "'+titre+'" est confirmée. Contactez-moi au '+tel+' pour organiser la remise. À bientôt !';
+  const titre=ann?.titre||'le matériel';
+  const lienPaiement='https://kiloue.vercel.app/paiement.html?reservation_id='+id;
+  const msg='Bonne nouvelle ! Votre demande de réservation pour "'+titre+'" a été acceptée.\n\nPour confirmer définitivement votre réservation, veuillez procéder au paiement sécurisé ici :\n'+lienPaiement+'\n\nUne fois le paiement effectué, nous vous mettrons en contact avec le loueur.';
 
   await db.from('messages').insert([{
     expediteur_id:   currentUser.id,
     destinataire_id: locataireId,
-    annonce_id:      annonceId,
+    annonce_id:      annonceId||null,
     contenu:         msg,
     lu:              false
   }]);
 
-  toast('✓ Réservation confirmée ! Message envoyé au locataire.');
-  setTimeout(()=>location.reload(), 2000);
+  toast('✓ Réservation acceptée ! Le locataire a reçu le lien de paiement.');
+  setTimeout(()=>location.reload(),2000);
 }
 
-/* Refuser une réservation */
+/* Refuser */
 function refuserResa(id){
   if(!confirm('Refuser cette réservation ?')) return;
   db.from('reservations').update({statut:'annulee'}).eq('id',id).then(({error})=>{
-    if(error){ toast('Erreur : '+error.message); return; }
+    if(error){toast('Erreur : '+error.message);return;}
     toast('Réservation refusée.');
     setTimeout(()=>location.reload(),1500);
   });
 }
 
-/* Annuler une réservation (loueur ou locataire) */
-function annulerResa(id, role){
-  const msg = role==='loueur'
-    ? 'Annuler cette réservation confirmée ? Le locataire sera informé.'
-    : 'Annuler votre réservation ?';
+/* Annuler (avec commission selon le rôle) */
+async function annulerResa(id, role){
+  const commission_annulation = role==='loueur' ? 10 : 8;
+  const msg=role==='loueur'
+    ?`Annuler cette réservation ? Une pénalité de ${commission_annulation}% sera appliquée.`
+    ?`Annuler votre réservation ? ${commission_annulation}% du montant seront retenus par kiloue.`
+    :`Annuler ?`;
   if(!confirm(msg)) return;
-  db.from('reservations').update({statut:'annulee'}).eq('id',id).then(({error})=>{
-    if(error){ toast('Erreur : '+error.message); return; }
-    toast('Réservation annulée.');
-    setTimeout(()=>location.reload(),1500);
-  });
+  const {error}=await db.from('reservations').update({
+    statut:'annulee',
+    commission_annulation: commission_annulation
+  }).eq('id',id);
+  if(error){toast('Erreur : '+error.message);return;}
+  toast('Réservation annulée.');
+  setTimeout(()=>location.reload(),1500);
 }
 
-/* Pause / Réactivation annonce */
-function toggleAnnonce(id, actuel){
+/* Toggle annonce */
+function toggleAnnonce(id,actuel){
   db.from('annonces').update({disponible:!actuel}).eq('id',id).then(({error})=>{
-    if(error){ toast('Erreur'); return; }
+    if(error){toast('Erreur');return;}
     toast(actuel?'Annonce mise en pause':'Annonce réactivée !');
     setTimeout(()=>location.reload(),1000);
   });
 }
 
-/* ─── INIT ─── */
+/* ── INIT ── */
 (function(){
   const s=document.createElement('script');
   s.src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js';
@@ -405,10 +431,9 @@ function toggleAnnonce(id, actuel){
 
 async function init(){
   db=supabase.createClient(SUPA_URL,SUPA_KEY);
-
   const {data:{user}}=await db.auth.getUser();
   if(!user){window.location.href='inscription.html';return;}
-  currentUser=user; // ← assigné ici, avant tout appel de fonction
+  currentUser=user;
 
   document.getElementById('btn-deco').onclick=async()=>{
     await db.auth.signOut();
@@ -430,12 +455,11 @@ async function init(){
   const actives=anns.filter(a=>a.disponible).length;
   document.getElementById('stat-annonces').textContent=anns.length;
   document.getElementById('stat-annonces-sub').textContent=actives+' active'+(actives>1?'s':'');
-  const listAnn=document.getElementById('list-annonces');
-  listAnn.innerHTML=anns.length===0
+  document.getElementById('list-annonces').innerHTML=anns.length===0
     ?'<div class="empty"><div class="empty-icon">📦</div><p>Aucune annonce.</p><a href="publier.html">Déposer votre première annonce →</a></div>'
     :anns.map(renderAnnonce).join('');
 
-  /* Réservations reçues (loueur) */
+  /* Réservations reçues */
   const {data:resasRecues}=await db
     .from('reservations')
     .select('*, annonces(id,titre,photos,prix_jour), utilisateurs!locataire_id(prenom,nom)')
@@ -443,27 +467,28 @@ async function init(){
     .order('created_at',{ascending:false});
   const rr=resasRecues||[];
 
-  let totalRevenu=0,nbConfirmees=0,nbAttente=0;
+  let totalRevenu=0,nbPayees=0,nbAttente=0;
   rr.forEach(r=>{
-    if(r.statut==='confirmee'||r.statut==='terminee'){totalRevenu+=(r.prix_total||0)-(r.commission||0);nbConfirmees++;}
+    if(r.statut==='payee'||r.statut==='confirmee'||r.statut==='terminee'){
+      totalRevenu+=(r.prix_total||0)-(r.commission||0);
+      nbPayees++;
+    }
     if(r.statut==='en_attente') nbAttente++;
   });
   document.getElementById('stat-revenus').textContent=totalRevenu.toFixed(2)+' €';
-  document.getElementById('stat-revenus-sub').textContent=nbConfirmees+' location'+(nbConfirmees>1?'s':'')+' confirmée'+(nbConfirmees>1?'s':'');
+  document.getElementById('stat-revenus-sub').textContent=nbPayees+' location'+(nbPayees>1?'s':'')+' payée'+(nbPayees>1?'s':'');
   document.getElementById('stat-resas').textContent=rr.length;
   if(nbAttente>0) document.getElementById('stat-resas-sub').innerHTML='<span style="color:#FFB300;font-weight:600;">'+nbAttente+' en attente</span>';
   else document.getElementById('stat-resas-sub').textContent='Aucune en attente';
 
-  const listRR=document.getElementById('list-resas-recues');
-  listRR.innerHTML=rr.length===0
+  document.getElementById('list-resas-recues').innerHTML=rr.length===0
     ?'<div class="empty"><div class="empty-icon">📅</div><p>Aucune réservation reçue.</p></div>'
     :rr.map(renderResaRecue).join('');
-  const dashRR=document.getElementById('dash-resas-recues');
-  dashRR.innerHTML=rr.length===0
+  document.getElementById('dash-resas-recues').innerHTML=rr.length===0
     ?'<div class="empty"><div class="empty-icon">📅</div><p>Aucune réservation reçue.</p></div>'
     :rr.slice(0,3).map(renderResaRecue).join('');
 
-  /* Mes locations (locataire) */
+  /* Mes locations */
   const {data:mesLocs}=await db
     .from('reservations')
     .select('*, annonces(id,titre,photos,prix_jour), loueurs:utilisateurs!loueur_id(prenom,nom)')
@@ -471,12 +496,10 @@ async function init(){
     .order('created_at',{ascending:false});
   const ml=mesLocs||[];
 
-  const listML=document.getElementById('list-mes-locations');
-  listML.innerHTML=ml.length===0
+  document.getElementById('list-mes-locations').innerHTML=ml.length===0
     ?'<div class="empty"><div class="empty-icon">🔑</div><p>Vous n\'avez pas encore loué de matériel.</p><a href="index.html">Parcourir les annonces →</a></div>'
     :ml.map(renderMaLocation).join('');
-  const dashML=document.getElementById('dash-mes-locations');
-  dashML.innerHTML=ml.length===0
+  document.getElementById('dash-mes-locations').innerHTML=ml.length===0
     ?'<div class="empty"><div class="empty-icon">🔑</div><p>Aucune location effectuée.</p><a href="index.html">Parcourir →</a></div>'
     :ml.slice(0,3).map(renderMaLocation).join('');
 
