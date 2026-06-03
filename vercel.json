@@ -1,6 +1,12 @@
 {
   "functions": {
-    "api/*.js": {
+    "api/create-payment.js": {
+      "runtime": "nodejs18.x"
+    },
+    "api/confirm-payment.js": {
+      "runtime": "nodejs18.x"
+    },
+    "api/webhook-stripe.js": {
       "runtime": "nodejs18.x"
     }
   }
