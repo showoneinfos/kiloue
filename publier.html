@@ -20,13 +20,13 @@
   nav{position:sticky;top:0;z-index:100;background:var(--white);border-bottom:1px solid var(--border);height:60px;display:flex;align-items:center;padding:0 24px;gap:16px;}
   .logo{font-size:22px;font-weight:700;color:var(--teal);text-decoration:none;white-space:nowrap;}
   .logo span{color:var(--ink);}
-  .nav-actions{margin-left:auto;display:flex;gap:8px;}
+  .nav-actions{margin-left:auto;}
   .btn-ghost{padding:8px 16px;border-radius:6px;border:1.5px solid var(--border);background:var(--white);font-size:13px;font-weight:500;font-family:var(--sans);color:var(--ink);cursor:pointer;}
   .btn-ghost:hover{border-color:var(--teal);color:var(--teal);}
   .page-wrap{max-width:960px;margin:0 auto;padding:36px 24px 80px;display:grid;grid-template-columns:1fr 280px;gap:32px;align-items:start;}
-  .steps{grid-column:1/-1;display:flex;align-items:center;gap:0;margin-bottom:8px;}
+  .steps{grid-column:1/-1;display:flex;align-items:center;margin-bottom:8px;}
   .st{display:flex;align-items:center;gap:8px;}
-  .st-num{width:30px;height:30px;border-radius:50%;border:2px solid var(--border);background:var(--white);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--ink2);flex-shrink:0;transition:all .2s;}
+  .st-num{width:28px;height:28px;border-radius:50%;border:2px solid var(--border);background:var(--white);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:var(--ink2);flex-shrink:0;transition:all .2s;}
   .st-num.active{border-color:var(--teal);background:var(--teal);color:#fff;}
   .st-num.done{border-color:var(--teal);background:var(--teal);color:#fff;}
   .st-label{font-size:12px;color:var(--ink2);}
@@ -50,15 +50,15 @@
   .tgl.on{background:var(--teal);}
   .tgl::after{content:'';position:absolute;width:18px;height:18px;border-radius:50%;background:#fff;top:3px;left:3px;transition:transform .2s;}
   .tgl.on::after{transform:translateX(18px);}
-  .upload-zone{border:2px dashed var(--border);border-radius:10px;padding:28px;text-align:center;cursor:pointer;transition:all .2s;position:relative;}
+  .upload-zone{border:2px dashed var(--border);border-radius:10px;padding:28px;text-align:center;cursor:pointer;transition:all .2s;}
   .upload-zone:hover{border-color:var(--teal);}
   .upload-zone svg{width:32px;height:32px;fill:none;stroke:var(--ink3);stroke-width:1.5;display:block;margin:0 auto 8px;}
   .previews{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;}
-  .preview-thumb{width:70px;height:70px;border-radius:8px;background:var(--bg);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
+  .preview-thumb{width:70px;height:70px;border-radius:8px;background:var(--bg);border:1px solid var(--border);position:relative;overflow:hidden;}
   .preview-thumb img{width:100%;height:100%;object-fit:cover;}
   .preview-thumb button{position:absolute;top:2px;right:2px;width:18px;height:18px;border-radius:50%;background:var(--teal);color:#fff;font-size:10px;border:none;cursor:pointer;}
   .preview-card{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:16px;position:sticky;top:76px;}
-  .preview-card h3{font-size:12px;font-weight:600;color:var(--ink2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:14px;}
+  .preview-card h3{font-size:11px;font-weight:600;color:var(--ink2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:14px;}
   .prev-img{width:100%;aspect-ratio:4/3;border-radius:8px;overflow:hidden;margin-bottom:10px;background:var(--bg);}
   .prev-img img{width:100%;height:100%;object-fit:cover;}
   .earn-box{background:var(--bg);border-radius:8px;padding:12px;}
@@ -71,18 +71,28 @@
   .btn-next:hover{background:var(--teal2);}
   .btn-next:disabled{opacity:.5;cursor:not-allowed;}
 
-  /* SUCCESS — pleine page par-dessus tout */
-  #success-screen{
-    display:none;
-    position:fixed;inset:0;
-    background:var(--bg);
-    z-index:500;
-    align-items:center;
-    justify-content:center;
-    flex-direction:column;
-    text-align:center;
-    padding:40px 20px;
-  }
+  /* CATÉGORIES — style Vinted */
+  .cat-list{border:1px solid var(--border);border-radius:10px;overflow:hidden;}
+  .cat-row{display:flex;align-items:center;gap:14px;padding:13px 16px;border-bottom:1px solid var(--border);cursor:pointer;background:var(--white);transition:background .12s;}
+  .cat-row:last-child{border-bottom:none;}
+  .cat-row:hover{background:var(--bg);}
+  .cat-row.selected{background:var(--teal-light);}
+  .cat-icon{width:32px;height:32px;border-radius:6px;background:var(--bg);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .cat-icon svg{width:17px;height:17px;fill:none;stroke:var(--ink2);stroke-width:1.8;}
+  .cat-row.selected .cat-icon{background:var(--teal-light);}
+  .cat-row.selected .cat-icon svg{stroke:var(--teal);}
+  .cat-name{font-size:14px;font-weight:500;color:var(--ink);flex:1;}
+  .cat-row.selected .cat-name{color:var(--teal);font-weight:600;}
+  .cat-arrow{color:var(--ink3);font-size:16px;line-height:1;}
+
+  /* SOUS-CATÉGORIES — liste propre */
+  .sous-list{display:flex;flex-direction:column;gap:2px;}
+  .sous-row{padding:10px 14px;border-radius:7px;cursor:pointer;font-size:14px;color:var(--ink2);transition:all .12s;border:1.5px solid transparent;}
+  .sous-row:hover{background:var(--bg);color:var(--ink);}
+  .sous-row.selected{background:var(--teal-light);color:var(--teal);border-color:#C8EEEA;font-weight:600;}
+
+  /* SUCCESS */
+  #success-screen{display:none;position:fixed;inset:0;background:var(--bg);z-index:500;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:40px 20px;}
   #success-screen.show{display:flex;}
   .success-icon{width:80px;height:80px;border-radius:50%;background:var(--teal-light);display:flex;align-items:center;justify-content:center;margin:0 auto 24px;}
   .success-icon svg{width:40px;height:40px;fill:none;stroke:var(--teal);stroke-width:2;}
@@ -91,8 +101,8 @@
   .success-list{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:18px;text-align:left;margin-bottom:28px;width:100%;max-width:420px;}
   .sl-item{display:flex;align-items:center;gap:10px;font-size:14px;padding:8px 0;border-bottom:1px solid var(--border);}
   .sl-item:last-child{border:none;}
-  .sl-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
-  .btn-success{padding:14px 36px;border-radius:8px;background:var(--teal);color:#fff;border:none;font-size:15px;font-weight:600;font-family:var(--sans);cursor:pointer;margin-bottom:12px;}
+  .sl-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+  .btn-success{padding:14px 36px;border-radius:8px;background:var(--teal);color:#fff;border:none;font-size:15px;font-weight:600;font-family:var(--sans);cursor:pointer;margin-bottom:10px;}
   .btn-success:hover{background:var(--teal2);}
   .btn-success-2{padding:11px 24px;border-radius:8px;border:1.5px solid var(--border);background:var(--white);font-size:14px;font-family:var(--sans);cursor:pointer;color:var(--ink2);}
 
@@ -106,16 +116,14 @@
 </head>
 <body>
 
-<!-- Auth check overlay -->
 <div id="auth-check" style="position:fixed;inset:0;background:#fff;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;">
   <div style="width:40px;height:40px;border:3px solid #E5E5E5;border-top-color:#00A693;border-radius:50%;animation:spin 0.8s linear infinite;"></div>
   <div style="font-size:14px;color:#666;">Vérification...</div>
 </div>
 
-<!-- SUCCESS PLEINE PAGE -->
 <div id="success-screen">
   <div class="success-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
-  <h2>Annonce publiée ! 🎉</h2>
+  <h2>Annonce publiée !</h2>
   <p>Votre annonce est maintenant visible sur kiloue.com. Vous serez notifié dès qu'un locataire vous contacte.</p>
   <div class="success-list">
     <div class="sl-item"><div class="sl-dot" style="background:var(--teal);"></div>Annonce visible immédiatement</div>
@@ -134,7 +142,6 @@
 </nav>
 
 <div class="page-wrap">
-  <!-- STEPS BAR -->
   <div class="steps" id="steps-bar">
     <div class="st"><div class="st-num active" id="sn1">1</div><div class="st-label active" id="sl1">Catégorie</div></div>
     <div class="st-line" id="sl-1"></div>
@@ -149,32 +156,34 @@
 
   <div id="form-area">
 
-    <!-- STEP 1 : CATÉGORIE -->
+    <!-- STEP 1 -->
     <div id="s1" class="card">
-      <div class="card-title"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h7"/></svg>Choisissez une catégorie</div>
+      <div class="card-title">
+        <svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h7"/></svg>
+        Choisissez une catégorie
+      </div>
       <div id="pub-l1">
-        <p style="font-size:13px;color:#666;margin-bottom:12px;">Sélectionnez une catégorie :</p>
-        <div id="pub-main-cats" style="border:1px solid #E5E5E5;border-radius:10px;overflow:hidden;"></div>
+        <div class="cat-list" id="pub-main-cats"></div>
       </div>
       <div id="pub-l2" style="display:none;">
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid #eee;">
-          <button onclick="backToCats()" style="padding:7px 14px;border-radius:6px;border:1.5px solid #ddd;background:#fff;font-size:13px;cursor:pointer;">← Retour</button>
-          <span id="pub-cat-label" style="font-size:15px;font-weight:600;"></span>
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--border);">
+          <button onclick="backToCats()" style="padding:7px 16px;border-radius:6px;border:1.5px solid var(--border);background:var(--white);font-size:13px;cursor:pointer;font-family:var(--sans);">← Retour</button>
+          <span id="pub-cat-label" style="font-size:15px;font-weight:600;color:var(--ink);"></span>
         </div>
-        <p style="font-size:13px;color:#666;margin-bottom:12px;">Choisissez une sous-catégorie :</p>
-        <div id="pub-sous-cats" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px;"></div>
-        <div id="pub-confirm-sous" style="display:none;padding:12px 14px;background:#E8F7F5;border-radius:8px;font-size:13px;color:#008577;">
-          ✓ Sélectionné : <strong id="pub-sous-name"></strong>
-          <button onclick="go(2)" style="margin-left:12px;background:#00A693;color:#fff;border:none;border-radius:6px;padding:6px 14px;font-size:13px;cursor:pointer;">Continuer →</button>
+        <p style="font-size:13px;color:var(--ink2);margin-bottom:12px;">Choisissez une sous-catégorie</p>
+        <div class="sous-list" id="pub-sous-cats"></div>
+        <div id="pub-confirm-sous" style="display:none;margin-top:16px;padding:12px 14px;background:var(--teal-light);border-radius:8px;font-size:13px;color:var(--teal2);display:none;align-items:center;justify-content:space-between;">
+          <span>Sélectionné : <strong id="pub-sous-name"></strong></span>
+          <button onclick="go(2)" style="background:var(--teal);color:#fff;border:none;border-radius:6px;padding:7px 16px;font-size:13px;cursor:pointer;font-family:var(--sans);font-weight:600;">Continuer →</button>
         </div>
       </div>
     </div>
 
-    <!-- STEP 2 : MATÉRIEL -->
+    <!-- STEP 2 -->
     <div id="s2" class="card" style="display:none;">
       <div class="card-title"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Décrivez votre matériel</div>
       <div id="cat-badge" style="display:none;margin-bottom:16px;padding:8px 14px;background:var(--teal-light);border-radius:8px;font-size:13px;color:var(--teal2);">
-        Catégorie : <strong id="cat-badge-name"></strong> · <strong id="cat-badge-sous"></strong>
+        <strong id="cat-badge-name"></strong> › <strong id="cat-badge-sous"></strong>
         <a href="#" onclick="go(1);return false;" style="margin-left:10px;color:var(--teal);font-size:12px;">Modifier</a>
       </div>
       <div class="field"><label>Titre *</label><input type="text" id="f-titre" placeholder="Ex : Tronçonneuse Stihl MS 250 — excellent état" oninput="updPreview()"></div>
@@ -188,17 +197,17 @@
       </div>
     </div>
 
-    <!-- STEP 3 : TARIFS -->
+    <!-- STEP 3 -->
     <div id="s3" class="card" style="display:none;">
       <div class="card-title"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Tarifs & zone</div>
       <div class="field"><label>Prix / jour (€) *</label><input type="number" id="f-prix" placeholder="25" min="1" oninput="updPreview()"></div>
       <div style="background:var(--bg);border-radius:10px;padding:14px;margin-bottom:16px;">
         <div style="display:flex;align-items:center;justify-content:space-between;">
-          <div><div style="font-size:14px;font-weight:600;">Location demi-journée</div><div style="font-size:12px;color:var(--ink2);">Proposer un tarif à la demi-journée</div></div>
+          <div><div style="font-size:14px;font-weight:500;">Location demi-journée</div><div style="font-size:12px;color:var(--ink2);margin-top:2px;">Proposer un tarif à la demi-journée</div></div>
           <div class="tgl" id="tgl-demi" onclick="toggleDemi(this)"></div>
         </div>
         <div id="demi-price-wrap" style="display:none;margin-top:12px;">
-          <div class="field" style="margin-bottom:0;"><label>Prix demi-journée (€)</label><input type="number" id="f-demi-prix" placeholder="Ex : 15" min="1" style="max-width:200px;"></div>
+          <div class="field" style="margin-bottom:0;"><label>Prix demi-journée (€)</label><input type="number" id="f-demi-prix" placeholder="15" min="1" style="max-width:200px;"></div>
         </div>
       </div>
       <div class="field"><label>Caution (€)</label><input type="number" id="f-caution" placeholder="Laisser vide si aucune" min="0"></div>
@@ -208,50 +217,50 @@
           <select id="f-rayon"><option value="10">10 km</option><option value="30" selected>30 km</option><option value="50">50 km</option><option value="999">Toute la France</option></select>
         </div>
       </div>
-      <div style="background:var(--teal-light);border-radius:8px;padding:12px 14px;font-size:12px;color:var(--teal2);margin-bottom:16px;">📍 Les locataires hors de cette zone ne verront pas votre annonce.</div>
+      <div style="background:var(--teal-light);border-radius:8px;padding:11px 14px;font-size:12px;color:var(--teal2);margin-bottom:16px;">Les locataires hors de cette zone ne verront pas votre annonce.</div>
       <div class="tgl-row">
-        <div><div class="tgl-lbl">Livraison à domicile proposée</div><div class="tgl-sub">Vous fixez vous-même le supplément</div></div>
+        <div><div class="tgl-lbl">Livraison à domicile</div><div class="tgl-sub">Vous fixez le supplément</div></div>
         <div class="tgl on" id="tgl-liv" onclick="toggleLivraison(this)"></div>
       </div>
       <div id="livraison-price-wrap" style="padding:10px 0 4px;">
         <div class="field" style="margin-bottom:0;"><label>Supplément livraison (€)</label>
-          <input type="number" id="f-livraison-prix" placeholder="Ex : 20" min="0" style="max-width:200px;">
-          <div class="field-hint">Ce montant s'ajoutera au prix. Le locataire le verra avant de réserver.</div>
+          <input type="number" id="f-livraison-prix" placeholder="20" min="0" style="max-width:200px;">
+          <div class="field-hint">Visible par le locataire avant de réserver.</div>
         </div>
       </div>
     </div>
 
-    <!-- STEP 4 : PHOTOS -->
+    <!-- STEP 4 -->
     <div id="s4" class="card" style="display:none;">
       <div class="card-title"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Photos</div>
       <div class="upload-zone" onclick="document.getElementById('file-in').click()">
         <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-        <p style="font-size:14px;font-weight:500;color:var(--ink2);">Cliquez pour ajouter des photos</p>
-        <span style="font-size:12px;color:#999;">JPG, PNG · Max 5 Mo chacune</span>
+        <p style="font-size:14px;font-weight:500;color:var(--ink2);margin-bottom:4px;">Cliquez pour ajouter des photos</p>
+        <span style="font-size:12px;color:var(--ink3);">JPG, PNG · Max 5 Mo chacune</span>
         <input type="file" id="file-in" multiple accept="image/*" style="display:none;">
       </div>
       <div class="previews" id="previews"></div>
-      <div class="field-hint" style="margin-top:10px;">Les annonces avec 3+ photos reçoivent 4× plus de demandes.</div>
+      <div class="field-hint" style="margin-top:10px;">Les annonces avec 3 photos ou plus reçoivent 4 fois plus de demandes.</div>
     </div>
 
-    <!-- STEP 5 : CONFIRMATION -->
+    <!-- STEP 5 -->
     <div id="s5" class="card" style="display:none;">
       <div class="card-title"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Récapitulatif</div>
       <div style="background:var(--bg);border-radius:10px;padding:18px;margin-bottom:16px;">
-        <div style="font-size:17px;font-weight:700;color:var(--ink);margin-bottom:8px;" id="r-titre">—</div>
-        <div style="font-size:13px;color:var(--ink2);" id="r-meta"></div>
+        <div style="font-size:16px;font-weight:700;color:var(--ink);margin-bottom:10px;" id="r-titre">—</div>
+        <div style="font-size:13px;color:var(--ink2);line-height:2;" id="r-meta"></div>
       </div>
       <div class="tgl-row" style="border:1px solid var(--border);border-radius:8px;padding:14px;margin-bottom:10px;">
-        <div><div class="tgl-lbl">J'accepte les CGU kiloue.com</div><div class="tgl-sub" style="color:var(--teal);cursor:pointer;">Lire →</div></div>
+        <div><div class="tgl-lbl">J'accepte les conditions générales kiloue.com</div><div class="tgl-sub" style="color:var(--teal);cursor:pointer;margin-top:2px;">Lire les CGU →</div></div>
         <div class="tgl" id="tgl-cgu" onclick="this.classList.toggle('on');chkCGU()"></div>
       </div>
       <div class="tgl-row" style="border:1px solid var(--border);border-radius:8px;padding:14px;">
-        <div><div class="tgl-lbl">Je certifie être propriétaire du matériel</div></div>
+        <div><div class="tgl-lbl">Je certifie être propriétaire du matériel</div><div class="tgl-sub" style="margin-top:2px;">Vous confirmez avoir le droit de louer ce bien.</div></div>
         <div class="tgl" id="tgl-own" onclick="this.classList.toggle('on');chkCGU()"></div>
       </div>
     </div>
 
-  </div><!-- /form-area -->
+  </div>
 
   <!-- APERÇU -->
   <div>
@@ -259,7 +268,7 @@
       <h3>Aperçu de votre annonce</h3>
       <div class="prev-img"><img src="https://images.unsplash.com/photo-1617953141905-b27fb1f9a1b0?w=400&q=80" alt="" id="prev-img-el" style="width:100%;height:100%;object-fit:cover;"></div>
       <div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:3px;" id="prev-name">Nom de votre matériel</div>
-      <div style="font-size:12px;color:var(--ink2);margin-bottom:8px;" id="prev-loc">📍 Votre ville</div>
+      <div style="font-size:12px;color:var(--ink2);margin-bottom:8px;" id="prev-loc">Votre ville</div>
       <div style="font-size:20px;font-weight:700;color:var(--ink);margin-bottom:12px;" id="prev-price">— <small style="font-size:13px;font-weight:400;color:var(--ink2);">/jour</small></div>
       <div class="earn-box">
         <div style="font-size:11px;font-weight:600;color:var(--ink2);text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px;">Vos revenus estimés</div>
@@ -274,10 +283,26 @@
     <button class="btn-back" id="btn-back" onclick="prev()" style="visibility:hidden;">← Retour</button>
     <button class="btn-next" id="btn-next" onclick="next()">Continuer →</button>
   </div>
-
-</div><!-- /page-wrap -->
+</div>
 
 <script>
+/* ── DONNÉES CATÉGORIES ── */
+const CATS = [
+  { key:'vehicules', name:'Véhicules', icon:'<path d="M5 17H3a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v5"/><circle cx="13" cy="19" r="2"/><circle cx="5" cy="19" r="2"/><path d="M15 17H7"/>' },
+  { key:'nautisme', name:'Nautisme', icon:'<path d="M2 20a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2"/><path d="M12 2v10"/><path d="M2 17l5-5 4 4 4-4 5 5"/>' },
+  { key:'bricolage', name:'Bricolage et Outillage', icon:'<path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>' },
+  { key:'jardinage', name:'Jardinage', icon:'<path d="M12 22V12"/><path d="M5 12C5 7 8 3 12 3s7 4 7 9"/><path d="M5 12a7 7 0 0 0 7 7"/>' },
+  { key:'btp', name:'BTP et Chantier', icon:'<rect x="2" y="6" width="20" height="14" rx="2"/><path d="M12 6V3"/><path d="M8 6V4"/><path d="M16 6V4"/>' },
+  { key:'agricole', name:'Matériel Agricole', icon:'<circle cx="7" cy="15" r="4"/><circle cx="17" cy="15" r="2"/><path d="M7 11V7l5-4 5 4v4"/>' },
+  { key:'maison', name:'Maison et Équipement', icon:'<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>' },
+  { key:'evenementiel', name:'Événementiel', icon:'<path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/>' },
+  { key:'sport', name:'Sport et Loisirs', icon:'<circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/>' },
+  { key:'hightech', name:'High-Tech', icon:'<rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>' },
+  { key:'mode', name:'Mode et Accessoires', icon:'<path d="M20.38 3.46L16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.57a1 1 0 0 0 .99.86H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.86l.58-3.57a2 2 0 0 0-1.34-2.23z"/>' },
+  { key:'animaux', name:'Animaux', icon:'<path d="M20.42 4.58a5.4 5.4 0 0 0-7.65 0l-.77.78-.77-.78a5.4 5.4 0 0 0-7.65 7.65l1.54 1.55L12 21l6.89-6.89 1.53-1.54a5.4 5.4 0 0 0 0-7.99z"/>' },
+  { key:'divers', name:'Divers', icon:'<circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>' }
+];
+
 const SUBS = {
   vehicules:['Voitures','Utilitaires','Motos','Scooters','Vélos','Vélos électriques','Trottinettes','Quads','Camping-cars','Caravanes','Remorques','Autres'],
   nautisme:['Bateaux à moteur','Voiliers','Jet-skis','Kayaks','Canoës','Paddles','Pédalos','Matériel de pêche','Matériel de plongée','Autres'],
@@ -286,53 +311,34 @@ const SUBS = {
   btp:['Mini-pelles','Nacelles','Compacteurs','Bétonnières','Groupes électrogènes','Marteaux-piqueurs','Lasers de chantier','Matériel de levage','Autres'],
   agricole:['Tracteurs','Micro-tracteurs','Remorques agricoles','Broyeurs','Charrues','Pulvérisateurs','Semoirs','Matériel irrigation','Autres'],
   maison:['Électroménager','Chauffage','Climatisation','Nettoyage','Mobilier','Déménagement','Décoration','Autres'],
-  evenementiel:['Tables','Chaises','Barnums','Tentes','Vaisselle','Décoration','Gonflables','Machines festives','Mariage','Anniversaire','Sonorisation','Éclairage','Autres'],
+  evenementiel:['Tables','Chaises','Barnums','Tentes','Vaisselle','Décoration','Gonflables','Machines festives','Sonorisation','Éclairage','Autres'],
   sport:['Fitness','Cyclisme','Sports nautiques','Sports hiver','Sports collectifs','Arts martiaux','Raquette','Randonnée','Camping','Chasse','Pêche','Autres'],
   hightech:['Ordinateurs','Tablettes','Smartphones','Consoles','VR','Appareils photo','Caméras','Drones','Vidéoprojecteurs','Imprimantes','Écrans','Autres'],
   mode:['Robes de soirée','Costumes','Vêtements homme','Vêtements femme','Vêtements enfant','Sacs','Bijoux','Montres','Chaussures','Autres'],
   animaux:['Cages','Niches','Clôtures','Remorques animaux','Équitation','Transport','Accessoires chiens','Accessoires chats','Autres'],
-  divers:['Instruments musique','Matériel médical','Déguisements','Livres','Jeux de société','Bagagerie','Autres']
+  divers:['Instruments de musique','Matériel médical','Déguisements','Livres','Jeux de société','Bagagerie','Autres']
 };
-const CATS = [
-  {key:'vehicules',emoji:'🚗',name:'Véhicules'},
-  {key:'nautisme',emoji:'🚤',name:'Nautisme'},
-  {key:'bricolage',emoji:'🔨',name:'Bricolage et Outillage'},
-  {key:'jardinage',emoji:'🌳',name:'Jardinage'},
-  {key:'btp',emoji:'🏗️',name:'BTP et Chantier'},
-  {key:'agricole',emoji:'🚜',name:'Matériel Agricole'},
-  {key:'maison',emoji:'🏠',name:'Maison et Equipement'},
-  {key:'evenementiel',emoji:'🎉',name:'Evenementiel'},
-  {key:'sport',emoji:'⚽',name:'Sport et Loisirs'},
-  {key:'hightech',emoji:'💻',name:'High-Tech'},
-  {key:'mode',emoji:'👗',name:'Mode et Accessoires'},
-  {key:'animaux',emoji:'🐶',name:'Animaux'},
-  {key:'divers',emoji:'📦',name:'Divers'}
-];
 
-let cur = 1;
-let _catKey = '', _catName = '', _catEmoji = '', _sousCat = '';
-let db = null;
+let cur=1, _catKey='', _catName='', _sousCat='', db=null;
 
-/* ── CATÉGORIES ── */
+/* ── RENDU CATÉGORIES ── */
 function renderCats(){
   const c = document.getElementById('pub-main-cats');
   c.innerHTML = CATS.map(cat =>
-    `<div onclick="openCat('${cat.key}','${cat.emoji}','${cat.name}')"
-      style="display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid #f5f5f5;cursor:pointer;background:#fff;"
-      onmouseover="this.style.background='#E8F7F5'" onmouseout="this.style.background='#fff'">
-      <span style="font-size:22px;width:30px;text-align:center;">${cat.emoji}</span>
-      <span style="flex:1;font-size:14px;font-weight:500;">${cat.name}</span>
-      <span style="color:#bbb;font-size:18px;">›</span>
+    `<div class="cat-row" onclick="openCat('${cat.key}','${cat.name}')">
+      <div class="cat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="17" height="17">${cat.icon}</svg></div>
+      <span class="cat-name">${cat.name}</span>
+      <span class="cat-arrow">›</span>
     </div>`
   ).join('');
 }
 
-function openCat(key, emoji, name){
-  _catKey=key; _catName=name; _catEmoji=emoji; _sousCat='';
-  document.getElementById('pub-cat-label').textContent = emoji+' '+name;
+function openCat(key, name){
+  _catKey=key; _catName=name; _sousCat='';
+  document.getElementById('pub-cat-label').textContent = name;
   const subs = SUBS[key]||[];
   document.getElementById('pub-sous-cats').innerHTML = subs.map(s =>
-    `<button onclick="selSous(this)" style="padding:7px 16px;border-radius:20px;border:1.5px solid #ddd;background:#fff;font-size:13px;cursor:pointer;color:#666;">${s}</button>`
+    `<div class="sous-row" onclick="selSous(this)">${s}</div>`
   ).join('');
   document.getElementById('pub-confirm-sous').style.display='none';
   document.getElementById('pub-l1').style.display='none';
@@ -344,127 +350,99 @@ function backToCats(){
   document.getElementById('pub-l2').style.display='none';
 }
 
-function selSous(btn){
-  document.querySelectorAll('#pub-sous-cats button').forEach(b=>{
-    b.style.background='#fff';b.style.borderColor='#ddd';b.style.color='#666';
-  });
-  btn.style.background='#00A693';btn.style.borderColor='#00A693';btn.style.color='#fff';
-  _sousCat = btn.textContent;
-  document.getElementById('pub-sous-name').textContent = btn.textContent;
-  document.getElementById('pub-confirm-sous').style.display='block';
-  // Mettre à jour badge
-  const badge = document.getElementById('cat-badge');
-  const badgeName = document.getElementById('cat-badge-name');
-  const badgeSous = document.getElementById('cat-badge-sous');
-  if(badge){ badge.style.display='block'; }
-  if(badgeName) badgeName.textContent = _catEmoji+' '+_catName;
-  if(badgeSous) badgeSous.textContent = _sousCat;
+function selSous(el){
+  document.querySelectorAll('.sous-row').forEach(r=>r.classList.remove('selected'));
+  el.classList.add('selected');
+  _sousCat = el.textContent;
+  document.getElementById('pub-sous-name').textContent = _sousCat;
+  const conf = document.getElementById('pub-confirm-sous');
+  conf.style.display='flex';
+  // Badge étape 2
+  document.getElementById('cat-badge').style.display='block';
+  document.getElementById('cat-badge-name').textContent = _catName;
+  document.getElementById('cat-badge-sous').textContent = _sousCat;
 }
 
-/* ── NAVIGATION ÉTAPES ── */
+/* ── NAVIGATION ── */
 function go(n){
   for(let i=1;i<=5;i++){
-    const s=document.getElementById('s'+i);
-    if(s) s.style.display = i===n?'block':'none';
+    document.getElementById('s'+i).style.display = i===n?'block':'none';
     const sn=document.getElementById('sn'+i), sl=document.getElementById('sl'+i);
     if(i<n){ sn.classList.add('done'); sn.innerHTML='✓'; sl.classList.add('active'); const ln=document.getElementById('sl-'+i); if(ln)ln.classList.add('done'); }
     else if(i===n){ sn.classList.add('active'); sn.classList.remove('done'); sn.textContent=i; sl.classList.add('active'); }
     else { sn.classList.remove('active','done'); sn.textContent=i; sl.classList.remove('active'); const ln=document.getElementById('sl-'+i); if(ln)ln.classList.remove('done'); }
   }
-  document.getElementById('btn-back').style.visibility = n>1?'visible':'hidden';
-  document.getElementById('btn-next').textContent = n===5?'Publier l\'annonce ✓':'Continuer →';
+  document.getElementById('btn-back').style.visibility=n>1?'visible':'hidden';
+  document.getElementById('btn-next').textContent=n===5?'Publier l\'annonce':'Continuer →';
   if(n===5) updRecap();
   cur=n; window.scrollTo(0,0);
 }
 
 function next(){
-  if(cur===1){
-    if(!_catName){ alert('Veuillez choisir une catégorie.'); return; }
-    if(!_sousCat){ alert('Veuillez choisir une sous-catégorie.'); return; }
-    go(2); return;
-  }
-  if(cur===2){
-    if(!document.getElementById('f-titre').value.trim()){ alert('Veuillez saisir un titre.'); return; }
-    go(3); return;
-  }
-  if(cur===3){
-    if(!document.getElementById('f-prix').value){ alert('Veuillez saisir un prix.'); return; }
-    if(!document.getElementById('f-ville').value.trim()){ alert('Veuillez saisir votre ville.'); return; }
-    go(4); return;
-  }
-  if(cur===4){ go(5); return; }
-  if(cur===5){ publish(); return; }
+  if(cur===1){ if(!_catName){alert('Veuillez choisir une catégorie.');return;} if(!_sousCat){alert('Veuillez choisir une sous-catégorie.');return;} go(2);return; }
+  if(cur===2){ if(!document.getElementById('f-titre').value.trim()){alert('Veuillez saisir un titre.');return;} go(3);return; }
+  if(cur===3){ if(!document.getElementById('f-prix').value){alert('Veuillez saisir un prix.');return;} if(!document.getElementById('f-ville').value.trim()){alert('Veuillez saisir votre ville.');return;} go(4);return; }
+  if(cur===4){ go(5);return; }
+  if(cur===5){ publish();return; }
 }
-
 function prev(){ if(cur>1) go(cur-1); }
 
 /* ── TOGGLES ── */
 function toggleDemi(el){
   el.classList.toggle('on');
-  document.getElementById('demi-price-wrap').style.display = el.classList.contains('on')?'block':'none';
-  if(el.classList.contains('on')){
-    const pj = document.getElementById('f-prix');
-    const pd = document.getElementById('f-demi-prix');
-    if(pj&&pd&&pj.value&&!pd.value) pd.value = Math.round(parseFloat(pj.value)/2);
-  }
+  document.getElementById('demi-price-wrap').style.display=el.classList.contains('on')?'block':'none';
+  if(el.classList.contains('on')){ const pj=document.getElementById('f-prix'); const pd=document.getElementById('f-demi-prix'); if(pj&&pd&&pj.value&&!pd.value) pd.value=Math.round(parseFloat(pj.value)/2); }
 }
-function toggleLivraison(el){
-  el.classList.toggle('on');
-  document.getElementById('livraison-price-wrap').style.display = el.classList.contains('on')?'block':'none';
-}
-function chkCGU(){
-  const ok = document.getElementById('tgl-cgu').classList.contains('on') && document.getElementById('tgl-own').classList.contains('on');
-  document.getElementById('btn-next').style.opacity = ok?'1':'.5';
-}
+function toggleLivraison(el){ el.classList.toggle('on'); document.getElementById('livraison-price-wrap').style.display=el.classList.contains('on')?'block':'none'; }
+function chkCGU(){ const ok=document.getElementById('tgl-cgu').classList.contains('on')&&document.getElementById('tgl-own').classList.contains('on'); document.getElementById('btn-next').style.opacity=ok?'1':'.5'; }
 
 /* ── APERÇU ── */
 function updPreview(){
-  const titre = document.getElementById('f-titre').value||'';
-  const ville = document.getElementById('f-ville')?.value||'';
-  const prix = parseFloat(document.getElementById('f-prix')?.value)||0;
-  document.getElementById('prev-name').textContent = titre||'Nom de votre matériel';
-  document.getElementById('prev-loc').textContent = '📍 '+(ville||'Votre ville');
+  const titre=document.getElementById('f-titre').value||'';
+  const ville=document.getElementById('f-ville')?.value||'';
+  const prix=parseFloat(document.getElementById('f-prix')?.value)||0;
+  document.getElementById('prev-name').textContent=titre||'Nom de votre matériel';
+  document.getElementById('prev-loc').textContent=ville||'Votre ville';
   if(prix>0){
-    const fee=(prix*.05).toFixed(2), net=(prix-fee).toFixed(2);
-    document.getElementById('prev-price').innerHTML = prix+'€ <small style="font-size:13px;font-weight:400;color:var(--ink2);">/jour</small>';
-    document.getElementById('e-brut').textContent = prix.toFixed(2)+' €';
-    document.getElementById('e-fee').textContent = '− '+fee+' €';
-    document.getElementById('e-net').textContent = net+' €';
+    const fee=(prix*.05).toFixed(2),net=(prix-fee).toFixed(2);
+    document.getElementById('prev-price').innerHTML=prix+'€ <small style="font-size:13px;font-weight:400;color:var(--ink2);">/jour</small>';
+    document.getElementById('e-brut').textContent=prix.toFixed(2)+' €';
+    document.getElementById('e-fee').textContent='− '+fee+' €';
+    document.getElementById('e-net').textContent=net+' €';
   }
 }
 
 /* ── RÉCAP ── */
 function updRecap(){
-  const titre = document.getElementById('f-titre').value||'—';
-  const ville = document.getElementById('f-ville').value||'—';
-  const rayon = document.getElementById('f-rayon').value||'30';
-  const prix = parseFloat(document.getElementById('f-prix').value)||0;
-  const caution = document.getElementById('f-caution').value||'0';
-  const livraison = document.getElementById('tgl-liv').classList.contains('on');
-  const prixLiv = document.getElementById('f-livraison-prix').value||'';
-  const commission = (prix*0.05).toFixed(2);
-  const net = (prix*0.95).toFixed(2);
-  document.getElementById('r-titre').textContent = titre;
-  document.getElementById('r-meta').innerHTML =
-    `<div style="margin-bottom:5px;">📂 ${_catName||'—'} › ${_sousCat||'—'}</div>`+
-    `<div style="margin-bottom:5px;">📍 ${ville} · ${rayon} km</div>`+
-    `<div style="margin-bottom:5px;">💶 ${prix>0?prix+'€/jour':'—'}</div>`+
-    `<div style="margin-bottom:5px;">🔒 Caution : ${caution}€</div>`+
-    `<div style="margin-bottom:5px;">🚚 Livraison : ${livraison?'Oui'+(prixLiv?' (+'+prixLiv+'€)':''):'Non'}</div>`+
-    (prix>0?`<div style="color:#00A693;font-weight:600;margin-top:8px;">✓ Vous recevez : ${net}€ <small style="font-weight:400;color:#666;">après commission (−${commission}€)</small></div>`:'');
+  const titre=document.getElementById('f-titre').value||'—';
+  const ville=document.getElementById('f-ville').value||'—';
+  const rayon=document.getElementById('f-rayon').value||'30';
+  const prix=parseFloat(document.getElementById('f-prix').value)||0;
+  const caution=document.getElementById('f-caution').value||'0';
+  const livraison=document.getElementById('tgl-liv').classList.contains('on');
+  const prixLiv=document.getElementById('f-livraison-prix').value||'';
+  const comm=(prix*.05).toFixed(2), net=(prix*.95).toFixed(2);
+  document.getElementById('r-titre').textContent=titre;
+  document.getElementById('r-meta').innerHTML=
+    `<span>Catégorie : ${_catName} › ${_sousCat}</span><br>`+
+    `<span>Ville : ${ville} · ${rayon} km</span><br>`+
+    `<span>Prix : ${prix>0?prix+'€/jour':'—'}</span><br>`+
+    `<span>Caution : ${caution}€</span><br>`+
+    `<span>Livraison : ${livraison?'Oui'+(prixLiv?' (+'+prixLiv+'€)':''):'Non'}</span><br>`+
+    (prix>0?`<span style="color:var(--teal);font-weight:600;">Vous recevez : ${net}€ après commission (−${comm}€)</span>`:'');
 }
 
 /* ── PHOTOS ── */
 document.addEventListener('DOMContentLoaded', function(){
   document.getElementById('file-in').addEventListener('change', function(){
-    const c = document.getElementById('previews');
+    const c=document.getElementById('previews');
     Array.from(this.files).forEach(function(f){
       if(!f.type.startsWith('image/')) return;
-      const r = new FileReader();
-      r.onload = function(e){
-        const img = document.createElement('img'); img.src = e.target.result;
-        const btn = document.createElement('button'); btn.textContent='×'; btn.onclick=function(){ this.parentElement.remove(); };
-        const d = document.createElement('div'); d.className='preview-thumb';
+      const r=new FileReader();
+      r.onload=function(e){
+        const img=document.createElement('img'); img.src=e.target.result;
+        const btn=document.createElement('button'); btn.textContent='×'; btn.onclick=function(){this.parentElement.remove();};
+        const d=document.createElement('div'); d.className='preview-thumb';
         d.appendChild(img); d.appendChild(btn); c.appendChild(d);
         if(c.querySelectorAll('.preview-thumb').length===1) document.getElementById('prev-img-el').src=e.target.result;
       };
@@ -478,90 +456,64 @@ document.addEventListener('DOMContentLoaded', function(){
 
 /* ── PUBLICATION ── */
 async function publish(){
-  const cguOk = document.getElementById('tgl-cgu').classList.contains('on') && document.getElementById('tgl-own').classList.contains('on');
-  if(!cguOk){ alert('Veuillez accepter les CGU et certifier être propriétaire.'); return; }
-
-  const btn = document.getElementById('btn-next');
-  btn.textContent = '⏳ Publication…';
-  btn.disabled = true;
-
+  const cguOk=document.getElementById('tgl-cgu').classList.contains('on')&&document.getElementById('tgl-own').classList.contains('on');
+  if(!cguOk){alert('Veuillez accepter les CGU et certifier être propriétaire.');return;}
+  const btn=document.getElementById('btn-next');
+  btn.textContent='Publication en cours…'; btn.disabled=true;
   try {
-    const { data: { user } } = await db.auth.getUser();
-    if(!user){ window.location.href='inscription.html'; return; }
-
-    const titre   = document.getElementById('f-titre').value.trim();
-    const desc    = document.getElementById('f-desc').value.trim();
-    const prix    = parseFloat(document.getElementById('f-prix').value)||0;
-    const caution = parseFloat(document.getElementById('f-caution').value)||0;
-    const ville   = document.getElementById('f-ville').value.trim();
-    const rayon   = parseInt(document.getElementById('f-rayon').value)||30;
-    const livraison = document.getElementById('tgl-liv').classList.contains('on');
-    const prixLiv = parseFloat(document.getElementById('f-livraison-prix').value)||0;
-    const demiJour = document.getElementById('tgl-demi').classList.contains('on');
-    const prixDemi = parseFloat(document.getElementById('f-demi-prix').value)||0;
-
-    // Upload photos vers Supabase Storage
-    const photoUrls = [];
-    const previews = document.querySelectorAll('#previews .preview-thumb img');
-    for(let i=0; i<previews.length; i++){
-      const src = previews[i].src;
+    const { data:{user} }=await db.auth.getUser();
+    if(!user){window.location.href='inscription.html';return;}
+    const titre=document.getElementById('f-titre').value.trim();
+    const desc=document.getElementById('f-desc').value.trim();
+    const prix=parseFloat(document.getElementById('f-prix').value)||0;
+    const caution=parseFloat(document.getElementById('f-caution').value)||0;
+    const ville=document.getElementById('f-ville').value.trim();
+    const rayon=parseInt(document.getElementById('f-rayon').value)||30;
+    const livraison=document.getElementById('tgl-liv').classList.contains('on');
+    const prixLiv=parseFloat(document.getElementById('f-livraison-prix').value)||0;
+    const demiJour=document.getElementById('tgl-demi').classList.contains('on');
+    const prixDemi=parseFloat(document.getElementById('f-demi-prix').value)||0;
+    // Upload photos
+    const photoUrls=[];
+    const previews=document.querySelectorAll('#previews .preview-thumb img');
+    for(let i=0;i<previews.length;i++){
+      const src=previews[i].src;
       if(src.startsWith('data:')){
-        const arr = src.split(','); const mime = arr[0].match(/:(.*?);/)[1];
-        const bstr = atob(arr[1]); let n=bstr.length; const u8 = new Uint8Array(n);
+        const arr=src.split(','); const mime=arr[0].match(/:(.*?);/)[1];
+        const bstr=atob(arr[1]); let n=bstr.length; const u8=new Uint8Array(n);
         while(n--) u8[n]=bstr.charCodeAt(n);
-        const blob = new Blob([u8],{type:mime});
-        const ext = mime.split('/')[1]||'jpg';
-        const path = user.id+'/'+Date.now()+'_'+i+'.'+ext;
-        const {error:upErr} = await db.storage.from('annonces-photos').upload(path,blob,{contentType:mime});
-        if(!upErr){
-          const {data:pub} = db.storage.from('annonces-photos').getPublicUrl(path);
-          if(pub?.publicUrl) photoUrls.push(pub.publicUrl);
-        }
+        const blob=new Blob([u8],{type:mime});
+        const ext=mime.split('/')[1]||'jpg';
+        const path=user.id+'/'+Date.now()+'_'+i+'.'+ext;
+        const {error:upErr}=await db.storage.from('annonces-photos').upload(path,blob,{contentType:mime});
+        if(!upErr){ const {data:pub}=db.storage.from('annonces-photos').getPublicUrl(path); if(pub?.publicUrl) photoUrls.push(pub.publicUrl); }
       }
     }
-
-    const {error} = await db.from('annonces').insert([{
-      user_id:    user.id,
-      titre, description:desc,
-      categorie:  _catName||'Divers',
-      sous_categorie: _sousCat||'',
-      prix_jour:  prix,
-      prix_demi_journee: demiJour?prixDemi:null,
-      caution, ville, rayon_km:rayon,
-      livraison, prix_livraison:prixLiv,
-      photos:     photoUrls,
-      disponible: true
+    const {error}=await db.from('annonces').insert([{
+      user_id:user.id, titre, description:desc,
+      categorie:_catName||'Divers', sous_categorie:_sousCat||'',
+      prix_jour:prix, prix_demi_journee:demiJour?prixDemi:null,
+      caution, ville, rayon_km:rayon, livraison, prix_livraison:prixLiv,
+      photos:photoUrls, disponible:true
     }]);
-
     if(error) throw error;
-
-    // ✅ SUCCÈS — afficher l'écran pleine page
     document.getElementById('success-screen').classList.add('show');
-
   } catch(e){
     alert('Erreur : '+(e.message||'Impossible de publier.'));
-    btn.textContent = 'Publier l\'annonce ✓';
-    btn.disabled = false;
+    btn.textContent='Publier l\'annonce'; btn.disabled=false;
   }
 }
 
-/* ── AUTH CHECK ── */
+/* ── AUTH ── */
 (function(){
-  const s = document.createElement('script');
-  s.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js';
-  s.onload = function(){
-    db = supabase.createClient(
-      'https://nsvosbuxkpnoasfilyqy.supabase.co',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5zdm9zYnV4a3Bub2FzZmlseXF5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAxODczOTcsImV4cCI6MjA5NTc2MzM5N30.pTuH4X8IQy0UJq8zUZ8t7I2WLMEUXae_8nWdtIFrpRE'
-    );
+  const s=document.createElement('script');
+  s.src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js';
+  s.onload=function(){
+    db=supabase.createClient('https://nsvosbuxkpnoasfilyqy.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5zdm9zYnV4a3Bub2FzZmlseXF5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAxODczOTcsImV4cCI6MjA5NTc2MzM5N30.pTuH4X8IQy0UJq8zUZ8t7I2WLMEUXae_8nWdtIFrpRE');
     db.auth.getUser().then(function(r){
-      const overlay = document.getElementById('auth-check');
-      if(!r.data||!r.data.user){
-        sessionStorage.setItem('redirect_after_login','publier.html');
-        window.location.href='inscription.html';
-      } else {
-        if(overlay) overlay.style.display='none';
-      }
+      const ov=document.getElementById('auth-check');
+      if(!r.data||!r.data.user){ sessionStorage.setItem('redirect_after_login','publier.html'); window.location.href='inscription.html'; }
+      else { if(ov) ov.style.display='none'; }
     });
   };
   document.head.appendChild(s);
