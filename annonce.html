@@ -21,7 +21,6 @@
   }
   *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
   body{font-family:var(--sans);background:var(--bg);color:var(--ink);}
-
   nav{position:sticky;top:0;z-index:100;background:var(--white);border-bottom:1px solid var(--border);height:60px;display:flex;align-items:center;padding:0 24px;gap:16px;}
   .logo{font-size:22px;font-weight:700;color:var(--teal);text-decoration:none;white-space:nowrap;}
   .logo span{color:var(--ink);}
@@ -30,74 +29,40 @@
   .btn-login:hover{border-color:var(--teal);color:var(--teal);}
   .btn-sell{padding:8px 18px;border-radius:6px;border:none;background:var(--teal);font-size:13px;font-weight:600;font-family:var(--sans);color:var(--white);cursor:pointer;}
   .btn-sell:hover{background:var(--teal2);}
-
   .breadcrumb{padding:12px 24px;font-size:13px;color:var(--ink2);display:flex;align-items:center;gap:6px;background:var(--white);border-bottom:1px solid var(--border);}
   .breadcrumb a{color:var(--ink2);text-decoration:none;}
   .breadcrumb a:hover{color:var(--teal);}
   .breadcrumb svg{width:12px;height:12px;fill:none;stroke:var(--ink3);stroke-width:2;}
-
   .page-wrap{max-width:1100px;margin:0 auto;padding:28px 24px 60px;display:grid;grid-template-columns:1fr 360px;gap:40px;align-items:start;}
-
-  /* GALLERY */
-  .gallery-main{border-radius:12px;overflow:hidden;aspect-ratio:4/3;margin-bottom:10px;cursor:pointer;}
+  .gallery-main{border-radius:12px;overflow:hidden;aspect-ratio:4/3;margin-bottom:10px;background:#f0f0f0;}
   .gallery-main img{width:100%;height:100%;object-fit:cover;display:block;}
   .gallery-thumbs{display:flex;gap:8px;}
   .g-thumb{width:80px;height:80px;border-radius:8px;overflow:hidden;cursor:pointer;border:2px solid transparent;flex-shrink:0;}
   .g-thumb.active,.g-thumb:hover{border-color:var(--teal);}
   .g-thumb img{width:100%;height:100%;object-fit:cover;}
-
-  /* TITLE */
   .title-row{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin:20px 0 10px;}
   .title-row h1{font-size:22px;font-weight:700;color:var(--ink);line-height:1.2;}
   .fav-btn{width:40px;height:40px;border-radius:50%;border:1.5px solid var(--border);background:var(--white);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;}
   .fav-btn svg{width:20px;height:20px;fill:none;stroke:var(--ink2);stroke-width:2;}
-  .fav-btn:hover svg{stroke:var(--teal);}
   .meta-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px;}
   .meta-loc{font-size:13px;color:var(--ink2);display:flex;align-items:center;gap:4px;}
   .meta-loc svg{width:14px;height:14px;fill:none;stroke:var(--teal);stroke-width:2;}
-  .meta-stars{font-size:13px;color:var(--ink2);}
   .meta-cat{font-size:12px;padding:3px 10px;border-radius:20px;background:var(--teal-light);color:var(--teal2);font-weight:500;}
-  .cert-badge{display:inline-flex;align-items:center;gap:5px;background:#FFF8E1;color:#F57F17;font-size:12px;font-weight:600;padding:4px 12px;border-radius:20px;}
-  .cert-badge svg{width:13px;height:13px;fill:none;stroke:#F57F17;stroke-width:2.5;}
-
-  /* TAGS */
   .tags{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;}
   .tag{display:flex;align-items:center;gap:5px;padding:6px 14px;border-radius:20px;border:1px solid var(--border);font-size:12px;color:var(--ink2);background:var(--white);}
   .tag svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:2;}
   .tag.green{background:var(--teal-light);color:var(--teal2);border-color:#C8EEEA;}
-
-  /* SECTIONS */
   .sec{margin-bottom:24px;padding-bottom:24px;border-bottom:1px solid var(--border);}
   .sec:last-child{border:none;}
   .sec h2{font-size:16px;font-weight:600;color:var(--ink);margin-bottom:12px;}
   .sec p{font-size:14px;color:var(--ink2);line-height:1.8;}
-  .rules{display:flex;flex-direction:column;gap:8px;}
-  .rule{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--ink2);}
-  .rule svg{width:16px;height:16px;flex-shrink:0;}
-  .rule.ok svg{fill:none;stroke:var(--teal);stroke-width:2;}
-  .rule.no svg{fill:none;stroke:#E53935;stroke-width:2;}
-
-  /* OWNER */
   .owner{display:flex;align-items:center;gap:14px;padding:16px;background:var(--white);border:1px solid var(--border);border-radius:10px;}
-  .owner-av{width:50px;height:50px;border-radius:50%;object-fit:cover;}
+  .owner-av{width:50px;height:50px;border-radius:50%;object-fit:cover;background:#e0e0e0;}
   .owner-name{font-size:15px;font-weight:600;color:var(--ink);margin-bottom:3px;}
   .owner-meta{font-size:12px;color:var(--ink2);}
-  .owner-cert{display:inline-flex;align-items:center;gap:4px;background:var(--teal-light);color:var(--teal2);font-size:11px;font-weight:500;padding:2px 8px;border-radius:20px;margin-top:4px;}
-  .owner-cert svg{width:10px;height:10px;fill:none;stroke:var(--teal);stroke-width:2.5;}
   .btn-msg{margin-left:auto;padding:9px 18px;border-radius:8px;border:1.5px solid var(--border);background:var(--white);font-size:13px;font-family:var(--sans);cursor:pointer;color:var(--ink2);}
   .btn-msg:hover{border-color:var(--teal);color:var(--teal);}
-
-  /* AVIS */
-  .avis-list{display:flex;flex-direction:column;gap:14px;}
-  .avis{padding:14px;background:var(--bg);border-radius:10px;}
-  .avis-top{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
-  .avis-av{width:34px;height:34px;border-radius:50%;object-fit:cover;}
-  .avis-name{font-size:13px;font-weight:500;color:var(--ink);}
-  .avis-date{font-size:11px;color:var(--ink3);}
-  .avis-stars{margin-left:auto;font-size:13px;color:#F57F17;}
-  .avis p{font-size:13px;color:var(--ink2);line-height:1.6;}
-
-  /* BOOKING CARD */
+  /* BOOKING */
   .booking{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:24px;position:sticky;top:76px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
   .price-main{font-size:28px;font-weight:700;color:var(--ink);margin-bottom:2px;}
   .price-main small{font-size:15px;font-weight:400;color:var(--ink2);}
@@ -126,11 +91,11 @@
   .caution-note{font-size:12px;color:var(--ink2);text-align:center;margin-bottom:12px;}
   .btn-reserve{width:100%;padding:14px;border-radius:8px;background:var(--teal);color:#fff;border:none;font-family:var(--sans);font-size:15px;font-weight:600;cursor:pointer;margin-bottom:10px;}
   .btn-reserve:hover{background:var(--teal2);}
+  .btn-reserve:disabled{background:#ccc;cursor:not-allowed;}
   .secure{display:flex;align-items:center;justify-content:center;gap:5px;font-size:12px;color:var(--ink2);}
   .secure svg{width:13px;height:13px;fill:none;stroke:var(--teal);stroke-width:2;}
   .zone-note{display:flex;gap:8px;padding:10px 12px;background:var(--teal-light);border-radius:8px;margin-top:12px;font-size:12px;color:var(--teal2);line-height:1.5;}
   .zone-note svg{width:14px;height:14px;fill:none;stroke:var(--teal);stroke-width:2;flex-shrink:0;margin-top:1px;}
-
   /* MODAL */
   .modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:200;align-items:center;justify-content:center;}
   .modal{background:#fff;border-radius:14px;padding:32px;max-width:400px;width:90%;text-align:center;}
@@ -142,20 +107,17 @@
   .modal-recap div{display:flex;justify-content:space-between;padding:4px 0;color:var(--ink2);}
   .modal-recap div span:last-child{font-weight:600;color:var(--ink);}
   .btn-modal{width:100%;padding:13px;border-radius:8px;background:var(--teal);color:#fff;border:none;font-family:var(--sans);font-size:14px;font-weight:600;cursor:pointer;}
-
   @media(max-width:900px){
-    nav{padding:0 16px;}
-    .breadcrumb{padding:10px 16px;}
     .page-wrap{grid-template-columns:1fr;padding:16px 16px 120px;}
-    .booking{position:fixed;bottom:0;left:0;right:0;border-radius:14px 14px 0 0;padding:16px;z-index:50;border-top:1px solid var(--border);}
-    .dates,.delivery-row,.recap,.caution-note,.secure,.zone-note{display:none;}
-    .price-half{display:none;}
-    .mobile-booking-row{display:flex;align-items:center;justify-content:space-between;}
+    .booking{position:fixed;bottom:0;left:0;right:0;border-radius:14px 14px 0 0;padding:16px;z-index:50;}
+    .dates,.delivery-row,.recap,.caution-note,.secure,.zone-note,.price-half{display:none;}
+    .mobile-booking-row{display:flex!important;align-items:center;justify-content:space-between;}
   }
-  @media(min-width:901px){.mobile-booking-row{display:none;}}
+  .mobile-booking-row{display:none;}
 </style>
 </head>
 <body>
+
 <nav>
   <a class="logo" href="index.html">kiloue<span>.com</span></a>
   <div class="nav-actions">
@@ -178,78 +140,43 @@
 
 <div class="page-wrap">
   <div>
-    <div class="gallery-main" id="gallery-main">
-      <img src="" alt="" id="main-img" style="background:#f0f0f0;">
-    </div>
+    <div class="gallery-main"><img src="" alt="" id="main-img"></div>
     <div class="gallery-thumbs" id="gallery-thumbs"></div>
 
     <div class="title-row">
-      <h1 id="annonce-titre">—</h1>
+      <h1 id="annonce-titre">Chargement…</h1>
       <button class="fav-btn"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
     </div>
     <div class="meta-row">
-      <div class="meta-loc"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Ajaccio · 4 km de vous</div>
-      <div class="meta-stars">⭐ 4,9 · 14 avis</div>
-      <div class="meta-cat">Jardinage & Forêt</div>
-      <div class="cert-badge"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>Loueur certifié</div>
+      <div class="meta-loc" id="meta-loc"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>—</div>
+      <div class="meta-cat" id="meta-cat">—</div>
     </div>
 
-    <div class="tags">
-      <div class="tag green"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Livraison possible</div>
-      <div class="tag"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Caution 150€</div>
-      <div class="tag"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Demi-journée dispo</div>
-      <div class="tag"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Disponible maintenant</div>
+    <div class="tags" id="tags-container">
+      <div class="tag green" id="tag-livraison" style="display:none;"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Livraison possible</div>
+      <div class="tag" id="tag-caution" style="display:none;"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>—</div>
     </div>
 
     <div class="sec">
       <h2>Description</h2>
-      <p id="annonce-desc" class="desc-text">—</p>
-    </div>
-
-    <div class="sec">
-      <h2>Règles de location</h2>
-      <div class="rules">
-        <div class="rule ok"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Retrait sur place à Ajaccio (quartier des Cannes)</div>
-        <div class="rule ok"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Livraison possible jusqu'à 30 km (+15€)</div>
-        <div class="rule ok"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Caution de 150€ remboursée après retour conforme</div>
-        <div class="rule no"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Carburant non inclus</div>
-        <div class="rule no"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Pas de location le dimanche</div>
-      </div>
+      <p id="annonce-desc">—</p>
     </div>
 
     <div class="sec">
       <h2>À propos du loueur</h2>
       <div class="owner">
-        <img class="owner-av" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80" alt="Jean-Pierre">
+        <img class="owner-av" id="owner-avatar" src="" alt="">
         <div>
-          <div class="owner-name">Jean-Pierre M.</div>
-          <div class="owner-meta">Membre depuis janvier 2024 · Ajaccio</div>
-          <div class="owner-cert"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>Identité vérifiée</div>
+          <div class="owner-name" id="owner-name">—</div>
+          <div class="owner-meta" id="owner-meta">—</div>
         </div>
         <button class="btn-msg">Contacter</button>
       </div>
     </div>
 
-    <div class="sec">
-      <h2>Avis (14)</h2>
-      <div class="avis-list">
-        <div class="avis">
-          <div class="avis-top">
-            <img class="avis-av" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&q=80" alt="Marie-Laure">
-            <div><div class="avis-name">Marie-Laure</div><div class="avis-date">Avril 2025</div></div>
-            <div class="avis-stars">★★★★★</div>
-          </div>
-          <p>Très bon matériel, Jean-Pierre est très réactif. La tronçonneuse était propre et prête à l'emploi. Livraison rapide. Je recommande !</p>
-        </div>
-        <div class="avis">
-          <div class="avis-top">
-            <img class="avis-av" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&q=80" alt="Antoine">
-            <div><div class="avis-name">Antoine T.</div><div class="avis-date">Mars 2025</div></div>
-            <div class="avis-stars">★★★★★</div>
-          </div>
-          <p>Parfait pour couper mon bois de chauffage. Matériel en parfait état. Très bonne expérience !</p>
-        </div>
-      </div>
+    <div class="sec" id="avis-section" style="display:none;">
+      <h2 id="avis-titre">Avis</h2>
+      <div class="avis-list" id="avis-list"></div>
     </div>
   </div>
 
@@ -257,575 +184,338 @@
   <div>
     <div class="booking">
       <div class="mobile-booking-row">
-        <div><div class="price-main">25 € <small>/jour</small></div></div>
+        <div><div class="price-main" id="price-main-mobile">— € <small>/jour</small></div></div>
         <button class="btn-reserve" style="width:auto;padding:11px 22px;font-size:14px;" onclick="showModal()">Réserver</button>
       </div>
-      <div class="price-main">25 € <small>/jour</small></div>
-      <div class="price-half">Demi-journée disponible à 15€</div>
+      <div class="price-main" id="price-main">— € <small>/jour</small></div>
+      <div class="price-half" id="price-half" style="display:none;"></div>
       <div class="dates">
         <div class="date-f"><label>Début</label><input type="date" id="d1" onchange="calc()"></div>
         <div class="date-f"><label>Fin</label><input type="date" id="d2" onchange="calc()"></div>
       </div>
-      <div class="delivery-row">
-        <div><div class="dr-label">Livraison à domicile</div><div class="dr-sub" id="deliv-price-label">Supplément +20€</div></div>
+      <div class="delivery-row" id="delivery-row" style="display:none;">
+        <div><div class="dr-label">Livraison à domicile</div><div class="dr-sub" id="deliv-price-label">—</div></div>
         <div class="tgl" id="tgl" onclick="toggleDel()"></div>
       </div>
       <div class="recap">
         <div class="recap-row"><span class="l" id="r-days">Sélectionnez des dates</span><span class="v" id="r-price">—</span></div>
-        <div class="recap-row" id="r-del-row" style="display:none;"><span class="l">Livraison</span><span class="v" id="r-del-price">+20,00 €</span></div>
+        <div class="recap-row" id="r-del-row" style="display:none;"><span class="l">Livraison</span><span class="v" id="r-del-price">—</span></div>
         <div class="recap-row"><span class="l">Commission kiloue (5%)</span><span class="v vt" id="r-comm">—</span></div>
         <hr class="recap-divider">
         <div class="recap-total"><span class="tl">Total</span><span class="tv" id="r-total">—</span></div>
       </div>
-      <div class="caution-note">Caution de <strong>150€</strong> remboursée après retour conforme</div>
-      <button class="btn-reserve" onclick="showModal()">Réserver maintenant</button>
+      <div class="caution-note" id="caution-note">—</div>
+      <button class="btn-reserve" id="btn-reserver" onclick="showModal()">Réserver maintenant</button>
       <div class="secure"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Paiement 100% sécurisé · kiloue.com</div>
-      <div class="zone-note"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Zone de location : Ajaccio et alentours jusqu'à 30 km. Livraison disponible (supplément fixé par le loueur).</div>
+      <div class="zone-note" id="zone-note" style="display:none;"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
     </div>
   </div>
 </div>
 
-<div class="modal-bg" id="modal" style="display:none;">
+<!-- MODAL CONFIRMATION -->
+<div class="modal-bg" id="modal">
   <div class="modal">
     <div class="modal-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
-    <h2>Réservation confirmée !</h2>
-    <p id="modal-loueur-msg">Le loueur a été notifié et vous contactera sous 2h pour confirmer les détails.</p>
+    <h2>Demande envoyée !</h2>
+    <p>Le loueur a été notifié et vous confirmera la réservation sous 24h.</p>
     <div class="modal-recap">
-      <div id="recap-ligne"><span id="recap-titre-court">—</span><span id="recap-prix-total">—</span></div>
-      <div><span>Commission kiloue (5%)</span><span>1,25 €</span></div>
-      <div style="border-top:1px solid var(--border);margin-top:6px;padding-top:8px;font-weight:600;"><span>Total prélevé</span><span style="color:var(--teal)">26,25 €</span></div>
+      <div><span id="modal-jours">—</span><span id="modal-base">—</span></div>
+      <div><span>Commission kiloue (5%)</span><span id="modal-comm">—</span></div>
+      <div style="border-top:1px solid var(--border);margin-top:6px;padding-top:8px;font-weight:600;">
+        <span>Total</span><span id="modal-total" style="color:var(--teal)">—</span>
+      </div>
     </div>
-    <button class="btn-modal" onclick="hideModal()">Fermer</button>
+    <button class="btn-modal" onclick="hideModal()">Voir mes locations →</button>
   </div>
 </div>
 
 <script>
-  let deliv=false;
-  const DELIVERY_PRICE = 20; // Prix livraison fixé par le loueur
-  const today=new Date(),tom=new Date(today);tom.setDate(tom.getDate()+1);
-  const fmt=d=>d.toISOString().split('T')[0];
-  document.getElementById('d1').value=fmt(today);
-  document.getElementById('d2').value=fmt(tom);
+/* ─── ÉTAT GLOBAL ─── */
+const SUPA_URL = 'https://nsvosbuxkpnoasfilyqy.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5zdm9zYnV4a3Bub2FzZmlseXF5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAxODczOTcsImV4cCI6MjA5NTc2MzM5N30.pTuH4X8IQy0UJq8zUZ8t7I2WLMEUXae_8nWdtIFrpRE';
+
+let ANNONCE = null;   // données complètes de l'annonce
+let LOUEUR_ID = null; // user_id du loueur — clé du fix
+let deliv = false;
+let db = null;
+
+/* ─── DATES PAR DÉFAUT ─── */
+const today = new Date();
+const tom = new Date(today);
+tom.setDate(tom.getDate() + 1);
+const fmtDate = d => d.toISOString().split('T')[0];
+document.getElementById('d1').value = fmtDate(today);
+document.getElementById('d2').value = fmtDate(tom);
+
+/* ─── CALCUL PRIX ─── */
+function calc(){
+  if(!ANNONCE) return;
+  const s = document.getElementById('d1').value;
+  const e = document.getElementById('d2').value;
+  if(!s || !e) return;
+  const days = Math.max(1, Math.round((new Date(e) - new Date(s)) / 86400000));
+  const pj = ANNONCE.prix_jour || 0;
+  const lp = deliv ? (ANNONCE.prix_livraison || 0) : 0;
+  const base = days * pj;
+  const sub = base + lp;
+  const comm = +(sub * 0.05).toFixed(2);
+  const total = +(sub + comm).toFixed(2);
+
+  document.getElementById('r-days').textContent = days + 'j × ' + pj + '€';
+  document.getElementById('r-price').textContent = base.toFixed(2) + ' €';
+  document.getElementById('r-comm').textContent = '+ ' + comm.toFixed(2) + ' €';
+  document.getElementById('r-total').textContent = total.toFixed(2) + ' €';
+  if(deliv){
+    document.getElementById('r-del-price').textContent = '+' + lp.toFixed(2) + ' €';
+  }
+}
+
+function toggleDel(){
+  deliv = !deliv;
+  document.getElementById('tgl').classList.toggle('on', deliv);
+  document.getElementById('r-del-row').style.display = deliv ? 'flex' : 'none';
   calc();
+}
 
-  function calc(){
-    const s=document.getElementById('d1').value,e=document.getElementById('d2').value;
-    if(!s||!e)return;
-    const days=Math.max(1,Math.round((new Date(e)-new Date(s))/86400000));
-    const pj=window.ANNONCE_PRIX||25,lp=window.ANNONCE_LIVRAISON||DELIVERY_PRICE||0;const base=days*pj,del=deliv?lp:0,sub=base+del;
-    const comm=+(sub*.05).toFixed(2),total=+(sub+comm).toFixed(2);
-    document.getElementById('r-days').textContent=days+'j × '+(window.ANNONCE_PRIX||25)+'€';
-    document.getElementById('r-price').textContent=base.toFixed(2)+' €';
-    document.getElementById('r-comm').textContent='+ '+comm.toFixed(2)+' €';
-    document.getElementById('r-total').textContent=total.toFixed(2)+' €';
-  }
-  function toggleDel(){
-    deliv=!deliv;
-    document.getElementById('tgl').classList.toggle('on',deliv);
-    document.getElementById('r-del-row').style.display=deliv?'flex':'none';
-    calc();
-  }
-  function switchImg(el,src){
-    document.querySelectorAll('.g-thumb').forEach(t=>t.classList.remove('active'));
-    el.classList.add('active');
-    document.getElementById('main-img').src=src;
-  }
-  function hideModal(){ document.getElementById('modal').style.display='none'; window.location.href='profil.html'; }
+function switchImg(el, src){
+  document.querySelectorAll('.g-thumb').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('main-img').src = src;
+}
 
-  function showModal(){
-    var annonceId=new URLSearchParams(window.location.search).get('id');
-    var d1val=document.getElementById('d1').value;
-    var d2val=document.getElementById('d2').value;
-    var prixJour=window.ANNONCE_PRIX||25;
-    var days=Math.max(1,Math.round((new Date(d2val)-new Date(d1val))/86400000));
-    var base=days*prixJour;
-    var delivOn=document.querySelector('.dr-tgl')&&document.querySelector('.dr-tgl').classList.contains('on');
-    var prixLiv=delivOn?(window.ANNONCE_LIVRAISON||0):0;
-    var sousTotal=base+prixLiv;
-    var commission=Math.round(sousTotal*5)/100;
-    var total=Math.round((sousTotal+commission)*100)/100;
+/* ─── MODAL ─── */
+function hideModal(){
+  document.getElementById('modal').style.display = 'none';
+  window.location.href = 'profil.html';
+}
 
-    function doReserve(db,user,loueurId){
-      db.from('reservations').select('id').eq('annonce_id',annonceId).in('statut',['en_attente','confirmee']).lte('date_debut',d2val).gte('date_fin',d1val).then(function(chk){
-        if(chk.data&&chk.data.length>0){ alert('Ces dates sont déjà réservées. Choisissez d\'autres dates.'); return; }
-        db.from('reservations').insert([{
-          annonce_id:annonceId, loueur_id:loueurId, locataire_id:user.id,
-          date_debut:d1val, date_fin:d2val, prix_total:total, commission:commission,
-          livraison:delivOn||false, prix_livraison:prixLiv, statut:'en_attente'
-        }]).then(function(ins){
-          if(ins.error){ alert('Erreur : '+ins.error.message); return; }
-          var rt=document.getElementById('recap-titre-court');
-          var rp=document.getElementById('recap-prix-total');
-          if(rt) rt.textContent=days+'j × '+prixJour+'€';
-          if(rp) rp.textContent=base.toFixed(2)+' €';
-          var spans=document.querySelectorAll('.modal-recap div span:last-child');
-          if(spans[1]) spans[1].textContent=commission.toFixed(2)+' €';
-          if(spans[2]) spans[2].textContent=total.toFixed(2)+' €';
-          document.getElementById('modal').style.display='flex';
-        });
-      });
-    }
+document.getElementById('modal').addEventListener('click', function(e){
+  if(e.target === this) hideModal();
+});
 
-    function init(){
-      var db=supabase.createClient('https://nsvosbuxkpnoasfilyqy.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5zdm9zYnV4a3Bub2FzZmlseXF5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAxODczOTcsImV4cCI6MjA5NTc2MzM5N30.pTuH4X8IQy0UJq8zUZ8t7I2WLMEUXae_8nWdtIFrpRE');
-      db.auth.getUser().then(function(r){
-        if(!r.data||!r.data.user){ sessionStorage.setItem('redirect_after_login',window.location.href); window.location.href='inscription.html'; return; }
-        var user=r.data.user;
-        db.from('annonces').select('user_id').eq('id',annonceId).single().then(function(ar){
-          var loueurId=(ar.data&&ar.data.user_id)||null;
-          doReserve(db,user,loueurId);
-        });
-      });
-    }
+/* ─── RÉSERVER ─── */
+async function showModal(){
+  if(!ANNONCE){ alert('Annonce non chargée.'); return; }
 
-    if(window.supabase){ init(); }
-    else { var s=document.createElement('script'); s.src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js'; s.onload=init; document.head.appendChild(s); }
+  // Vérifier connexion
+  const { data: { user } } = await db.auth.getUser();
+  if(!user){
+    sessionStorage.setItem('redirect_after_login', window.location.href);
+    window.location.href = 'inscription.html';
+    return;
   }
 
-    document.getElementById('modal').addEventListener('click',function(e){
-    if(e.target===document.getElementById('modal'))hideModal();
-  });
-</script>
-<script>
-if(/Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) || window.innerWidth < 768){
-    window.location.replace('mobile.html');
+  // Empêcher le propriétaire de réserver sa propre annonce
+  if(user.id === LOUEUR_ID){
+    alert('Vous ne pouvez pas réserver votre propre annonce.');
+    return;
   }
-</script>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>kiloue.com</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<style>
-  :root{
-    --teal:#00A693;--teal2:#008577;--teal-light:#E8F7F5;
-    --ink:#1A1A1A;--ink2:#666;--ink3:#999;
-    --border:#E5E5E5;--bg:#FAFAFA;--white:#fff;
-    --sans:'Inter',system-ui,sans-serif;
+
+  const annonceId = new URLSearchParams(window.location.search).get('id');
+  const d1val = document.getElementById('d1').value;
+  const d2val = document.getElementById('d2').value;
+
+  if(!d1val || !d2val){ alert('Veuillez sélectionner des dates.'); return; }
+  if(new Date(d2val) <= new Date(d1val)){ alert('La date de fin doit être après la date de début.'); return; }
+
+  const days = Math.max(1, Math.round((new Date(d2val) - new Date(d1val)) / 86400000));
+  const pj = ANNONCE.prix_jour || 0;
+  const lp = deliv ? (ANNONCE.prix_livraison || 0) : 0;
+  const base = days * pj;
+  const sub = base + lp;
+  const comm = +(sub * 0.05).toFixed(2);
+  const total = +(sub + comm).toFixed(2);
+
+  // Vérifier chevauchement dates
+  const { data: chevauchement } = await db
+    .from('reservations')
+    .select('id')
+    .eq('annonce_id', annonceId)
+    .in('statut', ['en_attente', 'confirmee'])
+    .lte('date_debut', d2val)
+    .gte('date_fin', d1val);
+
+  if(chevauchement && chevauchement.length > 0){
+    alert('Ces dates sont déjà réservées. Veuillez choisir d\'autres dates.');
+    return;
   }
-  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-  body{font-family:var(--sans);background:var(--bg);color:var(--ink);}
 
-  nav{position:sticky;top:0;z-index:100;background:var(--white);border-bottom:1px solid var(--border);height:60px;display:flex;align-items:center;padding:0 24px;gap:16px;}
-  .logo{font-size:22px;font-weight:700;color:var(--teal);text-decoration:none;white-space:nowrap;}
-  .logo span{color:var(--ink);}
-  .nav-actions{margin-left:auto;display:flex;gap:8px;}
-  .btn-login{padding:8px 16px;border-radius:6px;border:1.5px solid var(--border);background:var(--white);font-size:13px;font-weight:500;font-family:var(--sans);color:var(--ink);cursor:pointer;}
-  .btn-login:hover{border-color:var(--teal);color:var(--teal);}
-  .btn-sell{padding:8px 18px;border-radius:6px;border:none;background:var(--teal);font-size:13px;font-weight:600;font-family:var(--sans);color:var(--white);cursor:pointer;}
-  .btn-sell:hover{background:var(--teal2);}
+  // Désactiver le bouton pendant l'insertion
+  const btn = document.getElementById('btn-reserver');
+  btn.disabled = true;
+  btn.textContent = 'Envoi en cours…';
 
-  .breadcrumb{padding:12px 24px;font-size:13px;color:var(--ink2);display:flex;align-items:center;gap:6px;background:var(--white);border-bottom:1px solid var(--border);}
-  .breadcrumb a{color:var(--ink2);text-decoration:none;}
-  .breadcrumb a:hover{color:var(--teal);}
-  .breadcrumb svg{width:12px;height:12px;fill:none;stroke:var(--ink3);stroke-width:2;}
+  // Insérer la réservation — LOUEUR_ID toujours renseigné
+  const { error } = await db.from('reservations').insert([{
+    annonce_id:    annonceId,
+    loueur_id:     LOUEUR_ID,       // ← toujours l'user_id du propriétaire de l'annonce
+    locataire_id:  user.id,
+    date_debut:    d1val,
+    date_fin:      d2val,
+    prix_total:    total,
+    commission:    comm,
+    livraison:     deliv,
+    prix_livraison: lp,
+    statut:        'en_attente'
+  }]);
 
-  .page-wrap{max-width:1100px;margin:0 auto;padding:28px 24px 60px;display:grid;grid-template-columns:1fr 360px;gap:40px;align-items:start;}
+  btn.disabled = false;
+  btn.textContent = 'Réserver maintenant';
 
-  /* GALLERY */
-  .gallery-main{border-radius:12px;overflow:hidden;aspect-ratio:4/3;margin-bottom:10px;cursor:pointer;}
-  .gallery-main img{width:100%;height:100%;object-fit:cover;display:block;}
-  .gallery-thumbs{display:flex;gap:8px;}
-  .g-thumb{width:80px;height:80px;border-radius:8px;overflow:hidden;cursor:pointer;border:2px solid transparent;flex-shrink:0;}
-  .g-thumb.active,.g-thumb:hover{border-color:var(--teal);}
-  .g-thumb img{width:100%;height:100%;object-fit:cover;}
+  if(error){ alert('Erreur : ' + error.message); return; }
 
-  /* TITLE */
-  .title-row{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin:20px 0 10px;}
-  .title-row h1{font-size:22px;font-weight:700;color:var(--ink);line-height:1.2;}
-  .fav-btn{width:40px;height:40px;border-radius:50%;border:1.5px solid var(--border);background:var(--white);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;}
-  .fav-btn svg{width:20px;height:20px;fill:none;stroke:var(--ink2);stroke-width:2;}
-  .fav-btn:hover svg{stroke:var(--teal);}
-  .meta-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px;}
-  .meta-loc{font-size:13px;color:var(--ink2);display:flex;align-items:center;gap:4px;}
-  .meta-loc svg{width:14px;height:14px;fill:none;stroke:var(--teal);stroke-width:2;}
-  .meta-stars{font-size:13px;color:var(--ink2);}
-  .meta-cat{font-size:12px;padding:3px 10px;border-radius:20px;background:var(--teal-light);color:var(--teal2);font-weight:500;}
-  .cert-badge{display:inline-flex;align-items:center;gap:5px;background:#FFF8E1;color:#F57F17;font-size:12px;font-weight:600;padding:4px 12px;border-radius:20px;}
-  .cert-badge svg{width:13px;height:13px;fill:none;stroke:#F57F17;stroke-width:2.5;}
+  // Remplir le modal de confirmation
+  document.getElementById('modal-jours').textContent = days + 'j × ' + pj + '€';
+  document.getElementById('modal-base').textContent = base.toFixed(2) + ' €';
+  document.getElementById('modal-comm').textContent = comm.toFixed(2) + ' €';
+  document.getElementById('modal-total').textContent = total.toFixed(2) + ' €';
+  document.getElementById('modal').style.display = 'flex';
+}
 
-  /* TAGS */
-  .tags{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;}
-  .tag{display:flex;align-items:center;gap:5px;padding:6px 14px;border-radius:20px;border:1px solid var(--border);font-size:12px;color:var(--ink2);background:var(--white);}
-  .tag svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:2;}
-  .tag.green{background:var(--teal-light);color:var(--teal2);border-color:#C8EEEA;}
-
-  /* SECTIONS */
-  .sec{margin-bottom:24px;padding-bottom:24px;border-bottom:1px solid var(--border);}
-  .sec:last-child{border:none;}
-  .sec h2{font-size:16px;font-weight:600;color:var(--ink);margin-bottom:12px;}
-  .sec p{font-size:14px;color:var(--ink2);line-height:1.8;}
-  .rules{display:flex;flex-direction:column;gap:8px;}
-  .rule{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--ink2);}
-  .rule svg{width:16px;height:16px;flex-shrink:0;}
-  .rule.ok svg{fill:none;stroke:var(--teal);stroke-width:2;}
-  .rule.no svg{fill:none;stroke:#E53935;stroke-width:2;}
-
-  /* OWNER */
-  .owner{display:flex;align-items:center;gap:14px;padding:16px;background:var(--white);border:1px solid var(--border);border-radius:10px;}
-  .owner-av{width:50px;height:50px;border-radius:50%;object-fit:cover;}
-  .owner-name{font-size:15px;font-weight:600;color:var(--ink);margin-bottom:3px;}
-  .owner-meta{font-size:12px;color:var(--ink2);}
-  .owner-cert{display:inline-flex;align-items:center;gap:4px;background:var(--teal-light);color:var(--teal2);font-size:11px;font-weight:500;padding:2px 8px;border-radius:20px;margin-top:4px;}
-  .owner-cert svg{width:10px;height:10px;fill:none;stroke:var(--teal);stroke-width:2.5;}
-  .btn-msg{margin-left:auto;padding:9px 18px;border-radius:8px;border:1.5px solid var(--border);background:var(--white);font-size:13px;font-family:var(--sans);cursor:pointer;color:var(--ink2);}
-  .btn-msg:hover{border-color:var(--teal);color:var(--teal);}
-
-  /* AVIS */
-  .avis-list{display:flex;flex-direction:column;gap:14px;}
-  .avis{padding:14px;background:var(--bg);border-radius:10px;}
-  .avis-top{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
-  .avis-av{width:34px;height:34px;border-radius:50%;object-fit:cover;}
-  .avis-name{font-size:13px;font-weight:500;color:var(--ink);}
-  .avis-date{font-size:11px;color:var(--ink3);}
-  .avis-stars{margin-left:auto;font-size:13px;color:#F57F17;}
-  .avis p{font-size:13px;color:var(--ink2);line-height:1.6;}
-
-  /* BOOKING CARD */
-  .booking{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:24px;position:sticky;top:76px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
-  .price-main{font-size:28px;font-weight:700;color:var(--ink);margin-bottom:2px;}
-  .price-main small{font-size:15px;font-weight:400;color:var(--ink2);}
-  .price-half{font-size:13px;color:var(--ink2);margin-bottom:18px;}
-  .dates{display:grid;grid-template-columns:1fr 1fr;border:1.5px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:12px;}
-  .date-f{padding:11px 14px;}
-  .date-f:first-child{border-right:1px solid var(--border);}
-  .date-f label{display:block;font-size:10px;font-weight:600;color:var(--ink);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
-  .date-f input{border:none;outline:none;font-family:var(--sans);font-size:13px;color:var(--ink);background:transparent;width:100%;cursor:pointer;}
-  .delivery-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin-bottom:14px;}
-  .dr-label{font-size:13px;color:var(--ink);font-weight:500;}
-  .dr-sub{font-size:11px;color:var(--ink2);}
-  .tgl{width:42px;height:24px;border-radius:12px;background:var(--border);position:relative;cursor:pointer;transition:background .2s;flex-shrink:0;}
-  .tgl.on{background:var(--teal);}
-  .tgl::after{content:'';position:absolute;width:18px;height:18px;border-radius:50%;background:#fff;top:3px;left:3px;transition:transform .2s;}
-  .tgl.on::after{transform:translateX(18px);}
-  .recap{background:var(--bg);border-radius:8px;padding:14px;margin-bottom:14px;}
-  .recap-row{display:flex;justify-content:space-between;font-size:13px;padding:5px 0;}
-  .recap-row .l{color:var(--ink2);}
-  .recap-row .v{font-weight:500;color:var(--ink);}
-  .recap-row .vt{color:var(--teal);font-weight:500;}
-  .recap-divider{border:none;border-top:1px solid var(--border);margin:6px 0;}
-  .recap-total{display:flex;justify-content:space-between;align-items:center;padding-top:4px;}
-  .recap-total .tl{font-size:14px;font-weight:600;}
-  .recap-total .tv{font-size:18px;font-weight:700;color:var(--teal);}
-  .caution-note{font-size:12px;color:var(--ink2);text-align:center;margin-bottom:12px;}
-  .btn-reserve{width:100%;padding:14px;border-radius:8px;background:var(--teal);color:#fff;border:none;font-family:var(--sans);font-size:15px;font-weight:600;cursor:pointer;margin-bottom:10px;}
-  .btn-reserve:hover{background:var(--teal2);}
-  .secure{display:flex;align-items:center;justify-content:center;gap:5px;font-size:12px;color:var(--ink2);}
-  .secure svg{width:13px;height:13px;fill:none;stroke:var(--teal);stroke-width:2;}
-  .zone-note{display:flex;gap:8px;padding:10px 12px;background:var(--teal-light);border-radius:8px;margin-top:12px;font-size:12px;color:var(--teal2);line-height:1.5;}
-  .zone-note svg{width:14px;height:14px;fill:none;stroke:var(--teal);stroke-width:2;flex-shrink:0;margin-top:1px;}
-
-  /* MODAL */
-  .modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:200;align-items:center;justify-content:center;}
-  .modal{background:#fff;border-radius:14px;padding:32px;max-width:400px;width:90%;text-align:center;}
-  .modal-icon{width:60px;height:60px;border-radius:50%;background:var(--teal-light);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;}
-  .modal-icon svg{width:28px;height:28px;fill:none;stroke:var(--teal);stroke-width:2;}
-  .modal h2{font-size:20px;font-weight:700;color:var(--ink);margin-bottom:8px;}
-  .modal p{font-size:14px;color:var(--ink2);line-height:1.6;margin-bottom:20px;}
-  .modal-recap{background:var(--bg);border-radius:8px;padding:14px;text-align:left;font-size:13px;margin-bottom:18px;}
-  .modal-recap div{display:flex;justify-content:space-between;padding:4px 0;color:var(--ink2);}
-  .modal-recap div span:last-child{font-weight:600;color:var(--ink);}
-  .btn-modal{width:100%;padding:13px;border-radius:8px;background:var(--teal);color:#fff;border:none;font-family:var(--sans);font-size:14px;font-weight:600;cursor:pointer;}
-
-  @media(max-width:900px){
-    nav{padding:0 16px;}
-    .breadcrumb{padding:10px 16px;}
-    .page-wrap{grid-template-columns:1fr;padding:16px 16px 120px;}
-    .booking{position:fixed;bottom:0;left:0;right:0;border-radius:14px 14px 0 0;padding:16px;z-index:50;border-top:1px solid var(--border);}
-    .dates,.delivery-row,.recap,.caution-note,.secure,.zone-note{display:none;}
-    .price-half{display:none;}
-    .mobile-booking-row{display:flex;align-items:center;justify-content:space-between;}
-  }
-  @media(min-width:901px){.mobile-booking-row{display:none;}}
-</style>
-</head>
-<body>
-<nav>
-  <a class="logo" href="index.html">kiloue<span>.com</span></a>
-  <div class="nav-actions">
-    <button class="btn-login" onclick="window.location.href='inscription.html'">S'inscrire | Se connecter</button>
-    <button class="btn-sell" onclick="window.location.href='publier.html'">Déposer une annonce</button>
-  </div>
-</nav>
-
-<div class="breadcrumb">
-  <a href="index.html">Accueil</a>
-  <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
-  <a href="#" id="bc-cat">—</a>
-  <span id="bc-souscat-wrap" style="display:none;">
-    <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
-    <a href="#" id="bc-souscat">—</a>
-  </span>
-  <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
-  <span id="bc-titre">—</span>
-</div>
-
-<div class="page-wrap">
-  <div>
-    <div class="gallery-main" id="gallery-main">
-      <img src="" alt="" id="main-img" style="background:#f0f0f0;">
-    </div>
-    <div class="gallery-thumbs" id="gallery-thumbs"></div>
-
-    <div class="title-row">
-      <h1 id="annonce-titre">—</h1>
-      <button class="fav-btn"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
-    </div>
-    <div class="meta-row">
-      <div class="meta-loc"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Ajaccio · 4 km de vous</div>
-      <div class="meta-stars">⭐ 4,9 · 14 avis</div>
-      <div class="meta-cat">Jardinage & Forêt</div>
-      <div class="cert-badge"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>Loueur certifié</div>
-    </div>
-
-    <div class="tags">
-      <div class="tag green"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Livraison possible</div>
-      <div class="tag"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Caution 150€</div>
-      <div class="tag"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Demi-journée dispo</div>
-      <div class="tag"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Disponible maintenant</div>
-    </div>
-
-    <div class="sec">
-      <h2>Description</h2>
-      <p id="annonce-desc" class="desc-text">—</p>
-    </div>
-
-    <div class="sec">
-      <h2>Règles de location</h2>
-      <div class="rules">
-        <div class="rule ok"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Retrait sur place à Ajaccio (quartier des Cannes)</div>
-        <div class="rule ok"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Livraison possible jusqu'à 30 km (+15€)</div>
-        <div class="rule ok"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Caution de 150€ remboursée après retour conforme</div>
-        <div class="rule no"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Carburant non inclus</div>
-        <div class="rule no"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Pas de location le dimanche</div>
-      </div>
-    </div>
-
-    <div class="sec">
-      <h2>À propos du loueur</h2>
-      <div class="owner">
-        <img class="owner-av" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80" alt="Jean-Pierre">
-        <div>
-          <div class="owner-name">Jean-Pierre M.</div>
-          <div class="owner-meta">Membre depuis janvier 2024 · Ajaccio</div>
-          <div class="owner-cert"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>Identité vérifiée</div>
-        </div>
-        <button class="btn-msg">Contacter</button>
-      </div>
-    </div>
-
-    <div class="sec">
-      <h2>Avis (14)</h2>
-      <div class="avis-list">
-        <div class="avis">
-          <div class="avis-top">
-            <img class="avis-av" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&q=80" alt="Marie-Laure">
-            <div><div class="avis-name">Marie-Laure</div><div class="avis-date">Avril 2025</div></div>
-            <div class="avis-stars">★★★★★</div>
-          </div>
-          <p>Très bon matériel, Jean-Pierre est très réactif. La tronçonneuse était propre et prête à l'emploi. Livraison rapide. Je recommande !</p>
-        </div>
-        <div class="avis">
-          <div class="avis-top">
-            <img class="avis-av" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&q=80" alt="Antoine">
-            <div><div class="avis-name">Antoine T.</div><div class="avis-date">Mars 2025</div></div>
-            <div class="avis-stars">★★★★★</div>
-          </div>
-          <p>Parfait pour couper mon bois de chauffage. Matériel en parfait état. Très bonne expérience !</p>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- BOOKING -->
-  <div>
-    <div class="booking">
-      <div class="mobile-booking-row">
-        <div><div class="price-main">25 € <small>/jour</small></div></div>
-        <button class="btn-reserve" style="width:auto;padding:11px 22px;font-size:14px;" onclick="showModal()">Réserver</button>
-      </div>
-      <div class="price-main">25 € <small>/jour</small></div>
-      <div class="price-half">Demi-journée disponible à 15€</div>
-      <div class="dates">
-        <div class="date-f"><label>Début</label><input type="date" id="d1" onchange="calc()"></div>
-        <div class="date-f"><label>Fin</label><input type="date" id="d2" onchange="calc()"></div>
-      </div>
-      <div class="delivery-row">
-        <div><div class="dr-label">Livraison à domicile</div><div class="dr-sub" id="deliv-price-label">Supplément +20€</div></div>
-        <div class="tgl" id="tgl" onclick="toggleDel()"></div>
-      </div>
-      <div class="recap">
-        <div class="recap-row"><span class="l" id="r-days">Sélectionnez des dates</span><span class="v" id="r-price">—</span></div>
-        <div class="recap-row" id="r-del-row" style="display:none;"><span class="l">Livraison</span><span class="v" id="r-del-price">+20,00 €</span></div>
-        <div class="recap-row"><span class="l">Commission kiloue (5%)</span><span class="v vt" id="r-comm">—</span></div>
-        <hr class="recap-divider">
-        <div class="recap-total"><span class="tl">Total</span><span class="tv" id="r-total">—</span></div>
-      </div>
-      <div class="caution-note">Caution de <strong>150€</strong> remboursée après retour conforme</div>
-      <button class="btn-reserve" onclick="showModal()">Réserver maintenant</button>
-      <div class="secure"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Paiement 100% sécurisé · kiloue.com</div>
-      <div class="zone-note"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Zone de location : Ajaccio et alentours jusqu'à 30 km. Livraison disponible (supplément fixé par le loueur).</div>
-    </div>
-  </div>
-</div>
-
-<div class="modal-bg" id="modal" style="display:none;">
-  <div class="modal">
-    <div class="modal-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
-    <h2>Réservation confirmée !</h2>
-    <p id="modal-loueur-msg">Le loueur a été notifié et vous contactera sous 2h pour confirmer les détails.</p>
-    <div class="modal-recap">
-      <div id="recap-ligne"><span id="recap-titre-court">—</span><span id="recap-prix-total">—</span></div>
-      <div><span>Commission kiloue (5%)</span><span>1,25 €</span></div>
-      <div style="border-top:1px solid var(--border);margin-top:6px;padding-top:8px;font-weight:600;"><span>Total prélevé</span><span style="color:var(--teal)">26,25 €</span></div>
-    </div>
-    <button class="btn-modal" onclick="hideModal()">Fermer</button>
-  </div>
-</div>
-
-<script>
-  let deliv=false;
-  const DELIVERY_PRICE = 20; // Prix livraison fixé par le loueur
-  const today=new Date(),tom=new Date(today);tom.setDate(tom.getDate()+1);
-  const fmt=d=>d.toISOString().split('T')[0];
-  document.getElementById('d1').value=fmt(today);
-  document.getElementById('d2').value=fmt(tom);
-  calc();
-
-  function calc(){
-    const s=document.getElementById('d1').value,e=document.getElementById('d2').value;
-    if(!s||!e)return;
-    const days=Math.max(1,Math.round((new Date(e)-new Date(s))/86400000));
-    const pj=window.ANNONCE_PRIX||25,lp=window.ANNONCE_LIVRAISON||DELIVERY_PRICE||0;const base=days*pj,del=deliv?lp:0,sub=base+del;
-    const comm=+(sub*.05).toFixed(2),total=+(sub+comm).toFixed(2);
-    document.getElementById('r-days').textContent=days+'j × '+(window.ANNONCE_PRIX||25)+'€';
-    document.getElementById('r-price').textContent=base.toFixed(2)+' €';
-    document.getElementById('r-comm').textContent='+ '+comm.toFixed(2)+' €';
-    document.getElementById('r-total').textContent=total.toFixed(2)+' €';
-  }
-  function toggleDel(){
-    deliv=!deliv;
-    document.getElementById('tgl').classList.toggle('on',deliv);
-    document.getElementById('r-del-row').style.display=deliv?'flex':'none';
-    calc();
-  }
-  function switchImg(el,src){
-    document.querySelectorAll('.g-thumb').forEach(t=>t.classList.remove('active'));
-    el.classList.add('active');
-    document.getElementById('main-img').src=src;
-  }
-  function showModal(){document.getElementById('modal').style.display='flex';}
-  function hideModal(){document.getElementById('modal').style.display='none'; window.location.href='profil.html';}
-  document.getElementById('modal').addEventListener('click',function(e){if(e.target===this)hideModal();});
-</script>
-
-<script>
+/* ─── CHARGEMENT ANNONCE ─── */
 (function(){
-  var id=new URLSearchParams(window.location.search).get('id');
-  if(!id) return;
-  var s=document.createElement('script');
-  s.src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js';
-  s.onload=function(){
-    var db=supabase.createClient(
-      'https://nsvosbuxkpnoasfilyqy.supabase.co',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5zdm9zYnV4a3Bub2FzZmlseXF5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAxODczOTcsImV4cCI6MjA5NTc2MzM5N30.pTuH4X8IQy0UJq8zUZ8t7I2WLMEUXae_8nWdtIFrpRE'
-    );
-    db.from('annonces')
-      .select('*, utilisateurs(prenom, nom, ville, est_certifie, avatar_url)')
-      .eq('id',id).single()
-      .then(function(res){
-        if(res.error||!res.data) return;
-        var a=res.data, u=a.utilisateurs||{};
+  const id = new URLSearchParams(window.location.search).get('id');
+  if(!id){ document.getElementById('annonce-titre').textContent = 'Annonce introuvable'; return; }
 
-        // Titre
-        document.title=a.titre+' — kiloue.com';
-        // Titre
-        var h1=document.getElementById('annonce-titre');
-        if(h1) h1.textContent=a.titre;
-        // Breadcrumb
-        var bcCat=document.getElementById('bc-cat');
-        var bcTitre=document.getElementById('bc-titre');
-        var bcSousCat=document.getElementById('bc-souscat');
-        var bcSousCatWrap=document.getElementById('bc-souscat-wrap');
-        if(bcCat) bcCat.textContent=a.categorie||'—';
-        if(bcTitre) bcTitre.textContent=a.titre;
-        if(a.sous_categorie && bcSousCat && bcSousCatWrap){
-          bcSousCat.textContent=a.sous_categorie;
-          bcSousCatWrap.style.display='inline';
-        }
+  const s = document.createElement('script');
+  s.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js';
+  s.onload = async function(){
+    db = supabase.createClient(SUPA_URL, SUPA_KEY);
 
-        // Photos
-        if(a.photos&&a.photos.length>0){
-          // Image principale
-          var mainImg=document.getElementById('main-img');
-          if(mainImg) mainImg.src=a.photos[0];
-          // Miniatures - remplacer les 3 thumbs
-          var gallery=document.getElementById('gallery-thumbs');
-          if(gallery){
-            gallery.innerHTML='';
-            a.photos.forEach(function(url,i){
-              var div=document.createElement('div');
-              div.className='g-thumb'+(i===0?' active':'');
-              div.setAttribute('onclick','switchImg(this,"'+url+'")');
-              var img=document.createElement('img');
-              img.src=url; img.alt='';
-              div.appendChild(img);
-              gallery.appendChild(div);
-            });
-          }
-        }
+    const { data, error } = await db
+      .from('annonces')
+      .select('*, utilisateurs(id, prenom, nom, ville, est_certifie, avatar_url, created_at)')
+      .eq('id', id)
+      .single();
 
-        // Prix
-        var prices=document.querySelectorAll('.price-main');
-        prices.forEach(function(p){ p.innerHTML=a.prix_jour+' € <small>/jour</small>'; });
+    if(error || !data){
+      document.getElementById('annonce-titre').textContent = 'Annonce introuvable';
+      return;
+    }
 
-        // Prix demi-journée
-        var half=document.querySelector('.price-half');
-        if(half){
-          if(a.prix_demi_journee) half.textContent='Demi-journée disponible à '+a.prix_demi_journee+'€';
-          else half.style.display='none';
-        }
+    ANNONCE = data;
+    const u = data.utilisateurs || {};
 
-        // Ville/localisation
-        var loc=document.querySelector('.meta-loc');
-        if(loc) loc.innerHTML='<svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>'+a.ville;
+    // ══ LOUEUR_ID : récupéré depuis l'annonce, jamais NULL ══
+    LOUEUR_ID = data.user_id;
 
-        // Catégorie
-        var cat=document.querySelector('.meta-cat');
-        if(cat) cat.textContent=a.categorie;
+    // Titre
+    document.title = data.titre + ' — kiloue.com';
+    document.getElementById('annonce-titre').textContent = data.titre;
 
-        // Description
-        var descPara=document.getElementById('annonce-desc');
-        if(descPara) descPara.textContent=a.description||'Aucune description.';
+    // Breadcrumb
+    document.getElementById('bc-cat').textContent = data.categorie || '—';
+    document.getElementById('bc-titre').textContent = data.titre;
+    if(data.sous_categorie){
+      document.getElementById('bc-souscat').textContent = data.sous_categorie;
+      document.getElementById('bc-souscat-wrap').style.display = 'inline';
+    }
 
-        // Caution
-        var cautionTag=document.querySelector('.tags .tag:nth-child(2)');
-        if(cautionTag) cautionTag.innerHTML='<svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Caution '+a.caution+'€';
-
-        // Livraison tag
-        var livrTag=document.querySelector('.tags .tag.green');
-        if(livrTag){
-          if(!a.livraison) livrTag.style.display='none';
-          else if(a.prix_livraison>0) livrTag.innerHTML=livrTag.innerHTML+' (+'+a.prix_livraison+'€)';
-        }
-
-        // Livraison supplément dans réservation
-        var delivSub=document.querySelector('.dr-sub');
-        if(delivSub&&a.prix_livraison>0) delivSub.textContent='Supplément +'+a.prix_livraison+'€';
-
-        // Loueur
-        var ownerName=document.querySelector('.owner-name');
-        if(ownerName) ownerName.textContent=(u.prenom||'')+(u.nom?' '+u.nom:'');
-        var ownerCity=document.querySelector('.owner-city');
-        if(ownerCity&&u.ville) ownerCity.textContent=u.ville;
-
-        // Mise à jour du calcul prix
-        window.ANNONCE_PRIX=a.prix_jour;
-        window.ANNONCE_LIVRAISON=a.prix_livraison||0;
-        // Recalculer
-        if(typeof calc==='function') calc();
+    // Photos
+    if(data.photos && data.photos.length > 0){
+      document.getElementById('main-img').src = data.photos[0];
+      const gallery = document.getElementById('gallery-thumbs');
+      gallery.innerHTML = '';
+      data.photos.forEach(function(url, i){
+        const div = document.createElement('div');
+        div.className = 'g-thumb' + (i === 0 ? ' active' : '');
+        div.onclick = function(){ switchImg(div, url); };
+        const img = document.createElement('img');
+        img.src = url; img.alt = '';
+        div.appendChild(img);
+        gallery.appendChild(div);
       });
+    }
+
+    // Prix
+    document.getElementById('price-main').innerHTML = data.prix_jour + ' € <small>/jour</small>';
+    document.getElementById('price-main-mobile').innerHTML = data.prix_jour + ' € <small>/jour</small>';
+    if(data.prix_demi_journee){
+      const ph = document.getElementById('price-half');
+      ph.textContent = 'Demi-journée disponible à ' + data.prix_demi_journee + '€';
+      ph.style.display = 'block';
+    }
+
+    // Localisation
+    document.getElementById('meta-loc').innerHTML =
+      '<svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>' + (data.ville || '');
+
+    // Catégorie
+    document.getElementById('meta-cat').textContent = data.categorie || '';
+
+    // Tags
+    if(data.livraison && data.prix_livraison > 0){
+      const tl = document.getElementById('tag-livraison');
+      tl.innerHTML = '<svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Livraison possible (+' + data.prix_livraison + '€)';
+      tl.style.display = 'flex';
+    }
+    if(data.caution){
+      const tc = document.getElementById('tag-caution');
+      tc.innerHTML = '<svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Caution ' + data.caution + '€';
+      tc.style.display = 'flex';
+    }
+
+    // Description
+    document.getElementById('annonce-desc').textContent = data.description || 'Aucune description.';
+
+    // Livraison toggle
+    if(data.livraison){
+      document.getElementById('delivery-row').style.display = 'flex';
+      document.getElementById('deliv-price-label').textContent = 'Supplément +' + (data.prix_livraison || 0) + '€';
+    }
+
+    // Caution note
+    if(data.caution){
+      document.getElementById('caution-note').innerHTML = 'Caution de <strong>' + data.caution + '€</strong> remboursée après retour conforme';
+    }
+
+    // Zone note
+    const zn = document.getElementById('zone-note');
+    zn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>' +
+      'Zone de location : ' + (data.ville || '') + (data.rayon_km ? ' et alentours jusqu\'à ' + data.rayon_km + ' km.' : '.');
+    zn.style.display = 'flex';
+
+    // Loueur
+    const ownerNom = [u.prenom, u.nom].filter(Boolean).join(' ') || 'Loueur';
+    document.getElementById('owner-name').textContent = ownerNom;
+    document.getElementById('owner-avatar').src = u.avatar_url ||
+      'https://ui-avatars.com/api/?name=' + encodeURIComponent(ownerNom) + '&background=00A693&color=fff&size=80';
+    if(u.ville || u.created_at){
+      const dateInscrit = u.created_at ? new Date(u.created_at).toLocaleDateString('fr-FR',{month:'long',year:'numeric'}) : '';
+      document.getElementById('owner-meta').textContent =
+        (u.ville ? u.ville + ' · ' : '') + (dateInscrit ? 'Membre depuis ' + dateInscrit : '');
+    }
+
+    // Calcul initial
+    calc();
+
+    // Avis
+    const { data: avisData } = await db
+      .from('avis')
+      .select('*, utilisateurs!locataire_id(prenom, nom, avatar_url)')
+      .eq('annonce_id', id)
+      .order('created_at', {ascending: false})
+      .limit(5);
+
+    if(avisData && avisData.length > 0){
+      document.getElementById('avis-titre').textContent = 'Avis (' + avisData.length + ')';
+      const list = document.getElementById('avis-list');
+      list.innerHTML = avisData.map(function(av){
+        const loc = av.utilisateurs || {};
+        const nom = [loc.prenom, loc.nom].filter(Boolean).join(' ') || 'Locataire';
+        const stars = '★'.repeat(av.note || 5) + '☆'.repeat(5 - (av.note || 5));
+        const date = new Date(av.created_at).toLocaleDateString('fr-FR',{month:'long',year:'numeric'});
+        return '<div class="avis" style="padding:14px;background:var(--bg);border-radius:10px;">' +
+          '<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">' +
+          '<img style="width:34px;height:34px;border-radius:50%;object-fit:cover;" src="' +
+          (loc.avatar_url || 'https://ui-avatars.com/api/?name='+encodeURIComponent(nom)+'&background=E8F7F5&color=008577&size=60') + '" alt="">' +
+          '<div><div style="font-size:13px;font-weight:500;">' + nom + '</div>' +
+          '<div style="font-size:11px;color:var(--ink3);">' + date + '</div></div>' +
+          '<div style="margin-left:auto;color:#F57F17;font-size:13px;">' + stars + '</div></div>' +
+          '<p style="font-size:13px;color:var(--ink2);line-height:1.6;">' + (av.commentaire || '') + '</p></div>';
+      }).join('');
+      document.getElementById('avis-section').style.display = 'block';
+    }
   };
   document.head.appendChild(s);
 })();
