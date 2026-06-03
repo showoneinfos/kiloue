@@ -289,7 +289,7 @@
   <div class="modal">
     <div class="modal-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
     <h2>Réservation confirmée !</h2>
-    <p>Jean-Pierre M. a été notifié et vous contactera sous 2h pour confirmer les détails.</p>
+    <p id="modal-loueur-msg">Le loueur a été notifié et vous contactera sous 2h pour confirmer les détails.</p>
     <div class="modal-recap">
       <div id="recap-ligne"><span id="recap-titre-court">—</span><span id="recap-prix-total">—</span></div>
       <div><span>Commission kiloue (5%)</span><span>1,25 €</span></div>
@@ -330,7 +330,7 @@
     el.classList.add('active');
     document.getElementById('main-img').src=src;
   }
-  function hideModal(){document.getElementById('modal').style.display='none';}
+  function hideModal(){document.getElementById('modal').style.display='none'; window.location.href='profil.html';}
 
   function showModal(){
     var db;
@@ -395,6 +395,11 @@
               var spans = document.querySelectorAll('.modal-recap div span:last-child');
               if(spans[1]) spans[1].textContent = commission.toFixed(2)+' €';
               if(spans[2]) spans[2].textContent = total.toFixed(2)+' €';
+              // Mettre à jour le message loueur
+              var msgEl = document.getElementById('modal-loueur-msg');
+              if(msgEl && window._loueurPrenom){
+                msgEl.textContent = window._loueurPrenom + ' a été notifié et vous contactera sous 2h pour confirmer les détails.';
+              }
               document.getElementById('modal').style.display='flex';
             });
           });
@@ -702,7 +707,7 @@ if(/Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) || window.innerW
   <div class="modal">
     <div class="modal-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
     <h2>Réservation confirmée !</h2>
-    <p>Jean-Pierre M. a été notifié et vous contactera sous 2h pour confirmer les détails.</p>
+    <p id="modal-loueur-msg">Le loueur a été notifié et vous contactera sous 2h pour confirmer les détails.</p>
     <div class="modal-recap">
       <div id="recap-ligne"><span id="recap-titre-court">—</span><span id="recap-prix-total">—</span></div>
       <div><span>Commission kiloue (5%)</span><span>1,25 €</span></div>
@@ -744,7 +749,7 @@ if(/Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) || window.innerW
     document.getElementById('main-img').src=src;
   }
   function showModal(){document.getElementById('modal').style.display='flex';}
-  function hideModal(){document.getElementById('modal').style.display='none';}
+  function hideModal(){document.getElementById('modal').style.display='none'; window.location.href='profil.html';}
   document.getElementById('modal').addEventListener('click',function(e){if(e.target===this)hideModal();});
 </script>
 
