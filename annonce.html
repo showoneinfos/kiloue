@@ -330,92 +330,59 @@
     el.classList.add('active');
     document.getElementById('main-img').src=src;
   }
-  function hideModal(){document.getElementById('modal').style.display='none'; window.location.href='profil.html';}
+  function hideModal(){ document.getElementById('modal').style.display='none'; window.location.href='profil.html'; }
 
   function showModal(){
-    var db;
-    // Charger Supabase
-    function initAndReserve(){
-      db = supabase.createClient(
-        'https://nsvosbuxkpnoasfilyqy.supabase.co',
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5zdm9zYnV4a3Bub2FzZmlseXF5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAxODczOTcsImV4cCI6MjA5NTc2MzM5N30.pTuH4X8IQy0UJq8zUZ8t7I2WLMEUXae_8nWdtIFrpRE'
-      );
-      window._supa_annonce = db;
+    var annonceId=new URLSearchParams(window.location.search).get('id');
+    var d1val=document.getElementById('d1').value;
+    var d2val=document.getElementById('d2').value;
+    var prixJour=window.ANNONCE_PRIX||25;
+    var days=Math.max(1,Math.round((new Date(d2val)-new Date(d1val))/86400000));
+    var base=days*prixJour;
+    var delivOn=document.querySelector('.dr-tgl')&&document.querySelector('.dr-tgl').classList.contains('on');
+    var prixLiv=delivOn?(window.ANNONCE_LIVRAISON||0):0;
+    var sousTotal=base+prixLiv;
+    var commission=Math.round(sousTotal*5)/100;
+    var total=Math.round((sousTotal+commission)*100)/100;
 
-      db.auth.getUser().then(function(userRes){
-        if(!userRes.data || !userRes.data.user){
-          sessionStorage.setItem('redirect_after_login', window.location.href);
-          window.location.href = 'inscription.html';
-          return;
-        }
-        var user = userRes.data.user;
-        var d1val = document.getElementById('d1').value;
-        var d2val = document.getElementById('d2').value;
-        var annonceId = new URLSearchParams(window.location.search).get('id');
-        var prixJour = window.ANNONCE_PRIX || 25;
-        var days = Math.max(1, Math.round((new Date(d2val)-new Date(d1val))/86400000));
-        var base = days * prixJour;
-        var delivOn = document.querySelector('.dr-tgl') && document.querySelector('.dr-tgl').classList.contains('on');
-        var prixLiv = delivOn ? (window.ANNONCE_LIVRAISON || 0) : 0;
-        var sousTotal = base + prixLiv;
-        var commission = Math.round(sousTotal * 5) / 100;
-        var total = Math.round((sousTotal + commission) * 100) / 100;
-
-        // Vérifier dates disponibles
-        db.from('reservations')
-          .select('id')
-          .eq('annonce_id', annonceId)
-          .in('statut', ['en_attente', 'confirmee'])
-          .lte('date_debut', d2val)
-          .gte('date_fin', d1val)
-          .then(function(checkRes){
-            if(checkRes.data && checkRes.data.length > 0){
-              alert('Ces dates sont déjà réservées. Choisissez d\'autres dates.');
-              return;
-            }
-            // Sauvegarder
-            db.from('reservations').insert([{
-              annonce_id: annonceId,
-              loueur_id: window.ANNONCE_USER_ID,
-              locataire_id: user.id,
-              date_debut: d1val,
-              date_fin: d2val,
-              prix_total: total,
-              commission: commission,
-              livraison: delivOn || false,
-              prix_livraison: prixLiv,
-              statut: 'en_attente'
-            }]).then(function(ins){
-              if(ins.error){ alert('Erreur : ' + ins.error.message); return; }
-              // Mettre à jour le modal
-              var rt = document.getElementById('recap-titre-court');
-              var rp = document.getElementById('recap-prix-total');
-              if(rt) rt.textContent = days+'j × '+prixJour+'€';
-              if(rp) rp.textContent = base.toFixed(2)+' €';
-              var spans = document.querySelectorAll('.modal-recap div span:last-child');
-              if(spans[1]) spans[1].textContent = commission.toFixed(2)+' €';
-              if(spans[2]) spans[2].textContent = total.toFixed(2)+' €';
-              // Mettre à jour le message loueur
-              var msgEl = document.getElementById('modal-loueur-msg');
-              if(msgEl && window._loueurPrenom){
-                msgEl.textContent = window._loueurPrenom + ' a été notifié et vous contactera sous 2h pour confirmer les détails.';
-              }
-              document.getElementById('modal').style.display='flex';
-            });
-          });
+    function doReserve(db,user,loueurId){
+      db.from('reservations').select('id').eq('annonce_id',annonceId).in('statut',['en_attente','confirmee']).lte('date_debut',d2val).gte('date_fin',d1val).then(function(chk){
+        if(chk.data&&chk.data.length>0){ alert('Ces dates sont déjà réservées. Choisissez d\'autres dates.'); return; }
+        db.from('reservations').insert([{
+          annonce_id:annonceId, loueur_id:loueurId, locataire_id:user.id,
+          date_debut:d1val, date_fin:d2val, prix_total:total, commission:commission,
+          livraison:delivOn||false, prix_livraison:prixLiv, statut:'en_attente'
+        }]).then(function(ins){
+          if(ins.error){ alert('Erreur : '+ins.error.message); return; }
+          var rt=document.getElementById('recap-titre-court');
+          var rp=document.getElementById('recap-prix-total');
+          if(rt) rt.textContent=days+'j × '+prixJour+'€';
+          if(rp) rp.textContent=base.toFixed(2)+' €';
+          var spans=document.querySelectorAll('.modal-recap div span:last-child');
+          if(spans[1]) spans[1].textContent=commission.toFixed(2)+' €';
+          if(spans[2]) spans[2].textContent=total.toFixed(2)+' €';
+          document.getElementById('modal').style.display='flex';
+        });
       });
     }
 
-    if(window.supabase){ initAndReserve(); }
-    else {
-      var s=document.createElement('script');
-      s.src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js';
-      s.onload=initAndReserve;
-      document.head.appendChild(s);
+    function init(){
+      var db=supabase.createClient('https://nsvosbuxkpnoasfilyqy.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5zdm9zYnV4a3Bub2FzZmlseXF5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAxODczOTcsImV4cCI6MjA5NTc2MzM5N30.pTuH4X8IQy0UJq8zUZ8t7I2WLMEUXae_8nWdtIFrpRE');
+      db.auth.getUser().then(function(r){
+        if(!r.data||!r.data.user){ sessionStorage.setItem('redirect_after_login',window.location.href); window.location.href='inscription.html'; return; }
+        var user=r.data.user;
+        db.from('annonces').select('user_id').eq('id',annonceId).single().then(function(ar){
+          var loueurId=(ar.data&&ar.data.user_id)||null;
+          doReserve(db,user,loueurId);
+        });
+      });
     }
+
+    if(window.supabase){ init(); }
+    else { var s=document.createElement('script'); s.src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js'; s.onload=init; document.head.appendChild(s); }
   }
 
-  document.getElementById('modal').addEventListener('click',function(e){
+    document.getElementById('modal').addEventListener('click',function(e){
     if(e.target===document.getElementById('modal'))hideModal();
   });
 </script>
