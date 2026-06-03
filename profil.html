@@ -58,18 +58,24 @@
   .card{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:18px;}
   .card h2{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;}
   .card h2 a{font-size:12px;color:var(--teal);text-decoration:none;font-weight:400;}
-  .resa-item{display:flex;align-items:center;gap:12px;padding:10px;background:var(--bg);border-radius:8px;margin-bottom:8px;}
-  .resa-img{width:44px;height:44px;border-radius:8px;object-fit:cover;flex-shrink:0;}
+  .resa-item{border:1.5px solid var(--border);border-radius:12px;padding:16px;margin-bottom:12px;background:var(--white);}
+  .resa-item.wait{border-color:#FFB300;background:#FFFBF0;}
+  .resa-top{display:flex;align-items:center;gap:14px;margin-bottom:14px;}
+  .resa-img{width:64px;height:64px;border-radius:10px;object-fit:cover;flex-shrink:0;}
   .resa-info{flex:1;}
-  .resa-name{font-size:13px;font-weight:500;color:var(--ink);}
-  .resa-meta{font-size:12px;color:var(--ink2);margin-top:2px;}
-  .badge{font-size:11px;padding:3px 10px;border-radius:20px;font-weight:500;white-space:nowrap;}
-  .badge-wait{background:#FFF8E1;color:#F57F17;}
-  .badge-ok{background:var(--teal-light);color:var(--teal2);}
-  .badge-done{background:var(--bg);color:var(--ink2);border:1px solid var(--border);}
-  .resa-amt{font-size:14px;font-weight:600;color:var(--teal);white-space:nowrap;}
-  .actions{display:flex;gap:8px;margin-top:12px;padding-top:12px;border-top:1px solid var(--border);}
-  .btn-sm{padding:7px 14px;border-radius:7px;font-size:12px;font-family:var(--sans);cursor:pointer;border:1.5px solid var(--border);background:var(--white);color:var(--ink2);flex:1;}
+  .resa-name{font-size:15px;font-weight:600;color:var(--ink);}
+  .resa-meta{font-size:13px;color:var(--ink2);margin-top:4px;}
+  .resa-amt{font-size:20px;font-weight:700;color:var(--teal);white-space:nowrap;}
+  .badge{font-size:12px;padding:4px 12px;border-radius:20px;font-weight:600;white-space:nowrap;}
+  .badge-wait{background:#FFB300;color:#fff;}
+  .badge-ok{background:var(--teal);color:#fff;}
+  .badge-done{background:#E0E0E0;color:#666;}
+  .resa-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .btn-accept{padding:12px;border-radius:10px;font-size:14px;font-weight:700;font-family:var(--sans);cursor:pointer;border:none;background:#00A693;color:#fff;transition:background .15s;}
+  .btn-accept:hover{background:#008577;}
+  .btn-refuse{padding:12px;border-radius:10px;font-size:14px;font-weight:700;font-family:var(--sans);cursor:pointer;border:2px solid #E53935;background:#fff;color:#E53935;transition:all .15s;}
+  .btn-refuse:hover{background:#E53935;color:#fff;}
+  .btn-sm{padding:7px 14px;border-radius:7px;font-size:12px;font-family:var(--sans);cursor:pointer;border:1.5px solid var(--border);background:var(--white);color:var(--ink2);}
   .btn-sm:hover{border-color:var(--teal);color:var(--teal);}
   .btn-sm.danger:hover{border-color:#E53935;color:#E53935;}
   .rev-row{display:flex;justify-content:space-between;font-size:13px;padding:7px 0;border-bottom:1px solid var(--bg);}
@@ -187,10 +193,7 @@
           <div class="badge badge-done">Terminée</div>
           <div class="resa-amt">+51,30€</div>
         </div>
-        <div class="actions">
-          <button class="btn-sm" onclick="toast('✓ Réservation acceptée !')">✓ Accepter</button>
-          <button class="btn-sm danger" onclick="toast('✗ Réservation refusée')">✗ Refuser</button>
-        </div>
+        
       </div>
 
       <div style="display:flex;flex-direction:column;gap:16px;">
@@ -391,11 +394,23 @@ function badge(s){
                 var net=r.prix_total-r.commission;
                 if(r.statut==='confirmee'||r.statut==='terminee') totalRevenu+=net;
                 
-                var itemHtml='<div class="resa-item" id="resa-'+r.id+'">'+imgHtml+
-                  '<div class="resa-info"><div class="resa-name">'+(a.titre||'Annonce')+'</div>'+
-                  '<div class="resa-meta">'+locNom+' · '+fmt(r.date_debut)+' – '+fmt(r.date_fin)+(r.livraison?' · Livraison':'')+'</div></div>'+
-                  badge(r.statut)+
-                  '<div class="resa-amt">+'+net.toFixed(2)+'€</div></div>';
+                var isWait = r.statut==='en_attente';
+                var actionsHtml = isWait
+                  ? '<div class="resa-actions">'+
+                    '<button class="btn-accept" onclick="confirmerResa(\''+r.id+'\')">✓ Accepter la réservation</button>'+
+                    '<button class="btn-refuse" onclick="refuserResa(\''+r.id+'\')">✗ Refuser</button>'+
+                    '</div>'
+                  : '';
+                var itemHtml='<div class="resa-item'+(isWait?' wait':'')+'" id="resa-'+r.id+'">'+
+                  '<div class="resa-top">'+imgHtml+
+                  '<div class="resa-info">'+
+                  '<div class="resa-name">'+(a.titre||'Annonce')+'</div>'+
+                  '<div class="resa-meta">👤 '+locNom+'</div>'+
+                  '<div class="resa-meta">📅 '+fmt(r.date_debut)+' – '+fmt(r.date_fin)+(r.livraison?' · 🚚 Livraison':'')+'</div>'+
+                  '</div>'+
+                  '<div style="text-align:right;">'+badge(r.statut)+'<div class="resa-amt">+'+net.toFixed(2)+'€</div></div>'+
+                  '</div>'+
+                  actionsHtml+'</div>';
                 resaCard.insertAdjacentHTML('beforeend', itemHtml);
               });
               
@@ -407,8 +422,8 @@ function badge(s){
               var enAttente=resas.find(function(r){ return r.statut==='en_attente'; });
               var actionsDiv=resaCard.querySelector('.actions');
               if(actionsDiv && enAttente){
-                actionsDiv.querySelector('button:first-child').onclick=function(){ confirmerResa(enAttente.id, db); };
-                actionsDiv.querySelector('button:last-child').onclick=function(){ refuserResa(enAttente.id, db); };
+                // Boutons intégrés dans chaque item
+                
               } else if(actionsDiv){
                 actionsDiv.remove();
               }
@@ -429,17 +444,20 @@ function toggleAnnonce(id, actuel){
   });
 }
 
-function confirmerResa(id, db){
+function confirmerResa(id){
+  var db=supabase.createClient('https://nsvosbuxkpnoasfilyqy.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5zdm9zYnV4a3Bub2FzZmlseXF5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAxODczOTcsImV4cCI6MjA5NTc2MzM5N30.pTuH4X8IQy0UJq8zUZ8t7I2WLMEUXae_8nWdtIFrpRE');
   db.from('reservations').update({statut:'confirmee'}).eq('id',id).then(function(){
     toast('✓ Réservation confirmée !');
-    setTimeout(function(){ location.reload(); },1000);
+    setTimeout(function(){ location.reload(); },1500);
   });
 }
 
-function refuserResa(id, db){
+function refuserResa(id){
+  var db=supabase.createClient('https://nsvosbuxkpnoasfilyqy.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5zdm9zYnV4a3Bub2FzZmlseXF5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAxODczOTcsImV4cCI6MjA5NTc2MzM5N30.pTuH4X8IQy0UJq8zUZ8t7I2WLMEUXae_8nWdtIFrpRE');
+  if(!confirm('Refuser cette réservation ?')) return;
   db.from('reservations').update({statut:'annulee'}).eq('id',id).then(function(){
     toast('✗ Réservation refusée');
-    setTimeout(function(){ location.reload(); },1000);
+    setTimeout(function(){ location.reload(); },1500);
   });
 }
 
