@@ -235,25 +235,33 @@ async function payerMaintenant(){
     }
 
     if(paymentIntent.status==='succeeded'){
-      // 3. Mettre à jour la réservation dans Supabase
-      await db.from('reservations').update({
-        statut:'payee',
-        stripe_payment_id: paymentIntent.id,
-        paye_le: new Date().toISOString()
-      }).eq('id',reservationData.id);
+      // 3. Confirmer via Vercel Function (bypass RLS)
+      const confirmRes = await fetch('/api/confirm-payment', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          reservation_id: reservationData.id,
+          payment_intent_id: paymentIntent.id
+        })
+      });
+      const confirmData = await confirmRes.json();
+      if(!confirmData.success){
+        console.warn('Confirm warning:', confirmData.error);
+      }
 
-      // 4. Envoyer message automatique au loueur
-      const lou=reservationData.utilisateurs||{};
-      const msgAuto='Votre réservation vient d\'être payée ! Le locataire vous contactera bientôt.';
-      await db.from('messages').insert([{
-        expediteur_id:   (await db.auth.getUser()).data.user.id,
-        destinataire_id: reservationData.loueur_id,
-        annonce_id:      reservationData.annonce_id,
-        contenu:         msgAuto,
-        lu:              false
-      }]);
+      // 4. Message au loueur
+      try {
+        const {data:{user:u}} = await db.auth.getUser();
+        await db.from('messages').insert([{
+          expediteur_id:   u.id,
+          destinataire_id: reservationData.loueur_id,
+          annonce_id:      reservationData.annonce_id,
+          contenu:         'Votre réservation vient d\'être payée ! Contactez le locataire pour organiser la remise.',
+          lu:              false
+        }]);
+      } catch(e){ console.warn('Message error:', e); }
 
-      // 5. Afficher succès
+      // 5. Succès
       document.getElementById('payment-card').style.display='none';
       document.getElementById('success-card').style.display='block';
     }
