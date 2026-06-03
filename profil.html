@@ -107,8 +107,7 @@
   @media(max-width:900px){.sidebar{display:none;}.content{padding:16px;}.stats{grid-template-columns:1fr 1fr;}.two-col{grid-template-columns:1fr;}.topbar{padding:0 16px;}}
 </style>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="supabase-config.js"></script>
+  
 </head>
 <body>
 <div class="sidebar">
@@ -267,47 +266,183 @@
   function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.display='block';setTimeout(()=>t.style.display='none',3000);}
 </script>
 
+
 <script>
-document.addEventListener('DOMContentLoaded', async () => {
-  try {
-    const user = await getUtilisateurConnecte();
-    if (!user) { window.location.href = 'inscription.html'; return; }
+const SUPA_URL = 'https://nsvosbuxkpnoasfilyqy.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5zdm9zYnV4a3Bub2FzZmlseXF5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAxODczOTcsImV4cCI6MjA5NTc2MzM5N30.pTuH4X8IQy0UJq8zUZ8t7I2WLMEUXae_8nWdtIFrpRE';
 
-    const profil = await getMonProfil();
-    if (!profil) return;
+function fmt(date){ return new Date(date).toLocaleDateString('fr-FR',{day:'numeric',month:'short'}); }
+function badge(s){ 
+  if(s==='en_attente') return '<span class="badge badge-wait">En attente</span>';
+  if(s==='confirmee') return '<span class="badge badge-ok">Confirmée</span>';
+  return '<span class="badge badge-done">Terminée</span>';
+}
 
-    // Mettre à jour l'UI avec les vraies données
-    const nom = (profil.prenom || '') + ' ' + (profil.nom || '');
-    document.querySelector('.user-name') && (document.querySelector('.user-name').textContent = nom.trim() || 'Mon profil');
-    document.querySelector('.user-cert') && (document.querySelector('.user-cert').textContent = profil.est_certifie ? '✓ Certifié' : 'Non certifié');
+(function(){
+  var s=document.createElement('script');
+  s.src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js';
+  s.onload=function(){
+    var db=supabase.createClient(SUPA_URL,SUPA_KEY);
+    
+    db.auth.getUser().then(function(r){
+      if(!r.data||!r.data.user){ window.location.href='inscription.html'; return; }
+      var user=r.data.user;
 
-    // Initiales avatar
-    const initiales = ((profil.prenom || '?')[0] + (profil.nom || '?')[0]).toUpperCase();
-    document.querySelectorAll('.user-av').forEach(av => {
-      if (!av.src || av.src.includes('unsplash')) {
-        av.src = profil.avatar_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(nom)}&background=00A693&color=fff&size=80`;
+      // Charger le profil
+      db.from('utilisateurs').select('*').eq('id',user.id).single().then(function(pr){
+        var p=pr.data||{};
+        var nom=((p.prenom||'')+(p.nom?' '+p.nom:'')).trim()||'Mon profil';
+        
+        // Nom dans sidebar
+        var un=document.querySelector('.user-name');
+        if(un) un.textContent=nom;
+        
+        // Avatar
+        var av=document.querySelector('.user-av');
+        if(av) av.src=p.avatar_url||'https://ui-avatars.com/api/?name='+encodeURIComponent(nom)+'&background=00A693&color=fff&size=80';
+        
+        // Certification
+        var uc=document.querySelector('.user-cert');
+        if(uc) uc.textContent=p.est_certifie?'✓ Certifié':'Non certifié';
+      });
+
+      // Bouton déconnexion
+      var btnDeco=document.querySelector('.sidebar-bottom');
+      if(btnDeco){
+        var btn=document.createElement('button');
+        btn.textContent='Se déconnecter';
+        btn.style.cssText='width:100%;padding:9px;border-radius:8px;border:1.5px solid var(--border);background:transparent;font-size:13px;color:var(--ink2);cursor:pointer;margin-top:10px;font-family:inherit;';
+        btn.onclick=function(){ db.auth.signOut().then(function(){ window.location.href='index.html'; }); };
+        btnDeco.appendChild(btn);
       }
+
+      // Mes annonces
+      db.from('annonces').select('*').eq('user_id',user.id).order('created_at',{ascending:false}).then(function(ar){
+        var annonces=ar.data||[];
+        var annList=document.querySelector('.card:has(.ann-item), #ann-list');
+        
+        // Trouver le bon card (celui avec "Mes annonces")
+        var cards=document.querySelectorAll('.card');
+        var annCard=null;
+        cards.forEach(function(c){ if(c.querySelector('h2')&&c.querySelector('h2').textContent.includes('annonces')) annCard=c; });
+        
+        if(annCard){
+          // Supprimer les items fictifs
+          annCard.querySelectorAll('.ann-item').forEach(function(el){el.remove();});
+          
+          if(annonces.length===0){
+            annCard.insertAdjacentHTML('beforeend','<div style="text-align:center;padding:24px;color:#999;font-size:13px;">Aucune annonce pour le moment.<br><a href="publier.html" style="color:#00A693;font-weight:600;">Déposer votre première annonce →</a></div>');
+          } else {
+            annonces.forEach(function(a){
+              var photo=a.photos&&a.photos.length>0?a.photos[0]:'';
+              var imgHtml=photo
+                ?'<img class="ann-img" src="'+photo+'" alt="">'
+                :'<div class="ann-img" style="background:#f0f0f0;display:flex;align-items:center;justify-content:center;font-size:20px;">📦</div>';
+              annCard.insertAdjacentHTML('beforeend',
+                '<div class="ann-item">'+imgHtml+
+                '<div class="ann-info"><div class="ann-name">'+a.titre+'</div>'+
+                '<div class="ann-meta"><span><span class="'+(a.disponible?'dot-on':'dot-off')+'"></span>'+(a.disponible?'Active':'En pause')+'</span>'+
+                '<span>📍 '+a.ville+'</span><span>💶 '+a.prix_jour+'€/j</span></div></div>'+
+                '<div class="ann-acts">'+
+                '<button class="btn-sm" onclick="window.location.href=\'annonce.html?id='+a.id+'\'">Voir</button>'+
+                '<button class="btn-sm" onclick="toggleAnnonce(\''+a.id+'\','+a.disponible+')" style="'+(a.disponible?'':'color:var(--teal);border-color:var(--teal);')+'">'+(a.disponible?'Pause':'Réactiver')+'</button>'+
+                '</div></div>'
+              );
+            });
+          }
+        }
+
+        // Stats annonces
+        var statVals=document.querySelectorAll('.stat-val');
+        if(statVals[1]) statVals[1].textContent=annonces.length;
+      });
+
+      // Réservations REÇUES (en tant que loueur)
+      db.from('reservations')
+        .select('*, annonces(titre,photos,prix_jour), utilisateurs!locataire_id(prenom,nom)')
+        .eq('loueur_id',user.id)
+        .order('created_at',{ascending:false})
+        .limit(5)
+        .then(function(rr){
+          var resas=rr.data||[];
+          
+          // Trouver le card réservations
+          var cards=document.querySelectorAll('.card');
+          var resaCard=null;
+          cards.forEach(function(c){ if(c.querySelector('h2')&&c.querySelector('h2').textContent.includes('servations')) resaCard=c; });
+          
+          if(resaCard){
+            resaCard.querySelectorAll('.resa-item').forEach(function(el){el.remove();});
+            
+            if(resas.length===0){
+              resaCard.querySelector('.actions')&&resaCard.querySelector('.actions').remove();
+              resaCard.insertAdjacentHTML('beforeend','<div style="text-align:center;padding:20px;color:#999;font-size:13px;">Aucune réservation reçue.</div>');
+            } else {
+              // Calculer revenus totaux
+              var totalRevenu=0;
+              resas.forEach(function(r){
+                var a=r.annonces||{};
+                var loc=r.utilisateurs||{};
+                var photo=a.photos&&a.photos.length>0?a.photos[0]:'';
+                var imgHtml=photo
+                  ?'<img class="resa-img" src="'+photo+'" alt="">'
+                  :'<div class="resa-img" style="background:#f0f0f0;display:flex;align-items:center;justify-content:center;">📦</div>';
+                var locNom=(loc.prenom||'')+(loc.nom?' '+loc.nom[0]+'.':'');
+                var net=r.prix_total-r.commission;
+                if(r.statut==='confirmee'||r.statut==='terminee') totalRevenu+=net;
+                
+                var itemHtml='<div class="resa-item" id="resa-'+r.id+'">'+imgHtml+
+                  '<div class="resa-info"><div class="resa-name">'+(a.titre||'Annonce')+'</div>'+
+                  '<div class="resa-meta">'+locNom+' · '+fmt(r.date_debut)+' – '+fmt(r.date_fin)+(r.livraison?' · Livraison':'')+'</div></div>'+
+                  badge(r.statut)+
+                  '<div class="resa-amt">+'+net.toFixed(2)+'€</div></div>';
+                resaCard.insertAdjacentHTML('beforeend', itemHtml);
+              });
+              
+              // Mettre à jour revenus
+              var statVals=document.querySelectorAll('.stat-val');
+              if(statVals[0]) statVals[0].textContent=totalRevenu.toFixed(2)+' €';
+              
+              // Actions accepter/refuser sur la première en attente
+              var enAttente=resas.find(function(r){ return r.statut==='en_attente'; });
+              var actionsDiv=resaCard.querySelector('.actions');
+              if(actionsDiv && enAttente){
+                actionsDiv.querySelector('button:first-child').onclick=function(){ confirmerResa(enAttente.id, db); };
+                actionsDiv.querySelector('button:last-child').onclick=function(){ refuserResa(enAttente.id, db); };
+              } else if(actionsDiv){
+                actionsDiv.remove();
+              }
+            }
+          }
+        });
     });
+  };
+  document.head.appendChild(s);
+})();
 
-    // Mes annonces
-    const annonces = await getMesAnnonces();
-    const statNb = document.querySelector('.stat-val');
-    // Mettre à jour les stats si besoin
+function toggleAnnonce(id, actuel){
+  // Toggle disponible
+  var db=supabase.createClient('https://nsvosbuxkpnoasfilyqy.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5zdm9zYnV4a3Bub2FzZmlseXF5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAxODczOTcsImV4cCI6MjA5NTc2MzM5N30.pTuH4X8IQy0UJq8zUZ8t7I2WLMEUXae_8nWdtIFrpRE');
+  db.from('annonces').update({disponible:!actuel}).eq('id',id).then(function(){
+    toast(actuel?'Annonce mise en pause':'Annonce réactivée !');
+    setTimeout(function(){ location.reload(); },1000);
+  });
+}
 
-    // Bouton déconnexion
-    const btnDeco = document.createElement('button');
-    btnDeco.textContent = 'Se déconnecter';
-    btnDeco.style.cssText = 'width:100%;padding:10px;border-radius:8px;border:1.5px solid var(--border);background:transparent;font-size:13px;color:var(--ink2);cursor:pointer;margin-top:12px;font-family:var(--sans);';
-    btnDeco.onclick = async () => {
-      await deconnecterUtilisateur();
-      window.location.href = 'index.html';
-    };
-    document.querySelector('.sidebar-bottom')?.appendChild(btnDeco);
+function confirmerResa(id, db){
+  db.from('reservations').update({statut:'confirmee'}).eq('id',id).then(function(){
+    toast('✓ Réservation confirmée !');
+    setTimeout(function(){ location.reload(); },1000);
+  });
+}
 
-  } catch(e) {
-    console.error('Erreur profil:', e);
-  }
-});
+function refuserResa(id, db){
+  db.from('reservations').update({statut:'annulee'}).eq('id',id).then(function(){
+    toast('✗ Réservation refusée');
+    setTimeout(function(){ location.reload(); },1000);
+  });
+}
+
 </script>
 </body>
 </html>
