@@ -368,12 +368,41 @@ function renderAnnonce(a){
 }
 
 /* ─── ACTIONS ─── */
-function confirmerResa(id){
-  db.from('reservations').update({statut:'confirmee'}).eq('id',id).then(({error})=>{
-    if(error){ toast('Erreur : '+error.message); return; }
-    toast('✓ Réservation confirmée !');
-    setTimeout(()=>location.reload(),1500);
-  });
+async function confirmerResa(id){
+  // 1. Confirmer la réservation
+  const {error} = await db.from('reservations').update({statut:'confirmee'}).eq('id',id);
+  if(error){ toast('Erreur : '+error.message); return; }
+
+  // 2. Récupérer les infos de la réservation
+  const {data:resa} = await db
+    .from('reservations')
+    .select('locataire_id, annonce_id, annonces(titre)')
+    .eq('id',id)
+    .single();
+
+  // 3. Récupérer le téléphone du loueur (moi)
+  const {data:profil} = await db
+    .from('utilisateurs')
+    .select('prenom, telephone')
+    .eq('id', currentUser.id)
+    .single();
+
+  // 4. Envoyer un message automatique au locataire avec le numéro
+  if(resa && profil){
+    const tel = profil.telephone || 'non renseigné';
+    const titreAnnonce = resa.annonces?.titre || 'le matériel';
+    const msgAuto = 'Bonjour ! Votre réservation pour "'+titreAnnonce+'" est confirmée. Vous pouvez me contacter au '+tel+' pour organiser la remise du matériel. À bientôt !';
+    await db.from('messages').insert([{
+      expediteur_id:   currentUser.id,
+      destinataire_id: resa.locataire_id,
+      annonce_id:      resa.annonce_id,
+      contenu:         msgAuto,
+      lu:              false
+    }]);
+  }
+
+  toast('✓ Réservation confirmée ! Un message a été envoyé au locataire.');
+  setTimeout(()=>location.reload(),2000);
 }
 
 function refuserResa(id){
