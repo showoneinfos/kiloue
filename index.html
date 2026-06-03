@@ -206,7 +206,31 @@
     <a class="nav-cat" href="#qui-sommes-nous">Qui sommes-nous</a>
     <a class="nav-cat" href="#contact">Nous contacter</a>
   </div>
+  <div style="display:flex;align-items:center;gap:10px;margin-left:auto;padding-right:16px;">
+    <a href="inscription.html" id="nav-login" style="font-size:14px;font-weight:500;color:#1A1A1A;text-decoration:none;white-space:nowrap;">S'inscrire | Se connecter</a>
+    <a href="publier.html" style="padding:9px 18px;border-radius:8px;background:#00A693;color:#fff;font-size:14px;font-weight:600;text-decoration:none;white-space:nowrap;">Déposer une annonce</a>
+  </div>
 </nav>
+<script>
+(function(){
+  var s=document.createElement('script');
+  s.src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js';
+  s.onload=function(){
+    var db=supabase.createClient('https://nsvosbuxkpnoasfilyqy.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5zdm9zYnV4a3Bub2FzZmlseXF5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAxODczOTcsImV4cCI6MjA5NTc2MzM5N30.pTuH4X8IQy0UJq8zUZ8t7I2WLMEUXae_8nWdtIFrpRE');
+    db.auth.getUser().then(function(r){
+      var btn=document.getElementById('nav-login');
+      if(!btn) return;
+      if(r.data&&r.data.user){
+        btn.textContent='Mon espace';
+        btn.href='profil.html';
+        btn.style.fontWeight='600';
+        btn.style.color='#00A693';
+      }
+    });
+  };
+  document.head.appendChild(s);
+})();
+</script>
 
 <!-- TRUST -->
 <div class="trust-bar">
