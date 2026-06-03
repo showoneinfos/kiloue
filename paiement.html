@@ -235,19 +235,13 @@ async function payerMaintenant(){
     }
 
     if(paymentIntent.status==='succeeded'){
-      // 3. Confirmer via Vercel Function (bypass RLS)
-      const confirmRes = await fetch('/api/confirm-payment', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({
-          reservation_id: reservationData.id,
-          payment_intent_id: paymentIntent.id
-        })
-      });
-      const confirmData = await confirmRes.json();
-      if(!confirmData.success){
-        console.warn('Confirm warning:', confirmData.error);
-      }
+      // 3. Mettre à jour Supabase directement (RLS autorisé pour locataire)
+      const { error: updateErr } = await db.from('reservations').update({
+        statut: 'payee',
+        stripe_payment_id: paymentIntent.id,
+        paye_le: new Date().toISOString()
+      }).eq('id', reservationData.id);
+      if(updateErr) console.warn('Update error:', updateErr.message);
 
       // 4. Message au loueur
       try {
