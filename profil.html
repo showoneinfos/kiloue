@@ -398,10 +398,9 @@ function refuserResa(id){
 /* Annuler (avec commission selon le rôle) */
 async function annulerResa(id, role){
   const commission_annulation = role==='loueur' ? 10 : 8;
-  const msg=role==='loueur'
-    ?`Annuler cette réservation ? Une pénalité de ${commission_annulation}% sera appliquée.`
-    ?`Annuler votre réservation ? ${commission_annulation}% du montant seront retenus par kiloue.`
-    :`Annuler ?`;
+  const msg = role==='loueur'
+    ? 'Annuler cette réservation ? Une pénalité de '+commission_annulation+'% sera appliquée.'
+    : 'Annuler votre réservation ? '+commission_annulation+'% du montant seront retenus par kiloue.';
   if(!confirm(msg)) return;
   const {error}=await db.from('reservations').update({
     statut:'annulee',
