@@ -186,6 +186,13 @@ const db = createClient(
 const { data: { user: existingUser } } = await db.auth.getUser();
 if(existingUser) window.location.href = 'profil.html';
 
+/* ─── Mode URL : ?mode=login ou ?mode=signup ─── */
+const urlMode = new URLSearchParams(window.location.search).get('mode');
+if(urlMode === 'login'){
+  document.getElementById('s1').style.display = 'none';
+  document.getElementById('s-login').style.display = 'block';
+}
+
 /* ─── Validation formulaire ─── */
 function chk1(){
   const ok = document.getElementById('cgu').checked
