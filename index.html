@@ -11,15 +11,9 @@
 <title>kiloue.com — Location de matériel entre particuliers</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --teal:#00A693;--teal2:#008577;--teal-light:#E8F7F5;
-    --ink:#1A1A1A;--ink2:#666;--ink3:#999;
-    --border:#E5E5E5;--bg:#FAFAFA;
-    --white:#fff;
-    --sans:'Inter',system-ui,sans-serif;
-  }
+  :root{--teal:#00A693;--teal2:#008577;--teal-light:#E8F7F5;--ink:#1A1A1A;--ink2:#666;--ink3:#999;--border:#E5E5E5;--bg:#FAFAFA;--white:#fff;--sans:'Inter',system-ui,sans-serif;}
   *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
   html{scroll-behavior:smooth;}
   body{font-family:var(--sans);background:var(--white);color:var(--ink);overflow-x:hidden;}
@@ -32,56 +26,40 @@
   .nav-search svg{width:16px;height:16px;fill:none;stroke:var(--ink3);stroke-width:2;flex-shrink:0;}
   .nav-search input{border:none;outline:none;background:transparent;font-family:var(--sans);font-size:14px;color:var(--ink);flex:1;min-width:0;}
   .nav-search input::placeholder{color:var(--ink3);}
-  .nav-cats{display:flex;gap:4px;overflow-x:auto;flex:1;}
-  .nav-cats::-webkit-scrollbar{display:none;}
-  .nav-cat{padding:0 14px;height:44px;display:inline-flex;align-items:center;font-size:14px;font-weight:400;color:var(--ink2);cursor:pointer;white-space:nowrap;background:transparent;border:none;border-bottom:2px solid transparent;transition:all .15s;text-decoration:none;}
-  .nav-cat:hover{color:var(--teal);border-bottom-color:var(--teal);}
-  .cat-drop{position:relative;display:inline-flex;}
-  .nav-cats{border-top:1px solid var(--border);display:flex;align-items:center;padding:0 24px;gap:0;overflow-x:auto;height:44px;position:relative;}
-  .mega-cols{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;}
-  .mega-col-title{font-size:11px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px;padding:4px 8px;}
-  .mega-link{display:block;padding:7px 10px;border-radius:6px;font-size:13px;color:var(--ink2);cursor:pointer;text-decoration:none;transition:all .15s;}
-  .mega-link:hover{background:var(--teal-light);color:var(--teal);}
-  .mega-see-all{display:inline-flex;align-items:center;gap:5px;margin-top:14px;padding:8px 16px;border-radius:6px;background:var(--teal);color:#fff;font-size:13px;font-weight:600;cursor:pointer;border:none;font-family:var(--sans);}
-  .nav-actions{display:flex;gap:8px;align-items:center;flex-shrink:0;}
-  .btn-login{padding:8px 16px;border-radius:6px;border:1.5px solid var(--border);background:var(--white);font-size:13px;font-weight:500;font-family:var(--sans);color:var(--ink);cursor:pointer;white-space:nowrap;}
-  .btn-login:hover{border-color:var(--teal);color:var(--teal);}
-  .btn-sell{padding:8px 18px;border-radius:6px;border:none;background:var(--teal);font-size:13px;font-weight:600;font-family:var(--sans);color:var(--white);cursor:pointer;white-space:nowrap;}
+  .nav-links{display:flex;gap:4px;}
+  .nav-link{padding:0 14px;height:60px;display:inline-flex;align-items:center;font-size:14px;font-weight:400;color:var(--ink2);cursor:pointer;white-space:nowrap;background:transparent;border:none;text-decoration:none;transition:color .15s;}
+  .nav-link:hover{color:var(--ink);}
+  .nav-link.active{color:var(--teal);font-weight:500;}
+  .nav-actions{display:flex;align-items:center;gap:10px;margin-left:auto;flex-shrink:0;}
+  .btn-login{font-size:14px;font-weight:500;color:var(--ink);text-decoration:none;white-space:nowrap;}
+  .btn-login:hover{color:var(--teal);}
+  .btn-sell{padding:9px 18px;border-radius:8px;background:var(--teal);color:#fff;font-size:14px;font-weight:600;text-decoration:none;white-space:nowrap;}
   .btn-sell:hover{background:var(--teal2);}
-
-  /* BANNER */
-  .banner{position:relative;height:420px;overflow:hidden;}
-  .banner-img{width:100%;height:100%;object-fit:cover;display:block;}
-  .banner-overlay{position:absolute;inset:0;background:linear-gradient(to right,rgba(0,0,0,.55) 0%,rgba(0,0,0,.15) 60%,transparent 100%);}
-  .banner-content{position:absolute;top:50%;left:60px;transform:translateY(-50%);max-width:480px;}
-  .banner-content h1{font-size:36px;font-weight:700;color:#fff;line-height:1.2;margin-bottom:12px;letter-spacing:-0.5px;}
-  .banner-content p{font-size:15px;color:rgba(255,255,255,.85);margin-bottom:24px;line-height:1.6;}
-  .banner-btns{display:flex;gap:12px;}
-  .btn-banner-main{padding:13px 28px;border-radius:6px;background:var(--teal);color:#fff;border:none;font-size:15px;font-weight:600;font-family:var(--sans);cursor:pointer;}
-  .btn-banner-main:hover{background:var(--teal2);}
-  .btn-banner-ghost{padding:12px 24px;border-radius:6px;background:transparent;color:#fff;border:2px solid rgba(255,255,255,.7);font-size:14px;font-family:var(--sans);cursor:pointer;}
-  .btn-banner-ghost:hover{background:rgba(255,255,255,.1);}
 
   /* TRUST BAR */
   .trust-bar{background:var(--teal-light);border-bottom:1px solid #C8EEEA;padding:10px 24px;display:flex;justify-content:center;gap:40px;flex-wrap:wrap;}
   .trust-item{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--teal2);font-weight:500;}
   .trust-item svg{width:15px;height:15px;fill:none;stroke:var(--teal);stroke-width:2;}
 
+  /* CATÉGORIES — PILLS */
+  .cats-section{padding:24px 24px 16px;}
+  .cats-section-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:16px;}
+  .cats-section-title{font-size:16px;font-weight:600;color:var(--ink);}
+  .cats-section-more{font-size:13px;color:var(--teal);text-decoration:none;font-weight:500;}
+  .cats-section-more:hover{text-decoration:underline;}
+  .pills-wrap{display:flex;flex-wrap:wrap;gap:8px;}
+  .pill{padding:8px 18px;border-radius:20px;border:1.5px solid var(--border);background:var(--white);font-size:13px;font-weight:500;color:var(--ink2);cursor:pointer;text-decoration:none;transition:all .15s;white-space:nowrap;}
+  .pill:hover{border-color:var(--teal);background:var(--teal-light);color:var(--teal2);}
+  .pill.active{border-color:var(--teal);background:var(--teal-light);color:var(--teal2);}
+
   /* SECTION */
-  .section{padding:36px 24px;}
+  .section{padding:28px 24px;}
   .section-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:20px;}
-  .section-title{font-size:20px;font-weight:700;color:var(--ink);letter-spacing:-0.3px;}
+  .section-title{font-size:18px;font-weight:600;color:var(--ink);}
   .section-more{font-size:13px;color:var(--teal);text-decoration:none;font-weight:500;}
   .section-more:hover{text-decoration:underline;}
 
-  /* CATS */
-  .cats-scroll{display:flex;gap:10px;overflow-x:auto;padding-bottom:4px;}
-  .cats-scroll::-webkit-scrollbar{display:none;}
-  .cat-chip{display:inline-block;padding:0 16px;height:44px;line-height:44px;font-size:14px;font-weight:500;color:var(--ink2);text-decoration:none;white-space:nowrap;border-bottom:2px solid transparent;transition:all .15s;}
-  .cat-chip:hover{color:var(--ink);border-bottom-color:var(--ink);}
-  .cat-chip.active{color:var(--ink);border-bottom-color:var(--ink);}
-
-  /* LISTINGS GRID — style Vinted */
+  /* LISTINGS */
   .listings-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;}
   .listing-card{cursor:pointer;background:transparent;border:none;transition:transform .15s;}
   .listing-card:hover{transform:translateY(-3px);}
@@ -91,7 +69,7 @@
   .lc-img-placeholder svg{width:40px;height:40px;stroke:#ccc;fill:none;}
   .lc-fav{position:absolute;top:8px;right:8px;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.92);display:flex;align-items:center;justify-content:center;cursor:pointer;border:none;box-shadow:0 1px 4px rgba(0,0,0,.15);}
   .lc-fav svg{width:16px;height:16px;fill:none;stroke:#666;stroke-width:2;}
-  .lc-fav:hover svg{stroke:#e53935;fill:#ffeaea;}
+  .lc-fav:hover svg{stroke:#e53935;}
   .lc-body{padding:8px 2px 4px;}
   .lc-name{font-size:13px;font-weight:500;color:var(--ink);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
   .lc-meta{font-size:11px;color:var(--ink3);margin-bottom:4px;}
@@ -105,29 +83,29 @@
   /* HOW */
   .how-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
   .how-step{text-align:center;padding:28px 20px;}
-  .how-icon{width:64px;height:64px;border-radius:50%;background:var(--teal-light);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;}
-  .how-icon svg{width:28px;height:28px;fill:none;stroke:var(--teal);stroke-width:2;}
+  .how-icon{width:56px;height:56px;border-radius:50%;background:var(--teal-light);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;}
+  .how-icon svg{width:24px;height:24px;fill:none;stroke:var(--teal);stroke-width:2;}
   .how-step h3{font-size:15px;font-weight:600;color:var(--ink);margin-bottom:8px;}
   .how-step p{font-size:13px;color:var(--ink2);line-height:1.7;}
 
-  /* CERTIF BANNER */
+  /* CERTIF */
   .certif-banner{margin:0 24px 36px;border-radius:12px;overflow:hidden;display:grid;grid-template-columns:1fr 1fr;}
   .cb-left{background:var(--teal);padding:40px 36px;}
-  .cb-left h2{font-size:24px;font-weight:700;color:#fff;margin-bottom:10px;line-height:1.2;}
+  .cb-left h2{font-size:22px;font-weight:700;color:#fff;margin-bottom:10px;line-height:1.2;}
   .cb-left p{font-size:14px;color:rgba(255,255,255,.85);line-height:1.7;margin-bottom:24px;}
   .cb-steps{display:flex;flex-direction:column;gap:10px;}
   .cb-step{display:flex;align-items:center;gap:10px;font-size:13px;color:rgba(255,255,255,.9);}
-  .cb-step svg{width:16px;height:16px;fill:none;stroke:rgba(255,255,255,.7);stroke-width:2;flex-shrink:0;}
+  .cb-step svg{width:15px;height:15px;fill:none;stroke:rgba(255,255,255,.7);stroke-width:2;flex-shrink:0;}
   .cb-right{background:var(--bg);padding:40px 36px;display:flex;flex-direction:column;justify-content:center;gap:14px;}
   .cb-right h3{font-size:18px;font-weight:700;color:var(--ink);margin-bottom:4px;}
   .cb-right p{font-size:13px;color:var(--ink2);line-height:1.6;margin-bottom:8px;}
   .btn-certif{padding:12px 24px;border-radius:6px;background:var(--teal);color:#fff;border:none;font-size:14px;font-weight:600;font-family:var(--sans);cursor:pointer;width:fit-content;}
   .btn-certif:hover{background:var(--teal2);}
 
-  /* SIMULATOR */
+  /* SIMULATEUR */
   .sim-section{background:var(--bg);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:36px 24px;}
   .sim-inner{max-width:700px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;}
-  .sim-text h2{font-size:22px;font-weight:700;color:var(--ink);margin-bottom:10px;letter-spacing:-0.3px;}
+  .sim-text h2{font-size:22px;font-weight:700;color:var(--ink);margin-bottom:10px;}
   .sim-text p{font-size:14px;color:var(--ink2);line-height:1.75;}
   .sim-box{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:24px;}
   .sim-lbl{font-size:13px;color:var(--ink2);margin-bottom:6px;}
@@ -151,66 +129,40 @@
   .footer-copy{border-top:1px solid #333;padding:16px 24px;font-size:12px;color:var(--ink3);text-align:center;}
 
   @media(max-width:768px){
-    /* NAVBAR MOBILE : 2 lignes */
-    nav{padding:0;}
-    .nav-top{
-      flex-wrap:wrap;
-      padding:10px 16px 10px;
-      gap:8px;
-      height:auto;
-    }
-    .logo{flex:0 0 auto;}
-    .nav-actions{
-      display:flex !important;
-      gap:6px;
-      margin-left:auto;
-    }
-    .btn-login{font-size:12px !important;padding:7px 10px !important;}
-    .btn-sell{font-size:12px !important;padding:7px 12px !important;}
-    /* Barre de recherche : ligne 2, pleine largeur */
-    .nav-search{
-      order:3;
-      flex:0 0 100%;
-      max-width:100%;
-    }
-    .nav-cats{display:none;}
-    /* RESTE DU SITE */
-    .banner{height:260px;}
-    .banner-content{left:20px;max-width:260px;}
-    .banner-content h1{font-size:20px;}
-    .section{padding:24px 16px;}
+    nav{flex-wrap:wrap;padding:10px 16px;height:auto;gap:8px;}
+    .nav-links{display:none;}
+    .nav-search{order:3;flex:0 0 100%;max-width:100%;}
+    .section{padding:20px 16px;}
+    .cats-section{padding:16px;}
     .how-grid{grid-template-columns:1fr;}
     .certif-banner{grid-template-columns:1fr;margin:0 16px 24px;}
     .sim-inner{grid-template-columns:1fr;}
     footer{grid-template-columns:1fr 1fr;}
     .listings-grid{grid-template-columns:repeat(2,1fr);gap:10px;}
-    .trust-bar{gap:12px;padding:12px 16px;justify-content:flex-start;}
-    .all-cats-grid{grid-template-columns:repeat(2,1fr);}
+    .trust-bar{gap:12px;padding:12px 16px;}
   }
 </style>
-
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="supabase-config.js"></script>
 </head>
 <body>
 
 <nav>
-  <a class="logo" href="categories.html">kiloue<span>.com</span></a>
+  <a class="logo" href="index.html">kiloue<span>.com</span></a>
   <div class="nav-search">
     <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-    <input type="text" placeholder="Tronçonneuse, tables, remorque…">
+    <input type="text" placeholder="Tronçonneuse, tables, remorque…" onkeydown="if(event.key==='Enter')window.location.href='recherche.html?q='+this.value">
   </div>
-  <div class="nav-cats" id="nav-cats">
-    <a class="nav-cat" href="categories.html">Parcourir</a>
-    <a class="nav-cat" href="#comment-ca-marche">Comment ça marche</a>
-    <a class="nav-cat" href="#qui-sommes-nous">Qui sommes-nous</a>
-    <a class="nav-cat" href="#contact">Nous contacter</a>
+  <div class="nav-links">
+    <a class="nav-link" href="categories.html">Parcourir</a>
+    <a class="nav-link" href="#comment-ca-marche">Comment ça marche</a>
+    <a class="nav-link" href="#qui-sommes-nous">Qui sommes-nous</a>
+    <a class="nav-link" href="#contact">Nous contacter</a>
   </div>
-  <div style="display:flex;align-items:center;gap:10px;margin-left:auto;padding-right:16px;">
-    <a href="inscription.html" id="nav-login" style="font-size:14px;font-weight:500;color:#1A1A1A;text-decoration:none;white-space:nowrap;">S'inscrire | Se connecter</a>
-    <a href="publier.html" style="padding:9px 18px;border-radius:8px;background:#00A693;color:#fff;font-size:14px;font-weight:600;text-decoration:none;white-space:nowrap;">Déposer une annonce</a>
+  <div class="nav-actions">
+    <a href="inscription.html" id="nav-login" class="btn-login">S'inscrire | Se connecter</a>
+    <a href="publier.html" class="btn-sell">Déposer une annonce</a>
   </div>
 </nav>
+
 <script>
 (function(){
   var s=document.createElement('script');
@@ -227,12 +179,32 @@
         btn.style.color='#00A693';
       }
     });
+    // Charger annonces réelles
+    db.from('annonces').select('*').eq('disponible',true).order('created_at',{ascending:false}).limit(12).then(function(res){
+      if(!res.data||res.data.length===0) return;
+      var grid=document.getElementById('home-listings');
+      if(!grid) return;
+      grid.innerHTML=res.data.map(function(a){
+        var photo=a.photos&&a.photos.length>0?a.photos[0]:'';
+        var imgHtml=photo
+          ?'<img class="lc-img" src="'+photo+'" alt="'+a.titre+'" loading="lazy">'
+          :'<div class="lc-img-placeholder"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>';
+        return '<div class="listing-card" onclick="window.location.href=\'annonce.html?id='+a.id+'\'">'+
+          '<div class="lc-wrap">'+imgHtml+
+          '<button class="lc-fav" onclick="event.stopPropagation()"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button></div>'+
+          '<div class="lc-body">'+
+          '<div class="lc-name">'+a.titre+'</div>'+
+          '<div class="lc-meta">'+a.ville+'</div>'+
+          '<div class="lc-bot"><div class="lc-price">'+a.prix_jour+'€<small>/j</small></div>'+
+          (a.livraison?'<div class="lc-badge badge-livr">Livraison</div>':'')+'</div></div></div>';
+      }).join('');
+    });
   };
   document.head.appendChild(s);
 })();
 </script>
 
-<!-- TRUST -->
+<!-- TRUST BAR -->
 <div class="trust-bar">
   <div class="trust-item"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Loueurs vérifiés & certifiés</div>
   <div class="trust-item"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Paiement sécurisé</div>
@@ -241,175 +213,72 @@
   <div class="trust-item"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Commission 5% seulement</div>
 </div>
 
-<!-- CATEGORIES -->
-<div class="section">
-  <div class="section-head">
-    <div class="section-title">Parcourir par catégorie</div>
+<!-- CATÉGORIES — PILLS -->
+<div class="cats-section">
+  <div class="cats-section-head">
+    <div class="cats-section-title">Parcourir par catégorie</div>
+    <a class="cats-section-more" href="categories.html">Tout voir →</a>
   </div>
-  <div class="cats-scroll">
-    <a class="cat-chip" href="categories.html?cat=jardinage">Jardinage</a>
-    <a class="cat-chip" href="categories.html?cat=bricolage">Bricolage</a>
-    <a class="cat-chip" href="categories.html?cat=evenementiel">Évènementiel</a>
-    <a class="cat-chip" href="categories.html?cat=agricole">Agricole</a>
-    <a class="cat-chip" href="categories.html?cat=vehicules">Véhicules</a>
-    <a class="cat-chip" href="categories.html?cat=nautisme">Nautisme</a>
-    <a class="cat-chip" href="categories.html?cat=btp">BTP & Chantier</a>
-    <a class="cat-chip" href="categories.html?cat=maison">Maison</a>
-    <a class="cat-chip" href="categories.html?cat=sport">Sport & Loisirs</a>
-    <a class="cat-chip" href="categories.html?cat=hightech">High-Tech</a>
-    <a class="cat-chip" href="categories.html?cat=mode">Mode</a>
-    <a class="cat-chip" href="categories.html?cat=animaux">Animaux</a>
-    <a class="cat-chip" href="categories.html?cat=divers">Divers</a>
+  <div class="pills-wrap">
+    <a class="pill" href="categories.html?cat=vehicules">Véhicules</a>
+    <a class="pill" href="categories.html?cat=nautisme">Nautisme</a>
+    <a class="pill" href="categories.html?cat=bricolage">Bricolage & Outillage</a>
+    <a class="pill" href="categories.html?cat=jardinage">Jardinage</a>
+    <a class="pill" href="categories.html?cat=btp">BTP & Chantier</a>
+    <a class="pill" href="categories.html?cat=agricole">Matériel Agricole</a>
+    <a class="pill" href="categories.html?cat=maison">Maison & Équipement</a>
+    <a class="pill" href="categories.html?cat=evenementiel">Événementiel</a>
+    <a class="pill" href="categories.html?cat=sport">Sport & Loisirs</a>
+    <a class="pill" href="categories.html?cat=hightech">High-Tech</a>
+    <a class="pill" href="categories.html?cat=mode">Mode & Accessoires</a>
+    <a class="pill" href="categories.html?cat=animaux">Animaux</a>
+    <a class="pill" href="categories.html?cat=divers">Divers</a>
   </div>
 </div>
 
 <!-- ANNONCES -->
-<div class="section" id="annonces">
+<div class="section">
   <div class="section-head">
-    <div class="section-title">Annonces près de vous · Ajaccio</div>
+    <div class="section-title">Annonces près de vous</div>
     <a class="section-more" href="categories.html">Voir tout →</a>
   </div>
   <div class="listings-grid" id="home-listings">
-
+    <!-- Chargé depuis Supabase via le script ci-dessus -->
     <div class="listing-card" onclick="window.location.href='annonce.html'">
-      <div class="lc-wrap">
-        <img class="lc-img" src="https://images.unsplash.com/photo-1617953141905-b27fb1f9a1b0?w=400&q=80" alt="Tronçonneuse">
-        <button class="lc-fav"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
-      </div>
-      <div class="lc-body">
-        <div class="lc-name">Tronçonneuse Stihl MS 250</div>
-        <div class="lc-meta">Ajaccio · 4 km · ⭐ 4,9</div>
-        <div class="lc-bot">
-          <div class="lc-price">25 €<span style="font-size:12px;font-weight:400;color:var(--ink3);">/jour</span></div>
-          <div class="lc-badge badge-livr">Livraison</div>
-        </div>
-      </div>
+      <div class="lc-wrap"><img class="lc-img" src="https://images.unsplash.com/photo-1617953141905-b27fb1f9a1b0?w=400&q=80" alt=""><button class="lc-fav"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button></div>
+      <div class="lc-body"><div class="lc-name">Tronçonneuse Stihl MS 250</div><div class="lc-meta">Ajaccio</div><div class="lc-bot"><div class="lc-price">25€<small>/j</small></div><div class="lc-badge badge-livr">Livraison</div></div></div>
     </div>
-
     <div class="listing-card" onclick="window.location.href='annonce.html'">
-      <div class="lc-wrap">
-        <img class="lc-img" src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=400&q=80" alt="Motoculteur">
-        <button class="lc-fav"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
-      </div>
-      <div class="lc-body">
-        <div class="lc-name">Motoculteur Honda F220</div>
-        <div class="lc-meta">Ajaccio · 8 km · ⭐ 4,7</div>
-        <div class="lc-bot">
-          <div class="lc-price">35 €<span style="font-size:12px;font-weight:400;color:var(--ink3);">/jour</span></div>
-          <div class="lc-badge badge-cert">Certifié</div>
-        </div>
-      </div>
+      <div class="lc-wrap"><img class="lc-img" src="https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=400&q=80" alt=""><button class="lc-fav"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button></div>
+      <div class="lc-body"><div class="lc-name">Lot 50 chaises blanches</div><div class="lc-meta">Ajaccio</div><div class="lc-bot"><div class="lc-price">40€<small>/j</small></div><div class="lc-badge badge-livr">Livraison</div></div></div>
     </div>
-
     <div class="listing-card" onclick="window.location.href='annonce.html'">
-      <div class="lc-wrap">
-        <img class="lc-img" src="https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=400&q=80" alt="Chaises">
-        <button class="lc-fav"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
-      </div>
-      <div class="lc-body">
-        <div class="lc-name">Lot 50 chaises blanches</div>
-        <div class="lc-meta">Mezzavia · 12 km · ⭐ 5,0</div>
-        <div class="lc-bot">
-          <div class="lc-price">40 €<span style="font-size:12px;font-weight:400;color:var(--ink3);">/jour</span></div>
-          <div class="lc-badge badge-livr">+20€ livr.</div>
-        </div>
-      </div>
+      <div class="lc-wrap"><img class="lc-img" src="https://images.unsplash.com/photo-1504148455328-c376907d081c?w=400&q=80" alt=""><button class="lc-fav"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button></div>
+      <div class="lc-body"><div class="lc-name">Échafaudage roulant 4 m</div><div class="lc-meta">Ajaccio</div><div class="lc-bot"><div class="lc-price">18€<small>/j</small></div><div class="lc-badge badge-cert">Certifié</div></div></div>
     </div>
-
     <div class="listing-card" onclick="window.location.href='annonce.html'">
-      <div class="lc-wrap">
-        <img class="lc-img" src="https://images.unsplash.com/photo-1504148455328-c376907d081c?w=400&q=80" alt="Échafaudage">
-        <button class="lc-fav"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
-      </div>
-      <div class="lc-body">
-        <div class="lc-name">Échafaudage roulant 4 m</div>
-        <div class="lc-meta">Ajaccio · 16 km · ⭐ 4,6</div>
-        <div class="lc-bot">
-          <div class="lc-price">18 €<span style="font-size:12px;font-weight:400;color:var(--ink3);">/jour</span></div>
-          <div class="lc-badge badge-cert">Certifié</div>
-        </div>
-      </div>
+      <div class="lc-wrap"><img class="lc-img" src="https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=400&q=80" alt=""><button class="lc-fav"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button></div>
+      <div class="lc-body"><div class="lc-name">Remorque benne 750 kg</div><div class="lc-meta">Ajaccio</div><div class="lc-bot"><div class="lc-price">22€<small>/j</small></div><div class="lc-badge badge-cert">Sans caution</div></div></div>
     </div>
-
-    <div class="listing-card" onclick="window.location.href='annonce.html'">
-      <div class="lc-wrap">
-        <img class="lc-img" src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&q=80" alt="Chapiteau">
-        <button class="lc-fav"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
-      </div>
-      <div class="lc-body">
-        <div class="lc-name">Chapiteau 6 × 9 m</div>
-        <div class="lc-meta">Ajaccio · 6 km · ⭐ 4,8</div>
-        <div class="lc-bot">
-          <div class="lc-price">120 €<span style="font-size:12px;font-weight:400;color:var(--ink3);">/jour</span></div>
-          <div class="lc-badge badge-livr">Livraison incluse</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="listing-card" onclick="window.location.href='annonce.html'">
-      <div class="lc-wrap">
-        <img class="lc-img" src="https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=400&q=80" alt="Remorque">
-        <button class="lc-fav"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
-      </div>
-      <div class="lc-body">
-        <div class="lc-name">Remorque benne 750 kg</div>
-        <div class="lc-meta">Ajaccio · 2 km · ⭐ 4,5</div>
-        <div class="lc-bot">
-          <div class="lc-price">22 €<span style="font-size:12px;font-weight:400;color:var(--ink3);">/jour</span></div>
-          <div class="lc-badge badge-cert">Sans caution</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="listing-card" onclick="window.location.href='annonce.html'">
-      <div class="lc-wrap">
-        <img class="lc-img" src="https://images.unsplash.com/photo-1572981779307-38b8cabb2407?w=400&q=80" alt="Perceuse">
-        <button class="lc-fav"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
-      </div>
-      <div class="lc-body">
-        <div class="lc-name">Perceuse colonne Metabo</div>
-        <div class="lc-meta">Ajaccio · 5 km · ⭐ 4,9</div>
-        <div class="lc-bot">
-          <div class="lc-price">12 €<span style="font-size:12px;font-weight:400;color:var(--ink3);">/jour</span></div>
-          <div class="lc-badge badge-livr">Sur place</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="listing-card" onclick="window.location.href='annonce.html'">
-      <div class="lc-wrap">
-        <img class="lc-img" src="https://images.unsplash.com/photo-1562259949-e8e7689d7828?w=400&q=80" alt="Nettoyeur">
-        <button class="lc-fav"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
-      </div>
-      <div class="lc-body">
-        <div class="lc-name">Nettoyeur haute pression</div>
-        <div class="lc-meta">Ajaccio · 3 km · ⭐ 4,7</div>
-        <div class="lc-bot">
-          <div class="lc-price">15 €<span style="font-size:12px;font-weight:400;color:var(--ink3);">/jour</span></div>
-          <div class="lc-badge badge-cert">Certifié</div>
-        </div>
-      </div>
-    </div>
-
   </div>
 </div>
 
-<!-- HOW IT WORKS -->
-<div class="section" style="background:var(--bg);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
+<!-- COMMENT CA MARCHE -->
+<div class="section" id="comment-ca-marche" style="background:var(--bg);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
   <div class="section-head"><div class="section-title">Comment ça marche ?</div></div>
   <div class="how-grid">
     <div class="how-step">
       <div class="how-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
       <h3>Cherchez près de vous</h3>
-      <p>Entrez ce dont vous avez besoin. Chaque loueur définit sa propre zone maximale. Vous ne voyez que ce qui est accessible.</p>
+      <p>Parcourez les annonces par catégorie ou avec la recherche. Chaque loueur définit sa zone maximale.</p>
     </div>
     <div class="how-step">
       <div class="how-icon"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
       <h3>Réservez & payez en ligne</h3>
-      <p>Choisissez vos dates, confirmez la caution. Paiement 100% sécurisé. La commission de 5% est déduite automatiquement.</p>
+      <p>Choisissez vos dates, confirmez la caution. Paiement 100% sécurisé. Commission 5% déduite automatiquement.</p>
     </div>
     <div class="how-step">
-      <div class="how-icon"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+      <div class="how-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
       <h3>Louez, rendez, évaluez</h3>
       <p>Récupérez ou faites livrer le matériel. Après retour, la caution est remboursée et vous laissez un avis vérifié.</p>
     </div>
@@ -426,7 +295,7 @@
       <div class="cb-step"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Pièce d'identité + selfie</div>
       <div class="cb-step"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Justificatif de domicile</div>
       <div class="cb-step"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>RIB pour les virements</div>
-      <div class="cb-step"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>1ère évaluation ≥ 4★</div>
+      <div class="cb-step"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>1ère évaluation 4 étoiles ou plus</div>
     </div>
   </div>
   <div class="cb-right">
@@ -456,76 +325,31 @@
   </div>
 </div>
 
-<!-- FOOTER -->
-
-<!-- COMMENT CA MARCHE -->
-<div id="comment-ca-marche" style="padding:60px 24px;max-width:1200px;margin:0 auto;">
-  <h2 style="font-size:24px;font-weight:700;color:#1A1A1A;margin-bottom:8px;">Comment ça marche ?</h2>
-  <p style="font-size:15px;color:#666;margin-bottom:40px;">Louer ou proposer du matériel n'a jamais été aussi simple.</p>
-  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:32px;">
-    <div style="text-align:center;">
-      <div style="width:56px;height:56px;border-radius:50%;background:#E8F7F5;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:24px;">🔍</div>
-      <div style="font-size:16px;font-weight:600;color:#1A1A1A;margin-bottom:8px;">1. Cherchez</div>
-      <div style="font-size:14px;color:#666;line-height:1.6;">Parcourez les annonces près de chez vous par catégorie ou avec la recherche.</div>
-    </div>
-    <div style="text-align:center;">
-      <div style="width:56px;height:56px;border-radius:50%;background:#E8F7F5;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:24px;">📅</div>
-      <div style="font-size:16px;font-weight:600;color:#1A1A1A;margin-bottom:8px;">2. Réservez</div>
-      <div style="font-size:14px;color:#666;line-height:1.6;">Choisissez vos dates, payez en ligne en toute sécurité. Le loueur confirme sous 24h.</div>
-    </div>
-    <div style="text-align:center;">
-      <div style="width:56px;height:56px;border-radius:50%;background:#E8F7F5;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:24px;">🤝</div>
-      <div style="font-size:16px;font-weight:600;color:#1A1A1A;margin-bottom:8px;">3. Profitez</div>
-      <div style="font-size:14px;color:#666;line-height:1.6;">Récupérez le matériel, utilisez-le, rendez-le. La caution est libérée automatiquement.</div>
-    </div>
-    <div style="text-align:center;">
-      <div style="width:56px;height:56px;border-radius:50%;background:#E8F7F5;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:24px;">💸</div>
-      <div style="font-size:16px;font-weight:600;color:#1A1A1A;margin-bottom:8px;">4. Gagnez</div>
-      <div style="font-size:14px;color:#666;line-height:1.6;">Loueurs : recevez votre virement sous 24h après la location. Commission 5% seulement.</div>
-    </div>
-  </div>
-</div>
-
 <!-- QUI SOMMES NOUS -->
-<div id="qui-sommes-nous" style="padding:60px 24px;background:#fff;border-top:1px solid #E5E5E5;">
+<div id="qui-sommes-nous" style="padding:60px 24px;background:#fff;border-top:1px solid var(--border);">
   <div style="max-width:800px;margin:0 auto;text-align:center;">
-    <h2 style="font-size:24px;font-weight:700;color:#1A1A1A;margin-bottom:16px;">Qui sommes-nous ?</h2>
-    <p style="font-size:15px;color:#666;line-height:1.8;margin-bottom:20px;">
-      kiloue.com est une plateforme de location de matériel entre particuliers, née en Corse. Notre mission : permettre à chacun de louer ce dont il a besoin près de chez lui, au prix fixé par son voisin.
-    </p>
-    <p style="font-size:15px;color:#666;line-height:1.8;">
-      Tronçonneuses, remorques, tables de réception, matériel agricole... Tout ce qui dort dans un garage peut générer des revenus pour son propriétaire, et économiser de l'argent pour son locataire. C'est ça, l'économie du partage locale.
-    </p>
-    <div style="margin-top:32px;display:flex;justify-content:center;gap:40px;flex-wrap:wrap;">
-      <div><div style="font-size:28px;font-weight:700;color:#00A693;">5%</div><div style="font-size:13px;color:#666;">Commission seulement</div></div>
-      <div><div style="font-size:28px;font-weight:700;color:#00A693;">100%</div><div style="font-size:13px;color:#666;">Paiement sécurisé</div></div>
-      <div><div style="font-size:28px;font-weight:700;color:#00A693;">Corse</div><div style="font-size:13px;color:#666;">Né en Corse</div></div>
+    <h2 style="font-size:22px;font-weight:700;color:var(--ink);margin-bottom:16px;">Qui sommes-nous ?</h2>
+    <p style="font-size:15px;color:var(--ink2);line-height:1.8;margin-bottom:16px;">kiloue.com est une plateforme de location de matériel entre particuliers, née en Corse. Notre mission : permettre à chacun de louer ce dont il a besoin près de chez lui, au prix fixé par son voisin.</p>
+    <p style="font-size:15px;color:var(--ink2);line-height:1.8;">Tronçonneuses, remorques, tables de réception, matériel agricole... Tout ce qui dort dans un garage peut générer des revenus pour son propriétaire, et économiser de l'argent pour son locataire. C'est ça, l'économie du partage locale.</p>
+    <div style="margin-top:36px;display:flex;justify-content:center;gap:48px;flex-wrap:wrap;">
+      <div><div style="font-size:28px;font-weight:700;color:var(--teal);">5%</div><div style="font-size:13px;color:var(--ink2);">Commission seulement</div></div>
+      <div><div style="font-size:28px;font-weight:700;color:var(--teal);">100%</div><div style="font-size:13px;color:var(--ink2);">Paiement sécurisé</div></div>
+      <div><div style="font-size:28px;font-weight:700;color:var(--teal);">Corse</div><div style="font-size:13px;color:var(--ink2);">Né en Corse</div></div>
     </div>
   </div>
 </div>
 
 <!-- CONTACT -->
 <div id="contact" style="padding:60px 24px;max-width:600px;margin:0 auto;text-align:center;">
-  <h2 style="font-size:24px;font-weight:700;color:#1A1A1A;margin-bottom:8px;">Nous contacter</h2>
-  <p style="font-size:15px;color:#666;margin-bottom:32px;">Une question ? Une suggestion ? On vous répond sous 24h.</p>
-  <div style="background:#fff;border:1px solid #E5E5E5;border-radius:12px;padding:32px;text-align:left;">
-    <div style="margin-bottom:16px;">
-      <label style="display:block;font-size:12px;font-weight:600;color:#666;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">Votre nom</label>
-      <input type="text" placeholder="Jean Dupont" style="width:100%;border:1.5px solid #E5E5E5;border-radius:8px;padding:10px 14px;font-size:14px;font-family:inherit;outline:none;">
-    </div>
-    <div style="margin-bottom:16px;">
-      <label style="display:block;font-size:12px;font-weight:600;color:#666;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">Email</label>
-      <input type="email" placeholder="jean@exemple.fr" style="width:100%;border:1.5px solid #E5E5E5;border-radius:8px;padding:10px 14px;font-size:14px;font-family:inherit;outline:none;">
-    </div>
-    <div style="margin-bottom:20px;">
-      <label style="display:block;font-size:12px;font-weight:600;color:#666;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">Message</label>
-      <textarea placeholder="Votre message..." rows="4" style="width:100%;border:1.5px solid #E5E5E5;border-radius:8px;padding:10px 14px;font-size:14px;font-family:inherit;outline:none;resize:none;"></textarea>
-    </div>
-    <button onclick="alert('Message envoyé ! Nous vous répondrons sous 24h.')" style="width:100%;padding:12px;border-radius:8px;background:#00A693;color:#fff;border:none;font-size:15px;font-weight:600;font-family:inherit;cursor:pointer;">Envoyer le message</button>
+  <h2 style="font-size:22px;font-weight:700;color:var(--ink);margin-bottom:8px;">Nous contacter</h2>
+  <p style="font-size:14px;color:var(--ink2);margin-bottom:32px;">Une question ? Une suggestion ? On vous répond sous 24h.</p>
+  <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:32px;text-align:left;">
+    <div style="margin-bottom:14px;"><label style="display:block;font-size:12px;font-weight:600;color:var(--ink2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">Votre nom</label><input type="text" placeholder="Jean Dupont" style="width:100%;border:1.5px solid var(--border);border-radius:8px;padding:10px 14px;font-size:14px;font-family:inherit;outline:none;"></div>
+    <div style="margin-bottom:14px;"><label style="display:block;font-size:12px;font-weight:600;color:var(--ink2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">Email</label><input type="email" placeholder="jean@exemple.fr" style="width:100%;border:1.5px solid var(--border);border-radius:8px;padding:10px 14px;font-size:14px;font-family:inherit;outline:none;"></div>
+    <div style="margin-bottom:20px;"><label style="display:block;font-size:12px;font-weight:600;color:var(--ink2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">Message</label><textarea placeholder="Votre message..." rows="4" style="width:100%;border:1.5px solid var(--border);border-radius:8px;padding:10px 14px;font-size:14px;font-family:inherit;outline:none;resize:none;"></textarea></div>
+    <button onclick="alert('Message envoyé ! Nous vous répondrons sous 24h.')" style="width:100%;padding:12px;border-radius:8px;background:var(--teal);color:#fff;border:none;font-size:15px;font-weight:600;font-family:inherit;cursor:pointer;">Envoyer le message</button>
   </div>
-  <div style="margin-top:24px;font-size:13px;color:#999;">
-    Ou par email : <a href="mailto:contact@kiloue.com" style="color:#00A693;">contact@kiloue.com</a>
-  </div>
+  <div style="margin-top:20px;font-size:13px;color:var(--ink3);">Ou par email : <a href="mailto:contact@kiloue.com" style="color:var(--teal);">contact@kiloue.com</a></div>
 </div>
 
 <footer>
@@ -535,110 +359,40 @@
   </div>
   <div class="footer-col">
     <h4>Parcourir</h4>
-    <a href="categories.html">Jardinage & Forêt</a>
-    <a href="categories.html">Bricolage & BTP</a>
-    <a href="categories.html">Évènementiel</a>
-    <a href="categories.html">Agricole</a>
-    <a href="categories.html">Transport</a>
+    <a href="categories.html?cat=jardinage">Jardinage</a>
+    <a href="categories.html?cat=bricolage">Bricolage & BTP</a>
+    <a href="categories.html?cat=evenementiel">Événementiel</a>
+    <a href="categories.html?cat=agricole">Agricole</a>
+    <a href="categories.html?cat=vehicules">Véhicules</a>
   </div>
   <div class="footer-col">
     <h4>Loueurs</h4>
     <a href="publier.html">Déposer une annonce</a>
     <a href="inscription.html">Devenir certifié</a>
     <a href="profil.html">Mon espace</a>
-    <a href="categories.html">Comment ça marche</a>
   </div>
   <div class="footer-col">
     <h4>kiloue.com</h4>
-    <a href="categories.html">À propos</a>
-    <a href="categories.html">CGU</a>
-    <a href="categories.html">Confidentialité</a>
-    <a href="categories.html">Contact</a>
+    <a href="#qui-sommes-nous">À propos</a>
+    <a href="#contact">Contact</a>
+    <a href="#">CGU</a>
+    <a href="#">Confidentialité</a>
   </div>
 </footer>
 <div class="footer-copy">© 2025 kiloue.com — Tous droits réservés</div>
 
 <script>
-  const sl = document.getElementById('sl');
-  function upd(){
-    const v = parseInt(sl.value);
-    const c = (v*.05).toFixed(2);
-    const n = (v - c).toFixed(2);
-    document.getElementById('slbl').textContent = v + ' €';
-    document.getElementById('sa').textContent = v.toFixed(2) + ' €';
-    document.getElementById('sc').textContent = '− ' + c + ' €';
-    document.getElementById('sn').textContent = n + ' €';
-  }
-  sl.addEventListener('input', upd);
-
-  document.querySelectorAll('.nav-cat').forEach(c => c.addEventListener('click', function(){
-    document.querySelectorAll('.nav-cat').forEach(x => x.classList.remove('active'));
-    this.classList.add('active');
-  }));
-
-  document.querySelectorAll('.lc-fav').forEach(btn => btn.addEventListener('click', function(e){
-    e.stopPropagation();
-    this.querySelector('svg').style.fill = this.querySelector('svg').style.fill ? '' : 'var(--teal)';
-    this.querySelector('svg').style.stroke = this.querySelector('svg').style.stroke === 'var(--teal)' ? 'var(--ink2)' : 'var(--teal)';
-  }));
-</script>
-
-
-
-<script>
-function doSearch(){
-  const q = document.getElementById('main-search')?.value || '';
-  if(q.trim()) window.location.href = 'recherche.html?q=' + encodeURIComponent(q.trim());
-  else window.location.href = 'recherche.html';
+const sl = document.getElementById('sl');
+function upd(){
+  const v=parseInt(sl.value);
+  const c=(v*.05).toFixed(2);
+  const n=(v-c).toFixed(2);
+  document.getElementById('slbl').textContent=v+' €';
+  document.getElementById('sa').textContent=v.toFixed(2)+' €';
+  document.getElementById('sc').textContent='− '+c+' €';
+  document.getElementById('sn').textContent=n+' €';
 }
-</script>
-
-<script>
-document.addEventListener('DOMContentLoaded', async () => {
-  try {
-    // Charger les vraies annonces depuis Supabase
-    const annonces = await getAnnonces();
-
-    if (annonces && annonces.length > 0) {
-      const grid = document.querySelector('.listings-grid');
-      if (grid) {
-        grid.innerHTML = annonces.map(a => {
-          const photo = a.photos && a.photos.length > 0 ? a.photos[0] : null;
-          const imgHtml = photo 
-            ? `<img class="lc-img" src="${photo}" alt="${a.titre}" loading="lazy">`
-            : `<div class="lc-img-placeholder"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>`;
-          return `<div class="listing-card" onclick="window.location.href='annonce.html?id=${a.id}'">
-            <div class="lc-wrap">
-              ${imgHtml}
-              <button class="lc-fav" onclick="event.stopPropagation()">
-                <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-              </button>
-            </div>
-            <div class="lc-body">
-              <div class="lc-name">${a.titre}</div>
-              <div class="lc-meta">${a.ville}</div>
-              <div class="lc-bot">
-                <div class="lc-price">${a.prix_jour}€<small>/j</small></div>
-                ${a.livraison ? '<div class="lc-badge badge-livr">Livraison</div>' : ''}
-              </div>
-            </div>
-          </div>`;
-        }).join('');
-      }
-    }
-
-    // Vérifier si connecté pour adapter le nav
-    const user = await getUtilisateurConnecte();
-    if (user) {
-      const btnLogin = document.querySelector('.btn-ghost');
-      const btnSell = document.querySelector('.btn-fill');
-      if (btnLogin) { btnLogin.textContent = 'Mon compte'; btnLogin.onclick = () => window.location.href = 'profil.html'; }
-    }
-
-  } catch(e) {
-    console.error('Erreur chargement annonces:', e);
-  }
-});
+sl.addEventListener('input',upd);
 </script>
 </body>
 </html>
