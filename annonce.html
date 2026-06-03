@@ -170,7 +170,7 @@
           <div class="owner-name" id="owner-name">—</div>
           <div class="owner-meta" id="owner-meta">—</div>
         </div>
-        <button class="btn-msg">Contacter</button>
+        <button class="btn-msg" id="btn-contacter" onclick="contacter()">Contacter</button>
       </div>
     </div>
 
@@ -519,6 +519,12 @@ async function showModal(){
   };
   document.head.appendChild(s);
 })();
+
+function contacter(){
+  if(!LOUEUR_ID){ alert('Impossible de contacter le loueur.'); return; }
+  var annonceId = new URLSearchParams(window.location.search).get('id');
+  window.location.href = 'messages.html?annonce_id='+annonceId+'&avec='+LOUEUR_ID;
+}
 </script>
 </body>
 </html>
