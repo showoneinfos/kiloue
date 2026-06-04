@@ -255,7 +255,99 @@ async function payerMaintenant(){
         }]);
       } catch(e){ console.warn('Message error:', e); }
 
-      // 5. Succès
+      // 5. Email de confirmation au locataire
+      try {
+        const {data:{user:u}} = await db.auth.getUser();
+        const {data:locData} = await db.from('utilisateurs').select('email,prenom').eq('id',u.id).single();
+        const a = reservationData.annonces || {};
+        if(locData?.email){
+          await fetch('/api/send-email', {
+            method:'POST',
+            headers:{'Content-Type':'application/json'},
+            body: JSON.stringify({
+              type: 'paiement_confirme',
+              to: locData.email,
+              data: {
+                locataire_prenom: locData.prenom||'',
+                annonce_titre: a.titre||'',
+                date_debut: new Date(reservationData.date_debut).toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'}),
+                date_fin: new Date(reservationData.date_fin).toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'}),
+                montant_total: reservationData.prix_total?.toFixed(2)||''
+              }
+            })
+          });
+        }
+        // Email au loueur
+        const {data:louData} = await db.from('utilisateurs').select('email,prenom').eq('id',reservationData.loueur_id).single();
+        if(louData?.email){
+          await fetch('/api/send-email', {
+            method:'POST',
+            headers:{'Content-Type':'application/json'},
+            body: JSON.stringify({
+              type: 'nouvelle_reservation',
+              to: louData.email,
+              data: {
+                loueur_prenom: louData.prenom||'',
+                locataire_nom: locData?.prenom||'Locataire',
+                annonce_titre: a.titre||'',
+                date_debut: new Date(reservationData.date_debut).toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'}),
+                date_fin: new Date(reservationData.date_fin).toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'}),
+                montant_net: ((reservationData.prix_total||0)-(reservationData.commission||0)).toFixed(2)
+              }
+            })
+          });
+        }
+      } catch(e){ console.warn('Email error:', e); }
+
+      // 5. Emails de confirmation
+      try {
+        const {data:{user:u2}} = await db.auth.getUser();
+        const a = reservationData.annonces || {};
+        const fmtD = s => s ? new Date(s+'T00:00:00').toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'}) : '';
+
+        // Email au locataire
+        const {data:locData} = await db.from('utilisateurs').select('email,prenom').eq('id',u2.id).single();
+        if(locData?.email){
+          await fetch('/api/send-email',{
+            method:'POST',
+            headers:{'Content-Type':'application/json'},
+            body: JSON.stringify({
+              type: 'paiement_confirme',
+              to: locData.email,
+              data: {
+                locataire_prenom: locData.prenom||'',
+                annonce_titre: a.titre||'',
+                date_debut: fmtD(reservationData.date_debut),
+                date_fin: fmtD(reservationData.date_fin),
+                montant_total: reservationData.prix_total?.toFixed(2)||''
+              }
+            })
+          });
+        }
+
+        // Email au loueur
+        const {data:louData} = await db.from('utilisateurs').select('email,prenom').eq('id',reservationData.loueur_id).single();
+        if(louData?.email){
+          await fetch('/api/send-email',{
+            method:'POST',
+            headers:{'Content-Type':'application/json'},
+            body: JSON.stringify({
+              type: 'nouvelle_reservation',
+              to: louData.email,
+              data: {
+                loueur_prenom: louData.prenom||'',
+                locataire_nom: locData?.prenom||'Locataire',
+                annonce_titre: a.titre||'',
+                date_debut: fmtD(reservationData.date_debut),
+                date_fin: fmtD(reservationData.date_fin),
+                montant_net: ((reservationData.prix_total||0)-(reservationData.commission||0)).toFixed(2)
+              }
+            })
+          });
+        }
+      } catch(e){ console.warn('Email error:', e); }
+
+      // 6. Succès
       document.getElementById('payment-card').style.display='none';
       document.getElementById('success-card').style.display='block';
     }
