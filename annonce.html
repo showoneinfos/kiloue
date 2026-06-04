@@ -13,12 +13,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --teal:#00A693;--teal2:#008577;--teal-light:#E8F7F5;
-    --ink:#1A1A1A;--ink2:#666;--ink3:#999;
-    --border:#E5E5E5;--bg:#FAFAFA;--white:#fff;
-    --sans:'Inter',system-ui,sans-serif;
-  }
+  :root{--teal:#00A693;--teal2:#008577;--teal-light:#E8F7F5;--ink:#1A1A1A;--ink2:#666;--ink3:#999;--border:#E5E5E5;--bg:#FAFAFA;--white:#fff;--sans:'Inter',system-ui,sans-serif;}
   *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
   body{font-family:var(--sans);background:var(--bg);color:var(--ink);}
   nav{position:sticky;top:0;z-index:100;background:var(--white);border-bottom:1px solid var(--border);height:60px;display:flex;align-items:center;padding:0 24px;gap:16px;}
@@ -33,7 +28,7 @@
   .breadcrumb a{color:var(--ink2);text-decoration:none;}
   .breadcrumb a:hover{color:var(--teal);}
   .breadcrumb svg{width:12px;height:12px;fill:none;stroke:var(--ink3);stroke-width:2;}
-  .page-wrap{max-width:1100px;margin:0 auto;padding:28px 24px 60px;display:grid;grid-template-columns:1fr 360px;gap:40px;align-items:start;}
+  .page-wrap{max-width:1100px;margin:0 auto;padding:28px 24px 60px;display:grid;grid-template-columns:1fr 380px;gap:40px;align-items:start;}
   .gallery-main{border-radius:12px;overflow:hidden;aspect-ratio:4/3;margin-bottom:10px;background:#f0f0f0;}
   .gallery-main img{width:100%;height:100%;object-fit:cover;display:block;}
   .gallery-thumbs{display:flex;gap:8px;}
@@ -62,40 +57,67 @@
   .owner-meta{font-size:12px;color:var(--ink2);}
   .btn-msg{margin-left:auto;padding:9px 18px;border-radius:8px;border:1.5px solid var(--border);background:var(--white);font-size:13px;font-family:var(--sans);cursor:pointer;color:var(--ink2);}
   .btn-msg:hover{border-color:var(--teal);color:var(--teal);}
+
   /* BOOKING */
-  .booking{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:24px;position:sticky;top:76px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
-  .price-main{font-size:28px;font-weight:700;color:var(--ink);margin-bottom:2px;}
-  .price-main small{font-size:15px;font-weight:400;color:var(--ink2);}
-  .price-half{font-size:13px;color:var(--ink2);margin-bottom:18px;}
-  .dates{display:grid;grid-template-columns:1fr 1fr;border:1.5px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:12px;}
-  .date-f{padding:11px 14px;}
-  .date-f:first-child{border-right:1px solid var(--border);}
-  .date-f label{display:block;font-size:10px;font-weight:600;color:var(--ink);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
-  .date-f input{border:none;outline:none;font-family:var(--sans);font-size:13px;color:var(--ink);background:transparent;width:100%;cursor:pointer;}
-  .delivery-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin-bottom:14px;}
+  .booking{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:20px;position:sticky;top:76px;box-shadow:0 4px 24px rgba(0,0,0,.06);}
+  .price-main{font-size:26px;font-weight:700;color:var(--ink);margin-bottom:2px;}
+  .price-main small{font-size:14px;font-weight:400;color:var(--ink2);}
+  .price-half{font-size:13px;color:var(--ink2);margin-bottom:12px;}
+
+  /* CALENDRIER */
+  .cal-wrap{margin-bottom:14px;}
+  .cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+  .cal-nav{width:32px;height:32px;border-radius:6px;border:1.5px solid var(--border);background:var(--white);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--ink2);}
+  .cal-nav:hover{border-color:var(--teal);color:var(--teal);}
+  .cal-month{font-size:14px;font-weight:600;color:var(--ink);}
+  .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;}
+  .cal-day-name{text-align:center;font-size:10px;font-weight:600;color:var(--ink3);padding:4px 0;text-transform:uppercase;}
+  .cal-day{text-align:center;padding:7px 2px;border-radius:6px;font-size:12px;cursor:pointer;transition:all .12s;position:relative;color:var(--ink);}
+  .cal-day:hover:not(.blocked):not(.past){background:var(--teal-light);color:var(--teal);}
+  .cal-day.past{color:var(--ink3);cursor:not-allowed;}
+  .cal-day.blocked{background:#f5f5f5;color:#ccc;cursor:not-allowed;text-decoration:line-through;}
+  .cal-day.selected-start{background:var(--teal);color:#fff;border-radius:6px 0 0 6px;}
+  .cal-day.selected-end{background:var(--teal);color:#fff;border-radius:0 6px 6px 0;}
+  .cal-day.selected-start.selected-end{border-radius:6px;}
+  .cal-day.in-range{background:var(--teal-light);color:var(--teal);border-radius:0;}
+  .cal-day.empty{cursor:default;}
+  .cal-legend{display:flex;gap:12px;margin-top:8px;font-size:11px;color:var(--ink2);}
+  .cal-legend-item{display:flex;align-items:center;gap:4px;}
+  .cal-legend-dot{width:10px;height:10px;border-radius:2px;}
+
+  /* DATES SÉLECTIONNÉES */
+  .dates-selected{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
+  .date-sel-box{border:1.5px solid var(--border);border-radius:8px;padding:10px 12px;}
+  .date-sel-box.active{border-color:var(--teal);}
+  .date-sel-label{font-size:10px;font-weight:600;color:var(--ink2);text-transform:uppercase;letter-spacing:.4px;margin-bottom:3px;}
+  .date-sel-val{font-size:13px;color:var(--ink);font-weight:500;}
+  .date-sel-val.placeholder{color:var(--ink3);}
+
+  .delivery-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);margin-bottom:12px;}
   .dr-label{font-size:13px;color:var(--ink);font-weight:500;}
   .dr-sub{font-size:11px;color:var(--ink2);}
   .tgl{width:42px;height:24px;border-radius:12px;background:var(--border);position:relative;cursor:pointer;transition:background .2s;flex-shrink:0;}
   .tgl.on{background:var(--teal);}
   .tgl::after{content:'';position:absolute;width:18px;height:18px;border-radius:50%;background:#fff;top:3px;left:3px;transition:transform .2s;}
   .tgl.on::after{transform:translateX(18px);}
-  .recap{background:var(--bg);border-radius:8px;padding:14px;margin-bottom:14px;}
-  .recap-row{display:flex;justify-content:space-between;font-size:13px;padding:5px 0;}
+  .recap{background:var(--bg);border-radius:8px;padding:12px;margin-bottom:12px;}
+  .recap-row{display:flex;justify-content:space-between;font-size:13px;padding:4px 0;}
   .recap-row .l{color:var(--ink2);}
   .recap-row .v{font-weight:500;color:var(--ink);}
   .recap-row .vt{color:var(--teal);font-weight:500;}
-  .recap-divider{border:none;border-top:1px solid var(--border);margin:6px 0;}
+  .recap-divider{border:none;border-top:1px solid var(--border);margin:5px 0;}
   .recap-total{display:flex;justify-content:space-between;align-items:center;padding-top:4px;}
   .recap-total .tl{font-size:14px;font-weight:600;}
   .recap-total .tv{font-size:18px;font-weight:700;color:var(--teal);}
-  .caution-note{font-size:12px;color:var(--ink2);text-align:center;margin-bottom:12px;}
-  .btn-reserve{width:100%;padding:14px;border-radius:8px;background:var(--teal);color:#fff;border:none;font-family:var(--sans);font-size:15px;font-weight:600;cursor:pointer;margin-bottom:10px;}
+  .caution-note{font-size:12px;color:var(--ink2);text-align:center;margin-bottom:10px;}
+  .btn-reserve{width:100%;padding:13px;border-radius:8px;background:var(--teal);color:#fff;border:none;font-family:var(--sans);font-size:15px;font-weight:600;cursor:pointer;margin-bottom:8px;}
   .btn-reserve:hover{background:var(--teal2);}
   .btn-reserve:disabled{background:#ccc;cursor:not-allowed;}
   .secure{display:flex;align-items:center;justify-content:center;gap:5px;font-size:12px;color:var(--ink2);}
   .secure svg{width:13px;height:13px;fill:none;stroke:var(--teal);stroke-width:2;}
-  .zone-note{display:flex;gap:8px;padding:10px 12px;background:var(--teal-light);border-radius:8px;margin-top:12px;font-size:12px;color:var(--teal2);line-height:1.5;}
+  .zone-note{display:flex;gap:8px;padding:10px 12px;background:var(--teal-light);border-radius:8px;margin-top:10px;font-size:12px;color:var(--teal2);line-height:1.5;}
   .zone-note svg{width:14px;height:14px;fill:none;stroke:var(--teal);stroke-width:2;flex-shrink:0;margin-top:1px;}
+
   /* MODAL */
   .modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:200;align-items:center;justify-content:center;}
   .modal{background:#fff;border-radius:14px;padding:32px;max-width:400px;width:90%;text-align:center;}
@@ -107,11 +129,12 @@
   .modal-recap div{display:flex;justify-content:space-between;padding:4px 0;color:var(--ink2);}
   .modal-recap div span:last-child{font-weight:600;color:var(--ink);}
   .btn-modal{width:100%;padding:13px;border-radius:8px;background:var(--teal);color:#fff;border:none;font-family:var(--sans);font-size:14px;font-weight:600;cursor:pointer;}
+
   @media(max-width:900px){
     .page-wrap{grid-template-columns:1fr;padding:16px 16px 120px;}
-    .booking{position:fixed;bottom:0;left:0;right:0;border-radius:14px 14px 0 0;padding:16px;z-index:50;}
-    .dates,.delivery-row,.recap,.caution-note,.secure,.zone-note,.price-half{display:none;}
+    .booking{position:fixed;bottom:0;left:0;right:0;border-radius:14px 14px 0 0;padding:16px;z-index:50;max-height:60vh;overflow-y:auto;}
     .mobile-booking-row{display:flex!important;align-items:center;justify-content:space-between;}
+    .cal-wrap,.delivery-row,.recap,.caution-note,.secure,.zone-note,.price-half,.dates-selected{display:none;}
   }
   .mobile-booking-row{display:none;}
 </style>
@@ -121,7 +144,7 @@
 <nav>
   <a class="logo" href="index.html">kiloue<span>.com</span></a>
   <div class="nav-actions">
-    <button class="btn-login" onclick="window.location.href='inscription.html'">S'inscrire | Se connecter</button>
+    <button class="btn-login" onclick="window.location.href='inscription.html?mode=login'">Se connecter</button>
     <button class="btn-sell" onclick="window.location.href='publier.html'">Déposer une annonce</button>
   </div>
 </nav>
@@ -142,7 +165,6 @@
   <div>
     <div class="gallery-main"><img src="" alt="" id="main-img"></div>
     <div class="gallery-thumbs" id="gallery-thumbs"></div>
-
     <div class="title-row">
       <h1 id="annonce-titre">Chargement…</h1>
       <button class="fav-btn"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
@@ -151,17 +173,14 @@
       <div class="meta-loc" id="meta-loc"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>—</div>
       <div class="meta-cat" id="meta-cat">—</div>
     </div>
-
     <div class="tags" id="tags-container">
       <div class="tag green" id="tag-livraison" style="display:none;"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Livraison possible</div>
       <div class="tag" id="tag-caution" style="display:none;"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>—</div>
     </div>
-
     <div class="sec">
       <h2>Description</h2>
       <p id="annonce-desc">—</p>
     </div>
-
     <div class="sec">
       <h2>À propos du loueur</h2>
       <div class="owner">
@@ -173,10 +192,9 @@
         <button class="btn-msg" id="btn-contacter" onclick="contacter()">Contacter</button>
       </div>
     </div>
-
     <div class="sec" id="avis-section" style="display:none;">
       <h2 id="avis-titre">Avis</h2>
-      <div class="avis-list" id="avis-list"></div>
+      <div id="avis-list"></div>
     </div>
   </div>
 
@@ -185,34 +203,69 @@
     <div class="booking">
       <div class="mobile-booking-row">
         <div><div class="price-main" id="price-main-mobile">— € <small>/jour</small></div></div>
-        <button class="btn-reserve" style="width:auto;padding:11px 22px;font-size:14px;" onclick="showModal()">Réserver</button>
+        <button class="btn-reserve" style="width:auto;padding:11px 22px;font-size:14px;" onclick="reserver()">Réserver</button>
       </div>
+
       <div class="price-main" id="price-main">— € <small>/jour</small></div>
       <div class="price-half" id="price-half" style="display:none;"></div>
-      <div class="dates">
-        <div class="date-f"><label>Début</label><input type="date" id="d1" onchange="calc()"></div>
-        <div class="date-f"><label>Fin</label><input type="date" id="d2" onchange="calc()"></div>
+
+      <!-- CALENDRIER -->
+      <div class="cal-wrap">
+        <div class="cal-header">
+          <button class="cal-nav" onclick="calNav(-1)">‹</button>
+          <div class="cal-month" id="cal-month">—</div>
+          <button class="cal-nav" onclick="calNav(1)">›</button>
+        </div>
+        <div class="cal-grid" id="cal-grid">
+          <div class="cal-day-name">Lu</div>
+          <div class="cal-day-name">Ma</div>
+          <div class="cal-day-name">Me</div>
+          <div class="cal-day-name">Je</div>
+          <div class="cal-day-name">Ve</div>
+          <div class="cal-day-name">Sa</div>
+          <div class="cal-day-name">Di</div>
+        </div>
+        <div class="cal-legend">
+          <div class="cal-legend-item"><div class="cal-legend-dot" style="background:var(--teal);"></div>Sélectionné</div>
+          <div class="cal-legend-item"><div class="cal-legend-dot" style="background:#f5f5f5;border:1px solid #eee;"></div>Indisponible</div>
+          <div class="cal-legend-item"><div class="cal-legend-dot" style="background:var(--white);border:1px solid var(--border);"></div>Disponible</div>
+        </div>
       </div>
+
+      <!-- DATES SÉLECTIONNÉES -->
+      <div class="dates-selected">
+        <div class="date-sel-box" id="box-debut">
+          <div class="date-sel-label">Arrivée</div>
+          <div class="date-sel-val placeholder" id="val-debut">Choisir</div>
+        </div>
+        <div class="date-sel-box" id="box-fin">
+          <div class="date-sel-label">Départ</div>
+          <div class="date-sel-val placeholder" id="val-fin">Choisir</div>
+        </div>
+      </div>
+
       <div class="delivery-row" id="delivery-row" style="display:none;">
         <div><div class="dr-label">Livraison à domicile</div><div class="dr-sub" id="deliv-price-label">—</div></div>
         <div class="tgl" id="tgl" onclick="toggleDel()"></div>
       </div>
-      <div class="recap">
-        <div class="recap-row"><span class="l" id="r-days">Sélectionnez des dates</span><span class="v" id="r-price">—</span></div>
+
+      <div class="recap" id="recap-bloc" style="display:none;">
+        <div class="recap-row"><span class="l" id="r-days">—</span><span class="v" id="r-price">—</span></div>
         <div class="recap-row" id="r-del-row" style="display:none;"><span class="l">Livraison</span><span class="v" id="r-del-price">—</span></div>
         <div class="recap-row"><span class="l">Commission kiloue (5%)</span><span class="v vt" id="r-comm">—</span></div>
         <hr class="recap-divider">
         <div class="recap-total"><span class="tl">Total</span><span class="tv" id="r-total">—</span></div>
       </div>
-      <div class="caution-note" id="caution-note">—</div>
-      <button class="btn-reserve" id="btn-reserver" onclick="showModal()">Réserver maintenant</button>
+
+      <div class="caution-note" id="caution-note"></div>
+      <button class="btn-reserve" id="btn-reserver" onclick="reserver()">Sélectionnez des dates</button>
       <div class="secure"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Paiement 100% sécurisé · kiloue.com</div>
       <div class="zone-note" id="zone-note" style="display:none;"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
     </div>
   </div>
 </div>
 
-<!-- MODAL CONFIRMATION -->
+<!-- MODAL -->
 <div class="modal-bg" id="modal">
   <div class="modal">
     <div class="modal-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
@@ -230,30 +283,137 @@
 </div>
 
 <script>
-/* ─── ÉTAT GLOBAL ─── */
 const SUPA_URL = 'https://nsvosbuxkpnoasfilyqy.supabase.co';
 const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5zdm9zYnV4a3Bub2FzZmlseXF5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAxODczOTcsImV4cCI6MjA5NTc2MzM5N30.pTuH4X8IQy0UJq8zUZ8t7I2WLMEUXae_8nWdtIFrpRE';
 
-let ANNONCE = null;   // données complètes de l'annonce
-let LOUEUR_ID = null; // user_id du loueur — clé du fix
-let deliv = false;
-let db = null;
+let ANNONCE = null, LOUEUR_ID = null, deliv = false, db = null;
 
-/* ─── DATES PAR DÉFAUT ─── */
-const today = new Date();
-const tom = new Date(today);
-tom.setDate(tom.getDate() + 1);
-const fmtDate = d => d.toISOString().split('T')[0];
-document.getElementById('d1').value = fmtDate(today);
-document.getElementById('d2').value = fmtDate(tom);
+/* ── CALENDRIER ── */
+let calYear, calMonth;
+let dateStart = null, dateEnd = null;
+let selectingEnd = false;
+let blockedDates = new Set(); // Set de strings 'YYYY-MM-DD'
 
-/* ─── CALCUL PRIX ─── */
+const MOIS = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+const today = new Date(); today.setHours(0,0,0,0);
+
+function initCal(){
+  calYear = today.getFullYear();
+  calMonth = today.getMonth();
+  renderCal();
+}
+
+function calNav(dir){
+  calMonth += dir;
+  if(calMonth > 11){ calMonth=0; calYear++; }
+  if(calMonth < 0){ calMonth=11; calYear--; }
+  renderCal();
+}
+
+function fmtISO(d){ return d.toISOString().split('T')[0]; }
+function fmtFR(str){
+  if(!str) return '';
+  const d = new Date(str+'T00:00:00');
+  return d.toLocaleDateString('fr-FR',{day:'numeric',month:'short'});
+}
+
+function renderCal(){
+  document.getElementById('cal-month').textContent = MOIS[calMonth] + ' ' + calYear;
+  const grid = document.getElementById('cal-grid');
+  // Garder les en-têtes
+  const headers = Array.from(grid.querySelectorAll('.cal-day-name'));
+  grid.innerHTML = '';
+  headers.forEach(h => grid.appendChild(h));
+
+  const firstDay = new Date(calYear, calMonth, 1);
+  const lastDay = new Date(calYear, calMonth+1, 0);
+  // Lundi = 0
+  let startDow = firstDay.getDay(); // 0=dim
+  startDow = startDow === 0 ? 6 : startDow - 1;
+
+  // Cases vides avant le 1er
+  for(let i=0;i<startDow;i++){
+    const d=document.createElement('div');
+    d.className='cal-day empty';
+    grid.appendChild(d);
+  }
+
+  for(let day=1; day<=lastDay.getDate(); day++){
+    const date = new Date(calYear, calMonth, day);
+    const iso = fmtISO(date);
+    const el = document.createElement('div');
+    el.className = 'cal-day';
+    el.textContent = day;
+
+    const isPast = date < today;
+    const isBlocked = blockedDates.has(iso);
+
+    if(isPast) el.classList.add('past');
+    else if(isBlocked) el.classList.add('blocked');
+    else {
+      el.onclick = () => selectDate(iso);
+    }
+
+    // Colorier la sélection
+    if(dateStart && iso === dateStart) el.classList.add('selected-start');
+    if(dateEnd && iso === dateEnd) el.classList.add('selected-end');
+    if(dateStart && dateEnd && iso > dateStart && iso < dateEnd) el.classList.add('in-range');
+
+    grid.appendChild(el);
+  }
+}
+
+function selectDate(iso){
+  if(!dateStart || (dateStart && dateEnd)){
+    // Première sélection ou réinitialisation
+    dateStart = iso;
+    dateEnd = null;
+    selectingEnd = true;
+    document.getElementById('box-debut').classList.add('active');
+    document.getElementById('box-fin').classList.remove('active');
+  } else if(selectingEnd){
+    if(iso <= dateStart){
+      // Clic avant le début → recommencer
+      dateStart = iso;
+      dateEnd = null;
+    } else {
+      // Vérifier pas de date bloquée dans la plage
+      let hasBlocked = false;
+      const s = new Date(dateStart+'T00:00:00');
+      const e = new Date(iso+'T00:00:00');
+      for(let d=new Date(s); d<=e; d.setDate(d.getDate()+1)){
+        if(blockedDates.has(fmtISO(d))){ hasBlocked=true; break; }
+      }
+      if(hasBlocked){
+        alert('Certaines dates dans cette plage sont déjà réservées.');
+        return;
+      }
+      dateEnd = iso;
+      selectingEnd = false;
+      document.getElementById('box-fin').classList.add('active');
+    }
+  }
+
+  // Mettre à jour affichage
+  const vd = document.getElementById('val-debut');
+  const vf = document.getElementById('val-fin');
+  if(dateStart){ vd.textContent = fmtFR(dateStart); vd.classList.remove('placeholder'); }
+  else { vd.textContent = 'Choisir'; vd.classList.add('placeholder'); }
+  if(dateEnd){ vf.textContent = fmtFR(dateEnd); vf.classList.remove('placeholder'); }
+  else { vf.textContent = 'Choisir'; vf.classList.add('placeholder'); }
+
+  renderCal();
+  calc();
+}
+
+/* ── CALCUL PRIX ── */
 function calc(){
-  if(!ANNONCE) return;
-  const s = document.getElementById('d1').value;
-  const e = document.getElementById('d2').value;
-  if(!s || !e) return;
-  const days = Math.max(1, Math.round((new Date(e) - new Date(s)) / 86400000));
+  if(!ANNONCE || !dateStart || !dateEnd){
+    document.getElementById('recap-bloc').style.display='none';
+    document.getElementById('btn-reserver').textContent = dateStart ? 'Sélectionnez la date de fin' : 'Sélectionnez des dates';
+    return;
+  }
+  const days = Math.max(1, Math.round((new Date(dateEnd) - new Date(dateStart)) / 86400000));
   const pj = ANNONCE.prix_jour || 0;
   const lp = deliv ? (ANNONCE.prix_livraison || 0) : 0;
   const base = days * pj;
@@ -261,13 +421,13 @@ function calc(){
   const comm = +(sub * 0.05).toFixed(2);
   const total = +(sub + comm).toFixed(2);
 
-  document.getElementById('r-days').textContent = days + 'j × ' + pj + '€';
+  document.getElementById('r-days').textContent = days + ' jour' + (days>1?'s':'') + ' × ' + pj + '€';
   document.getElementById('r-price').textContent = base.toFixed(2) + ' €';
   document.getElementById('r-comm').textContent = '+ ' + comm.toFixed(2) + ' €';
   document.getElementById('r-total').textContent = total.toFixed(2) + ' €';
-  if(deliv){
-    document.getElementById('r-del-price').textContent = '+' + lp.toFixed(2) + ' €';
-  }
+  if(deliv) document.getElementById('r-del-price').textContent = '+' + lp.toFixed(2) + ' €';
+  document.getElementById('recap-bloc').style.display='block';
+  document.getElementById('btn-reserver').textContent = 'Réserver maintenant';
 }
 
 function toggleDel(){
@@ -283,42 +443,30 @@ function switchImg(el, src){
   document.getElementById('main-img').src = src;
 }
 
-/* ─── MODAL ─── */
+/* ── MODAL ── */
 function hideModal(){
   document.getElementById('modal').style.display = 'none';
   window.location.href = 'profil.html';
 }
-
 document.getElementById('modal').addEventListener('click', function(e){
   if(e.target === this) hideModal();
 });
 
-/* ─── RÉSERVER ─── */
-async function showModal(){
+/* ── RÉSERVER ── */
+async function reserver(){
   if(!ANNONCE){ alert('Annonce non chargée.'); return; }
+  if(!dateStart || !dateEnd){ alert('Veuillez sélectionner vos dates sur le calendrier.'); return; }
 
-  // Vérifier connexion
   const { data: { user } } = await db.auth.getUser();
   if(!user){
     sessionStorage.setItem('redirect_after_login', window.location.href);
     window.location.href = 'inscription.html';
     return;
   }
-
-  // Empêcher le propriétaire de réserver sa propre annonce
-  if(user.id === LOUEUR_ID){
-    alert('Vous ne pouvez pas réserver votre propre annonce.');
-    return;
-  }
+  if(user.id === LOUEUR_ID){ alert('Vous ne pouvez pas réserver votre propre annonce.'); return; }
 
   const annonceId = new URLSearchParams(window.location.search).get('id');
-  const d1val = document.getElementById('d1').value;
-  const d2val = document.getElementById('d2').value;
-
-  if(!d1val || !d2val){ alert('Veuillez sélectionner des dates.'); return; }
-  if(new Date(d2val) <= new Date(d1val)){ alert('La date de fin doit être après la date de début.'); return; }
-
-  const days = Math.max(1, Math.round((new Date(d2val) - new Date(d1val)) / 86400000));
+  const days = Math.max(1, Math.round((new Date(dateEnd) - new Date(dateStart)) / 86400000));
   const pj = ANNONCE.prix_jour || 0;
   const lp = deliv ? (ANNONCE.prix_livraison || 0) : 0;
   const base = days * pj;
@@ -326,45 +474,28 @@ async function showModal(){
   const comm = +(sub * 0.05).toFixed(2);
   const total = +(sub + comm).toFixed(2);
 
-  // Vérifier chevauchement dates
-  const { data: chevauchement } = await db
-    .from('reservations')
-    .select('id')
+  // Vérifier chevauchement
+  const { data: chev } = await db.from('reservations').select('id')
     .eq('annonce_id', annonceId)
-    .in('statut', ['en_attente', 'confirmee'])
-    .lte('date_debut', d2val)
-    .gte('date_fin', d1val);
+    .in('statut', ['en_attente','acceptee','payee','confirmee'])
+    .lte('date_debut', dateEnd)
+    .gte('date_fin', dateStart);
+  if(chev && chev.length > 0){ alert('Ces dates sont déjà réservées. Veuillez choisir d\'autres dates.'); return; }
 
-  if(chevauchement && chevauchement.length > 0){
-    alert('Ces dates sont déjà réservées. Veuillez choisir d\'autres dates.');
-    return;
-  }
-
-  // Désactiver le bouton pendant l'insertion
   const btn = document.getElementById('btn-reserver');
-  btn.disabled = true;
-  btn.textContent = 'Envoi en cours…';
+  btn.disabled = true; btn.textContent = 'Envoi en cours…';
 
-  // Insérer la réservation — LOUEUR_ID toujours renseigné
   const { error } = await db.from('reservations').insert([{
-    annonce_id:    annonceId,
-    loueur_id:     LOUEUR_ID,       // ← toujours l'user_id du propriétaire de l'annonce
-    locataire_id:  user.id,
-    date_debut:    d1val,
-    date_fin:      d2val,
-    prix_total:    total,
-    commission:    comm,
-    livraison:     deliv,
-    prix_livraison: lp,
-    statut:        'en_attente'
+    annonce_id: annonceId, loueur_id: LOUEUR_ID, locataire_id: user.id,
+    date_debut: dateStart, date_fin: dateEnd,
+    prix_total: total, commission: comm,
+    livraison: deliv, prix_livraison: lp, statut: 'en_attente'
   }]);
 
-  btn.disabled = false;
-  btn.textContent = 'Réserver maintenant';
-
+  btn.disabled = false; btn.textContent = 'Réserver maintenant';
   if(error){ alert('Erreur : ' + error.message); return; }
 
-  // Remplir le modal de confirmation
+  // Modal confirmation
   document.getElementById('modal-jours').textContent = days + 'j × ' + pj + '€';
   document.getElementById('modal-base').textContent = base.toFixed(2) + ' €';
   document.getElementById('modal-comm').textContent = comm.toFixed(2) + ' €';
@@ -372,7 +503,7 @@ async function showModal(){
   document.getElementById('modal').style.display = 'flex';
 }
 
-/* ─── CHARGEMENT ANNONCE ─── */
+/* ── CHARGEMENT ANNONCE ── */
 (function(){
   const id = new URLSearchParams(window.location.search).get('id');
   if(!id){ document.getElementById('annonce-titre').textContent = 'Annonce introuvable'; return; }
@@ -384,26 +515,17 @@ async function showModal(){
 
     const { data, error } = await db
       .from('annonces')
-      .select('*, utilisateurs(id, prenom, nom, ville, est_certifie, avatar_url, created_at)')
-      .eq('id', id)
-      .single();
+      .select('*, utilisateurs(id,prenom,nom,ville,est_certifie,avatar_url,created_at)')
+      .eq('id', id).single();
 
-    if(error || !data){
-      document.getElementById('annonce-titre').textContent = 'Annonce introuvable';
-      return;
-    }
+    if(error || !data){ document.getElementById('annonce-titre').textContent = 'Annonce introuvable'; return; }
 
     ANNONCE = data;
     const u = data.utilisateurs || {};
-
-    // ══ LOUEUR_ID : récupéré depuis l'annonce, jamais NULL ══
     LOUEUR_ID = data.user_id;
 
-    // Titre
     document.title = data.titre + ' — kiloue.com';
     document.getElementById('annonce-titre').textContent = data.titre;
-
-    // Breadcrumb
     document.getElementById('bc-cat').textContent = data.categorie || '—';
     document.getElementById('bc-titre').textContent = data.titre;
     if(data.sous_categorie){
@@ -418,16 +540,13 @@ async function showModal(){
       gallery.innerHTML = '';
       data.photos.forEach(function(url, i){
         const div = document.createElement('div');
-        div.className = 'g-thumb' + (i === 0 ? ' active' : '');
+        div.className = 'g-thumb' + (i===0?' active':'');
         div.onclick = function(){ switchImg(div, url); };
-        const img = document.createElement('img');
-        img.src = url; img.alt = '';
-        div.appendChild(img);
-        gallery.appendChild(div);
+        const img = document.createElement('img'); img.src=url; img.alt='';
+        div.appendChild(img); gallery.appendChild(div);
       });
     }
 
-    // Prix
     document.getElementById('price-main').innerHTML = data.prix_jour + ' € <small>/jour</small>';
     document.getElementById('price-main-mobile').innerHTML = data.prix_jour + ' € <small>/jour</small>';
     if(data.prix_demi_journee){
@@ -435,15 +554,9 @@ async function showModal(){
       ph.textContent = 'Demi-journée disponible à ' + data.prix_demi_journee + '€';
       ph.style.display = 'block';
     }
-
-    // Localisation
-    document.getElementById('meta-loc').innerHTML =
-      '<svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>' + (data.ville || '');
-
-    // Catégorie
+    document.getElementById('meta-loc').innerHTML = '<svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>' + (data.ville||'');
     document.getElementById('meta-cat').textContent = data.categorie || '';
 
-    // Tags
     if(data.livraison && data.prix_livraison > 0){
       const tl = document.getElementById('tag-livraison');
       tl.innerHTML = '<svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>Livraison possible (+' + data.prix_livraison + '€)';
@@ -454,65 +567,63 @@ async function showModal(){
       tc.innerHTML = '<svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Caution ' + data.caution + '€';
       tc.style.display = 'flex';
     }
-
-    // Description
     document.getElementById('annonce-desc').textContent = data.description || 'Aucune description.';
-
-    // Livraison toggle
     if(data.livraison){
       document.getElementById('delivery-row').style.display = 'flex';
-      document.getElementById('deliv-price-label').textContent = 'Supplément +' + (data.prix_livraison || 0) + '€';
+      document.getElementById('deliv-price-label').textContent = 'Supplément +' + (data.prix_livraison||0) + '€';
     }
-
-    // Caution note
     if(data.caution){
       document.getElementById('caution-note').innerHTML = 'Caution de <strong>' + data.caution + '€</strong> remboursée après retour conforme';
     }
-
-    // Zone note
     const zn = document.getElementById('zone-note');
-    zn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>' +
-      'Zone de location : ' + (data.ville || '') + (data.rayon_km ? ' et alentours jusqu\'à ' + data.rayon_km + ' km.' : '.');
+    zn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>Zone : ' + (data.ville||'') + (data.rayon_km?' · jusqu\'à '+data.rayon_km+' km':'') + '.';
     zn.style.display = 'flex';
 
-    // Loueur
     const ownerNom = [u.prenom, u.nom].filter(Boolean).join(' ') || 'Loueur';
     document.getElementById('owner-name').textContent = ownerNom;
-    document.getElementById('owner-avatar').src = u.avatar_url ||
-      'https://ui-avatars.com/api/?name=' + encodeURIComponent(ownerNom) + '&background=00A693&color=fff&size=80';
+    document.getElementById('owner-avatar').src = u.avatar_url || 'https://ui-avatars.com/api/?name='+encodeURIComponent(ownerNom)+'&background=00A693&color=fff&size=80';
     if(u.ville || u.created_at){
-      const dateInscrit = u.created_at ? new Date(u.created_at).toLocaleDateString('fr-FR',{month:'long',year:'numeric'}) : '';
-      document.getElementById('owner-meta').textContent =
-        (u.ville ? u.ville + ' · ' : '') + (dateInscrit ? 'Membre depuis ' + dateInscrit : '');
+      const di = u.created_at ? new Date(u.created_at).toLocaleDateString('fr-FR',{month:'long',year:'numeric'}) : '';
+      document.getElementById('owner-meta').textContent = (u.ville?u.ville+' · ':'') + (di?'Membre depuis '+di:'');
     }
 
-    // Calcul initial
-    calc();
+    // Charger les dates bloquées
+    const { data: resaData } = await db.from('reservations').select('date_debut,date_fin,statut')
+      .eq('annonce_id', id)
+      .in('statut', ['en_attente','acceptee','payee','confirmee']);
+
+    if(resaData){
+      resaData.forEach(r => {
+        const s = new Date(r.date_debut+'T00:00:00');
+        const e = new Date(r.date_fin+'T00:00:00');
+        for(let d=new Date(s); d<=e; d.setDate(d.getDate()+1)){
+          blockedDates.add(fmtISO(d));
+        }
+      });
+    }
+
+    // Init calendrier après chargement des dates
+    initCal();
 
     // Avis
-    const { data: avisData } = await db
-      .from('avis')
-      .select('*, utilisateurs!locataire_id(prenom, nom, avatar_url)')
-      .eq('annonce_id', id)
-      .order('created_at', {ascending: false})
-      .limit(5);
-
+    const { data: avisData } = await db.from('avis')
+      .select('*, utilisateurs!locataire_id(prenom,nom,avatar_url)')
+      .eq('annonce_id', id).order('created_at',{ascending:false}).limit(5);
     if(avisData && avisData.length > 0){
       document.getElementById('avis-titre').textContent = 'Avis (' + avisData.length + ')';
-      const list = document.getElementById('avis-list');
-      list.innerHTML = avisData.map(function(av){
+      document.getElementById('avis-list').innerHTML = avisData.map(av => {
         const loc = av.utilisateurs || {};
-        const nom = [loc.prenom, loc.nom].filter(Boolean).join(' ') || 'Locataire';
-        const stars = '★'.repeat(av.note || 5) + '☆'.repeat(5 - (av.note || 5));
+        const nom = [loc.prenom,loc.nom].filter(Boolean).join(' ') || 'Locataire';
+        const stars = '★'.repeat(av.note||5)+'☆'.repeat(5-(av.note||5));
         const date = new Date(av.created_at).toLocaleDateString('fr-FR',{month:'long',year:'numeric'});
-        return '<div class="avis" style="padding:14px;background:var(--bg);border-radius:10px;">' +
+        return '<div style="padding:14px;background:var(--bg);border-radius:10px;margin-bottom:10px;">' +
           '<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">' +
           '<img style="width:34px;height:34px;border-radius:50%;object-fit:cover;" src="' +
-          (loc.avatar_url || 'https://ui-avatars.com/api/?name='+encodeURIComponent(nom)+'&background=E8F7F5&color=008577&size=60') + '" alt="">' +
+          (loc.avatar_url||'https://ui-avatars.com/api/?name='+encodeURIComponent(nom)+'&background=E8F7F5&color=008577&size=60') + '" alt="">' +
           '<div><div style="font-size:13px;font-weight:500;">' + nom + '</div>' +
           '<div style="font-size:11px;color:var(--ink3);">' + date + '</div></div>' +
           '<div style="margin-left:auto;color:#F57F17;font-size:13px;">' + stars + '</div></div>' +
-          '<p style="font-size:13px;color:var(--ink2);line-height:1.6;">' + (av.commentaire || '') + '</p></div>';
+          '<p style="font-size:13px;color:var(--ink2);line-height:1.6;">' + (av.commentaire||'') + '</p></div>';
       }).join('');
       document.getElementById('avis-section').style.display = 'block';
     }
@@ -522,7 +633,7 @@ async function showModal(){
 
 function contacter(){
   if(!LOUEUR_ID){ alert('Impossible de contacter le loueur.'); return; }
-  var annonceId = new URLSearchParams(window.location.search).get('id');
+  const annonceId = new URLSearchParams(window.location.search).get('id');
   window.location.href = 'messages.html?annonce_id='+annonceId+'&avec='+LOUEUR_ID;
 }
 </script>
