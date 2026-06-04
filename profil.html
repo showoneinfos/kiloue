@@ -421,20 +421,36 @@ function refuserResa(id){
   });
 }
 
-/* Annuler (avec commission selon le rôle) */
+/* Annuler (avec remboursement partiel Stripe) */
 async function annulerResa(id, role){
   const commission_annulation = role==='loueur' ? 10 : 8;
   const msg = role==='loueur'
-    ? 'Annuler cette réservation ? Une pénalité de '+commission_annulation+'% sera appliquée.'
-    : 'Annuler votre réservation ? '+commission_annulation+'% du montant seront retenus par kiloue.';
+    ? 'Annuler cette réservation ? Une pénalité de '+commission_annulation+'% sera appliquée à votre charge.'
+    : 'Annuler votre réservation ? '+commission_annulation+'% du montant seront retenus par kiloue.com.';
   if(!confirm(msg)) return;
-  const {error}=await db.from('reservations').update({
-    statut:'annulee',
-    commission_annulation: commission_annulation
-  }).eq('id',id);
-  if(error){toast('Erreur : '+error.message);return;}
-  toast('Réservation annulée.');
-  setTimeout(()=>location.reload(),1500);
+
+  const btn = event.target;
+  if(btn) btn.disabled = true;
+
+  try {
+    const res = await fetch('/api/cancel-payment', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({reservation_id: id, role})
+    });
+    const data = await res.json();
+    if(!data.success) throw new Error(data.error || 'Erreur annulation');
+    const msg2 = data.remboursement > 0
+      ? 'Réservation annulée. Remboursement de '+data.remboursement+'€ en cours ('+data.retenu+'€ retenus par kiloue).'
+      : 'Réservation annulée.';
+    toast(msg2);
+    setTimeout(()=>location.reload(), 2000);
+  } catch(e) {
+    // Fallback : annuler directement dans Supabase si la Function échoue
+    await db.from('reservations').update({statut:'annulee',commission_annulation}).eq('id',id);
+    toast('Réservation annulée.');
+    setTimeout(()=>location.reload(), 1500);
+  }
 }
 
 /* Toggle annonce */
