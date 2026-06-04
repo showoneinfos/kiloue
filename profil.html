@@ -383,7 +383,10 @@ async function accepterResa(id, locataireId, annonceId){
 
   // Envoyer email au locataire
   try {
-    const {data:locData} = await db.from('utilisateurs').select('email,prenom').eq('id',locataireId).single();
+    const [{data:locData},{data:resaData}] = await Promise.all([
+      db.from('utilisateurs').select('email,prenom').eq('id',locataireId).single(),
+      db.from('reservations').select('date_debut,date_fin,prix_total').eq('id',id).single()
+    ]);
     if(locData?.email){
       await fetch('/api/send-email', {
         method:'POST',
@@ -394,10 +397,10 @@ async function accepterResa(id, locataireId, annonceId){
           data: {
             locataire_prenom: locData.prenom||'',
             annonce_titre: titre,
-            date_debut: '',
-            date_fin: '',
-            montant_total: '',
-            lien_paiement: 'https://kiloue.vercel.app/paiement.html?reservation_id='+id
+            date_debut: resaData?.date_debut ? new Date(resaData.date_debut+'T00:00:00').toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'}) : '',
+            date_fin: resaData?.date_fin ? new Date(resaData.date_fin+'T00:00:00').toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'}) : '',
+            montant_total: resaData?.prix_total?.toFixed(2)||'',
+            lien_paiement: 'https://kiloue.com/paiement.html?reservation_id='+id
           }
         })
       });
