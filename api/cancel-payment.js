@@ -1,5 +1,4 @@
-// api/cancel-payment.js — Vercel Function
-// Annulation avec remboursement partiel Stripe
+// api/cancel-payment.js — Sans aucun package npm, fetch natif uniquement
 
 module.exports = async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -12,88 +11,93 @@ module.exports = async (req, res) => {
     const { reservation_id, role } = req.body;
     if(!reservation_id || !role) return res.status(400).json({error: 'Paramètres manquants'});
 
-    const secret = process.env.STRIPE_SECRET_KEY;
-    const { createClient } = require('@supabase/supabase-js');
-    const supabase = createClient(
-      'https://nsvosbuxkpnoasfilyqy.supabase.co',
-      process.env.SUPABASE_SERVICE_KEY
-    );
+    const STRIPE_KEY = process.env.STRIPE_SECRET_KEY;
+    const SUPA_URL = 'https://nsvosbuxkpnoasfilyqy.supabase.co';
+    const SUPA_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY;
 
-    // Récupérer la réservation
-    const { data: resa, error: resaErr } = await supabase
-      .from('reservations').select('*').eq('id', reservation_id).single();
-    if(resaErr || !resa) return res.status(404).json({error: 'Réservation introuvable'});
+    // 1. Récupérer la réservation via Supabase REST API
+    const resaRes = await fetch(
+      `${SUPA_URL}/rest/v1/reservations?id=eq.${reservation_id}&select=*`,
+      {
+        headers: {
+          'apikey': SUPA_SERVICE_KEY,
+          'Authorization': 'Bearer ' + SUPA_SERVICE_KEY
+        }
+      }
+    );
+    const resaData = await resaRes.json();
+    const resa = resaData[0];
+    if(!resa) return res.status(404).json({error: 'Réservation introuvable'});
 
     const commission_annulation = role === 'loueur' ? 10 : 8;
     const prix_total = resa.prix_total || 0;
 
-    // Si pas de paiement Stripe — juste annuler
-    if(!resa.stripe_payment_id){
-      await supabase.from('reservations').update({statut:'annulee',commission_annulation}).eq('id',reservation_id);
-      return res.status(200).json({success:true, remboursement:0, retenu:0});
+    // 2. Si pas de paiement Stripe — juste annuler dans Supabase
+    if(!resa.stripe_payment_id) {
+      await fetch(`${SUPA_URL}/rest/v1/reservations?id=eq.${reservation_id}`, {
+        method: 'PATCH',
+        headers: {
+          'apikey': SUPA_SERVICE_KEY,
+          'Authorization': 'Bearer ' + SUPA_SERVICE_KEY,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ statut: 'annulee', commission_annulation })
+      });
+      return res.status(200).json({ success: true, remboursement: 0, retenu: 0 });
     }
 
-    // Montant à rembourser en centimes
-    // Locataire annule → 92% remboursé, 8% retenus
-    // Loueur annule → 100% remboursé au locataire
+    // 3. Calculer le remboursement
     const taux = role === 'locataire' ? 0.92 : 1.0;
-    const montant_rembourse_centimes = Math.round(prix_total * taux * 100);
+    const montant_centimes = Math.round(prix_total * taux * 100);
     const montant_retenu = +(prix_total * (commission_annulation / 100)).toFixed(2);
 
-    // Récupérer la liste des charges liées au PaymentIntent
+    // 4. Récupérer la charge Stripe
     const chargesRes = await fetch(
       `https://api.stripe.com/v1/charges?payment_intent=${resa.stripe_payment_id}&limit=1`,
-      { headers: { 'Authorization': 'Bearer ' + secret } }
+      { headers: { 'Authorization': 'Bearer ' + STRIPE_KEY } }
     );
     const chargesData = await chargesRes.json();
-    console.log('Charges:', JSON.stringify(chargesData));
-
-    if(!chargesData.data || !chargesData.data.length){
-      // Pas de charge trouvée — annuler sans remboursement Stripe
-      await supabase.from('reservations').update({statut:'annulee',commission_annulation}).eq('id',reservation_id);
-      return res.status(200).json({success:true, remboursement:0, retenu:0, note:'Aucune charge Stripe trouvée'});
+    
+    let refundResult = null;
+    if(chargesData.data && chargesData.data.length > 0) {
+      const chargeId = chargesData.data[0].id;
+      
+      // 5. Remboursement partiel Stripe
+      const refundRes = await fetch('https://api.stripe.com/v1/refunds', {
+        method: 'POST',
+        headers: {
+          'Authorization': 'Bearer ' + STRIPE_KEY,
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: new URLSearchParams({
+          charge: chargeId,
+          amount: montant_centimes.toString()
+        }).toString()
+      });
+      refundResult = await refundRes.json();
     }
 
-    const chargeId = chargesData.data[0].id;
-    console.log('Charge ID:', chargeId, 'Montant à rembourser:', montant_rembourse_centimes);
-
-    // Faire le remboursement partiel
-    const refundParams = new URLSearchParams({
-      charge: chargeId,
-      amount: montant_rembourse_centimes.toString()
-    });
-
-    const refundRes = await fetch('https://api.stripe.com/v1/refunds', {
-      method: 'POST',
+    // 6. Mettre à jour Supabase
+    await fetch(`${SUPA_URL}/rest/v1/reservations?id=eq.${reservation_id}`, {
+      method: 'PATCH',
       headers: {
-        'Authorization': 'Bearer ' + secret,
-        'Content-Type': 'application/x-www-form-urlencoded'
+        'apikey': SUPA_SERVICE_KEY,
+        'Authorization': 'Bearer ' + SUPA_SERVICE_KEY,
+        'Content-Type': 'application/json'
       },
-      body: refundParams.toString()
+      body: JSON.stringify({ statut: 'annulee', commission_annulation })
     });
-    const refund = await refundRes.json();
-    console.log('Refund result:', JSON.stringify(refund));
-
-    if(refund.error){
-      console.error('Refund error:', refund.error);
-      // Continuer quand même l'annulation Supabase
-    }
-
-    // Mettre à jour Supabase
-    await supabase.from('reservations').update({
-      statut: 'annulee',
-      commission_annulation
-    }).eq('id', reservation_id);
 
     return res.status(200).json({
       success: true,
-      remboursement: (montant_rembourse_centimes / 100).toFixed(2),
+      remboursement: (montant_centimes / 100).toFixed(2),
       retenu: montant_retenu.toFixed(2),
-      refund_id: refund.id || null
+      refund_id: refundResult?.id || null,
+      refund_error: refundResult?.error?.message || null
     });
 
-  } catch(err){
-    console.error('Cancel error:', err);
-    return res.status(500).json({error: err.message});
+  } catch(err) {
+    console.error('Cancel error:', err.message);
+    return res.status(500).json({ error: err.message });
   }
 };
