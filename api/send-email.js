@@ -56,11 +56,10 @@ module.exports = async (req, res) => {
       subject = '📅 Nouvelle demande de réservation — kiloue.com';
       html = `<div style="${baseStyle}">
         <div style="${headerStyle}">
-          <img src="https://kiloue.vercel.app/favicon.ico" width="32" style="margin-bottom:8px;"><br>
           <span style="color:#fff;font-size:20px;font-weight:700;">kiloue.com</span>
         </div>
         <div style="${bodyStyle}">
-          <h2 style="color:#1A1A1A;margin-bottom:8px;">Nouvelle demande de réservation !</h2>
+          <h2 style="color:#1A1A1A;margin-bottom:8px;">Paiement reçu — Réservation confirmée !</h2>
           <p style="color:#666;line-height:1.7;margin-bottom:16px;">
             Bonjour ${data.loueur_prenom || 'Loueur'},<br><br>
             <strong>${data.locataire_nom || 'Un locataire'}</strong> souhaite réserver votre annonce :
@@ -73,9 +72,14 @@ module.exports = async (req, res) => {
           <p style="color:#666;font-size:14px;margin-bottom:20px;">
             Connectez-vous à votre espace pour accepter ou refuser cette demande.
           </p>
-          <a href="https://kiloue.vercel.app/profil.html" style="${btnStyle}">
-            Voir la demande →
+          <a href="https://kiloue.com/profil.html" style="${btnStyle}">
+            Voir mes réservations →
           </a>
+          <div style="background:#FFF8E1;border:1px solid #FFE082;border-radius:8px;padding:12px 14px;margin-top:16px;font-size:12px;color:#795548;line-height:1.7;">
+            <strong style="display:block;margin-bottom:4px;color:#5D4037;">Conditions d'annulation</strong>
+            En cas d'annulation de votre part après acceptation, une <strong>pénalité de 10%</strong> du montant total sera retenue par kiloue.com.<br>
+            En cas d'annulation par le locataire, <strong>8% lui seront retenus</strong>.
+          </div>
         </div>
         <div style="${footerStyle}">
           kiloue.com · Location de matériel entre particuliers<br>
@@ -137,7 +141,12 @@ module.exports = async (req, res) => {
             <div style="color:#666;font-size:14px;">Du <strong>${data.date_debut || ''}</strong> au <strong>${data.date_fin || ''}</strong></div>
           </div>
           <p style="color:#666;font-size:14px;">Le loueur va vous contacter pour organiser la remise du matériel.</p>
-          <a href="https://kiloue.vercel.app/profil.html" style="${btnStyle}">
+          <div style="background:#FFF8E1;border:1px solid #FFE082;border-radius:8px;padding:12px 14px;margin-top:16px;font-size:12px;color:#795548;line-height:1.7;">
+            <strong style="display:block;margin-bottom:4px;color:#5D4037;">Conditions d'annulation</strong>
+            En cas d'annulation de votre part, <strong>8% du montant total seront retenus</strong> par kiloue.com à titre de frais d'annulation.<br>
+            En cas d'annulation par le loueur, une pénalité de <strong>10%</strong> sera à sa charge.
+          </div>
+          <a href="https://kiloue.com/profil.html" style="${btnStyle}">
             Voir mes locations →
           </a>
         </div>
