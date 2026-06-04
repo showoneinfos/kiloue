@@ -1274,11 +1274,27 @@ function refuserResaMobile(id){
 
 async function annulerResaMobile(id, role){
   const comm = role==='loueur' ? 10 : 8;
-  if(!confirm(role==='loueur' ? 'Annuler ? Pénalité 10%.' : 'Annuler ? 8% retenus.')) return;
-  const {error} = await db.from('reservations').update({statut:'annulee',commission_annulation:comm}).eq('id',id);
-  if(error){ toast('Erreur'); return; }
-  toast('Réservation annulée.');
-  setTimeout(() => showSection(role==='loueur'?'reservations_recues':'mes_locations'), 1500);
+  if(!confirm(role==='loueur' ? 'Annuler ? Pénalité de 10% appliquée.' : 'Annuler ? '+comm+'% du montant retenus par kiloue.')) return;
+  try {
+    const res = await fetch('/api/cancel-payment', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({reservation_id: id, role})
+    });
+    const data = await res.json();
+    if(data.success){
+      const msg = data.remboursement > 0
+        ? 'Annulée. Remboursement '+data.remboursement+'€ ('+data.retenu+'€ retenus).'
+        : 'Réservation annulée.';
+      toast(msg);
+    } else {
+      throw new Error(data.error);
+    }
+  } catch(e) {
+    await db.from('reservations').update({statut:'annulee',commission_annulation:comm}).eq('id',id);
+    toast('Réservation annulée.');
+  }
+  setTimeout(() => showSection(role==='loueur'?'reservations_recues':'mes_locations'), 2000);
 }
 
 /* ─── AUTH ─── */
