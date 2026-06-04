@@ -313,7 +313,8 @@ function calNav(dir){
 function fmtISO(d){ return d.toISOString().split('T')[0]; }
 function fmtFR(str){
   if(!str) return '';
-  const d = new Date(str+'T00:00:00');
+  const parts = str.split('-');
+  const d = new Date(parseInt(parts[0]), parseInt(parts[1])-1, parseInt(parts[2]));
   return d.toLocaleDateString('fr-FR',{day:'numeric',month:'short'});
 }
 
