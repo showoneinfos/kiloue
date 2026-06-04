@@ -369,7 +369,25 @@ function renderCal(){
   }
 }
 
+function resetDates(){
+  dateStart = null; dateEnd = null; selectingEnd = false;
+  document.getElementById('box-debut').classList.remove('active');
+  document.getElementById('box-fin').classList.remove('active');
+  document.getElementById('val-debut').textContent = 'Choisir';
+  document.getElementById('val-debut').classList.add('placeholder');
+  document.getElementById('val-fin').textContent = 'Choisir';
+  document.getElementById('val-fin').classList.add('placeholder');
+  document.getElementById('recap-bloc').style.display='none';
+  document.getElementById('btn-reserver').textContent = 'Sélectionnez des dates';
+  renderCal();
+}
+
 function selectDate(iso){
+  // Reclic sur début → annuler
+  if(dateStart && !dateEnd && iso === dateStart){
+    resetDates();
+    return;
+  }
   if(!dateStart || (dateStart && dateEnd)){
     // Première sélection ou réinitialisation
     dateStart = iso;
