@@ -413,7 +413,7 @@ function calc(){
     document.getElementById('btn-reserver').textContent = dateStart ? 'Sélectionnez la date de fin' : 'Sélectionnez des dates';
     return;
   }
-  const days = Math.max(1, Math.round((new Date(dateEnd) - new Date(dateStart)) / 86400000));
+  const days = Math.max(1, Math.round((new Date(dateEnd) - new Date(dateStart)) / 86400000) + 1);
   const pj = ANNONCE.prix_jour || 0;
   const lp = deliv ? (ANNONCE.prix_livraison || 0) : 0;
   const base = days * pj;
@@ -466,7 +466,7 @@ async function reserver(){
   if(user.id === LOUEUR_ID){ alert('Vous ne pouvez pas réserver votre propre annonce.'); return; }
 
   const annonceId = new URLSearchParams(window.location.search).get('id');
-  const days = Math.max(1, Math.round((new Date(dateEnd) - new Date(dateStart)) / 86400000));
+  const days = Math.max(1, Math.round((new Date(dateEnd) - new Date(dateStart)) / 86400000) + 1);
   const pj = ANNONCE.prix_jour || 0;
   const lp = deliv ? (ANNONCE.prix_livraison || 0) : 0;
   const base = days * pj;
