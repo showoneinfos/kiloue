@@ -381,7 +381,30 @@ async function accepterResa(id, locataireId, annonceId){
     lu:              false
   }]);
 
-  toast('✓ Réservation acceptée ! Le locataire a reçu le lien de paiement.');
+  // Envoyer email au locataire
+  try {
+    const {data:locData} = await db.from('utilisateurs').select('email,prenom').eq('id',locataireId).single();
+    if(locData?.email){
+      await fetch('/api/send-email', {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({
+          type: 'reservation_acceptee',
+          to: locData.email,
+          data: {
+            locataire_prenom: locData.prenom||'',
+            annonce_titre: titre,
+            date_debut: '',
+            date_fin: '',
+            montant_total: '',
+            lien_paiement: 'https://kiloue.vercel.app/paiement.html?reservation_id='+id
+          }
+        })
+      });
+    }
+  } catch(e){ console.warn('Email error:', e); }
+
+  toast('✓ Réservation acceptée ! Le locataire a reçu le lien de paiement par email.');
   setTimeout(()=>location.reload(),2000);
 }
 
