@@ -310,7 +310,12 @@ function calNav(dir){
   renderCal();
 }
 
-function fmtISO(d){ return d.toISOString().split('T')[0]; }
+function fmtISO(d){
+  const y = d.getFullYear();
+  const m = String(d.getMonth()+1).padStart(2,'0');
+  const day = String(d.getDate()).padStart(2,'0');
+  return y+'-'+m+'-'+day;
+}
 function fmtFR(str){
   if(!str) return '';
   const parts = str.split('-');
