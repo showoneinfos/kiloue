@@ -289,13 +289,18 @@ body{display:flex;flex-direction:column;}
   <div class="page active" id="page-home">
     <div class="cats-scroll" id="cats-scroll">
       <div class="cat-chip active" onclick="filterCat('',this)">Tout</div>
-      <div class="cat-chip" onclick="filterCat('Véhicules',this)">🚗 Véhicules</div>
-      <div class="cat-chip" onclick="filterCat('Bricolage & Outillage',this)">🔨 Bricolage</div>
-      <div class="cat-chip" onclick="filterCat('Jardinage',this)">🌳 Jardinage</div>
-      <div class="cat-chip" onclick="filterCat('BTP & Chantier',this)">🏗 BTP</div>
-      <div class="cat-chip" onclick="filterCat('Événementiel',this)">🎉 Événementiel</div>
-      <div class="cat-chip" onclick="filterCat('Sport & Loisirs',this)">⚽ Sport</div>
-      <div class="cat-chip" onclick="filterCat('High-Tech',this)">💻 High-Tech</div>
+      <div class="cat-chip" onclick="filterCat('Véhicules',this)">Véhicules</div>
+      <div class="cat-chip" onclick="filterCat('Bricolage & Outillage',this)">Bricolage</div>
+      <div class="cat-chip" onclick="filterCat('Jardinage',this)">Jardinage</div>
+      <div class="cat-chip" onclick="filterCat('BTP & Chantier',this)">BTP & Chantier</div>
+      <div class="cat-chip" onclick="filterCat('Événementiel',this)">Événementiel</div>
+      <div class="cat-chip" onclick="filterCat('Sport & Loisirs',this)">Sport & Loisirs</div>
+      <div class="cat-chip" onclick="filterCat('High-Tech',this)">High-Tech</div>
+      <div class="cat-chip" onclick="filterCat('Nautisme',this)">Nautisme</div>
+      <div class="cat-chip" onclick="filterCat('Matériel Agricole',this)">Matériel Agricole</div>
+      <div class="cat-chip" onclick="filterCat('Maison & Équipement',this)">Maison & Équipement</div>
+      <div class="cat-chip" onclick="filterCat('Animaux',this)">Animaux</div>
+      <div class="cat-chip" onclick="filterCat('Divers',this)">Divers</div>
     </div>
     <div class="sec-head">
       <div class="sec-title" id="home-title">Annonces près de vous</div>
@@ -471,19 +476,19 @@ body{display:flex;flex-direction:column;}
   <div class="drawer-handle"></div>
   <div class="drawer-title">Catégories</div>
   <div class="drawer-scroll">
-    <div class="drawer-cat-item" onclick="filterCatFromDrawer('Véhicules')">🚗 Véhicules</div>
-    <div class="drawer-cat-item" onclick="filterCatFromDrawer('Nautisme')">🚤 Nautisme</div>
-    <div class="drawer-cat-item" onclick="filterCatFromDrawer('Bricolage & Outillage')">🔨 Bricolage & Outillage</div>
-    <div class="drawer-cat-item" onclick="filterCatFromDrawer('Jardinage')">🌳 Jardinage</div>
-    <div class="drawer-cat-item" onclick="filterCatFromDrawer('BTP & Chantier')">🏗 BTP & Chantier</div>
-    <div class="drawer-cat-item" onclick="filterCatFromDrawer('Matériel Agricole')">🚜 Matériel Agricole</div>
-    <div class="drawer-cat-item" onclick="filterCatFromDrawer('Maison & Équipement')">🏠 Maison & Équipement</div>
-    <div class="drawer-cat-item" onclick="filterCatFromDrawer('Événementiel')">🎉 Événementiel</div>
-    <div class="drawer-cat-item" onclick="filterCatFromDrawer('Sport & Loisirs')">⚽ Sport & Loisirs</div>
-    <div class="drawer-cat-item" onclick="filterCatFromDrawer('High-Tech')">💻 High-Tech</div>
-    <div class="drawer-cat-item" onclick="filterCatFromDrawer('Mode & Accessoires')">👗 Mode & Accessoires</div>
-    <div class="drawer-cat-item" onclick="filterCatFromDrawer('Animaux')">🐶 Animaux</div>
-    <div class="drawer-cat-item" onclick="filterCatFromDrawer('Divers')">📦 Divers</div>
+    <div class="drawer-cat-item" onclick="filterCatFromDrawer('Véhicules')">Véhicules</div>
+    <div class="drawer-cat-item" onclick="filterCatFromDrawer('Nautisme')">Nautisme</div>
+    <div class="drawer-cat-item" onclick="filterCatFromDrawer('Bricolage & Outillage')">Bricolage & Outillage</div>
+    <div class="drawer-cat-item" onclick="filterCatFromDrawer('Jardinage')">Jardinage</div>
+    <div class="drawer-cat-item" onclick="filterCatFromDrawer('BTP & Chantier')">BTP & Chantier</div>
+    <div class="drawer-cat-item" onclick="filterCatFromDrawer('Matériel Agricole')">Matériel Agricole</div>
+    <div class="drawer-cat-item" onclick="filterCatFromDrawer('Maison & Équipement')">Maison & Équipement</div>
+    <div class="drawer-cat-item" onclick="filterCatFromDrawer('Événementiel')">Événementiel</div>
+    <div class="drawer-cat-item" onclick="filterCatFromDrawer('Sport & Loisirs')">Sport & Loisirs</div>
+    <div class="drawer-cat-item" onclick="filterCatFromDrawer('High-Tech')">High-Tech</div>
+    <div class="drawer-cat-item" onclick="filterCatFromDrawer('Mode & Accessoires')">Mode & Accessoires</div>
+    <div class="drawer-cat-item" onclick="filterCatFromDrawer('Animaux')">Animaux</div>
+    <div class="drawer-cat-item" onclick="filterCatFromDrawer('Divers')">Divers</div>
   </div>
 </div>
 
@@ -541,10 +546,11 @@ const NAV_PAGES = ['home','search','messages','profile'];
 const BNAV_MAP = {home:'bnav-home',search:'bnav-search',messages:'bnav-messages',profile:'bnav-profile'};
 
 function goPage(name){
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.page').forEach(p => { p.classList.remove('active'); p.style.display='none'; });
   const pg = document.getElementById('page-'+name);
   if(!pg) return;
   pg.classList.add('active');
+  pg.style.display = (name === 'chat') ? 'flex' : 'block';
   pg.scrollTop = 0;
 
   // Topbar visibility
@@ -669,6 +675,7 @@ async function searchAnnonces(){
 
 /* ─── DETAIL ANNONCE ─── */
 async function openAnnonce(id){
+  if(!db){ toast('Chargement en cours…'); return; }
   currentAnnonceId = id;
   dateStart = null; dateEnd = null; selectingEnd = false; blockedDates = new Set(); delivEnabled = false;
   goPage('detail');
@@ -1390,6 +1397,11 @@ async function publierAnnonce(){
         document.getElementById('msg-dot').style.display = 'block';
       }
     }
+
+    // S'assurer que la page home est visible
+    document.querySelectorAll('.page').forEach(p => { p.classList.remove('active'); p.style.display='none'; });
+    const homePg = document.getElementById('page-home');
+    if(homePg){ homePg.classList.add('active'); homePg.style.display='block'; }
 
     // Charger annonces accueil
     loadAnnonces();
