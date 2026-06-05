@@ -59,7 +59,7 @@ module.exports = async (req, res) => {
           <span style="color:#fff;font-size:20px;font-weight:700;">kiloue.com</span>
         </div>
         <div style="${bodyStyle}">
-          <h2 style="color:#1A1A1A;margin-bottom:8px;">Paiement reçu — Réservation confirmée !</h2>
+          <h2 style="color:#1A1A1A;margin-bottom:8px;">Nouvelle demande de réservation</h2>
           <p style="color:#666;line-height:1.7;margin-bottom:16px;">
             Bonjour ${data.loueur_prenom || 'Loueur'},<br><br>
             <strong>${data.locataire_nom || 'Un locataire'}</strong> souhaite réserver votre annonce :
@@ -70,20 +70,19 @@ module.exports = async (req, res) => {
             <div style="color:#00A693;font-size:18px;font-weight:700;margin-top:8px;">+${data.montant_net || ''}€ pour vous</div>
           </div>
           <p style="color:#666;font-size:14px;margin-bottom:20px;">
-            Connectez-vous à votre espace pour accepter ou refuser cette demande.
+            Connectez-vous à votre espace pour <strong>accepter ou refuser</strong> cette demande. Le locataire sera notifié immédiatement.
           </p>
           <a href="https://kiloue.com/profil.html" style="${btnStyle}">
-            Voir mes réservations →
+            Accepter ou refuser →
           </a>
-          <div style="background:#FFF8E1;border:1px solid #FFE082;border-radius:8px;padding:12px 14px;margin-top:16px;font-size:12px;color:#795548;line-height:1.7;">
+          <div style="background:#FFF8E1;border:1px solid #FFE082;border-radius:8px;padding:12px 14px;margin-top:24px;font-size:12px;color:#795548;line-height:1.7;">
             <strong style="display:block;margin-bottom:4px;color:#5D4037;">Conditions d'annulation</strong>
             En cas d'annulation de votre part après acceptation, une <strong>pénalité de 10%</strong> du montant total sera retenue par kiloue.com.<br>
             En cas d'annulation par le locataire, <strong>8% lui seront retenus</strong>.
           </div>
         </div>
         <div style="${footerStyle}">
-          kiloue.com · Location de matériel entre particuliers<br>
-          <a href="https://kiloue.vercel.app" style="color:#00A693;">kiloue.vercel.app</a>
+          kiloue.com · Location de matériel entre particuliers
         </div>
       </div>`;
     }
@@ -109,7 +108,7 @@ module.exports = async (req, res) => {
           <p style="color:#666;font-size:14px;margin-bottom:4px;">
             Pour confirmer définitivement votre réservation, procédez au paiement sécurisé :
           </p>
-          <a href="${data.lien_paiement || 'https://kiloue.vercel.app/profil.html'}" style="${btnStyle}">
+          <a href="${data.lien_paiement || 'https://kiloue.com/profil.html'}" style="${btnStyle}">
             Payer maintenant — ${data.montant_total || ''}€
           </a>
           <p style="color:#999;font-size:12px;margin-top:16px;">
@@ -117,7 +116,7 @@ module.exports = async (req, res) => {
           </p>
         </div>
         <div style="${footerStyle}">
-          kiloue.com · <a href="https://kiloue.vercel.app" style="color:#00A693;">kiloue.vercel.app</a>
+          kiloue.com · Location de matériel entre particuliers
         </div>
       </div>`;
     }
@@ -151,7 +150,7 @@ module.exports = async (req, res) => {
           </a>
         </div>
         <div style="${footerStyle}">
-          kiloue.com · <a href="https://kiloue.vercel.app" style="color:#00A693;">kiloue.vercel.app</a>
+          kiloue.com · Location de matériel entre particuliers
         </div>
       </div>`;
     }
