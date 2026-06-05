@@ -292,7 +292,7 @@ let ANNONCE = null, LOUEUR_ID = null, deliv = false, db = null;
 let calYear, calMonth;
 let dateStart = null, dateEnd = null;
 let selectingEnd = false;
-let blockedDates = new Set(); // Set de strings 'YYYY-MM-DD'
+let blockedDates = new Set();
 
 const MOIS = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
 const today = new Date(); today.setHours(0,0,0,0);
@@ -326,18 +326,15 @@ function fmtFR(str){
 function renderCal(){
   document.getElementById('cal-month').textContent = MOIS[calMonth] + ' ' + calYear;
   const grid = document.getElementById('cal-grid');
-  // Garder les en-têtes
   const headers = Array.from(grid.querySelectorAll('.cal-day-name'));
   grid.innerHTML = '';
   headers.forEach(h => grid.appendChild(h));
 
   const firstDay = new Date(calYear, calMonth, 1);
   const lastDay = new Date(calYear, calMonth+1, 0);
-  // Lundi = 0
-  let startDow = firstDay.getDay(); // 0=dim
+  let startDow = firstDay.getDay();
   startDow = startDow === 0 ? 6 : startDow - 1;
 
-  // Cases vides avant le 1er
   for(let i=0;i<startDow;i++){
     const d=document.createElement('div');
     d.className='cal-day empty';
@@ -360,7 +357,6 @@ function renderCal(){
       el.onclick = () => selectDate(iso);
     }
 
-    // Colorier la sélection
     if(dateStart && iso === dateStart) el.classList.add('selected-start');
     if(dateEnd && iso === dateEnd) el.classList.add('selected-end');
     if(dateStart && dateEnd && iso > dateStart && iso < dateEnd) el.classList.add('in-range');
@@ -383,13 +379,11 @@ function resetDates(){
 }
 
 function selectDate(iso){
-  // Reclic sur début → annuler
   if(dateStart && !dateEnd && iso === dateStart){
     resetDates();
     return;
   }
   if(!dateStart || (dateStart && dateEnd)){
-    // Première sélection ou réinitialisation
     dateStart = iso;
     dateEnd = null;
     selectingEnd = true;
@@ -397,11 +391,9 @@ function selectDate(iso){
     document.getElementById('box-fin').classList.remove('active');
   } else if(selectingEnd){
     if(iso <= dateStart){
-      // Clic avant le début → recommencer
       dateStart = iso;
       dateEnd = null;
     } else {
-      // Vérifier pas de date bloquée dans la plage
       let hasBlocked = false;
       const s = new Date(dateStart+'T00:00:00');
       const e = new Date(iso+'T00:00:00');
@@ -418,7 +410,6 @@ function selectDate(iso){
     }
   }
 
-  // Mettre à jour affichage
   const vd = document.getElementById('val-debut');
   const vf = document.getElementById('val-fin');
   if(dateStart){ vd.textContent = fmtFR(dateStart); vd.classList.remove('placeholder'); }
@@ -518,6 +509,42 @@ async function reserver(){
 
   btn.disabled = false; btn.textContent = 'Réserver maintenant';
   if(error){ alert('Erreur : ' + error.message); return; }
+
+  // ── EMAIL AU LOUEUR ──
+  try {
+    const { data: loueurData } = await db.from('utilisateurs')
+      .select('email, prenom')
+      .eq('id', LOUEUR_ID)
+      .single();
+
+    const { data: locData } = await db.from('utilisateurs')
+      .select('prenom, nom')
+      .eq('id', user.id)
+      .single();
+
+    if(loueurData && loueurData.email){
+      const montant_net = +((total - comm) * 0.95).toFixed(2);
+      await fetch('/api/send-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: 'nouvelle_reservation',
+          to: loueurData.email,
+          data: {
+            loueur_prenom: loueurData.prenom || '',
+            locataire_nom: [locData?.prenom, locData?.nom].filter(Boolean).join(' ') || 'Un locataire',
+            annonce_titre: ANNONCE.titre || '',
+            date_debut: fmtFR(dateStart),
+            date_fin: fmtFR(dateEnd),
+            montant_net: montant_net
+          }
+        })
+      });
+    }
+  } catch(e){
+    console.error('Email loueur non envoyé:', e);
+    // On ne bloque pas le locataire si l'email échoue
+  }
 
   // Modal confirmation
   document.getElementById('modal-jours').textContent = days + 'j × ' + pj + '€';
@@ -626,7 +653,6 @@ async function reserver(){
       });
     }
 
-    // Init calendrier après chargement des dates
     initCal();
 
     // Avis
