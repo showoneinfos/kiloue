@@ -12,8 +12,6 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
 html,body{height:100%;overflow:hidden;font-family:var(--sans);background:var(--bg);color:var(--ink);}
 body{display:flex;flex-direction:column;}
-
-/* ── TOPBAR ── */
 .topbar{background:var(--white);border-bottom:1px solid var(--border);height:52px;display:flex;align-items:center;padding:0 14px;gap:10px;flex-shrink:0;position:relative;z-index:10;}
 .logo{font-size:20px;font-weight:700;color:var(--teal);text-decoration:none;}
 .logo span{color:var(--ink);}
@@ -23,13 +21,9 @@ body{display:flex;flex-direction:column;}
 .topbar-icon{width:36px;height:36px;border-radius:50%;background:var(--bg);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;position:relative;}
 .topbar-icon svg{width:18px;height:18px;fill:none;stroke:var(--ink2);stroke-width:2;}
 .badge-dot{position:absolute;top:5px;right:5px;width:8px;height:8px;border-radius:50%;background:var(--teal);border:2px solid var(--white);}
-
-/* ── PAGES ── */
 .pages{flex:1;overflow:hidden;position:relative;}
 .page{position:absolute;inset:0;overflow-y:auto;-webkit-overflow-scrolling:touch;display:none;padding-bottom:calc(var(--nav-h) + 10px);}
 .page.active{display:block;}
-
-/* ── BOTTOM NAV ── */
 .bottom-nav{height:var(--nav-h);background:var(--white);border-top:1px solid var(--border);display:flex;align-items:center;padding-bottom:env(safe-area-inset-bottom);flex-shrink:0;}
 .bnav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;padding:6px 0;position:relative;}
 .bnav-item svg{width:22px;height:22px;fill:none;stroke:var(--ink3);stroke-width:2;}
@@ -39,34 +33,24 @@ body{display:flex;flex-direction:column;}
 .bnav-pub{background:var(--teal);border-radius:50%;width:46px;height:46px;display:flex;align-items:center;justify-content:center;margin-top:-12px;box-shadow:0 4px 12px rgba(0,166,147,.4);}
 .bnav-pub svg{stroke:#fff!important;width:22px;height:22px;}
 .bnav-badge{position:absolute;top:4px;right:calc(50% - 16px);background:#E53935;color:#fff;font-size:9px;font-weight:700;min-width:14px;height:14px;border-radius:7px;display:flex;align-items:center;justify-content:center;padding:0 3px;}
-
-/* ── CARDS GRID ── */
 .cards-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 12px 12px;}
-.lcard{border-radius:12px;overflow:hidden;background:var(--white);border:1px solid var(--border);cursor:pointer;active:opacity:.85;}
+.lcard{border-radius:12px;overflow:hidden;background:var(--white);border:1px solid var(--border);cursor:pointer;}
 .lcard:active{transform:scale(.98);}
 .lcard-img-wrap{position:relative;aspect-ratio:1;overflow:hidden;background:#f0f0f0;}
 .lcard-img{width:100%;height:100%;object-fit:cover;display:block;}
-.lcard-fav{position:absolute;top:6px;right:6px;width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.9);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;}
-.lcard-fav svg{width:13px;height:13px;fill:none;stroke:var(--ink2);stroke-width:2;}
 .lcard-body{padding:8px 10px;}
 .lcard-name{font-size:12px;font-weight:600;color:var(--ink);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .lcard-loc{font-size:11px;color:var(--ink3);margin-bottom:4px;}
 .lcard-price{font-size:15px;font-weight:700;color:var(--ink);}
 .lcard-price small{font-size:10px;font-weight:400;color:var(--ink3);}
 .lcard-badge{font-size:9px;padding:2px 6px;border-radius:10px;background:var(--teal-light);color:var(--teal2);font-weight:500;}
-
-/* ── SECTION HEADER ── */
 .sec-head{display:flex;align-items:center;justify-content:space-between;padding:14px 14px 8px;}
 .sec-title{font-size:16px;font-weight:700;color:var(--ink);}
 .sec-more{font-size:13px;color:var(--teal);}
-
-/* ── CATS SCROLL ── */
 .cats-scroll{display:flex;gap:8px;padding:10px 12px;overflow-x:auto;scrollbar-width:none;}
 .cats-scroll::-webkit-scrollbar{display:none;}
 .cat-chip{padding:7px 14px;border-radius:20px;border:1.5px solid var(--border);background:var(--white);font-size:12px;font-weight:500;color:var(--ink2);white-space:nowrap;cursor:pointer;flex-shrink:0;}
 .cat-chip.active{background:var(--teal);border-color:var(--teal);color:#fff;}
-
-/* ── ANNONCE DETAIL ── */
 .det-header{display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--white);border-bottom:1px solid var(--border);}
 .det-back{width:34px;height:34px;border-radius:50%;background:var(--bg);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;}
 .det-back svg{width:18px;height:18px;fill:none;stroke:var(--ink);stroke-width:2;}
@@ -98,8 +82,6 @@ body{display:flex;flex-direction:column;}
 .det-price-wrap .det-price small{font-size:12px;font-weight:400;color:var(--ink2);}
 .det-price-wrap .det-demi{font-size:11px;color:var(--ink2);}
 .btn-reserver{flex:1;padding:13px;border-radius:10px;background:var(--teal);color:#fff;border:none;font-size:14px;font-weight:600;font-family:var(--sans);cursor:pointer;}
-
-/* ── CALENDRIER MOBILE ── */
 .cal-section{padding:14px;background:var(--white);margin-bottom:8px;}
 .cal-section h3{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:12px;}
 .cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
@@ -128,8 +110,6 @@ body{display:flex;flex-direction:column;}
 .cal-recap-row{display:flex;justify-content:space-between;font-size:13px;padding:3px 0;color:var(--ink2);}
 .cal-recap-total{display:flex;justify-content:space-between;font-size:15px;font-weight:700;padding-top:8px;border-top:1px solid var(--border);margin-top:4px;color:var(--ink);}
 .cal-recap-total .tv{color:var(--teal);}
-
-/* ── PROFIL ── */
 .prof-header{background:var(--teal);padding:20px 16px 24px;}
 .prof-av-wrap{display:flex;align-items:center;gap:14px;margin-bottom:16px;}
 .prof-av{width:60px;height:60px;border-radius:50%;object-fit:cover;border:3px solid rgba(255,255,255,.4);}
@@ -141,10 +121,6 @@ body{display:flex;flex-direction:column;}
 .prof-stat-val{font-size:20px;font-weight:700;color:#fff;}
 .prof-stat-lbl{font-size:10px;color:rgba(255,255,255,.7);margin-top:2px;}
 .prof-body{padding:14px;}
-.earn-card{background:var(--teal);border-radius:12px;padding:16px;margin-bottom:16px;}
-.earn-lbl{font-size:11px;color:rgba(255,255,255,.7);margin-bottom:3px;}
-.earn-val{font-size:26px;font-weight:700;color:#fff;}
-.earn-sub{font-size:11px;color:rgba(255,255,255,.6);margin-top:3px;}
 .menu-section{background:var(--white);border-radius:12px;margin-bottom:12px;overflow:hidden;}
 .menu-section-title{font-size:11px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.5px;padding:12px 14px 6px;}
 .menu-item{display:flex;align-items:center;gap:12px;padding:13px 14px;border-bottom:1px solid var(--bg);cursor:pointer;}
@@ -155,8 +131,6 @@ body{display:flex;flex-direction:column;}
 .menu-item .mi-right{font-size:12px;color:var(--ink3);display:flex;align-items:center;gap:4px;}
 .mi-badge{background:var(--teal);color:#fff;font-size:10px;padding:1px 6px;border-radius:10px;font-weight:600;}
 .mi-badge-warn{background:#FFB300;color:#fff;font-size:10px;padding:1px 6px;border-radius:10px;font-weight:600;}
-
-/* ── RÉSERVATIONS (profil) ── */
 .resa-item{border:1.5px solid var(--border);border-radius:12px;padding:13px;margin-bottom:10px;background:var(--white);}
 .resa-item.wait{border-color:#FFB300;background:#FFFBF0;}
 .resa-item.acceptee{border-color:#2196F3;background:#E3F2FD;}
@@ -179,8 +153,6 @@ body{display:flex;flex-direction:column;}
 .btn-cancel-m{width:100%;padding:10px;border-radius:8px;border:1.5px solid #E53935;background:#fff;color:#E53935;font-size:12px;font-weight:600;font-family:var(--sans);cursor:pointer;margin-top:6px;}
 .btn-pay-m{width:100%;padding:11px;border-radius:8px;background:#2196F3;color:#fff;border:none;font-size:13px;font-weight:700;font-family:var(--sans);cursor:pointer;margin-top:8px;animation:pulse 2s infinite;}
 @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.8;}}
-
-/* ── MESSAGES ── */
 .msg-item{display:flex;align-items:center;gap:12px;padding:12px 14px;cursor:pointer;background:var(--white);border-bottom:1px solid var(--bg);}
 .msg-item:active{background:var(--bg);}
 .msg-av{width:46px;height:46px;border-radius:50%;object-fit:cover;flex-shrink:0;}
@@ -190,8 +162,6 @@ body{display:flex;flex-direction:column;}
 .msg-preview.unread{color:var(--ink);font-weight:500;}
 .msg-time{font-size:11px;color:var(--ink3);}
 .msg-unread-dot{width:8px;height:8px;border-radius:50%;background:var(--teal);flex-shrink:0;}
-
-/* ── CHAT ── */
 .chat-header{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--white);border-bottom:1px solid var(--border);}
 .chat-messages{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:8px;}
 .bubble{max-width:75%;padding:10px 13px;border-radius:16px;font-size:13px;line-height:1.5;}
@@ -202,8 +172,6 @@ body{display:flex;flex-direction:column;}
 .chat-input:focus{border-color:var(--teal);}
 .chat-send{width:36px;height:36px;border-radius:50%;background:var(--teal);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;}
 .chat-send svg{width:16px;height:16px;fill:none;stroke:#fff;stroke-width:2;}
-
-/* ── INSCRIPTION / CONNEXION ── */
 .auth-page{padding:24px 16px;}
 .auth-logo{text-align:center;margin-bottom:24px;}
 .auth-logo .logo{font-size:28px;}
@@ -217,8 +185,6 @@ body{display:flex;flex-direction:column;}
 .auth-field-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
 .btn-auth{width:100%;padding:14px;border-radius:10px;background:var(--teal);color:#fff;border:none;font-size:15px;font-weight:600;font-family:var(--sans);cursor:pointer;margin-top:4px;}
 .auth-err{background:#FFF0F0;border:1px solid #FFCDD2;border-radius:8px;padding:10px 12px;font-size:13px;color:#C62828;margin-bottom:12px;display:none;}
-
-/* ── PUBLIER ── */
 .pub-page{padding:0 0 80px;}
 .pub-header{padding:16px 14px;background:var(--white);border-bottom:1px solid var(--border);}
 .pub-header h1{font-size:17px;font-weight:700;color:var(--ink);}
@@ -240,11 +206,7 @@ body{display:flex;flex-direction:column;}
 .pub-bottom{position:fixed;bottom:0;left:0;right:0;background:var(--white);border-top:1px solid var(--border);padding:12px 14px;padding-bottom:calc(12px + env(safe-area-inset-bottom));}
 .btn-pub{width:100%;padding:14px;border-radius:10px;background:var(--teal);color:#fff;border:none;font-size:15px;font-weight:600;font-family:var(--sans);cursor:pointer;}
 .btn-pub:disabled{background:#ccc;cursor:not-allowed;}
-
-/* ── TOAST ── */
 #toast{display:none;position:fixed;bottom:calc(var(--nav-h) + 10px);left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 18px;border-radius:20px;font-size:13px;z-index:999;white-space:nowrap;max-width:90vw;}
-
-/* ── DRAWER CAT ── */
 .drawer-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:200;}
 .cat-drawer{display:none;position:fixed;bottom:0;left:0;right:0;background:#fff;border-radius:18px 18px 0 0;z-index:201;max-height:75vh;flex-direction:column;}
 .cat-drawer.open{display:flex;}
@@ -254,13 +216,9 @@ body{display:flex;flex-direction:column;}
 .drawer-scroll{overflow-y:auto;flex:1;}
 .drawer-cat-item{display:flex;align-items:center;gap:12px;padding:13px 16px;border-bottom:1px solid var(--bg);cursor:pointer;font-size:14px;color:var(--ink);}
 .drawer-cat-item:active{background:var(--bg);}
-
-/* LOADING */
 .loading-spin{text-align:center;padding:40px;color:var(--ink3);font-size:13px;}
 .spinner{width:28px;height:28px;border:3px solid var(--border);border-top-color:var(--teal);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 10px;}
 @keyframes spin{to{transform:rotate(360deg)}}
-
-/* EMPTY */
 .empty-state{text-align:center;padding:40px 20px;color:var(--ink3);}
 .empty-state .ico{font-size:40px;margin-bottom:12px;}
 .empty-state p{font-size:14px;margin-bottom:14px;}
@@ -269,7 +227,6 @@ body{display:flex;flex-direction:column;}
 </head>
 <body>
 
-<!-- TOPBAR -->
 <div class="topbar" id="main-topbar">
   <a class="logo" href="#">kiloue<span>.com</span></a>
   <div class="search-bar" onclick="goPage('search')">
@@ -282,10 +239,8 @@ body{display:flex;flex-direction:column;}
   </div>
 </div>
 
-<!-- PAGES -->
 <div class="pages" id="pages">
 
-  <!-- ═══ HOME ═══ -->
   <div class="page active" id="page-home">
     <div class="cats-scroll" id="cats-scroll">
       <div class="cat-chip active" onclick="filterCat('',this)">Tout</div>
@@ -311,7 +266,6 @@ body{display:flex;flex-direction:column;}
     </div>
   </div>
 
-  <!-- ═══ SEARCH ═══ -->
   <div class="page" id="page-search">
     <div style="padding:10px 12px;background:var(--white);border-bottom:1px solid var(--border);">
       <div style="display:flex;align-items:center;gap:8px;background:var(--bg);border:1.5px solid var(--teal);border-radius:20px;padding:0 12px;height:40px;">
@@ -325,7 +279,6 @@ body{display:flex;flex-direction:column;}
     </div>
   </div>
 
-  <!-- ═══ DETAIL ANNONCE ═══ -->
   <div class="page" id="page-detail" style="padding-bottom:0;">
     <div class="det-header">
       <div class="det-back" onclick="goBack()"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></div>
@@ -335,7 +288,6 @@ body{display:flex;flex-direction:column;}
     <div id="det-content"><div class="loading-spin"><div class="spinner"></div>Chargement…</div></div>
   </div>
 
-  <!-- ═══ MESSAGES LISTE ═══ -->
   <div class="page" id="page-messages">
     <div style="padding:14px;background:var(--white);border-bottom:1px solid var(--border);">
       <div style="font-size:18px;font-weight:700;color:var(--ink);">Messages</div>
@@ -343,7 +295,6 @@ body{display:flex;flex-direction:column;}
     <div id="messages-list"><div class="loading-spin"><div class="spinner"></div>Chargement…</div></div>
   </div>
 
-  <!-- ═══ CHAT ═══ -->
   <div class="page" id="page-chat" style="display:flex;flex-direction:column;padding-bottom:0;">
     <div class="chat-header">
       <div class="det-back" onclick="goBack()"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></div>
@@ -356,12 +307,10 @@ body{display:flex;flex-direction:column;}
     </div>
   </div>
 
-  <!-- ═══ PROFIL ═══ -->
   <div class="page" id="page-profile">
     <div id="profile-content"><div class="loading-spin"><div class="spinner"></div>Chargement…</div></div>
   </div>
 
-  <!-- ═══ AUTH ═══ -->
   <div class="page" id="page-auth">
     <div class="auth-page">
       <div class="auth-logo"><a class="logo" href="#">kiloue<span>.com</span></a></div>
@@ -369,8 +318,6 @@ body{display:flex;flex-direction:column;}
         <div class="auth-tab active" id="tab-login" onclick="switchAuthTab('login')">Se connecter</div>
         <div class="auth-tab" id="tab-signup" onclick="switchAuthTab('signup')">S'inscrire</div>
       </div>
-
-      <!-- LOGIN -->
       <div id="auth-login">
         <div class="auth-err" id="err-login"></div>
         <div class="auth-field"><label>Email</label><input type="email" id="login-email" placeholder="jean@exemple.fr"></div>
@@ -380,8 +327,6 @@ body{display:flex;flex-direction:column;}
           Pas encore de compte ? <a onclick="switchAuthTab('signup')" style="color:var(--teal);font-weight:600;cursor:pointer;">S'inscrire</a>
         </div>
       </div>
-
-      <!-- SIGNUP -->
       <div id="auth-signup" style="display:none;">
         <div class="auth-err" id="err-signup"></div>
         <div class="auth-field-row">
@@ -400,7 +345,6 @@ body{display:flex;flex-direction:column;}
     </div>
   </div>
 
-  <!-- ═══ PUBLIER ═══ -->
   <div class="page" id="page-publish">
     <div class="pub-header">
       <h1>Déposer une annonce</h1>
@@ -442,7 +386,6 @@ body{display:flex;flex-direction:column;}
 
 </div>
 
-<!-- BOTTOM NAV -->
 <div class="bottom-nav">
   <div class="bnav-item active" id="bnav-home" onclick="goPage('home')">
     <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
@@ -467,10 +410,8 @@ body{display:flex;flex-direction:column;}
   </div>
 </div>
 
-<!-- TOAST -->
 <div id="toast"></div>
 
-<!-- CAT DRAWER -->
 <div class="drawer-overlay" id="drawer-overlay" onclick="closeCatDrawer()"></div>
 <div class="cat-drawer" id="cat-drawer">
   <div class="drawer-handle"></div>
@@ -508,7 +449,6 @@ let currentAnnonce = null;
 let delivEnabled = false;
 let chatChannel = null;
 
-/* ─── UTILS ─── */
 function toast(msg){
   const t = document.getElementById('toast');
   t.textContent = msg; t.style.display = 'block';
@@ -541,7 +481,6 @@ function imgOrPlaceholder(photos, cls){
   return '<div class="'+cls+'" style="background:#f0f0f0;display:flex;align-items:center;justify-content:center;font-size:24px;">📦</div>';
 }
 
-/* ─── NAVIGATION ─── */
 const NAV_PAGES = ['home','search','messages','profile'];
 const BNAV_MAP = {home:'bnav-home',search:'bnav-search',messages:'bnav-messages',profile:'bnav-profile'};
 
@@ -552,18 +491,11 @@ function goPage(name){
   pg.classList.add('active');
   pg.style.display = (name === 'chat') ? 'flex' : 'block';
   pg.scrollTop = 0;
-
-  // Topbar visibility
   const noTopbar = ['detail','chat','auth','publish'];
   document.getElementById('main-topbar').style.display = noTopbar.includes(name) ? 'none' : 'flex';
-
-  // Bottom nav
   document.querySelectorAll('.bnav-item').forEach(b => b.classList.remove('active'));
   if(BNAV_MAP[name]) document.getElementById(BNAV_MAP[name]).classList.add('active');
-
   if(name !== pageHistory[pageHistory.length-1]) pageHistory.push(name);
-
-  // Charger les données
   if(name === 'messages') loadMessages();
   if(name === 'profile') loadProfile();
 }
@@ -579,7 +511,6 @@ function requireAuth(page){
   else goPage('auth');
 }
 
-/* ─── HOME — Annonces ─── */
 let allAnnonces = [];
 let currentCatFilter = '';
 
@@ -624,7 +555,6 @@ function filterCat(cat, el){
 
 function filterCatFromDrawer(cat){
   closeCatDrawer();
-  // Trouver le chip correspondant
   document.querySelectorAll('.cat-chip').forEach(c => {
     c.classList.remove('active');
     if(c.textContent.includes(cat.split(' ')[0])) c.classList.add('active');
@@ -644,7 +574,6 @@ function closeCatDrawer(){
   document.getElementById('drawer-overlay').classList.remove('open');
 }
 
-/* ─── SEARCH ─── */
 async function searchAnnonces(){
   const q = document.getElementById('search-input').value.trim();
   const res = document.getElementById('search-results');
@@ -673,7 +602,6 @@ async function searchAnnonces(){
     </div>`).join('')+'</div>';
 }
 
-/* ─── DETAIL ANNONCE ─── */
 async function openAnnonce(id){
   if(!db){ toast('Chargement en cours…'); return; }
   currentAnnonceId = id;
@@ -692,7 +620,6 @@ async function openAnnonce(id){
   const u = data.utilisateurs || {};
   document.getElementById('det-header-title').textContent = data.titre;
 
-  // Photos
   const photosHtml = data.photos && data.photos.length > 0
     ? `<img class="det-img-main" id="det-main-img" src="${data.photos[0]}" alt="">
        ${data.photos.length > 1 ? '<div class="det-thumbs">'+data.photos.map((p,i)=>`<div class="det-thumb ${i===0?'active':''}" onclick="switchDetImg('${p}',this)"><img src="${p}" alt=""></div>`).join('')+'</div>' : ''}`
@@ -711,8 +638,8 @@ async function openAnnonce(id){
         <div class="det-cat">${data.categorie||''}</div>
       </div>
       <div class="det-tags">
-        ${data.livraison && data.prix_livraison > 0 ? `<div class="det-tag green">🚚 Livraison +${data.prix_livraison}€</div>` : ''}
-        ${data.caution ? `<div class="det-tag">🔒 Caution ${data.caution}€</div>` : ''}
+        ${data.livraison && data.prix_livraison > 0 ? `<div class="det-tag green">Livraison +${data.prix_livraison}€</div>` : ''}
+        ${data.caution ? `<div class="det-tag">Caution ${data.caution}€</div>` : ''}
       </div>
     </div>
     <div class="det-sec"><h3>Description</h3><p>${data.description||'Aucune description.'}</p></div>
@@ -769,7 +696,6 @@ async function openAnnonce(id){
       <button class="btn-reserver" id="btn-reserver-main" onclick="reserverMobile()">Sélectionnez des dates</button>
     </div>`;
 
-  // Charger dates bloquées
   const {data:resaData} = await db.from('reservations').select('date_debut,date_fin')
     .eq('annonce_id', id).in('statut',['en_attente','acceptee','payee','confirmee']);
   if(resaData){
@@ -798,7 +724,6 @@ function toggleDetLivraison(){
   calcRecap();
 }
 
-/* ─── CALENDRIER ─── */
 const MOIS = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
 const today0 = new Date(); today0.setHours(0,0,0,0);
 
@@ -940,11 +865,33 @@ async function reserverMobile(){
 
   btn.disabled = false;
   if(error){ btn.textContent = 'Réserver — '+total.toFixed(2)+' €'; toast('Erreur : '+error.message); return; }
+
+  // ── EMAIL AU LOUEUR ──
+  try {
+    const [{data:loueurData},{data:locData}] = await Promise.all([
+      db.from('utilisateurs').select('email,prenom').eq('id',currentAnnonce.user_id).single(),
+      db.from('utilisateurs').select('prenom,nom').eq('id',currentUser.id).single()
+    ]);
+    if(loueurData && loueurData.email){
+      const montant_net = +((total - comm) * 0.95).toFixed(2);
+      await fetch('/api/send-email',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
+        type:'nouvelle_reservation',to:loueurData.email,
+        data:{
+          loueur_prenom: loueurData.prenom||'',
+          locataire_nom: [locData?.prenom,locData?.nom].filter(Boolean).join(' ')||'Un locataire',
+          annonce_titre: currentAnnonce.titre||'',
+          date_debut: fmtLong(dateStart),
+          date_fin: fmtLong(dateEnd),
+          montant_net: montant_net
+        }
+      })});
+    }
+  } catch(e){ console.error('Email loueur non envoyé:',e); }
+
   toast('✓ Demande envoyée ! Le loueur va confirmer sous 24h.');
   setTimeout(() => goPage('profile'), 1500);
 }
 
-/* ─── MESSAGES ─── */
 async function loadMessages(){
   if(!currentUser){ document.getElementById('messages-list').innerHTML = '<div class="empty-state"><div class="ico">💬</div><p>Connectez-vous pour voir vos messages</p><button onclick="goPage(\'auth\')">Se connecter →</button></div>'; return; }
   const {data} = await db.from('messages')
@@ -957,16 +904,12 @@ async function loadMessages(){
     return;
   }
 
-  // Dédupliquer par conversation
   const seen = new Set();
   const convs = [];
   data.forEach(m => {
     const otherId = m.expediteur_id === currentUser.id ? m.destinataire_id : m.expediteur_id;
     const key = [otherId, m.annonce_id].join('_');
-    if(!seen.has(key)){
-      seen.add(key);
-      convs.push({...m, other_id: otherId});
-    }
+    if(!seen.has(key)){ seen.add(key); convs.push({...m, other_id: otherId}); }
   });
 
   document.getElementById('messages-list').innerHTML = convs.map(m => {
@@ -979,7 +922,7 @@ async function loadMessages(){
       <img class="msg-av" src="${av}" alt="">
       <div class="msg-info">
         <div style="display:flex;justify-content:space-between;align-items:baseline;">
-          <div class="msg-name">${m.expediteur_id !== currentUser.id ? [u.prenom,u.nom].filter(Boolean).join(' ') : 'Moi → '+m.destinataire_id}</div>
+          <div class="msg-name">${m.expediteur_id !== currentUser.id ? [u.prenom,u.nom].filter(Boolean).join(' ') : 'Moi'}</div>
           <div class="msg-time">${new Date(m.created_at).toLocaleDateString('fr-FR',{day:'numeric',month:'short'})}</div>
         </div>
         <div class="msg-preview ${unread?'unread':''}">${m.contenu.substring(0,60)}${m.contenu.length>60?'…':''}</div>
@@ -997,8 +940,6 @@ async function ouvrirChat(withUserId, annonceId, withName){
   document.getElementById('chat-with-name').textContent = withName || 'Conversation';
   goPage('chat');
   loadChatMessages();
-
-  // Realtime
   if(chatChannel) chatChannel.unsubscribe();
   chatChannel = db.channel('chat-'+currentUser.id)
     .on('postgres_changes',{event:'INSERT',schema:'public',table:'messages'},msg => {
@@ -1020,7 +961,6 @@ async function loadChatMessages(){
   wrap.innerHTML = '';
   (data||[]).forEach(m => appendChatMsg(m, false));
   wrap.scrollTop = wrap.scrollHeight;
-  // Marquer comme lus
   db.from('messages').update({lu:true}).eq('destinataire_id',currentUser.id).eq('expediteur_id',currentChatWith).eq('lu',false).then(()=>{});
 }
 
@@ -1048,7 +988,6 @@ async function sendMsg(){
   if(error) toast('Erreur envoi');
 }
 
-/* ─── PROFIL ─── */
 async function loadProfile(){
   if(!currentUser){
     document.getElementById('profile-content').innerHTML = `
@@ -1065,7 +1004,6 @@ async function loadProfile(){
   const nom = [profil.prenom, profil.nom].filter(Boolean).join(' ') || currentUser.email.split('@')[0];
   const av = profil.avatar_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(nom)}&background=00A693&color=fff&size=80`;
 
-  // Stats
   const {data:rr} = await db.from('reservations').select('prix_total,commission,statut').eq('loueur_id',currentUser.id);
   const resasRecues = rr || [];
   let revenus = 0; let nbPayees = 0; let nbAttente = 0;
@@ -1137,296 +1075,4 @@ async function showSection(section){
       .eq('loueur_id',currentUser.id).order('created_at',{ascending:false});
     const rr = data || [];
     if(!rr.length){ content.innerHTML = '<div class="empty-state"><div class="ico">📅</div><p>Aucune réservation reçue</p></div>'; return; }
-    content.innerHTML = '<div style="margin-top:4px;">'+rr.map(r => {
-      const a=r.annonces||{}, loc=r.utilisateurs||{};
-      const locNom=[loc.prenom,loc.nom?loc.nom[0]+'.':''].filter(Boolean).join(' ')||'Locataire';
-      const net=(r.prix_total||0)-(r.commission||0);
-      let actions = '';
-      if(r.statut==='en_attente'){
-        actions=`<button class="btn-accept-m" onclick="accepterResaMobile('${r.id}','${r.locataire_id}','${r.annonce_id||''}')">✓ Accepter</button>
-                 <button class="btn-refuse-m" onclick="refuserResaMobile('${r.id}')">✗ Refuser</button>`;
-      } else if(r.statut==='acceptee'){
-        actions=`<div style="padding:8px 10px;background:#E3F2FD;border-radius:8px;font-size:12px;color:#1565C0;margin-top:6px;">En attente du paiement…</div>
-                 <button class="btn-cancel-m" onclick="annulerResaMobile('${r.id}','loueur')">Annuler (pénalité 10%)</button>`;
-      } else if(r.statut==='payee'||r.statut==='confirmee'){
-        actions=`<button class="btn-cancel-m" onclick="annulerResaMobile('${r.id}','loueur')">Annuler (pénalité 10%)</button>`;
-      }
-      return `<div class="resa-item ${r.statut==='en_attente'?'wait':r.statut==='acceptee'?'acceptee':r.statut==='payee'||r.statut==='confirmee'?'confirmee payee':''}">
-        <div class="resa-top">
-          ${imgOrPlaceholder(a.photos,'resa-img')}
-          <div class="resa-info">
-            <div class="resa-name">${a.titre||'Annonce supprimée'}</div>
-            <div class="resa-meta">${locNom}</div>
-            <div class="resa-meta">${fmt(r.date_debut)} → ${fmt(r.date_fin)}</div>
-          </div>
-          <div style="text-align:right;">
-            ${badgeHtml(r.statut)}
-            <div class="resa-amt">+${net.toFixed(2)}€</div>
-          </div>
-        </div>
-        ${actions}
-      </div>`;
-    }).join('')+'</div>';
-  }
-
-  else if(section === 'mes_locations'){
-    const {data} = await db.from('reservations')
-      .select('*, annonces(id,titre,photos), loueurs:utilisateurs!loueur_id(prenom,nom)')
-      .eq('locataire_id',currentUser.id).order('created_at',{ascending:false});
-    const ml = data || [];
-    if(!ml.length){ content.innerHTML = '<div class="empty-state"><div class="ico">🔑</div><p>Aucune location effectuée</p><button onclick="goPage(\'home\')">Parcourir →</button></div>'; return; }
-    content.innerHTML = '<div style="margin-top:4px;">'+ml.map(r => {
-      const a=r.annonces||{}, lou=r.loueurs||{};
-      const louNom=[lou.prenom,lou.nom?lou.nom[0]+'.':''].filter(Boolean).join(' ')||'Loueur';
-      let actions = '';
-      if(r.statut==='acceptee'){
-        actions=`<button class="btn-pay-m" onclick="payerMaintenant('${r.id}')">💳 Payer maintenant — ${r.prix_total?r.prix_total.toFixed(2)+'€':''}</button>`;
-      } else if(r.statut==='en_attente'){
-        actions=`<button class="btn-cancel-m" onclick="annulerResaMobile('${r.id}','locataire')">Annuler ma demande</button>`;
-      } else if(r.statut==='payee'||r.statut==='confirmee'){
-        actions=`<button class="btn-cancel-m" onclick="annulerResaMobile('${r.id}','locataire')">Annuler (8% retenus)</button>`;
-      }
-      return `<div class="resa-item ${r.statut==='en_attente'?'wait':r.statut==='acceptee'?'acceptee':r.statut==='payee'||r.statut==='confirmee'?'confirmee payee':''}">
-        <div class="resa-top">
-          ${imgOrPlaceholder(a.photos,'resa-img')}
-          <div class="resa-info">
-            <div class="resa-name">${a.titre||'Annonce supprimée'}</div>
-            <div class="resa-meta">Loueur : ${louNom}</div>
-            <div class="resa-meta">${fmt(r.date_debut)} → ${fmt(r.date_fin)}</div>
-          </div>
-          <div style="text-align:right;">
-            ${badgeHtml(r.statut)}
-            <div class="resa-amt">${r.prix_total?r.prix_total.toFixed(2)+'€':''}</div>
-          </div>
-        </div>
-        ${actions}
-      </div>`;
-    }).join('')+'</div>';
-  }
-
-  else if(section === 'mes_annonces'){
-    const {data} = await db.from('annonces').select('*').eq('user_id',currentUser.id).order('created_at',{ascending:false});
-    const anns = data || [];
-    if(!anns.length){ content.innerHTML = '<div class="empty-state"><div class="ico">📦</div><p>Aucune annonce</p><button onclick="goPage(\'publish\')">Déposer →</button></div>'; return; }
-    content.innerHTML = '<div style="margin-top:4px;">'+anns.map(a => `
-      <div style="display:flex;align-items:center;gap:10px;padding:12px;background:var(--white);border-radius:10px;margin-bottom:8px;">
-        ${a.photos&&a.photos.length>0?`<img src="${a.photos[0]}" style="width:52px;height:52px;border-radius:8px;object-fit:cover;" alt="">`:
-        '<div style="width:52px;height:52px;border-radius:8px;background:#f0f0f0;display:flex;align-items:center;justify-content:center;">📦</div>'}
-        <div style="flex:1;min-width:0;">
-          <div style="font-size:13px;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${a.titre}</div>
-          <div style="font-size:11px;color:var(--ink2);margin-top:2px;">${a.disponible?'🟢 Active':'⚫ En pause'} · ${a.prix_jour}€/j</div>
-        </div>
-        <button onclick="openAnnonce('${a.id}')" style="padding:6px 10px;border-radius:6px;border:1.5px solid var(--border);background:var(--white);font-size:12px;cursor:pointer;">Voir</button>
-      </div>`).join('')+'</div>';
-  }
-}
-
-function payerMaintenant(resaId){
-  window.location.href = 'paiement.html?reservation_id=' + resaId;
-}
-
-async function accepterResaMobile(id, locataireId, annonceId){
-  const {error} = await db.from('reservations').update({statut:'acceptee'}).eq('id',id);
-  if(error){ toast('Erreur : '+error.message); return; }
-
-  // Message au locataire
-  const [{data:ann},{data:profil}] = await Promise.all([
-    db.from('annonces').select('titre').eq('id',annonceId).single(),
-    db.from('utilisateurs').select('prenom,telephone').eq('id',currentUser.id).single()
-  ]);
-  const titre = ann?.titre||'le matériel';
-  const lien = 'https://kiloue.com/paiement.html?reservation_id='+id;
-  await db.from('messages').insert([{
-    expediteur_id: currentUser.id, destinataire_id: locataireId,
-    annonce_id: annonceId||null,
-    contenu: 'Bonne nouvelle ! Votre demande pour "'+titre+'" a été acceptée. Procédez au paiement : '+lien,
-    lu: false
-  }]);
-
-  // Email
-  try {
-    const [{data:locData},{data:resaData}] = await Promise.all([
-      db.from('utilisateurs').select('email,prenom').eq('id',locataireId).single(),
-      db.from('reservations').select('date_debut,date_fin,prix_total').eq('id',id).single()
-    ]);
-    if(locData?.email){
-      await fetch('/api/send-email',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
-        type:'reservation_acceptee',to:locData.email,
-        data:{locataire_prenom:locData.prenom||'',annonce_titre:titre,
-          date_debut:fmtLong(resaData?.date_debut),date_fin:fmtLong(resaData?.date_fin),
-          montant_total:resaData?.prix_total?.toFixed(2)||'',lien_paiement:lien}
-      })});
-    }
-  } catch(e){}
-
-  toast('✓ Réservation acceptée !');
-  setTimeout(() => showSection('reservations_recues'), 1500);
-}
-
-function refuserResaMobile(id){
-  if(!confirm('Refuser cette réservation ?')) return;
-  db.from('reservations').update({statut:'annulee'}).eq('id',id).then(({error}) => {
-    if(error){ toast('Erreur'); return; }
-    toast('Réservation refusée.');
-    setTimeout(() => showSection('reservations_recues'), 1500);
-  });
-}
-
-async function annulerResaMobile(id, role){
-  const comm = role==='loueur' ? 10 : 8;
-  if(!confirm(role==='loueur' ? 'Annuler ? Pénalité de 10% appliquée.' : 'Annuler ? '+comm+'% du montant retenus par kiloue.')) return;
-  try {
-    const res = await fetch('/api/cancel-payment', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({reservation_id: id, role})
-    });
-    const data = await res.json();
-    if(data.success){
-      const msg = data.remboursement > 0
-        ? 'Annulée. Remboursement '+data.remboursement+'€ ('+data.retenu+'€ retenus).'
-        : 'Réservation annulée.';
-      toast(msg);
-    } else {
-      throw new Error(data.error);
-    }
-  } catch(e) {
-    await db.from('reservations').update({statut:'annulee',commission_annulation:comm}).eq('id',id);
-    toast('Réservation annulée.');
-  }
-  setTimeout(() => showSection(role==='loueur'?'reservations_recues':'mes_locations'), 2000);
-}
-
-/* ─── AUTH ─── */
-function switchAuthTab(tab){
-  document.getElementById('auth-login').style.display = tab==='login' ? 'block' : 'none';
-  document.getElementById('auth-signup').style.display = tab==='signup' ? 'block' : 'none';
-  document.getElementById('tab-login').classList.toggle('active', tab==='login');
-  document.getElementById('tab-signup').classList.toggle('active', tab==='signup');
-}
-
-function chkSignup(){
-  const ok = document.getElementById('signup-prenom').value.trim()
-    && document.getElementById('signup-nom').value.trim()
-    && document.getElementById('signup-email').value.trim()
-    && document.getElementById('signup-ville').value.trim()
-    && document.getElementById('signup-cp').value.trim()
-    && document.getElementById('signup-tel').value.trim()
-    && document.getElementById('signup-pwd').value.length >= 6;
-  const btn = document.getElementById('btn-signup');
-  btn.disabled = !ok; btn.style.opacity = ok ? '1' : '.5';
-}
-
-async function connecter(){
-  const email = document.getElementById('login-email').value.trim();
-  const pwd = document.getElementById('login-pwd').value;
-  const err = document.getElementById('err-login');
-  err.style.display = 'none';
-  const {error} = await db.auth.signInWithPassword({email, password: pwd});
-  if(error){ err.textContent = '❌ Email ou mot de passe incorrect.'; err.style.display = 'block'; return; }
-  const {data:{user}} = await db.auth.getUser();
-  currentUser = user;
-  toast('Bienvenue !');
-  goPage('home');
-}
-
-async function inscrire(){
-  const prenom = document.getElementById('signup-prenom').value.trim();
-  const nom = document.getElementById('signup-nom').value.trim();
-  const email = document.getElementById('signup-email').value.trim();
-  const ville = document.getElementById('signup-ville').value.trim();
-  const cp = document.getElementById('signup-cp').value.trim();
-  const tel = document.getElementById('signup-tel').value.trim();
-  const pwd = document.getElementById('signup-pwd').value;
-  const err = document.getElementById('err-signup');
-  err.style.display = 'none';
-
-  const {data:signUpData, error:signUpErr} = await db.auth.signUp({email,password:pwd,options:{data:{prenom,nom}}});
-  if(signUpErr && !signUpErr.message.includes('already registered')){ err.textContent='❌ '+signUpErr.message; err.style.display='block'; return; }
-  const {data:signInData, error:signInErr} = await db.auth.signInWithPassword({email,password:pwd});
-  if(signInErr){ err.textContent='❌ '+signInErr.message; err.style.display='block'; return; }
-  currentUser = signInData.user;
-  await db.from('utilisateurs').upsert({id:currentUser.id,prenom,nom,email,ville,code_postal:cp,telephone:tel,est_certifie:false},{onConflict:'id'});
-  toast('Compte créé ! Bienvenue sur kiloue.com');
-  goPage('home');
-}
-
-async function deconnexion(){
-  await db.auth.signOut();
-  currentUser = null;
-  toast('Déconnecté');
-  goPage('home');
-}
-
-/* ─── PUBLIER ─── */
-function toggleLivraisonField(){
-  const show = document.getElementById('pub-tgl-livraison').classList.contains('on');
-  document.getElementById('pub-livraison-field').style.display = show ? 'block' : 'none';
-}
-
-async function publierAnnonce(){
-  if(!currentUser){ goPage('auth'); return; }
-  const cat = document.getElementById('pub-cat').value;
-  const titre = document.getElementById('pub-titre').value.trim();
-  const desc = document.getElementById('pub-desc').value.trim();
-  const prix = parseFloat(document.getElementById('pub-prix').value);
-  const caution = parseFloat(document.getElementById('pub-caution').value) || 0;
-  const ville = document.getElementById('pub-ville').value.trim();
-  const rayon = parseInt(document.getElementById('pub-rayon').value);
-  const livraison = document.getElementById('pub-tgl-livraison').classList.contains('on');
-  const prixLivraison = livraison ? (parseFloat(document.getElementById('pub-prix-livraison').value)||0) : 0;
-  const photosRaw = document.getElementById('pub-photos').value.trim();
-  const photos = photosRaw ? photosRaw.split(',').map(p=>p.trim()).filter(Boolean) : [];
-
-  if(!cat||!titre||!desc||!prix||!ville){ toast('Veuillez remplir tous les champs obligatoires.'); return; }
-
-  const btn = document.getElementById('btn-pub');
-  btn.disabled = true; btn.textContent = 'Publication…';
-
-  const {error} = await db.from('annonces').insert([{
-    user_id: currentUser.id, categorie: cat, titre, description: desc,
-    prix_jour: prix, caution, ville, rayon_km: rayon,
-    livraison, prix_livraison: prixLivraison, photos, disponible: true
-  }]);
-
-  btn.disabled = false; btn.textContent = 'Publier mon annonce →';
-  if(error){ toast('Erreur : '+error.message); return; }
-  toast('✓ Annonce publiée !');
-  setTimeout(() => { goPage('home'); loadAnnonces(); }, 1500);
-}
-
-/* ─── INIT ─── */
-(function(){
-  const s = document.createElement('script');
-  s.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js';
-  s.onload = async function(){
-    db = supabase.createClient(SUPA_URL, SUPA_KEY);
-    const {data:{user}} = await db.auth.getUser();
-    if(user){ currentUser = user; }
-
-    // Badge messages non lus
-    if(currentUser){
-      const {count} = await db.from('messages').select('id',{count:'exact',head:true}).eq('destinataire_id',currentUser.id).eq('lu',false);
-      if(count > 0){
-        document.getElementById('bnav-msg-badge').style.display = 'flex';
-        document.getElementById('bnav-msg-badge').textContent = count;
-        document.getElementById('msg-dot').style.display = 'block';
-      }
-    }
-
-    // S'assurer que la page home est visible
-    document.querySelectorAll('.page').forEach(p => { p.classList.remove('active'); p.style.display='none'; });
-    const homePg = document.getElementById('page-home');
-    if(homePg){ homePg.classList.add('active'); homePg.style.display='block'; }
-
-    // Charger annonces accueil
-    loadAnnonces();
-
-    // Stripe
-    stripe = Stripe(STRIPE_PK);
-  };
-  document.head.appendChild(s);
-})();
-</script>
-</body>
-</html>
+    content.innerHTML = '<div sty
