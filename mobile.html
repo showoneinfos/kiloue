@@ -34,10 +34,12 @@ body{display:flex;flex-direction:column;}
 .bnav-pub svg{stroke:#fff!important;width:22px;height:22px;}
 .bnav-badge{position:absolute;top:4px;right:calc(50% - 16px);background:#E53935;color:#fff;font-size:9px;font-weight:700;min-width:14px;height:14px;border-radius:7px;display:flex;align-items:center;justify-content:center;padding:0 3px;}
 .cards-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 12px 12px;}
-.lcard{border-radius:12px;overflow:hidden;background:var(--white);border:1px solid var(--border);cursor:pointer;}
+.lcard{border-radius:12px;overflow:hidden;background:var(--white);border:1px solid var(--border);cursor:pointer;active:opacity:.85;}
 .lcard:active{transform:scale(.98);}
 .lcard-img-wrap{position:relative;aspect-ratio:1;overflow:hidden;background:#f0f0f0;}
 .lcard-img{width:100%;height:100%;object-fit:cover;display:block;}
+.lcard-fav{position:absolute;top:6px;right:6px;width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.9);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;}
+.lcard-fav svg{width:13px;height:13px;fill:none;stroke:var(--ink2);stroke-width:2;}
 .lcard-body{padding:8px 10px;}
 .lcard-name{font-size:12px;font-weight:600;color:var(--ink);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .lcard-loc{font-size:11px;color:var(--ink3);margin-bottom:4px;}
@@ -121,6 +123,10 @@ body{display:flex;flex-direction:column;}
 .prof-stat-val{font-size:20px;font-weight:700;color:#fff;}
 .prof-stat-lbl{font-size:10px;color:rgba(255,255,255,.7);margin-top:2px;}
 .prof-body{padding:14px;}
+.earn-card{background:var(--teal);border-radius:12px;padding:16px;margin-bottom:16px;}
+.earn-lbl{font-size:11px;color:rgba(255,255,255,.7);margin-bottom:3px;}
+.earn-val{font-size:26px;font-weight:700;color:#fff;}
+.earn-sub{font-size:11px;color:rgba(255,255,255,.6);margin-top:3px;}
 .menu-section{background:var(--white);border-radius:12px;margin-bottom:12px;overflow:hidden;}
 .menu-section-title{font-size:11px;font-weight:600;color:var(--ink3);text-transform:uppercase;letter-spacing:.5px;padding:12px 14px 6px;}
 .menu-item{display:flex;align-items:center;gap:12px;padding:13px 14px;border-bottom:1px solid var(--bg);cursor:pointer;}
@@ -922,7 +928,7 @@ async function loadMessages(){
       <img class="msg-av" src="${av}" alt="">
       <div class="msg-info">
         <div style="display:flex;justify-content:space-between;align-items:baseline;">
-          <div class="msg-name">${m.expediteur_id !== currentUser.id ? [u.prenom,u.nom].filter(Boolean).join(' ') : 'Moi'}</div>
+          <div class="msg-name">${m.expediteur_id !== currentUser.id ? [u.prenom,u.nom].filter(Boolean).join(' ') : 'Moi → '+m.destinataire_id}</div>
           <div class="msg-time">${new Date(m.created_at).toLocaleDateString('fr-FR',{day:'numeric',month:'short'})}</div>
         </div>
         <div class="msg-preview ${unread?'unread':''}">${m.contenu.substring(0,60)}${m.contenu.length>60?'…':''}</div>
@@ -1075,4 +1081,286 @@ async function showSection(section){
       .eq('loueur_id',currentUser.id).order('created_at',{ascending:false});
     const rr = data || [];
     if(!rr.length){ content.innerHTML = '<div class="empty-state"><div class="ico">📅</div><p>Aucune réservation reçue</p></div>'; return; }
-    content.innerHTML = '<div sty
+    content.innerHTML = '<div style="margin-top:4px;">'+rr.map(r => {
+      const a=r.annonces||{}, loc=r.utilisateurs||{};
+      const locNom=[loc.prenom,loc.nom?loc.nom[0]+'.':''].filter(Boolean).join(' ')||'Locataire';
+      const net=(r.prix_total||0)-(r.commission||0);
+      let actions = '';
+      if(r.statut==='en_attente'){
+        actions=`<button class="btn-accept-m" onclick="accepterResaMobile('${r.id}','${r.locataire_id}','${r.annonce_id||''}')">✓ Accepter</button>
+                 <button class="btn-refuse-m" onclick="refuserResaMobile('${r.id}')">✗ Refuser</button>`;
+      } else if(r.statut==='acceptee'){
+        actions=`<div style="padding:8px 10px;background:#E3F2FD;border-radius:8px;font-size:12px;color:#1565C0;margin-top:6px;">En attente du paiement…</div>
+                 <button class="btn-cancel-m" onclick="annulerResaMobile('${r.id}','loueur')">Annuler (pénalité 10%)</button>`;
+      } else if(r.statut==='payee'||r.statut==='confirmee'){
+        actions=`<button class="btn-cancel-m" onclick="annulerResaMobile('${r.id}','loueur')">Annuler (pénalité 10%)</button>`;
+      }
+      return `<div class="resa-item ${r.statut==='en_attente'?'wait':r.statut==='acceptee'?'acceptee':r.statut==='payee'||r.statut==='confirmee'?'confirmee payee':''}">
+        <div class="resa-top">
+          ${imgOrPlaceholder(a.photos,'resa-img')}
+          <div class="resa-info">
+            <div class="resa-name">${a.titre||'Annonce supprimée'}</div>
+            <div class="resa-meta">${locNom}</div>
+            <div class="resa-meta">${fmt(r.date_debut)} → ${fmt(r.date_fin)}</div>
+          </div>
+          <div style="text-align:right;">
+            ${badgeHtml(r.statut)}
+            <div class="resa-amt">+${net.toFixed(2)}€</div>
+          </div>
+        </div>
+        ${actions}
+      </div>`;
+    }).join('')+'</div>';
+  }
+
+  else if(section === 'mes_locations'){
+    const {data} = await db.from('reservations')
+      .select('*, annonces(id,titre,photos), loueurs:utilisateurs!loueur_id(prenom,nom)')
+      .eq('locataire_id',currentUser.id).order('created_at',{ascending:false});
+    const ml = data || [];
+    if(!ml.length){ content.innerHTML = '<div class="empty-state"><div class="ico">🔑</div><p>Aucune location effectuée</p><button onclick="goPage(\'home\')">Parcourir →</button></div>'; return; }
+    content.innerHTML = '<div style="margin-top:4px;">'+ml.map(r => {
+      const a=r.annonces||{}, lou=r.loueurs||{};
+      const louNom=[lou.prenom,lou.nom?lou.nom[0]+'.':''].filter(Boolean).join(' ')||'Loueur';
+      let actions = '';
+      if(r.statut==='acceptee'){
+        actions=`<button class="btn-pay-m" onclick="payerMaintenant('${r.id}')">💳 Payer maintenant — ${r.prix_total?r.prix_total.toFixed(2)+'€':''}</button>`;
+      } else if(r.statut==='en_attente'){
+        actions=`<button class="btn-cancel-m" onclick="annulerResaMobile('${r.id}','locataire')">Annuler ma demande</button>`;
+      } else if(r.statut==='payee'||r.statut==='confirmee'){
+        actions=`<button class="btn-cancel-m" onclick="annulerResaMobile('${r.id}','locataire')">Annuler (8% retenus)</button>`;
+      }
+      return `<div class="resa-item ${r.statut==='en_attente'?'wait':r.statut==='acceptee'?'acceptee':r.statut==='payee'||r.statut==='confirmee'?'confirmee payee':''}">
+        <div class="resa-top">
+          ${imgOrPlaceholder(a.photos,'resa-img')}
+          <div class="resa-info">
+            <div class="resa-name">${a.titre||'Annonce supprimée'}</div>
+            <div class="resa-meta">Loueur : ${louNom}</div>
+            <div class="resa-meta">${fmt(r.date_debut)} → ${fmt(r.date_fin)}</div>
+          </div>
+          <div style="text-align:right;">
+            ${badgeHtml(r.statut)}
+            <div class="resa-amt">${r.prix_total?r.prix_total.toFixed(2)+'€':''}</div>
+          </div>
+        </div>
+        ${actions}
+      </div>`;
+    }).join('')+'</div>';
+  }
+
+  else if(section === 'mes_annonces'){
+    const {data} = await db.from('annonces').select('*').eq('user_id',currentUser.id).order('created_at',{ascending:false});
+    const anns = data || [];
+    if(!anns.length){ content.innerHTML = '<div class="empty-state"><div class="ico">📦</div><p>Aucune annonce</p><button onclick="goPage(\'publish\')">Déposer →</button></div>'; return; }
+    content.innerHTML = '<div style="margin-top:4px;">'+anns.map(a => `
+      <div style="display:flex;align-items:center;gap:10px;padding:12px;background:var(--white);border-radius:10px;margin-bottom:8px;">
+        ${a.photos&&a.photos.length>0?`<img src="${a.photos[0]}" style="width:52px;height:52px;border-radius:8px;object-fit:cover;" alt="">`:
+        '<div style="width:52px;height:52px;border-radius:8px;background:#f0f0f0;display:flex;align-items:center;justify-content:center;">📦</div>'}
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:13px;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${a.titre}</div>
+          <div style="font-size:11px;color:var(--ink2);margin-top:2px;">${a.disponible?'🟢 Active':'⚫ En pause'} · ${a.prix_jour}€/j</div>
+        </div>
+        <button onclick="openAnnonce('${a.id}')" style="padding:6px 10px;border-radius:6px;border:1.5px solid var(--border);background:var(--white);font-size:12px;cursor:pointer;">Voir</button>
+      </div>`).join('')+'</div>';
+  }
+}
+
+function payerMaintenant(resaId){
+  window.location.href = 'paiement.html?reservation_id=' + resaId;
+}
+
+async function accepterResaMobile(id, locataireId, annonceId){
+  const {error} = await db.from('reservations').update({statut:'acceptee'}).eq('id',id);
+  if(error){ toast('Erreur : '+error.message); return; }
+
+  const [{data:ann},{data:profil}] = await Promise.all([
+    db.from('annonces').select('titre').eq('id',annonceId).single(),
+    db.from('utilisateurs').select('prenom,telephone').eq('id',currentUser.id).single()
+  ]);
+  const titre = ann?.titre||'le matériel';
+  const lien = 'https://kiloue.com/paiement.html?reservation_id='+id;
+  await db.from('messages').insert([{
+    expediteur_id: currentUser.id, destinataire_id: locataireId,
+    annonce_id: annonceId||null,
+    contenu: 'Bonne nouvelle ! Votre demande pour "'+titre+'" a été acceptée. Procédez au paiement : '+lien,
+    lu: false
+  }]);
+
+  try {
+    const [{data:locData},{data:resaData}] = await Promise.all([
+      db.from('utilisateurs').select('email,prenom').eq('id',locataireId).single(),
+      db.from('reservations').select('date_debut,date_fin,prix_total').eq('id',id).single()
+    ]);
+    if(locData?.email){
+      await fetch('/api/send-email',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
+        type:'reservation_acceptee',to:locData.email,
+        data:{locataire_prenom:locData.prenom||'',annonce_titre:titre,
+          date_debut:fmtLong(resaData?.date_debut),date_fin:fmtLong(resaData?.date_fin),
+          montant_total:resaData?.prix_total?.toFixed(2)||'',lien_paiement:lien}
+      })});
+    }
+  } catch(e){}
+
+  toast('✓ Réservation acceptée !');
+  setTimeout(() => showSection('reservations_recues'), 1500);
+}
+
+function refuserResaMobile(id){
+  if(!confirm('Refuser cette réservation ?')) return;
+  db.from('reservations').update({statut:'annulee'}).eq('id',id).then(({error}) => {
+    if(error){ toast('Erreur'); return; }
+    toast('Réservation refusée.');
+    setTimeout(() => showSection('reservations_recues'), 1500);
+  });
+}
+
+async function annulerResaMobile(id, role){
+  const comm = role==='loueur' ? 10 : 8;
+  if(!confirm(role==='loueur' ? 'Annuler ? Pénalité de 10% appliquée.' : 'Annuler ? '+comm+'% du montant retenus par kiloue.')) return;
+  try {
+    const res = await fetch('/api/cancel-payment', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({reservation_id: id, role})
+    });
+    const data = await res.json();
+    if(data.success){
+      const msg = data.remboursement > 0
+        ? 'Annulée. Remboursement '+data.remboursement+'€ ('+data.retenu+'€ retenus).'
+        : 'Réservation annulée.';
+      toast(msg);
+    } else {
+      throw new Error(data.error);
+    }
+  } catch(e) {
+    await db.from('reservations').update({statut:'annulee',commission_annulation:comm}).eq('id',id);
+    toast('Réservation annulée.');
+  }
+  setTimeout(() => showSection(role==='loueur'?'reservations_recues':'mes_locations'), 2000);
+}
+
+function switchAuthTab(tab){
+  document.getElementById('auth-login').style.display = tab==='login' ? 'block' : 'none';
+  document.getElementById('auth-signup').style.display = tab==='signup' ? 'block' : 'none';
+  document.getElementById('tab-login').classList.toggle('active', tab==='login');
+  document.getElementById('tab-signup').classList.toggle('active', tab==='signup');
+}
+
+function chkSignup(){
+  const ok = document.getElementById('signup-prenom').value.trim()
+    && document.getElementById('signup-nom').value.trim()
+    && document.getElementById('signup-email').value.trim()
+    && document.getElementById('signup-ville').value.trim()
+    && document.getElementById('signup-cp').value.trim()
+    && document.getElementById('signup-tel').value.trim()
+    && document.getElementById('signup-pwd').value.length >= 6;
+  const btn = document.getElementById('btn-signup');
+  btn.disabled = !ok; btn.style.opacity = ok ? '1' : '.5';
+}
+
+async function connecter(){
+  const email = document.getElementById('login-email').value.trim();
+  const pwd = document.getElementById('login-pwd').value;
+  const err = document.getElementById('err-login');
+  err.style.display = 'none';
+  const {error} = await db.auth.signInWithPassword({email, password: pwd});
+  if(error){ err.textContent = '❌ Email ou mot de passe incorrect.'; err.style.display = 'block'; return; }
+  const {data:{user}} = await db.auth.getUser();
+  currentUser = user;
+  toast('Bienvenue !');
+  goPage('home');
+}
+
+async function inscrire(){
+  const prenom = document.getElementById('signup-prenom').value.trim();
+  const nom = document.getElementById('signup-nom').value.trim();
+  const email = document.getElementById('signup-email').value.trim();
+  const ville = document.getElementById('signup-ville').value.trim();
+  const cp = document.getElementById('signup-cp').value.trim();
+  const tel = document.getElementById('signup-tel').value.trim();
+  const pwd = document.getElementById('signup-pwd').value;
+  const err = document.getElementById('err-signup');
+  err.style.display = 'none';
+
+  const {data:signUpData, error:signUpErr} = await db.auth.signUp({email,password:pwd,options:{data:{prenom,nom}}});
+  if(signUpErr && !signUpErr.message.includes('already registered')){ err.textContent='❌ '+signUpErr.message; err.style.display='block'; return; }
+  const {data:signInData, error:signInErr} = await db.auth.signInWithPassword({email,password:pwd});
+  if(signInErr){ err.textContent='❌ '+signInErr.message; err.style.display='block'; return; }
+  currentUser = signInData.user;
+  await db.from('utilisateurs').upsert({id:currentUser.id,prenom,nom,email,ville,code_postal:cp,telephone:tel,est_certifie:false},{onConflict:'id'});
+  toast('Compte créé ! Bienvenue sur kiloue.com');
+  goPage('home');
+}
+
+async function deconnexion(){
+  await db.auth.signOut();
+  currentUser = null;
+  toast('Déconnecté');
+  goPage('home');
+}
+
+function toggleLivraisonField(){
+  const show = document.getElementById('pub-tgl-livraison').classList.contains('on');
+  document.getElementById('pub-livraison-field').style.display = show ? 'block' : 'none';
+}
+
+async function publierAnnonce(){
+  if(!currentUser){ goPage('auth'); return; }
+  const cat = document.getElementById('pub-cat').value;
+  const titre = document.getElementById('pub-titre').value.trim();
+  const desc = document.getElementById('pub-desc').value.trim();
+  const prix = parseFloat(document.getElementById('pub-prix').value);
+  const caution = parseFloat(document.getElementById('pub-caution').value) || 0;
+  const ville = document.getElementById('pub-ville').value.trim();
+  const rayon = parseInt(document.getElementById('pub-rayon').value);
+  const livraison = document.getElementById('pub-tgl-livraison').classList.contains('on');
+  const prixLivraison = livraison ? (parseFloat(document.getElementById('pub-prix-livraison').value)||0) : 0;
+  const photosRaw = document.getElementById('pub-photos').value.trim();
+  const photos = photosRaw ? photosRaw.split(',').map(p=>p.trim()).filter(Boolean) : [];
+
+  if(!cat||!titre||!desc||!prix||!ville){ toast('Veuillez remplir tous les champs obligatoires.'); return; }
+
+  const btn = document.getElementById('btn-pub');
+  btn.disabled = true; btn.textContent = 'Publication…';
+
+  const {error} = await db.from('annonces').insert([{
+    user_id: currentUser.id, categorie: cat, titre, description: desc,
+    prix_jour: prix, caution, ville, rayon_km: rayon,
+    livraison, prix_livraison: prixLivraison, photos, disponible: true
+  }]);
+
+  btn.disabled = false; btn.textContent = 'Publier mon annonce →';
+  if(error){ toast('Erreur : '+error.message); return; }
+  toast('✓ Annonce publiée !');
+  setTimeout(() => { goPage('home'); loadAnnonces(); }, 1500);
+}
+
+(function(){
+  const s = document.createElement('script');
+  s.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js';
+  s.onload = async function(){
+    db = supabase.createClient(SUPA_URL, SUPA_KEY);
+    const {data:{user}} = await db.auth.getUser();
+    if(user){ currentUser = user; }
+
+    if(currentUser){
+      const {count} = await db.from('messages').select('id',{count:'exact',head:true}).eq('destinataire_id',currentUser.id).eq('lu',false);
+      if(count > 0){
+        document.getElementById('bnav-msg-badge').style.display = 'flex';
+        document.getElementById('bnav-msg-badge').textContent = count;
+        document.getElementById('msg-dot').style.display = 'block';
+      }
+    }
+
+    document.querySelectorAll('.page').forEach(p => { p.classList.remove('active'); p.style.display='none'; });
+    const homePg = document.getElementById('page-home');
+    if(homePg){ homePg.classList.add('active'); homePg.style.display='block'; }
+
+    loadAnnonces();
+    stripe = Stripe(STRIPE_PK);
+  };
+  document.head.appendChild(s);
+})();
+</script>
+</body>
+</html>
