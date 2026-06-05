@@ -8,7 +8,7 @@
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Créer un compte — kiloue.com</title>
+<title>Connexion — kiloue.com</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -99,8 +99,30 @@
   <div class="right">
     <div class="form-wrap">
 
-      <!-- ══ INSCRIPTION ══ -->
-      <div id="s1">
+      <!-- ══ CONNEXION (affichée par défaut) ══ -->
+      <div id="s-login">
+        <div class="form-title">Se connecter</div>
+        <div class="form-sub">Bon retour sur kiloue.com !</div>
+
+        <div class="err-msg" id="err-login"></div>
+
+        <div class="field"><label>Email *</label><input type="email" id="login-email" placeholder="jean@exemple.fr"></div>
+        <div class="field"><label>Mot de passe *</label>
+          <div class="pwd-wrap">
+            <input type="password" id="login-pwd" placeholder="Votre mot de passe">
+            <button class="eye-btn" onclick="toggleLoginPwd()" type="button">
+              <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+        </div>
+        <button class="btn-main" id="btn-login" onclick="connecter()">Se connecter →</button>
+        <div style="margin-top:14px;text-align:center;font-size:13px;color:var(--ink2);">
+          Pas encore de compte ? <a href="#" onclick="showSignup()" style="color:var(--teal);font-weight:600;">S'inscrire</a>
+        </div>
+      </div>
+
+      <!-- ══ INSCRIPTION (cachée par défaut) ══ -->
+      <div id="s1" style="display:none;">
         <div class="form-title">Créer un compte</div>
         <div class="form-sub">Gratuit · 2 minutes · Aucune carte requise</div>
 
@@ -148,28 +170,6 @@
         </div>
       </div>
 
-      <!-- ══ CONNEXION ══ -->
-      <div id="s-login" style="display:none;">
-        <div class="form-title">Se connecter</div>
-        <div class="form-sub">Bon retour sur kiloue.com !</div>
-
-        <div class="err-msg" id="err-login"></div>
-
-        <div class="field"><label>Email *</label><input type="email" id="login-email" placeholder="jean@exemple.fr"></div>
-        <div class="field"><label>Mot de passe *</label>
-          <div class="pwd-wrap">
-            <input type="password" id="login-pwd" placeholder="Votre mot de passe">
-            <button class="eye-btn" onclick="toggleLoginPwd()" type="button">
-              <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-            </button>
-          </div>
-        </div>
-        <button class="btn-main" id="btn-login" onclick="connecter()">Se connecter →</button>
-        <div style="margin-top:14px;text-align:center;font-size:13px;color:var(--ink2);">
-          Pas encore de compte ? <a href="#" onclick="showSignup()" style="color:var(--teal);font-weight:600;">S'inscrire</a>
-        </div>
-      </div>
-
     </div>
   </div>
 </div>
@@ -182,18 +182,16 @@ const db = createClient(
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5zdm9zYnV4a3Bub2FzZmlseXF5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAxODczOTcsImV4cCI6MjA5NTc2MzM5N30.pTuH4X8IQy0UJq8zUZ8t7I2WLMEUXae_8nWdtIFrpRE'
 );
 
-/* ─── Auth check ─── */
 const { data: { user: existingUser } } = await db.auth.getUser();
 if(existingUser) window.location.href = 'profil.html';
 
-/* ─── Mode URL : ?mode=login ou ?mode=signup ─── */
+/* Mode URL : ?mode=signup pour afficher l'inscription */
 const urlMode = new URLSearchParams(window.location.search).get('mode');
-if(urlMode === 'login'){
-  document.getElementById('s1').style.display = 'none';
-  document.getElementById('s-login').style.display = 'block';
+if(urlMode === 'signup'){
+  document.getElementById('s-login').style.display = 'none';
+  document.getElementById('s1').style.display = 'block';
 }
 
-/* ─── Validation formulaire ─── */
 function chk1(){
   const ok = document.getElementById('cgu').checked
     && document.getElementById('prenom').value.trim()
@@ -215,7 +213,6 @@ function showErr(id, msg){
 }
 function hideErr(id){ document.getElementById(id).style.display = 'none'; }
 
-/* ─── INSCRIPTION ─── */
 async function inscrire(){
   const prenom     = document.getElementById('prenom').value.trim();
   const nom        = document.getElementById('nom').value.trim();
@@ -231,7 +228,6 @@ async function inscrire(){
   btn.disabled = true;
 
   try {
-    /* 1. Créer le compte Auth */
     const { data: signUpData, error: signUpError } = await db.auth.signUp({
       email,
       password: pwd,
@@ -242,14 +238,11 @@ async function inscrire(){
       throw signUpError;
     }
 
-    /* 2. Connexion immédiate */
     const { data: signInData, error: signInError } = await db.auth.signInWithPassword({ email, password: pwd });
     if(signInError) throw signInError;
 
     const userId = signInData.user.id;
 
-    /* 3. Créer/mettre à jour le profil dans la table utilisateurs
-          ON CONFLICT gère le cas où le trigger a déjà créé la ligne */
     const { error: profileError } = await db.from('utilisateurs').upsert({
       id:           userId,
       prenom:       prenom,
@@ -261,12 +254,8 @@ async function inscrire(){
       est_certifie: false
     }, { onConflict: 'id' });
 
-    if(profileError){
-      console.warn('Profil warning:', profileError.message);
-      // On continue quand même — le compte Auth est créé
-    }
+    if(profileError) console.warn('Profil warning:', profileError.message);
 
-    /* 4. Redirection */
     const redirect = sessionStorage.getItem('redirect_after_login') || 'profil.html';
     sessionStorage.removeItem('redirect_after_login');
     window.location.href = redirect;
@@ -282,7 +271,6 @@ async function inscrire(){
   }
 }
 
-/* ─── CONNEXION ─── */
 async function connecter(){
   const email = document.getElementById('login-email').value.trim();
   const pwd   = document.getElementById('login-pwd').value;
@@ -303,7 +291,6 @@ async function connecter(){
   }
 }
 
-/* ─── GOOGLE ─── */
 async function signInGoogle(){
   await db.auth.signInWithOAuth({
     provider: 'google',
@@ -311,7 +298,6 @@ async function signInGoogle(){
   });
 }
 
-/* ─── HELPERS ─── */
 function showLogin(){
   document.getElementById('s1').style.display = 'none';
   document.getElementById('s-login').style.display = 'block';
@@ -329,7 +315,6 @@ function toggleLoginPwd(){
   i.type = i.type === 'password' ? 'text' : 'password';
 }
 
-/* ─── Exposer au HTML ─── */
 window.chk1 = chk1;
 window.inscrire = inscrire;
 window.connecter = connecter;
