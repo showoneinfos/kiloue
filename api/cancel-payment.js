@@ -1,21 +1,20 @@
 // api/cancel-payment.js — Sans aucun package npm, fetch natif uniquement
-
 module.exports = async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  if(req.method === 'OPTIONS') return res.status(200).end();
-  if(req.method !== 'POST') return res.status(405).json({error: 'Method not allowed'});
+  if (req.method === 'OPTIONS') return res.status(200).end();
+  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   try {
     const { reservation_id, role } = req.body;
-    if(!reservation_id || !role) return res.status(400).json({error: 'Paramètres manquants'});
+    if (!reservation_id || !role) return res.status(400).json({ error: 'Paramètres manquants' });
 
     const STRIPE_KEY = process.env.STRIPE_SECRET_KEY;
     const SUPA_URL = 'https://nsvosbuxkpnoasfilyqy.supabase.co';
     const SUPA_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY;
 
-    // 1. Récupérer la réservation via Supabase REST API
+    // 1. Récupérer la réservation
     const resaRes = await fetch(
       `${SUPA_URL}/rest/v1/reservations?id=eq.${reservation_id}&select=*`,
       {
@@ -27,13 +26,25 @@ module.exports = async (req, res) => {
     );
     const resaData = await resaRes.json();
     const resa = resaData[0];
-    if(!resa) return res.status(404).json({error: 'Réservation introuvable'});
+    if (!resa) return res.status(404).json({ error: 'Réservation introuvable' });
 
-    const commission_annulation = role === 'loueur' ? 10 : 8;
     const prix_total = resa.prix_total || 0;
 
-    // 2. Si pas de paiement Stripe — juste annuler dans Supabase
-    if(!resa.stripe_payment_id) {
+    // 2. Calcul du remboursement locataire via Stripe
+    // - Locataire annule : remboursé à 92% (8% retenus)
+    // - Loueur annule    : remboursé à 100% (pénalité 10% loueur hors Stripe)
+    const taux_remboursement = role === 'locataire' ? 0.92 : 1.0;
+    const montant_centimes = Math.round(prix_total * taux_remboursement * 100);
+
+    // Commission enregistrée en BDD pour traçabilité
+    // Locataire : 8% retenus / Loueur : -10% (à déduire de son virement)
+    const commission_annulation = role === 'locataire' ? 8 : -10;
+    const montant_retenu = role === 'locataire'
+      ? +(prix_total * 0.08).toFixed(2)
+      : 0; // le locataire récupère 100%, le loueur sera débité séparément
+
+    // 3. Si pas de paiement Stripe — juste annuler dans Supabase
+    if (!resa.stripe_payment_id) {
       await fetch(`${SUPA_URL}/rest/v1/reservations?id=eq.${reservation_id}`, {
         method: 'PATCH',
         headers: {
@@ -46,22 +57,27 @@ module.exports = async (req, res) => {
       return res.status(200).json({ success: true, remboursement: 0, retenu: 0 });
     }
 
-    // 3. Calculer le remboursement
-    const taux = role === 'locataire' ? 0.92 : 1.0;
-    const montant_centimes = Math.round(prix_total * taux * 100);
-    const montant_retenu = +(prix_total * (commission_annulation / 100)).toFixed(2);
-
     // 4. Récupérer la charge Stripe
     const chargesRes = await fetch(
       `https://api.stripe.com/v1/charges?payment_intent=${resa.stripe_payment_id}&limit=1`,
       { headers: { 'Authorization': 'Bearer ' + STRIPE_KEY } }
     );
     const chargesData = await chargesRes.json();
-    
+
     let refundResult = null;
-    if(chargesData.data && chargesData.data.length > 0) {
-      const chargeId = chargesData.data[0].id;
-      
+    if (chargesData.data && chargesData.data.length > 0) {
+      const charge = chargesData.data[0];
+
+      // Sécurité : ne pas rembourser plus que ce qui a été encaissé
+      const deja_rembourse = charge.amount_refunded || 0;
+      const encaisse = charge.amount || 0;
+      const remboursable = encaisse - deja_rembourse;
+      const a_rembourser = Math.min(montant_centimes, remboursable);
+
+      if (a_rembourser <= 0) {
+        return res.status(400).json({ error: 'Déjà entièrement remboursé' });
+      }
+
       // 5. Remboursement partiel Stripe
       const refundRes = await fetch('https://api.stripe.com/v1/refunds', {
         method: 'POST',
@@ -70,8 +86,8 @@ module.exports = async (req, res) => {
           'Content-Type': 'application/x-www-form-urlencoded'
         },
         body: new URLSearchParams({
-          charge: chargeId,
-          amount: montant_centimes.toString()
+          charge: charge.id,
+          amount: a_rembourser.toString()
         }).toString()
       });
       refundResult = await refundRes.json();
@@ -96,7 +112,7 @@ module.exports = async (req, res) => {
       refund_error: refundResult?.error?.message || null
     });
 
-  } catch(err) {
+  } catch (err) {
     console.error('Cancel error:', err.message);
     return res.status(500).json({ error: err.message });
   }
