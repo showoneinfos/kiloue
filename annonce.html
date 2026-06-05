@@ -510,18 +510,14 @@ async function reserver(){
   btn.disabled = false; btn.textContent = 'Réserver maintenant';
   if(error){ alert('Erreur : ' + error.message); return; }
 
-  // ── EMAIL AU LOUEUR ──
+  // ── EMAILS ──
   try {
-    const { data: loueurData } = await db.from('utilisateurs')
-      .select('email, prenom')
-      .eq('id', LOUEUR_ID)
-      .single();
+    const [{ data: loueurData }, { data: locData }] = await Promise.all([
+      db.from('utilisateurs').select('email, prenom').eq('id', LOUEUR_ID).single(),
+      db.from('utilisateurs').select('email, prenom, nom').eq('id', user.id).single()
+    ]);
 
-    const { data: locData } = await db.from('utilisateurs')
-      .select('prenom, nom')
-      .eq('id', user.id)
-      .single();
-
+    // Email au loueur
     if(loueurData && loueurData.email){
       const montant_net = +((total - comm) * 0.95).toFixed(2);
       await fetch('/api/send-email', {
@@ -541,9 +537,27 @@ async function reserver(){
         })
       });
     }
+
+    // Email au locataire
+    if(locData && locData.email){
+      await fetch('/api/send-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: 'reservation_envoyee',
+          to: locData.email,
+          data: {
+            locataire_prenom: locData.prenom || '',
+            annonce_titre: ANNONCE.titre || '',
+            date_debut: fmtFR(dateStart),
+            date_fin: fmtFR(dateEnd),
+            montant_total: total.toFixed(2)
+          }
+        })
+      });
+    }
   } catch(e){
-    console.error('Email loueur non envoyé:', e);
-    // On ne bloque pas le locataire si l'email échoue
+    console.error('Email non envoyé:', e);
   }
 
   // Modal confirmation
