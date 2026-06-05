@@ -155,6 +155,42 @@ module.exports = async (req, res) => {
       </div>`;
     }
 
+    // ── TYPE 4 : Confirmation envoi réservation au locataire ──
+    else if(type === 'reservation_envoyee'){
+      subject = '📅 Votre demande de réservation a bien été envoyée — kiloue.com';
+      html = `<div style="${baseStyle}">
+        <div style="${headerStyle}">
+          <span style="color:#fff;font-size:20px;font-weight:700;">kiloue.com</span>
+        </div>
+        <div style="${bodyStyle}">
+          <h2 style="color:#1A1A1A;margin-bottom:8px;">Demande envoyée !</h2>
+          <p style="color:#666;line-height:1.7;margin-bottom:16px;">
+            Bonjour ${data.locataire_prenom || ''},<br><br>
+            Votre demande de réservation a bien été transmise au loueur :
+          </p>
+          <div style="background:#F5F5F5;border-radius:8px;padding:16px;margin-bottom:20px;">
+            <div style="font-size:16px;font-weight:600;color:#1A1A1A;margin-bottom:8px;">${data.annonce_titre || ''}</div>
+            <div style="color:#666;font-size:14px;">Du <strong>${data.date_debut || ''}</strong> au <strong>${data.date_fin || ''}</strong></div>
+            <div style="color:#00A693;font-size:18px;font-weight:700;margin-top:8px;">${data.montant_total || ''}€ au total</div>
+          </div>
+          <p style="color:#666;font-size:14px;margin-bottom:20px;">
+            Le loueur va examiner votre demande et vous confirmer sous <strong>24h</strong>. Vous recevrez un email avec le lien de paiement dès qu'il aura accepté.
+          </p>
+          <a href="https://kiloue.com/profil.html" style="${btnStyle}">
+            Suivre ma réservation →
+          </a>
+          <div style="background:#FFF8E1;border:1px solid #FFE082;border-radius:8px;padding:12px 14px;margin-top:24px;font-size:12px;color:#795548;line-height:1.7;">
+            <strong style="display:block;margin-bottom:4px;color:#5D4037;">Conditions d'annulation</strong>
+            En cas d'annulation de votre part après paiement, <strong>8% du montant total seront retenus</strong> par kiloue.com.<br>
+            En cas d'annulation par le loueur, une pénalité de <strong>10%</strong> sera à sa charge.
+          </div>
+        </div>
+        <div style="${footerStyle}">
+          kiloue.com · Location de matériel entre particuliers
+        </div>
+      </div>`;
+    }
+
     else {
       return res.status(400).json({error: 'Type email inconnu: ' + type});
     }
