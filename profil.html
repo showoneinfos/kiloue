@@ -63,6 +63,7 @@
   .resa-name{font-size:15px;font-weight:600;color:var(--ink);}
   .resa-meta{font-size:13px;color:var(--ink2);margin-top:4px;}
   .resa-amt{font-size:18px;font-weight:700;color:var(--teal);white-space:nowrap;text-align:right;}
+  .resa-amt-annulee{font-size:13px;color:#C62828;white-space:nowrap;text-align:right;margin-top:2px;}
   .badge{font-size:12px;padding:4px 12px;border-radius:20px;font-weight:600;white-space:nowrap;display:inline-block;margin-bottom:4px;}
   .badge-wait{background:#FFB300;color:#fff;}
   .badge-acceptee{background:#2196F3;color:#fff;}
@@ -231,6 +232,38 @@ function imgOrPlaceholder(photos,cls){
   return '<div class="'+cls+'" style="background:#f0f0f0;display:flex;align-items:center;justify-content:center;">📦</div>';
 }
 
+/* Calcule et affiche les montants pour une réservation annulée */
+function annulationInfo(r, roleAffiche){
+  const total = r.prix_total || 0;
+  const comm = r.commission_annulation || 0;
+  if(total === 0 || comm === 0) return '';
+
+  if(roleAffiche === 'loueur'){
+    // Le locataire a annulé → loueur ne reçoit rien, 8% retenus au locataire
+    // Le loueur a annulé → locataire remboursé 100%, pénalité 10% pour le loueur
+    if(comm > 0 && comm <= 8){
+      // locataire a annulé
+      const retenu = +(total * comm / 100).toFixed(2);
+      return `<div style="font-size:11px;color:#C62828;margin-top:4px;">Annulée par le locataire · ${retenu}€ retenus</div>`;
+    } else {
+      // loueur a annulé
+      const penalite = +(total * comm / 100).toFixed(2);
+      return `<div style="font-size:11px;color:#C62828;margin-top:4px;">Annulée par vous · pénalité ${penalite}€</div>`;
+    }
+  } else {
+    // Vue locataire
+    if(comm < 0 || comm >= 10){
+      // loueur a annulé → locataire remboursé 100%
+      return `<div style="font-size:11px;color:#2E7D32;margin-top:4px;">Annulée par le loueur · remboursé à 100%</div>`;
+    } else {
+      // locataire a annulé → 8% retenus
+      const retenu = +(total * comm / 100).toFixed(2);
+      const rembourse = +(total - retenu).toFixed(2);
+      return `<div style="font-size:11px;color:#C62828;margin-top:4px;">Annulée · remboursé ${rembourse}€ (${retenu}€ retenus par kiloue)</div>`;
+    }
+  }
+}
+
 const SECTIONS=['dashboard','annonces','reservations','locations'];
 const TITLES={dashboard:'Tableau de bord',annonces:'Mes annonces',reservations:'Réservations reçues',locations:'Mes locations'};
 
@@ -249,6 +282,13 @@ function renderResaRecue(r){
   const photo=imgOrPlaceholder(a.photos,'resa-img');
   const locNom=[loc.prenom,loc.nom?loc.nom[0]+'.':''].filter(Boolean).join(' ')||'Locataire';
   const net=(r.prix_total||0)-(r.commission||0);
+
+  let amtHtml = '';
+  if(r.statut === 'annulee'){
+    amtHtml = `<div class="resa-amt" style="color:#C62828;">+${net.toFixed(2)} €</div>${annulationInfo(r,'loueur')}`;
+  } else {
+    amtHtml = `<div class="resa-amt">+${net.toFixed(2)} €</div>`;
+  }
 
   let actions='';
   if(r.statut==='en_attente'){
@@ -280,7 +320,7 @@ function renderResaRecue(r){
       </div>
       <div style="text-align:right;flex-shrink:0;">
         ${badgeHtml(r.statut)}
-        <div class="resa-amt">+${net.toFixed(2)} €</div>
+        ${amtHtml}
       </div>
     </div>
     ${actions}
@@ -293,9 +333,15 @@ function renderMaLocation(r){
   const photo=imgOrPlaceholder(a.photos,'resa-img');
   const louNom=[lou.prenom,lou.nom?lou.nom[0]+'.':''].filter(Boolean).join(' ')||'Loueur';
 
+  let amtHtml = '';
+  if(r.statut === 'annulee'){
+    amtHtml = `<div class="resa-amt" style="color:#C62828;">${r.prix_total?r.prix_total.toFixed(2)+' €':''}</div>${annulationInfo(r,'locataire')}`;
+  } else {
+    amtHtml = `<div class="resa-amt">${r.prix_total?r.prix_total.toFixed(2)+' €':''}</div>`;
+  }
+
   let actions='';
   if(r.statut==='acceptee'){
-    // Locataire doit payer
     actions=`<div style="margin-top:10px;padding:12px 14px;background:#E3F2FD;border-radius:8px;">
       <div style="font-size:13px;color:#1565C0;font-weight:600;margin-bottom:8px;">Le loueur a accepté votre demande ! Finalisez votre réservation.</div>
       <button class="btn-pay-now" onclick="window.location.href='paiement.html?reservation_id=${r.id}'">
@@ -325,7 +371,7 @@ function renderMaLocation(r){
       </div>
       <div style="text-align:right;flex-shrink:0;">
         ${badgeHtml(r.statut)}
-        <div class="resa-amt">${r.prix_total?r.prix_total.toFixed(2)+' €':''}</div>
+        ${amtHtml}
       </div>
     </div>
     ${actions}
@@ -357,20 +403,17 @@ function renderAnnonce(a){
 }
 
 /* ── ACTIONS ── */
-
-/* Accepter → statut "acceptee" + message au locataire avec lien paiement */
 async function accepterResa(id, locataireId, annonceId){
   const {error}=await db.from('reservations').update({statut:'acceptee'}).eq('id',id);
   if(error){toast('Erreur : '+error.message);return;}
 
-  // Récupérer infos
   const [{data:ann},{data:profil}]=await Promise.all([
     db.from('annonces').select('titre').eq('id',annonceId).single(),
     db.from('utilisateurs').select('prenom,telephone').eq('id',currentUser.id).single()
   ]);
 
   const titre=ann?.titre||'le matériel';
-  const lienPaiement='https://kiloue.vercel.app/paiement.html?reservation_id='+id;
+  const lienPaiement='https://kiloue.com/paiement.html?reservation_id='+id;
   const msg='Bonne nouvelle ! Votre demande de réservation pour "'+titre+'" a été acceptée.\n\nPour confirmer définitivement votre réservation, veuillez procéder au paiement sécurisé ici :\n'+lienPaiement+'\n\nUne fois le paiement effectué, nous vous mettrons en contact avec le loueur.';
 
   await db.from('messages').insert([{
@@ -381,7 +424,6 @@ async function accepterResa(id, locataireId, annonceId){
     lu:              false
   }]);
 
-  // Envoyer email au locataire
   try {
     const [{data:locData},{data:resaData}] = await Promise.all([
       db.from('utilisateurs').select('email,prenom').eq('id',locataireId).single(),
@@ -411,7 +453,6 @@ async function accepterResa(id, locataireId, annonceId){
   setTimeout(()=>location.reload(),2000);
 }
 
-/* Refuser */
 function refuserResa(id){
   if(!confirm('Refuser cette réservation ?')) return;
   db.from('reservations').update({statut:'annulee'}).eq('id',id).then(({error})=>{
@@ -421,7 +462,6 @@ function refuserResa(id){
   });
 }
 
-/* Annuler (avec remboursement partiel Stripe) */
 async function annulerResa(id, role){
   const commission_annulation = role==='loueur' ? 10 : 8;
   const msg = role==='loueur'
@@ -446,14 +486,12 @@ async function annulerResa(id, role){
     toast(msg2);
     setTimeout(()=>location.reload(), 2000);
   } catch(e) {
-    // Fallback : annuler directement dans Supabase si la Function échoue
     await db.from('reservations').update({statut:'annulee',commission_annulation}).eq('id',id);
     toast('Réservation annulée.');
     setTimeout(()=>location.reload(), 1500);
   }
 }
 
-/* Toggle annonce */
 function toggleAnnonce(id,actuel){
   db.from('annonces').update({disponible:!actuel}).eq('id',id).then(({error})=>{
     if(error){toast('Erreur');return;}
@@ -481,7 +519,6 @@ async function init(){
     window.location.href='index.html';
   };
 
-  /* Profil */
   const {data:profil}=await db.from('utilisateurs').select('*').eq('id',user.id).single();
   const p=profil||{};
   const nom=[p.prenom,p.nom].filter(Boolean).join(' ')||user.email.split('@')[0];
@@ -490,7 +527,6 @@ async function init(){
   document.getElementById('user-avatar').src=p.avatar_url
     ||'https://ui-avatars.com/api/?name='+encodeURIComponent(nom)+'&background=00A693&color=fff&size=80';
 
-  /* Annonces */
   const {data:annonces}=await db.from('annonces').select('*').eq('user_id',user.id).order('created_at',{ascending:false});
   const anns=annonces||[];
   const actives=anns.filter(a=>a.disponible).length;
@@ -500,7 +536,6 @@ async function init(){
     ?'<div class="empty"><div class="empty-icon">📦</div><p>Aucune annonce.</p><a href="publier.html">Déposer votre première annonce →</a></div>'
     :anns.map(renderAnnonce).join('');
 
-  /* Réservations reçues */
   const {data:resasRecues}=await db
     .from('reservations')
     .select('*, annonces(id,titre,photos,prix_jour), utilisateurs!locataire_id(prenom,nom)')
@@ -529,7 +564,6 @@ async function init(){
     ?'<div class="empty"><div class="empty-icon">📅</div><p>Aucune réservation reçue.</p></div>'
     :rr.slice(0,3).map(renderResaRecue).join('');
 
-  /* Mes locations */
   const {data:mesLocs}=await db
     .from('reservations')
     .select('*, annonces(id,titre,photos,prix_jour), loueurs:utilisateurs!loueur_id(prenom,nom)')
@@ -544,7 +578,6 @@ async function init(){
     ?'<div class="empty"><div class="empty-icon">🔑</div><p>Aucune location effectuée.</p><a href="index.html">Parcourir →</a></div>'
     :ml.slice(0,3).map(renderMaLocation).join('');
 
-  /* Avis */
   const {data:avisData}=await db.from('avis').select('note').eq('loueur_id',user.id);
   const avis=avisData||[];
   if(avis.length===0){document.getElementById('stat-note').textContent='—';document.getElementById('stat-note-sub').textContent='Aucun avis';}
