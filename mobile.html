@@ -509,6 +509,7 @@ function annulationInfo(r, roleAffiche){
     }
   }
 }
+function badgeHtml(s){
   if(s==='en_attente') return '<span class="badge badge-wait">En attente</span>';
   if(s==='acceptee')   return '<span class="badge badge-acceptee">Acceptée</span>';
   if(s==='payee')      return '<span class="badge badge-ok">Payée</span>';
@@ -1146,21 +1147,24 @@ async function showSection(section){
       } else if(r.statut==='payee'||r.statut==='confirmee'){
         actions=`<button class="btn-cancel-m" onclick="annulerResaMobile('${r.id}','loueur')">Annuler (pénalité 10%)</button>`;
       }
-      return `<div class="resa-item ${r.statut==='en_attente'?'wait':r.statut==='acceptee'?'acceptee':r.statut==='payee'||r.statut==='confirmee'?'confirmee payee':''}">
-        <div class="resa-top">
-          ${imgOrPlaceholder(a.photos,'resa-img')}
-          <div class="resa-info">
-            <div class="resa-name">${a.titre||'Annonce supprimée'}</div>
-            <div class="resa-meta">${locNom}</div>
-            <div class="resa-meta">${fmt(r.date_debut)} → ${fmt(r.date_fin)}</div>
-          </div>
-          <div style="text-align:right;">
-            ${badgeHtml(r.statut)}
-            ${r.statut==='annulee' ? `<div class="resa-amt" style="color:#C62828;">+${net.toFixed(2)}€</div>${annulationInfo(r,'loueur')}` : `<div class="resa-amt">+${net.toFixed(2)}€</div>`}
-          </div>
-        </div>
-        ${actions}
-      </div>`;
+      const amtHtmlLoueur = r.statut==='annulee'
+        ? '<div class="resa-amt" style="color:#C62828;">+'+net.toFixed(2)+'€</div>'+annulationInfo(r,'loueur')
+        : '<div class="resa-amt">+'+net.toFixed(2)+'€</div>';
+      return '<div class="resa-item '+(r.statut==='en_attente'?'wait':r.statut==='acceptee'?'acceptee':r.statut==='payee'||r.statut==='confirmee'?'confirmee payee':'')+'">'
+        +'<div class="resa-top">'
+        +imgOrPlaceholder(a.photos,'resa-img')
+        +'<div class="resa-info">'
+        +'<div class="resa-name">'+(a.titre||'Annonce supprimée')+'</div>'
+        +'<div class="resa-meta">'+locNom+'</div>'
+        +'<div class="resa-meta">'+fmt(r.date_debut)+' → '+fmt(r.date_fin)+'</div>'
+        +'</div>'
+        +'<div style="text-align:right;">'
+        +badgeHtml(r.statut)
+        +amtHtmlLoueur
+        +'</div>'
+        +'</div>'
+        +actions
+        +'</div>';
     }).join('')+'</div>';
   }
 
@@ -1181,21 +1185,24 @@ async function showSection(section){
       } else if(r.statut==='payee'||r.statut==='confirmee'){
         actions=`<button class="btn-cancel-m" onclick="annulerResaMobile('${r.id}','locataire')">Annuler (8% retenus)</button>`;
       }
-      return `<div class="resa-item ${r.statut==='en_attente'?'wait':r.statut==='acceptee'?'acceptee':r.statut==='payee'||r.statut==='confirmee'?'confirmee payee':''}">
-        <div class="resa-top">
-          ${imgOrPlaceholder(a.photos,'resa-img')}
-          <div class="resa-info">
-            <div class="resa-name">${a.titre||'Annonce supprimée'}</div>
-            <div class="resa-meta">Loueur : ${louNom}</div>
-            <div class="resa-meta">${fmt(r.date_debut)} → ${fmt(r.date_fin)}</div>
-          </div>
-          <div style="text-align:right;">
-            ${badgeHtml(r.statut)}
-            ${r.statut==='annulee' ? `<div class="resa-amt" style="color:#C62828;">${r.prix_total?r.prix_total.toFixed(2)+'€':''}</div>${annulationInfo(r,'locataire')}` : `<div class="resa-amt">${r.prix_total?r.prix_total.toFixed(2)+'€':''}</div>`}
-          </div>
-        </div>
-        ${actions}
-      </div>`;
+      const amtHtmlLoc = r.statut==='annulee'
+        ? '<div class="resa-amt" style="color:#C62828;">'+(r.prix_total?r.prix_total.toFixed(2)+'€':'')+'</div>'+annulationInfo(r,'locataire')
+        : '<div class="resa-amt">'+(r.prix_total?r.prix_total.toFixed(2)+'€':'')+'</div>';
+      return '<div class="resa-item '+(r.statut==='en_attente'?'wait':r.statut==='acceptee'?'acceptee':r.statut==='payee'||r.statut==='confirmee'?'confirmee payee':'')+'">'
+        +'<div class="resa-top">'
+        +imgOrPlaceholder(a.photos,'resa-img')
+        +'<div class="resa-info">'
+        +'<div class="resa-name">'+(a.titre||'Annonce supprimée')+'</div>'
+        +'<div class="resa-meta">Loueur : '+louNom+'</div>'
+        +'<div class="resa-meta">'+fmt(r.date_debut)+' → '+fmt(r.date_fin)+'</div>'
+        +'</div>'
+        +'<div style="text-align:right;">'
+        +badgeHtml(r.statut)
+        +amtHtmlLoc
+        +'</div>'
+        +'</div>'
+        +actions
+        +'</div>';
     }).join('')+'</div>';
   }
 
