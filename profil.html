@@ -118,6 +118,9 @@
   <a class="nav-item" href="messages.html">
     <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>Messages
   </a>
+  <a class="nav-item" id="nav-monprofil" href="#" onclick="showSection('monprofil');return false;">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 1 0-16 0"/></svg>Mon profil
+  </a>
   <div class="sidebar-bottom">
     <div class="user-row">
       <img class="user-av" id="user-avatar" src="" alt="">
@@ -195,6 +198,49 @@
       <div class="card">
         <h2>Mes locations — réservations que j'ai faites</h2>
         <div id="list-mes-locations"><div class="loading">Chargement…</div></div>
+      </div>
+    </div>
+
+    <!-- MON PROFIL -->
+    <div class="section" id="section-monprofil">
+      <div class="card" style="max-width:480px;">
+        <h2>Mon profil</h2>
+        <div id="profil-form">
+          <div style="text-align:center;margin-bottom:24px;">
+            <img id="edit-avatar" src="" style="width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid var(--teal);" alt="">
+            <div style="margin-top:10px;">
+              <label style="font-size:12px;font-weight:600;color:var(--ink2);text-transform:uppercase;letter-spacing:.4px;display:block;margin-bottom:5px;">URL de la photo</label>
+              <input type="text" id="edit-avatar-url" placeholder="https://..." style="width:100%;border:1.5px solid var(--border);border-radius:8px;padding:10px 12px;font-size:13px;font-family:inherit;outline:none;" oninput="previewAvatar()">
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
+            <div>
+              <label style="font-size:12px;font-weight:600;color:var(--ink2);text-transform:uppercase;letter-spacing:.4px;display:block;margin-bottom:5px;">Prénom *</label>
+              <input type="text" id="edit-prenom" style="width:100%;border:1.5px solid var(--border);border-radius:8px;padding:10px 12px;font-size:14px;font-family:inherit;outline:none;">
+            </div>
+            <div>
+              <label style="font-size:12px;font-weight:600;color:var(--ink2);text-transform:uppercase;letter-spacing:.4px;display:block;margin-bottom:5px;">Nom *</label>
+              <input type="text" id="edit-nom" style="width:100%;border:1.5px solid var(--border);border-radius:8px;padding:10px 12px;font-size:14px;font-family:inherit;outline:none;">
+            </div>
+          </div>
+          <div style="margin-bottom:14px;">
+            <label style="font-size:12px;font-weight:600;color:var(--ink2);text-transform:uppercase;letter-spacing:.4px;display:block;margin-bottom:5px;">Téléphone</label>
+            <input type="tel" id="edit-telephone" placeholder="06 12 34 56 78" style="width:100%;border:1.5px solid var(--border);border-radius:8px;padding:10px 12px;font-size:14px;font-family:inherit;outline:none;">
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;">
+            <div>
+              <label style="font-size:12px;font-weight:600;color:var(--ink2);text-transform:uppercase;letter-spacing:.4px;display:block;margin-bottom:5px;">Ville</label>
+              <input type="text" id="edit-ville" placeholder="Ajaccio" style="width:100%;border:1.5px solid var(--border);border-radius:8px;padding:10px 12px;font-size:14px;font-family:inherit;outline:none;">
+            </div>
+            <div>
+              <label style="font-size:12px;font-weight:600;color:var(--ink2);text-transform:uppercase;letter-spacing:.4px;display:block;margin-bottom:5px;">Code postal</label>
+              <input type="text" id="edit-cp" placeholder="20000" maxlength="5" style="width:100%;border:1.5px solid var(--border);border-radius:8px;padding:10px 12px;font-size:14px;font-family:inherit;outline:none;">
+            </div>
+          </div>
+          <div id="edit-err" style="display:none;background:#FFF0F0;border:1px solid #FFCDD2;border-radius:8px;padding:10px 12px;font-size:13px;color:#C62828;margin-bottom:12px;"></div>
+          <div id="edit-ok" style="display:none;background:#E8F7F5;border:1px solid #C8EEEA;border-radius:8px;padding:10px 12px;font-size:13px;color:#008577;margin-bottom:12px;">Profil mis à jour !</div>
+          <button onclick="sauvegarderProfil()" style="width:100%;padding:13px;border-radius:8px;background:var(--teal);color:#fff;border:none;font-family:inherit;font-size:15px;font-weight:600;cursor:pointer;">Enregistrer les modifications</button>
+        </div>
       </div>
     </div>
 
@@ -294,8 +340,8 @@ function annulationInfo(r, roleAffiche){
   }
 }
 
-const SECTIONS=['dashboard','annonces','reservations','locations'];
-const TITLES={dashboard:'Tableau de bord',annonces:'Mes annonces',reservations:'Réservations reçues',locations:'Mes locations'};
+const SECTIONS=['dashboard','annonces','reservations','locations','monprofil'];
+const TITLES={dashboard:'Tableau de bord',annonces:'Mes annonces',reservations:'Réservations reçues',locations:'Mes locations',monprofil:'Mon profil'};
 
 function showSection(name){
   SECTIONS.forEach(s=>{
@@ -530,6 +576,47 @@ function toggleAnnonce(id,actuel){
   });
 }
 
+
+function previewAvatar(){
+  const url = document.getElementById('edit-avatar-url').value.trim();
+  if(url) document.getElementById('edit-avatar').src = url;
+}
+
+async function sauvegarderProfil(){
+  const prenom = document.getElementById('edit-prenom').value.trim();
+  const nom = document.getElementById('edit-nom').value.trim();
+  const telephone = document.getElementById('edit-telephone').value.trim();
+  const ville = document.getElementById('edit-ville').value.trim();
+  const cp = document.getElementById('edit-cp').value.trim();
+  const avatar_url = document.getElementById('edit-avatar-url').value.trim();
+
+  const err = document.getElementById('edit-err');
+  const ok = document.getElementById('edit-ok');
+  err.style.display = 'none';
+  ok.style.display = 'none';
+
+  if(!prenom || !nom){ err.textContent = 'Le prénom et le nom sont obligatoires.'; err.style.display = 'block'; return; }
+
+  const btn = event.target;
+  btn.disabled = true; btn.textContent = 'Enregistrement…';
+
+  const updates = { prenom, nom, telephone, ville, code_postal: cp };
+  if(avatar_url) updates.avatar_url = avatar_url;
+
+  const { error } = await db.from('utilisateurs').update(updates).eq('id', currentUser.id);
+
+  btn.disabled = false; btn.textContent = 'Enregistrer les modifications';
+
+  if(error){ err.textContent = 'Erreur : ' + error.message; err.style.display = 'block'; return; }
+
+  ok.style.display = 'block';
+  // Mettre à jour le nom dans la sidebar
+  const nomComplet = [prenom, nom].filter(Boolean).join(' ');
+  document.getElementById('user-name').textContent = nomComplet;
+  if(avatar_url) document.getElementById('user-avatar').src = avatar_url;
+  setTimeout(() => ok.style.display = 'none', 3000);
+}
+
 /* ── INIT ── */
 (function(){
   const s=document.createElement('script');
@@ -553,6 +640,14 @@ async function init(){
   const p=profil||{};
   const nom=[p.prenom,p.nom].filter(Boolean).join(' ')||user.email.split('@')[0];
   document.getElementById('user-name').textContent=nom;
+  // Pré-remplir le formulaire de profil
+  document.getElementById('edit-prenom').value = p.prenom || '';
+  document.getElementById('edit-nom').value = p.nom || '';
+  document.getElementById('edit-telephone').value = p.telephone || '';
+  document.getElementById('edit-ville').value = p.ville || '';
+  document.getElementById('edit-cp').value = p.code_postal || '';
+  document.getElementById('edit-avatar-url').value = p.avatar_url || '';
+  document.getElementById('edit-avatar').src = p.avatar_url || 'https://ui-avatars.com/api/?name='+encodeURIComponent(nom)+'&background=00A693&color=fff&size=80';
   document.getElementById('user-cert').textContent=p.est_certifie?'✓ Certifié':'Non certifié';
   document.getElementById('user-avatar').src=p.avatar_url
     ||'https://ui-avatars.com/api/?name='+encodeURIComponent(nom)+'&background=00A693&color=fff&size=80';
