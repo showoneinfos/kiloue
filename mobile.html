@@ -953,16 +953,31 @@ async function reserverMobile(){
 
 async function loadMessages(){
   if(!currentUser){ document.getElementById('messages-list').innerHTML = '<div class="empty-state"><div class="ico">💬</div><p>Connectez-vous pour voir vos messages</p><button onclick="goPage(\'auth\')">Se connecter →</button></div>'; return; }
-  const {data} = await db.from('messages')
-    .select('*, exp:utilisateurs!expediteur_id(prenom,nom,avatar_url), annonces(titre)')
-    .or(`expediteur_id.eq.${currentUser.id},destinataire_id.eq.${currentUser.id}`)
+
+  // Charger les messages sans jointure complexe
+  const {data, error} = await db.from('messages')
+    .select('*, annonces(titre)')
+    .or('expediteur_id.eq.'+currentUser.id+',destinataire_id.eq.'+currentUser.id)
     .order('created_at',{ascending:false});
 
-  if(!data || !data.length){
+  if(error || !data || !data.length){
     document.getElementById('messages-list').innerHTML = '<div class="empty-state"><div class="ico">💬</div><p>Aucun message pour le moment</p></div>';
     return;
   }
 
+  // Collecter tous les IDs uniques pour récupérer les profils
+  const userIds = new Set();
+  data.forEach(m => {
+    userIds.add(m.expediteur_id);
+    userIds.add(m.destinataire_id);
+  });
+  const {data: profils} = await db.from('utilisateurs')
+    .select('id,prenom,nom,avatar_url')
+    .in('id', Array.from(userIds));
+  const profilMap = {};
+  (profils||[]).forEach(p => profilMap[p.id] = p);
+
+  // Dédupliquer par conversation
   const seen = new Set();
   const convs = [];
   data.forEach(m => {
@@ -972,23 +987,24 @@ async function loadMessages(){
   });
 
   document.getElementById('messages-list').innerHTML = convs.map(m => {
-    const u = m.exp || {};
-    const nom = m.expediteur_id !== currentUser.id ? [u.prenom,u.nom].filter(Boolean).join(' ') : 'Vous';
-    const av = u.avatar_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(nom)}&background=00A693&color=fff&size=80`;
+    const otherId = m.expediteur_id === currentUser.id ? m.destinataire_id : m.expediteur_id;
+    const other = profilMap[otherId] || {};
+    const nom = [other.prenom, other.nom].filter(Boolean).join(' ') || 'Utilisateur';
+    const av = other.avatar_url || 'https://ui-avatars.com/api/?name='+encodeURIComponent(nom)+'&background=00A693&color=fff&size=80';
     const unread = !m.lu && m.destinataire_id === currentUser.id;
     const titre = m.annonces?.titre || '';
-    return `<div class="msg-item" onclick="ouvrirChat('${m.other_id}','${m.annonce_id||''}','${nom}')">
-      <img class="msg-av" src="${av}" alt="">
-      <div class="msg-info">
-        <div style="display:flex;justify-content:space-between;align-items:baseline;">
-          <div class="msg-name">${m.expediteur_id !== currentUser.id ? [u.prenom,u.nom].filter(Boolean).join(' ') : 'Moi → '+m.destinataire_id}</div>
-          <div class="msg-time">${new Date(m.created_at).toLocaleDateString('fr-FR',{day:'numeric',month:'short'})}</div>
-        </div>
-        <div class="msg-preview ${unread?'unread':''}">${m.contenu.substring(0,60)}${m.contenu.length>60?'…':''}</div>
-        ${titre ? `<div style="font-size:11px;color:var(--teal2);margin-top:2px;">${titre}</div>` : ''}
-      </div>
-      ${unread ? '<div class="msg-unread-dot"></div>' : ''}
-    </div>`;
+    return '<div class="msg-item" onclick="ouvrirChat(\''+m.other_id+'\',\''+( m.annonce_id||'')+'\',\''+nom+'\')">'+
+      '<img class="msg-av" src="'+av+'" alt="">'+
+      '<div class="msg-info">'+
+        '<div style="display:flex;justify-content:space-between;align-items:baseline;">'+
+          '<div class="msg-name">'+nom+'</div>'+
+          '<div class="msg-time">'+new Date(m.created_at).toLocaleDateString('fr-FR',{day:'numeric',month:'short'})+'</div>'+
+        '</div>'+
+        '<div class="msg-preview '+(unread?'unread':'')+'">'+m.contenu.substring(0,60)+(m.contenu.length>60?'…':'')+'</div>'+
+        (titre ? '<div style="font-size:11px;color:var(--teal2);margin-top:2px;">'+titre+'</div>' : '')+
+      '</div>'+
+      (unread ? '<div class="msg-unread-dot"></div>' : '')+
+    '</div>';
   }).join('');
 }
 
