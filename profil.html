@@ -381,7 +381,7 @@ function renderResaRecue(r){
     </div>`;
   } else if(r.statut==='payee'||r.statut==='confirmee'){
     actions=`<div style="margin-top:8px;display:flex;gap:10px;flex-wrap:wrap;">
-      <a href="messages.html?annonce_id=${a.id||''}&avec=${r.locataire_id||''}" style="display:inline-block;padding:9px 16px;border-radius:8px;background:var(--teal-light);color:var(--teal);font-size:13px;font-weight:600;text-decoration:none;border:1.5px solid #C8EEEA;">💬 Envoyer un message</a>
+      <a href="messages.html?annonce_id=${a.id||''}&avec=${r.locataire_id||''}" style="display:inline-block;padding:10px 18px;border-radius:8px;background:var(--teal);color:#fff;font-size:13px;font-weight:600;text-decoration:none;">💬 Envoyer un message</a>
       <button class="btn-cancel" style="margin-left:auto;" onclick="annulerResa('${r.id}','loueur')">Annuler (pénalité 10%)</button>
     </div>`;
   }
@@ -430,8 +430,8 @@ function renderMaLocation(r){
     </div>`;
   } else if(r.statut==='payee'||r.statut==='confirmee'){
     actions=`<div style="margin-top:8px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
-      ${a.id?`<a href="annonce.html?id=${a.id}" style="display:inline-block;padding:9px 16px;border-radius:8px;background:var(--teal-light);color:var(--teal);font-size:13px;font-weight:600;text-decoration:none;border:1.5px solid #C8EEEA;">Voir l'annonce →</a>`:''}
-      <a href="messages.html?annonce_id=${a.id||''}&avec=${r.loueur_id||''}" style="display:inline-block;padding:9px 16px;border-radius:8px;background:var(--teal-light);color:var(--teal);font-size:13px;font-weight:600;text-decoration:none;border:1.5px solid #C8EEEA;">💬 Envoyer un message</a>
+      ${a.id?`<a href="annonce.html?id=${a.id}" style="display:inline-block;padding:10px 18px;border-radius:8px;background:var(--teal);color:#fff;font-size:13px;font-weight:600;text-decoration:none;">Voir l'annonce →</a>`:''}
+      <a href="messages.html?annonce_id=${a.id||''}&avec=${r.loueur_id||''}" style="display:inline-block;padding:10px 18px;border-radius:8px;background:var(--teal);color:#fff;font-size:13px;font-weight:600;text-decoration:none;">💬 Envoyer un message</a>
       <button class="btn-cancel" style="margin-left:auto;" onclick="annulerResa('${r.id}','locataire')">Annuler (8% retenus)</button>
     </div>`;
   }
