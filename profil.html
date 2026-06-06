@@ -232,34 +232,64 @@ function imgOrPlaceholder(photos,cls){
   return '<div class="'+cls+'" style="background:#f0f0f0;display:flex;align-items:center;justify-content:center;">📦</div>';
 }
 
-/* Calcule et affiche les montants pour une réservation annulée */
+/* Calcule et affiche le décompte d'annulation */
 function annulationInfo(r, roleAffiche){
   const total = r.prix_total || 0;
   const comm = r.commission_annulation || 0;
-  if(total === 0 || comm === 0) return '';
+  if(total === 0) return '';
+
+  const style = `
+    margin-top:8px;
+    padding:10px 12px;
+    background:#FFF0F0;
+    border:1px solid #FFCDD2;
+    border-radius:8px;
+    font-size:12px;
+    color:#666;
+    line-height:1.8;
+  `;
+  const rowStyle = `display:flex;justify-content:space-between;`;
+  const totalStyle = `display:flex;justify-content:space-between;font-weight:600;color:#1A1A1A;border-top:1px solid #FFCDD2;margin-top:4px;padding-top:4px;`;
 
   if(roleAffiche === 'loueur'){
-    // Le locataire a annulé → loueur ne reçoit rien, 8% retenus au locataire
-    // Le loueur a annulé → locataire remboursé 100%, pénalité 10% pour le loueur
     if(comm > 0 && comm <= 8){
-      // locataire a annulé
+      // locataire a annulé → 8% retenus, loueur ne reçoit rien
       const retenu = +(total * comm / 100).toFixed(2);
-      return `<div style="font-size:11px;color:#C62828;margin-top:4px;">Annulée par le locataire · ${retenu}€ retenus</div>`;
+      return `<div style="${style}">
+        <div style="font-weight:600;color:#C62828;margin-bottom:4px;">Annulée par le locataire</div>
+        <div style="${rowStyle}"><span>Montant de la réservation</span><span>${total.toFixed(2)}€</span></div>
+        <div style="${rowStyle}"><span>Frais d'annulation retenus (${comm}%)</span><span style="color:#C62828;">-${retenu}€</span></div>
+        <div style="${rowStyle}"><span>Vous avez reçu</span><span style="color:#C62828;">0€ (réservation non payée avant annulation)</span></div>
+      </div>`;
     } else {
-      // loueur a annulé
-      const penalite = +(total * comm / 100).toFixed(2);
-      return `<div style="font-size:11px;color:#C62828;margin-top:4px;">Annulée par vous · pénalité ${penalite}€</div>`;
+      // loueur a annulé → pénalité 10%
+      const penalite = +(total * Math.abs(comm) / 100).toFixed(2);
+      return `<div style="${style}">
+        <div style="font-weight:600;color:#C62828;margin-bottom:4px;">Annulée par vous</div>
+        <div style="${rowStyle}"><span>Montant remboursé au locataire</span><span>${total.toFixed(2)}€ (100%)</span></div>
+        <div style="${rowStyle}"><span>Pénalité à votre charge (10%)</span><span style="color:#C62828;">-${penalite}€</span></div>
+      </div>`;
     }
   } else {
     // Vue locataire
     if(comm < 0 || comm >= 10){
       // loueur a annulé → locataire remboursé 100%
-      return `<div style="font-size:11px;color:#2E7D32;margin-top:4px;">Annulée par le loueur · remboursé à 100%</div>`;
+      return `<div style="${style.replace('#FFF0F0','#F0FFF4').replace('#FFCDD2','#C8E6C9')}">
+        <div style="font-weight:600;color:#2E7D32;margin-bottom:4px;">Annulée par le loueur</div>
+        <div style="${rowStyle}"><span>Montant payé</span><span>${total.toFixed(2)}€</span></div>
+        <div style="${rowStyle}"><span>Frais d'annulation</span><span style="color:#2E7D32;">0€ (à la charge du loueur)</span></div>
+        <div style="${totalStyle.replace('#FFCDD2','#C8E6C9')}"><span>Vous êtes remboursé</span><span style="color:#2E7D32;">${total.toFixed(2)}€</span></div>
+      </div>`;
     } else {
       // locataire a annulé → 8% retenus
       const retenu = +(total * comm / 100).toFixed(2);
       const rembourse = +(total - retenu).toFixed(2);
-      return `<div style="font-size:11px;color:#C62828;margin-top:4px;">Annulée · remboursé ${rembourse}€ (${retenu}€ retenus par kiloue)</div>`;
+      return `<div style="${style}">
+        <div style="font-weight:600;color:#C62828;margin-bottom:4px;">Annulée par vous</div>
+        <div style="${rowStyle}"><span>Montant payé</span><span>${total.toFixed(2)}€</span></div>
+        <div style="${rowStyle}"><span>Frais d'annulation (${comm}%)</span><span style="color:#C62828;">-${retenu}€</span></div>
+        <div style="${totalStyle}"><span>Vous êtes remboursé</span><span style="color:#C62828;">${rembourse}€</span></div>
+      </div>`;
     }
   }
 }

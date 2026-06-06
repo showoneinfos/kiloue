@@ -473,7 +473,42 @@ function fmtLong(d){
 function fmtISO(d){
   return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
 }
-function badgeHtml(s){
+function annulationInfo(r, roleAffiche){
+  const total = r.prix_total || 0;
+  const comm = r.commission_annulation || 0;
+  if(total === 0) return '';
+
+  const style = 'margin-top:8px;padding:10px 12px;background:#FFF0F0;border:1px solid #FFCDD2;border-radius:8px;font-size:12px;color:#666;line-height:1.8;';
+  const row = 'display:flex;justify-content:space-between;';
+  const total_row = 'display:flex;justify-content:space-between;font-weight:600;color:#1A1A1A;border-top:1px solid #FFCDD2;margin-top:4px;padding-top:4px;';
+
+  if(roleAffiche === 'loueur'){
+    if(comm > 0 && comm <= 8){
+      const retenu = +(total * comm / 100).toFixed(2);
+      return `<div style="${style}"><div style="font-weight:600;color:#C62828;margin-bottom:4px;">Annulée par le locataire</div>
+        <div style="${row}"><span>Montant réservation</span><span>${total.toFixed(2)}€</span></div>
+        <div style="${row}"><span>Frais retenus (${comm}%)</span><span style="color:#C62828;">-${retenu}€</span></div></div>`;
+    } else {
+      const penalite = +(total * Math.abs(comm) / 100).toFixed(2);
+      return `<div style="${style}"><div style="font-weight:600;color:#C62828;margin-bottom:4px;">Annulée par vous</div>
+        <div style="${row}"><span>Remboursé au locataire</span><span>${total.toFixed(2)}€</span></div>
+        <div style="${row}"><span>Pénalité (10%)</span><span style="color:#C62828;">-${penalite}€</span></div></div>`;
+    }
+  } else {
+    if(comm < 0 || comm >= 10){
+      return `<div style="${style.replace('#FFF0F0','#F0FFF4').replace('#FFCDD2','#C8E6C9')}"><div style="font-weight:600;color:#2E7D32;margin-bottom:4px;">Annulée par le loueur</div>
+        <div style="${row}"><span>Montant payé</span><span>${total.toFixed(2)}€</span></div>
+        <div style="${total_row.replace('#FFCDD2','#C8E6C9')}"><span>Vous êtes remboursé</span><span style="color:#2E7D32;">${total.toFixed(2)}€</span></div></div>`;
+    } else {
+      const retenu = +(total * comm / 100).toFixed(2);
+      const rembourse = +(total - retenu).toFixed(2);
+      return `<div style="${style}"><div style="font-weight:600;color:#C62828;margin-bottom:4px;">Annulée par vous</div>
+        <div style="${row}"><span>Montant payé</span><span>${total.toFixed(2)}€</span></div>
+        <div style="${row}"><span>Frais d'annulation (${comm}%)</span><span style="color:#C62828;">-${retenu}€</span></div>
+        <div style="${total_row}"><span>Vous êtes remboursé</span><span style="color:#C62828;">${rembourse}€</span></div></div>`;
+    }
+  }
+}
   if(s==='en_attente') return '<span class="badge badge-wait">En attente</span>';
   if(s==='acceptee')   return '<span class="badge badge-acceptee">Acceptée</span>';
   if(s==='payee')      return '<span class="badge badge-ok">Payée</span>';
@@ -1121,7 +1156,7 @@ async function showSection(section){
           </div>
           <div style="text-align:right;">
             ${badgeHtml(r.statut)}
-            <div class="resa-amt">+${net.toFixed(2)}€</div>
+            ${r.statut==='annulee' ? `<div class="resa-amt" style="color:#C62828;">+${net.toFixed(2)}€</div>${annulationInfo(r,'loueur')}` : `<div class="resa-amt">+${net.toFixed(2)}€</div>`}
           </div>
         </div>
         ${actions}
@@ -1156,7 +1191,7 @@ async function showSection(section){
           </div>
           <div style="text-align:right;">
             ${badgeHtml(r.statut)}
-            <div class="resa-amt">${r.prix_total?r.prix_total.toFixed(2)+'€':''}</div>
+            ${r.statut==='annulee' ? `<div class="resa-amt" style="color:#C62828;">${r.prix_total?r.prix_total.toFixed(2)+'€':''}</div>${annulationInfo(r,'locataire')}` : `<div class="resa-amt">${r.prix_total?r.prix_total.toFixed(2)+'€':''}</div>`}
           </div>
         </div>
         ${actions}
