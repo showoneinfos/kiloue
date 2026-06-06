@@ -1029,12 +1029,24 @@ async function ouvrirChat(withUserId, annonceId, withName){
 async function loadChatMessages(){
   const wrap = document.getElementById('chat-messages');
   wrap.innerHTML = '<div class="loading-spin"><div class="spinner"></div></div>';
-  let q = db.from('messages')
-    .or(`and(expediteur_id.eq.${currentUser.id},destinataire_id.eq.${currentChatWith}),and(expediteur_id.eq.${currentChatWith},destinataire_id.eq.${currentUser.id})`)
-    .order('created_at',{ascending:true});
-  const {data} = await q;
+
+  // Deux requêtes simples puis fusion
+  const [{data:sent},{data:received}] = await Promise.all([
+    db.from('messages').select('*')
+      .eq('expediteur_id', currentUser.id)
+      .eq('destinataire_id', currentChatWith)
+      .order('created_at',{ascending:true}),
+    db.from('messages').select('*')
+      .eq('expediteur_id', currentChatWith)
+      .eq('destinataire_id', currentUser.id)
+      .order('created_at',{ascending:true})
+  ]);
+
+  const all = [...(sent||[]), ...(received||[])];
+  all.sort((a,b) => new Date(a.created_at) - new Date(b.created_at));
+
   wrap.innerHTML = '';
-  (data||[]).forEach(m => appendChatMsg(m, false));
+  all.forEach(m => appendChatMsg(m, false));
   wrap.scrollTop = wrap.scrollHeight;
   db.from('messages').update({lu:true}).eq('destinataire_id',currentUser.id).eq('expediteur_id',currentChatWith).eq('lu',false).then(()=>{});
 }
