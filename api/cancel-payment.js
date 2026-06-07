@@ -30,18 +30,17 @@ module.exports = async (req, res) => {
 
     const prix_total = resa.prix_total || 0;
 
-    // 2. Calcul du remboursement locataire via Stripe
-    // - Locataire annule : remboursé à 92% (8% retenus)
-    // - Loueur annule    : remboursé à 100% (pénalité 10% loueur hors Stripe)
-    const taux_remboursement = role === 'locataire' ? 0.92 : 1.0;
+    // 2. Calcul du remboursement
+    // - Locataire annule : remboursé à 75% (25% retenus : 20% loueur + 5% kiloue)
+    // - Loueur annule    : remboursé à 100%, aucune pénalité
+    const taux_remboursement = role === 'locataire' ? 0.75 : 1.0;
     const montant_centimes = Math.round(prix_total * taux_remboursement * 100);
 
-    // Commission enregistrée en BDD pour traçabilité
-    // Locataire : 8% retenus / Loueur : -10% (à déduire de son virement)
-    const commission_annulation = role === 'locataire' ? 8 : -10;
+    // commission_annulation : 25 si locataire annule, 0 si loueur annule
+    const commission_annulation = role === 'locataire' ? 25 : 0;
     const montant_retenu = role === 'locataire'
-      ? +(prix_total * 0.08).toFixed(2)
-      : 0; // le locataire récupère 100%, le loueur sera débité séparément
+      ? +(prix_total * 0.25).toFixed(2)
+      : 0;
 
     // 3. Si pas de paiement Stripe — juste annuler dans Supabase
     if (!resa.stripe_payment_id) {
@@ -68,7 +67,6 @@ module.exports = async (req, res) => {
     if (chargesData.data && chargesData.data.length > 0) {
       const charge = chargesData.data[0];
 
-      // Sécurité : ne pas rembourser plus que ce qui a été encaissé
       const deja_rembourse = charge.amount_refunded || 0;
       const encaisse = charge.amount || 0;
       const remboursable = encaisse - deja_rembourse;
