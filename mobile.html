@@ -1435,10 +1435,12 @@ window._mobilePhotoFiles = [];
 
 async function handleMobilePhotos(input){
   const files = Array.from(input.files);
+  toast('Photos sélectionnées: ' + files.length);
   const previews = document.getElementById('pub-photo-previews');
   files.forEach(function(file){
     const fileIndex = window._mobilePhotoFiles.length;
     window._mobilePhotoFiles.push(file);
+    toast('Fichier: ' + file.name + ' (' + Math.round(file.size/1024) + 'ko)');
     const reader = new FileReader();
     reader.onload = function(e){
       const div = document.createElement('div');
