@@ -176,11 +176,15 @@
         <strong id="cat-badge-name"></strong> › <strong id="cat-badge-sous"></strong>
         <a href="#" onclick="go(1);return false;" style="margin-left:10px;color:var(--teal);font-size:12px;">Modifier</a>
       </div>
-      <div class="field"><label>Titre *</label><input type="text" id="f-titre" placeholder="Ex : Appartement T2 vue mer — Ajaccio" oninput="updPreview()"></div>
-      <div class="field"><label>Description</label><textarea id="f-desc" placeholder="Surface, équipements, règles de la maison, animaux acceptés…"></textarea></div>
-      <div class="row2">
+      <div class="field"><label>Titre *</label><input type="text" id="f-titre" placeholder="Ex : Tronçonneuse Stihl MS 250 — excellent état" oninput="updPreview()"></div>
+      <div class="field"><label>Description</label><textarea id="f-desc" placeholder="État, accessoires inclus, conditions particulières…"></textarea></div>
+      <div class="row2" id="hebergement-fields" style="display:none;">
         <div class="field"><label>Capacité (personnes)</label><input type="number" id="f-marque" placeholder="4" min="1"></div>
         <div class="field"><label>Chambres</label><input type="number" id="f-modele" placeholder="2" min="0"></div>
+      </div>
+      <div class="row2" id="materiel-fields">
+        <div class="field"><label>Marque</label><input type="text" id="f-marque2" placeholder="Stihl, Honda…"></div>
+        <div class="field"><label>Modèle</label><input type="text" id="f-modele2" placeholder="MS 250…"></div>
       </div>
       <div class="field"><label>État</label>
         <select id="f-etat"><option>Neuf / jamais utilisé</option><option>Très bon état</option><option selected>Bon état</option><option>État correct</option></select>
@@ -320,6 +324,18 @@ function renderCats(){
 
 function openCat(key, name){
   _catKey=key; _catName=name; _sousCat='';
+  // Afficher les bons champs selon la catégorie
+  if(key === 'hebergement'){
+    document.getElementById('hebergement-fields').style.display='grid';
+    document.getElementById('materiel-fields').style.display='none';
+    document.getElementById('f-titre').placeholder='Ex : Appartement T2 vue mer — Ajaccio';
+    document.getElementById('f-desc').placeholder='Surface, équipements, règles de la maison…';
+  } else {
+    document.getElementById('hebergement-fields').style.display='none';
+    document.getElementById('materiel-fields').style.display='grid';
+    document.getElementById('f-titre').placeholder='Ex : Tronçonneuse Stihl MS 250 — excellent état';
+    document.getElementById('f-desc').placeholder='État, accessoires inclus, conditions particulières…';
+  }
   document.getElementById('pub-cat-label').textContent = name;
   const subs = SUBS[key]||[];
   document.getElementById('pub-sous-cats').innerHTML = subs.map(function(s){
