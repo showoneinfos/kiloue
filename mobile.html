@@ -393,7 +393,7 @@ body{display:flex;flex-direction:column;}
           <div style="font-size:13px;color:#999;">Appuyez pour ajouter des photos</div>
           <div style="font-size:11px;color:#ccc;margin-top:4px;">Galerie ou caméra</div>
         </div>
-        <input type="file" id="pub-file-input" multiple accept="image/*" style="display:none;" onchange="handleMobilePhotos(this)">
+        <input type="file" id="pub-file-input" multiple accept="image/*" style="display:none;">
       </div>
       <button class="btn-pub" id="btn-pub" onclick="publierAnnonce()" style="width:100%;padding:16px;border-radius:10px;background:#00A693;color:#fff;border:none;font-size:16px;font-weight:700;font-family:inherit;cursor:pointer;margin-top:20px;">Publier mon annonce →</button>
     </div>
@@ -1432,6 +1432,16 @@ function toggleLivraisonField(){
 
 window._mobilePhotoUrls = [];
 window._mobilePhotoFiles = [];
+
+// Attacher l'event listener au chargement
+document.addEventListener('DOMContentLoaded', function(){
+  const fileInput = document.getElementById('pub-file-input');
+  if(fileInput){
+    fileInput.addEventListener('change', function(){
+      handleMobilePhotos(this);
+    });
+  }
+});
 
 async function handleMobilePhotos(input){
   const files = Array.from(input.files);
