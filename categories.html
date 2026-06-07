@@ -30,27 +30,19 @@
   .btn-login:hover{border-color:var(--teal);color:var(--teal);}
   .btn-sell{padding:8px 18px;border-radius:6px;border:none;background:var(--teal);font-size:13px;font-weight:600;font-family:var(--sans);color:var(--white);cursor:pointer;white-space:nowrap;}
   .btn-sell:hover{background:var(--teal2);}
-
-  /* BARRE CATÉGORIES — style texte simple */
   .cats-bar{border-top:1px solid var(--border);height:44px;display:flex;align-items:center;padding:0 24px;gap:0;overflow-x:auto;}
   .cats-bar::-webkit-scrollbar{display:none;}
   .cat-tab{padding:0 14px;height:44px;display:flex;align-items:center;gap:6px;font-size:13px;font-weight:500;color:var(--ink2);cursor:pointer;white-space:nowrap;border-bottom:2px solid transparent;transition:all .15s;}
   .cat-tab:hover,.cat-tab.active{color:var(--teal);border-bottom-color:var(--teal);}
   .cat-tab svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;flex-shrink:0;}
-
-  /* BREADCRUMB */
   .breadcrumb{padding:12px 24px;font-size:13px;color:var(--ink2);display:flex;align-items:center;gap:6px;background:var(--white);border-bottom:1px solid var(--border);}
   .breadcrumb a{color:var(--ink2);text-decoration:none;}
   .breadcrumb a:hover{color:var(--teal);}
   .breadcrumb svg{width:12px;height:12px;fill:none;stroke:var(--ink3);stroke-width:2;}
   .bc-current{color:var(--ink);font-weight:500;}
-
-  /* PAGE */
   .page-content{max-width:1200px;margin:0 auto;padding:28px 24px;}
   .page-title{font-size:22px;font-weight:700;color:var(--ink);margin-bottom:6px;}
   .page-sub{font-size:14px;color:var(--ink2);margin-bottom:28px;}
-
-  /* GRILLE TOUTES CATÉGORIES — style sobre */
   .all-cats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-bottom:40px;}
   .all-cat-card{background:var(--white);border:1.5px solid var(--border);border-radius:10px;padding:16px;cursor:pointer;transition:all .15s;text-decoration:none;display:flex;align-items:center;gap:12px;}
   .all-cat-card:hover{border-color:var(--teal);background:var(--teal-light);}
@@ -61,8 +53,6 @@
   .cat-card-info .name{font-size:14px;font-weight:500;color:var(--ink);}
   .all-cat-card:hover .cat-card-info .name{color:var(--teal);}
   .cat-card-info .count{font-size:12px;color:var(--ink3);margin-top:2px;}
-
-  /* VUE CATÉGORIE */
   .subcat-view{display:none;}
   .subcat-view.active{display:block;}
   .subcat-header{display:flex;align-items:center;gap:12px;margin-bottom:20px;}
@@ -72,8 +62,6 @@
   .subcat-chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:28px;}
   .subcat-chip{padding:7px 16px;border-radius:20px;border:1.5px solid var(--border);background:var(--white);font-size:13px;color:var(--ink2);cursor:pointer;transition:all .15s;}
   .subcat-chip:hover,.subcat-chip.active{background:var(--teal);border-color:var(--teal);color:#fff;}
-
-  /* ANNONCES */
   .results-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid var(--border);}
   .results-info{font-size:14px;color:var(--ink2);}
   .results-info strong{color:var(--ink);}
@@ -96,7 +84,6 @@
   .lcard-badge{font-size:10px;padding:2px 7px;border-radius:20px;font-weight:500;}
   .bl{background:#E8F7F5;color:#008577;}
   .bc{background:#F5F5F5;color:#666;}
-
   @media(max-width:768px){
     .nav-top{padding:0 16px;}
     .cats-bar{padding:0 8px;}
@@ -122,9 +109,9 @@
     </div>
   </div>
 
-  <!-- BARRE CATÉGORIES — texte + petite icône SVG, zéro emoji -->
   <div class="cats-bar">
     <div class="cat-tab active" onclick="selectTab(this,'all')" data-cat="all">Toutes les catégories</div>
+    <div class="cat-tab" onclick="selectTab(this,'hebergement')" data-cat="hebergement"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Hébergement</div>
     <div class="cat-tab" onclick="selectTab(this,'vehicules')" data-cat="vehicules"><svg viewBox="0 0 24 24"><path d="M5 17H3a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v5"/><circle cx="13" cy="19" r="2"/><circle cx="5" cy="19" r="2"/></svg>Véhicules</div>
     <div class="cat-tab" onclick="selectTab(this,'nautisme')" data-cat="nautisme"><svg viewBox="0 0 24 24"><path d="M2 20a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2"/><path d="M12 2v10"/><path d="M2 17l5-5 4 4 4-4 5 5"/></svg>Nautisme</div>
     <div class="cat-tab" onclick="selectTab(this,'bricolage')" data-cat="bricolage"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>Bricolage</div>
@@ -148,22 +135,19 @@
 </div>
 
 <div class="page-content">
-
-  <!-- VUE : TOUTES LES CATÉGORIES -->
   <div id="view-all" class="subcat-view active">
     <div class="page-title">Toutes les catégories</div>
-    <div class="page-sub">Parcourez les 13 catégories de kiloue.com</div>
+    <div class="page-sub">Parcourez les 14 catégories de kiloue.com</div>
     <div class="all-cats-grid" id="all-cats-grid"></div>
   </div>
-
-  <!-- VUES PAR CATÉGORIE (générées dynamiquement) -->
   <div id="cat-views"></div>
-
 </div>
 
 <script>
-/* ── DONNÉES ── */
 const CATS = [
+  { key:'hebergement', name:'Hébergement & Vacances', dbName:'Hébergement et Vacances',
+    icon:'<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>',
+    subs:['Tout voir','Appartements','Maisons','Villas','Mobile homes','Bungalows','Tentes & Glamping','Chambres d\'hôtes','Gîtes','Chalets','Camping-cars & Vans','Caravanes à louer','Pénichettes','Autres'] },
   { key:'vehicules', name:'Véhicules', dbName:'Véhicules',
     icon:'<path d="M5 17H3a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v5"/><circle cx="13" cy="19" r="2"/><circle cx="5" cy="19" r="2"/>',
     subs:['Tout voir','Voitures','Utilitaires','Motos','Scooters','Vélos','Vélos électriques','Trottinettes','Quads','Camping-cars','Caravanes','Remorques','Autres'] },
@@ -195,7 +179,7 @@ const CATS = [
     icon:'<rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>',
     subs:['Tout voir','Ordinateurs','Tablettes','Smartphones','Consoles','VR','Appareils photo','Caméras','Drones','Vidéoprojecteurs','Imprimantes','Écrans','Autres'] },
   { key:'mode', name:'Mode & Accessoires', dbName:'Mode et Accessoires',
-    icon:'<path d="M20.38 3.46L16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.57a1 1 0 0 0 .99.86H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.86l.58-3.57a2 2 0 0 0-1.34-2.23z"/>',
+    icon:'<path d="M20.38 3.46L16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.57a1 1 0 0 0 .99.86H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.86l.58-3.57a2 2 0 0-1.34-2.23z"/>',
     subs:['Tout voir','Robes de soirée','Costumes','Vêtements homme','Vêtements femme','Vêtements enfant','Sacs','Bijoux','Montres','Chaussures','Autres'] },
   { key:'animaux', name:'Animaux', dbName:'Animaux',
     icon:'<path d="M20.42 4.58a5.4 5.4 0 0 0-7.65 0l-.77.78-.77-.78a5.4 5.4 0 0 0-7.65 7.65l1.54 1.55L12 21l6.89-6.89 1.53-1.54a5.4 5.4 0 0 0 0-7.99z"/>',
@@ -207,58 +191,43 @@ const CATS = [
 
 function svgIcon(paths, size){
   size = size||18;
-  return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="${size}" height="${size}">${paths}</svg>`;
+  return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="'+size+'" height="'+size+'">'+paths+'</svg>';
 }
 
-/* ── RENDU GRILLE "TOUTES LES CATÉGORIES" ── */
 function renderAllCats(){
   const grid = document.getElementById('all-cats-grid');
-  grid.innerHTML = CATS.map(c =>
-    `<div class="all-cat-card" onclick="selectTabByKey('${c.key}')">
-      <div class="cat-icon-box">${svgIcon(c.icon)}</div>
-      <div class="cat-card-info">
-        <div class="name">${c.name}</div>
-        <div class="count">${c.subs.length - 1} sous-catégories</div>
-      </div>
-    </div>`
-  ).join('');
+  grid.innerHTML = CATS.map(function(c){
+    return '<div class="all-cat-card" onclick="selectTabByKey(\''+c.key+'\')">'
+      + '<div class="cat-icon-box">'+svgIcon(c.icon)+'</div>'
+      + '<div class="cat-card-info">'
+      + '<div class="name">'+c.name+'</div>'
+      + '<div class="count">'+(c.subs.length-1)+' sous-catégories</div>'
+      + '</div></div>';
+  }).join('');
 }
 
-/* ── RENDU VUES CATÉGORIES ── */
 function renderCatViews(){
   const wrap = document.getElementById('cat-views');
-  wrap.innerHTML = CATS.map(c => `
-    <div id="view-${c.key}" class="subcat-view">
-      <div class="subcat-header">
-        <div class="cat-icon-lg">${svgIcon(c.icon, 22)}</div>
-        <h1>${c.name}</h1>
-      </div>
-      <div class="subcat-chips" id="chips-${c.key}">
-        ${c.subs.map((s,i) => `<div class="subcat-chip${i===0?' active':''}" onclick="selChip(this,'${c.key}','${s}')">${s}</div>`).join('')}
-      </div>
-      <div class="results-bar">
-        <span class="results-info"><strong id="count-${c.key}">—</strong> annonces</span>
-        <select class="sort-sel" onchange="sortGrid('${c.key}',this.value)">
-          <option value="recent">Plus récentes</option>
-          <option value="asc">Prix croissant</option>
-          <option value="desc">Prix décroissant</option>
-        </select>
-      </div>
-      <div class="listings-grid" id="grid-${c.key}">
-        <div style="grid-column:1/-1;text-align:center;padding:40px;color:#999;font-size:14px;">Chargement…</div>
-      </div>
-    </div>
-  `).join('');
+  wrap.innerHTML = CATS.map(function(c){
+    return '<div id="view-'+c.key+'" class="subcat-view">'
+      + '<div class="subcat-header"><div class="cat-icon-lg">'+svgIcon(c.icon,22)+'</div><h1>'+c.name+'</h1></div>'
+      + '<div class="subcat-chips" id="chips-'+c.key+'">'
+      + c.subs.map(function(s,i){ return '<div class="subcat-chip'+(i===0?' active':'')+'" onclick="selChip(this,\''+c.key+'\',\''+s+'\')">'+s+'</div>'; }).join('')
+      + '</div>'
+      + '<div class="results-bar"><span class="results-info"><strong id="count-'+c.key+'">—</strong> annonces</span>'
+      + '<select class="sort-sel" onchange="sortGrid(\''+c.key+'\',this.value)"><option value="recent">Plus récentes</option><option value="asc">Prix croissant</option><option value="desc">Prix décroissant</option></select></div>'
+      + '<div class="listings-grid" id="grid-'+c.key+'"><div style="grid-column:1/-1;text-align:center;padding:40px;color:#999;font-size:14px;">Chargement…</div></div>'
+      + '</div>';
+  }).join('');
 }
 
-/* ── NAVIGATION ── */
 const CAT_NAMES = {all:'Toutes les catégories'};
-CATS.forEach(c => CAT_NAMES[c.key] = c.name);
+CATS.forEach(function(c){ CAT_NAMES[c.key] = c.name; });
 
 function selectTab(el, key){
-  document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.cat-tab').forEach(function(t){ t.classList.remove('active'); });
   if(el) el.classList.add('active');
-  document.querySelectorAll('.subcat-view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.subcat-view').forEach(function(v){ v.classList.remove('active'); });
   document.getElementById('view-'+key).classList.add('active');
   document.getElementById('bc-text').textContent = CAT_NAMES[key]||key;
   if(key !== 'all') loadGrid(key);
@@ -266,21 +235,20 @@ function selectTab(el, key){
 }
 
 function selectTabByKey(key){
-  const el = document.querySelector(`[data-cat="${key}"]`);
+  const el = document.querySelector('[data-cat="'+key+'"]');
   selectTab(el, key);
 }
 
 function selChip(el, catKey, sub){
-  el.closest('.subcat-chips').querySelectorAll('.subcat-chip').forEach(c => c.classList.remove('active'));
+  el.closest('.subcat-chips').querySelectorAll('.subcat-chip').forEach(function(c){ c.classList.remove('active'); });
   el.classList.add('active');
   filterGrid(catKey, sub === 'Tout voir' ? null : sub);
 }
 
-/* ── CHARGEMENT SUPABASE ── */
 const SUPA_URL = 'https://nsvosbuxkpnoasfilyqy.supabase.co';
 const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5zdm9zYnV4a3Bub2FzZmlseXF5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAxODczOTcsImV4cCI6MjA5NTc2MzM5N30.pTuH4X8IQy0UJq8zUZ8t7I2WLMEUXae_8nWdtIFrpRE';
 let db = null;
-const gridData = {}; // cache des données par catégorie
+const gridData = {};
 
 function ensureDB(cb){
   if(db){ cb(); return; }
@@ -291,25 +259,17 @@ function ensureDB(cb){
 }
 
 function loadGrid(key, sort){
-  const cat = CATS.find(c => c.key === key);
+  const cat = CATS.find(function(c){ return c.key === key; });
   if(!cat) return;
   const grid = document.getElementById('grid-'+key);
   if(!grid) return;
-
-  // Si déjà chargé et pas de nouveau tri, utiliser le cache
-  if(gridData[key] && !sort){
-    renderCards(key, gridData[key]);
-    return;
-  }
-
+  if(gridData[key] && !sort){ renderCards(key, gridData[key]); return; }
   grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:#999;font-size:14px;">Chargement…</div>';
-
   ensureDB(async function(){
     let q = db.from('annonces').select('*').eq('categorie', cat.dbName).eq('disponible', true);
-    if(sort === 'asc')  q = q.order('prix_jour', {ascending:true});
+    if(sort === 'asc') q = q.order('prix_jour', {ascending:true});
     else if(sort === 'desc') q = q.order('prix_jour', {ascending:false});
     else q = q.order('created_at', {ascending:false});
-
     const { data, error } = await q;
     if(error || !data || data.length === 0){
       grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:48px;color:#999;font-size:14px;">Aucune annonce dans cette catégorie pour le moment.</div>';
@@ -324,13 +284,11 @@ function loadGrid(key, sort){
 function filterGrid(key, sous){
   const data = gridData[key];
   if(!data) return;
-  const filtered = sous ? data.filter(a => a.sous_categorie === sous) : data;
+  const filtered = sous ? data.filter(function(a){ return a.sous_categorie === sous; }) : data;
   renderCards(key, filtered);
 }
 
-function sortGrid(key, val){
-  loadGrid(key, val);
-}
+function sortGrid(key, val){ loadGrid(key, val); }
 
 function renderCards(key, items){
   const grid = document.getElementById('grid-'+key);
@@ -340,28 +298,28 @@ function renderCards(key, items){
     grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:48px;color:#999;font-size:14px;">Aucune annonce pour ce filtre.</div>';
     return;
   }
-  grid.innerHTML = items.map(a => {
+  const now = new Date();
+  grid.innerHTML = items.map(function(a){
+    const isBoosted = a.boost_expire && new Date(a.boost_expire) > now;
     const photo = a.photos && a.photos.length > 0 ? a.photos[0] : '';
     const imgHtml = photo
-      ? `<img class="lcard-img" src="${photo}" alt="${a.titre}" loading="lazy">`
-      : `<div class="lcard-img" style="display:flex;align-items:center;justify-content:center;background:#f5f5f5;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>`;
-    return `<div class="lcard" onclick="window.location.href='annonce.html?id=${a.id}'">
-      <div class="lcard-img-w">${imgHtml}
-        <button class="lcard-fav" onclick="event.stopPropagation()"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
-      </div>
-      <div class="lcard-body">
-        <div class="lcard-name">${a.titre}</div>
-        <div class="lcard-meta">${a.ville||''}</div>
-        <div class="lcard-bot">
-          <div class="lcard-price">${a.prix_jour}€<small>/j</small></div>
-          ${a.livraison ? '<div class="lcard-badge bl">Livraison</div>' : '<div class="lcard-badge bc">Sur place</div>'}
-        </div>
-      </div>
-    </div>`;
+      ? '<img class="lcard-img" src="'+photo+'" alt="'+a.titre+'" loading="lazy">'
+      : '<div class="lcard-img" style="display:flex;align-items:center;justify-content:center;background:#f5f5f5;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>';
+    const boostBadge = isBoosted ? '<div style="position:absolute;top:8px;left:8px;background:linear-gradient(135deg,#FF6B35,#FF8E53);color:#fff;font-size:10px;font-weight:700;padding:3px 8px;border-radius:10px;">★ À la une</div>' : '';
+    const cardStyle = isBoosted ? 'box-shadow:0 0 0 2px #FF6B35;border-radius:10px;' : '';
+    return '<div class="lcard" onclick="window.location.href=\'annonce.html?id='+a.id+'\'" style="'+cardStyle+'">'
+      + '<div class="lcard-img-w">'+imgHtml+boostBadge
+      + '<button class="lcard-fav" onclick="event.stopPropagation()"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>'
+      + '</div>'
+      + '<div class="lcard-body">'
+      + '<div class="lcard-name">'+a.titre+'</div>'
+      + '<div class="lcard-meta">'+(a.ville||'')+'</div>'
+      + '<div class="lcard-bot"><div class="lcard-price">'+a.prix_jour+'€<small>/j</small></div>'
+      + (a.livraison ? '<div class="lcard-badge bl">Livraison</div>' : '<div class="lcard-badge bc">Sur place</div>')
+      + '</div></div></div>';
   }).join('');
 }
 
-/* ── INIT ── */
 document.addEventListener('DOMContentLoaded', function(){
   renderAllCats();
   renderCatViews();
