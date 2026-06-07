@@ -385,7 +385,16 @@ body{display:flex;flex-direction:column;}
         <div class="tgl" id="pub-tgl-livraison" onclick="this.classList.toggle('on');toggleLivraisonField()"></div>
       </div>
       <div class="pub-field" id="pub-livraison-field" style="display:none;margin-top:10px;"><label>Supplément livraison (€)</label><input type="number" id="pub-prix-livraison" placeholder="20" min="0"></div>
-      <div class="pub-field" style="margin-top:10px;"><label>Photos (URLs séparées par des virgules)</label><input type="text" id="pub-photos" placeholder="https://... , https://..."></div>
+      <div class="pub-field" style="margin-top:10px;">
+        <label>Photos</label>
+        <div id="pub-photo-previews" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;"></div>
+        <div onclick="document.getElementById('pub-file-input').click()" style="border:2px dashed var(--border);border-radius:10px;padding:20px;text-align:center;cursor:pointer;">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="1.5" style="display:block;margin:0 auto 8px;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <div style="font-size:13px;color:#999;">Appuyez pour ajouter des photos</div>
+          <div style="font-size:11px;color:#ccc;margin-top:4px;">Galerie ou caméra</div>
+        </div>
+        <input type="file" id="pub-file-input" multiple accept="image/*" style="display:none;" onchange="handleMobilePhotos(this)">
+      </div>
     </div>
     <div class="pub-bottom">
       <button class="btn-pub" id="btn-pub" onclick="publierAnnonce()">Publier mon annonce →</button>
@@ -1421,6 +1430,33 @@ function toggleLivraisonField(){
   document.getElementById('pub-livraison-field').style.display = show ? 'block' : 'none';
 }
 
+window._mobilePhotoUrls = [];
+window._mobilePhotoFiles = [];
+
+async function handleMobilePhotos(input){
+  const files = Array.from(input.files);
+  const previews = document.getElementById('pub-photo-previews');
+  files.forEach(function(file){
+    window._mobilePhotoFiles.push(file);
+    const reader = new FileReader();
+    reader.onload = function(e){
+      const div = document.createElement('div');
+      div.style.cssText = 'position:relative;width:70px;height:70px;border-radius:8px;overflow:hidden;';
+      const img = document.createElement('img');
+      img.src = e.target.result;
+      img.style.cssText = 'width:100%;height:100%;object-fit:cover;';
+      const btn = document.createElement('button');
+      btn.textContent = '×';
+      btn.style.cssText = 'position:absolute;top:2px;right:2px;width:20px;height:20px;border-radius:50%;background:#00A693;color:#fff;border:none;font-size:12px;cursor:pointer;';
+      const idx = window._mobilePhotoFiles.length - 1;
+      btn.onclick = function(){ div.remove(); window._mobilePhotoFiles.splice(idx, 1); };
+      div.appendChild(img); div.appendChild(btn);
+      previews.appendChild(div);
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
 async function publierAnnonce(){
   if(!currentUser){ goPage('auth'); return; }
   const cat = document.getElementById('pub-cat').value;
@@ -1432,13 +1468,26 @@ async function publierAnnonce(){
   const rayon = parseInt(document.getElementById('pub-rayon').value);
   const livraison = document.getElementById('pub-tgl-livraison').classList.contains('on');
   const prixLivraison = livraison ? (parseFloat(document.getElementById('pub-prix-livraison').value)||0) : 0;
-  const photosRaw = document.getElementById('pub-photos').value.trim();
-  const photos = photosRaw ? photosRaw.split(',').map(p=>p.trim()).filter(Boolean) : [];
+  const photos = window._mobilePhotoUrls || [];
 
   if(!cat||!titre||!desc||!prix||!ville){ toast('Veuillez remplir tous les champs obligatoires.'); return; }
 
   const btn = document.getElementById('btn-pub');
   btn.disabled = true; btn.textContent = 'Publication…';
+
+  // Upload photos vers Supabase Storage
+  const uploadedUrls = [];
+  for(let i = 0; i < window._mobilePhotoFiles.length; i++){
+    const file = window._mobilePhotoFiles[i];
+    const ext = file.name.split('.').pop() || 'jpg';
+    const path = currentUser.id + '/' + Date.now() + '_' + i + '.' + ext;
+    const {error: upErr} = await db.storage.from('annonces-photos').upload(path, file, {contentType: file.type});
+    if(!upErr){
+      const {data: pub} = db.storage.from('annonces-photos').getPublicUrl(path);
+      if(pub?.publicUrl) uploadedUrls.push(pub.publicUrl);
+    }
+  }
+  window._mobilePhotoUrls = uploadedUrls;
 
   const {error} = await db.from('annonces').insert([{
     user_id: currentUser.id, categorie: cat, titre, description: desc,
