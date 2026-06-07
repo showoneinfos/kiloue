@@ -1515,8 +1515,40 @@ async function publierAnnonce(){
 
   btn.disabled = false; btn.textContent = 'Publier mon annonce →';
   if(error){ toast('Erreur : '+error.message); return; }
+
+  // Email de confirmation
+  try {
+    const emailTo = currentUser.email;
+    const prenomUser = currentUser.user_metadata?.prenom || '';
+    if(emailTo){
+      const emailRes = await fetch('/api/send-email', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          type: 'annonce_publiee',
+          to: emailTo,
+          data: { prenom: prenomUser, annonce_titre: titre, ville: ville, prix: prix }
+        })
+      });
+      const emailData = await emailRes.json();
+      console.log('Email result:', emailData);
+    }
+  } catch(e){ console.warn('Email error:', e); }
+
+  // Réinitialiser le formulaire
+  document.getElementById('pub-titre').value = '';
+  document.getElementById('pub-desc').value = '';
+  document.getElementById('pub-prix').value = '';
+  document.getElementById('pub-caution').value = '';
+  document.getElementById('pub-ville').value = '';
+  document.getElementById('pub-rayon').value = '30';
+  document.getElementById('pub-photo-previews').innerHTML = '';
+  document.getElementById('pub-file-input').value = '';
+  window._mobilePhotoFiles = [];
+  window._mobilePhotoUrls = [];
+
   toast('✓ Annonce publiée !');
-  setTimeout(() => { goPage('home'); loadAnnonces(); }, 1500);
+  setTimeout(function(){ goPage('home'); loadAnnonces(); }, 1500);
 }
 
 (function(){
