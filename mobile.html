@@ -1327,7 +1327,7 @@ function refuserResaMobile(id){
 
 async function annulerResaMobile(id, role){
   const comm = role==='loueur' ? 10 : 8;
-  if(!confirm(role==='loueur' ? 'Annuler ? Pénalité de 10% appliquée.' : 'Annuler ? '+comm+'% du montant retenus par kiloue.')) return;
+  if(!confirm(role==='loueur' ? 'Annuler cette réservation ? Le locataire sera remboursé à 100%.' : 'Annuler ? 25% du montant total vous sera retenu (20% au loueur + 5% kiloue).')) return;
   try {
     const res = await fetch('/api/cancel-payment', {
       method: 'POST',

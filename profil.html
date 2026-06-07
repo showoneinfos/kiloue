@@ -412,12 +412,12 @@ function renderResaRecue(r){
       En attente du paiement du locataire…
     </div>
     <div class="resa-actions one" style="margin-top:8px;">
-      <button class="btn-cancel" onclick="annulerResa('${r.id}','loueur')">Annuler (25% retenus)</button>
+      <button class="btn-cancel" onclick="annulerResa('${r.id}','loueur')">Annuler la réservation</button>
     </div>`;
   } else if(r.statut==='payee'||r.statut==='confirmee'){
     actions=`<div style="margin-top:8px;display:flex;gap:10px;flex-wrap:wrap;">
       <a href="messages.html?annonce_id=${a.id||''}&avec=${r.locataire_id||''}" style="display:inline-block;padding:10px 18px;border-radius:8px;background:var(--teal);color:#fff;font-size:13px;font-weight:600;text-decoration:none;">💬 Envoyer un message</a>
-      <button class="btn-cancel" style="margin-left:auto;" onclick="annulerResa('${r.id}','loueur')">Annuler (25% retenus)</button>
+      <button class="btn-cancel" style="margin-left:auto;" onclick="annulerResa('${r.id}','loueur')">Annuler la réservation</button>
     </div>`;
   }
 
@@ -582,10 +582,9 @@ function refuserResa(id){
 }
 
 async function annulerResa(id, role){
-  const commission_annulation = role==='loueur' ? 10 : 8;
   const msg = role==='loueur'
-    ? 'Annuler cette réservation ? Une pénalité de '+commission_annulation+'% sera appliquée à votre charge.'
-    : 'Annuler votre réservation ? '+commission_annulation+'% du montant seront retenus par kiloue.com.';
+    ? 'Annuler cette réservation ? Le locataire sera remboursé à 100%, aucune pénalité pour vous.'
+    : 'Annuler votre réservation ? 25% du montant total vous seront retenus (20% au loueur + 5% kiloue).';
   if(!confirm(msg)) return;
 
   const btn = event.target;
