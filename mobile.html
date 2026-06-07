@@ -1196,9 +1196,9 @@ async function showSection(section){
                  <button class="btn-refuse-m" onclick="refuserResaMobile('${r.id}')">✗ Refuser</button>`;
       } else if(r.statut==='acceptee'){
         actions=`<div style="padding:8px 10px;background:#E3F2FD;border-radius:8px;font-size:12px;color:#1565C0;margin-top:6px;">En attente du paiement…</div>
-                 <button class="btn-cancel-m" onclick="annulerResaMobile('${r.id}','loueur')">Annuler (pénalité 10%)</button>`;
+                 <button class="btn-cancel-m" onclick="annulerResaMobile('${r.id}','loueur')">Annuler (25% retenus)</button>`;
       } else if(r.statut==='payee'||r.statut==='confirmee'){
-        actions=`<button class="btn-cancel-m" onclick="annulerResaMobile('${r.id}','loueur')">Annuler (pénalité 10%)</button>`;
+        actions=`<button class="btn-cancel-m" onclick="annulerResaMobile('${r.id}','loueur')">Annuler (25% retenus)</button>`;
       }
       const amtHtmlLoueur = r.statut==='annulee'
         ? '<div class="resa-amt" style="color:#C62828;">+'+net.toFixed(2)+'€</div>'+annulationInfo(r,'loueur')
@@ -1236,7 +1236,7 @@ async function showSection(section){
       } else if(r.statut==='en_attente'){
         actions=`<button class="btn-cancel-m" onclick="annulerResaMobile('${r.id}','locataire')">Annuler ma demande</button>`;
       } else if(r.statut==='payee'||r.statut==='confirmee'){
-        actions=`<button class="btn-cancel-m" onclick="annulerResaMobile('${r.id}','locataire')">Annuler (8% retenus)</button>`;
+        actions=`<button class="btn-cancel-m" onclick="annulerResaMobile('${r.id}','locataire')">Annuler (25% retenus)</button>`;
       }
       const amtHtmlLoc = r.statut==='annulee'
         ? '<div class="resa-amt" style="color:#C62828;">'+(r.prix_total?r.prix_total.toFixed(2)+'€':'')+'</div>'+annulationInfo(r,'locataire')

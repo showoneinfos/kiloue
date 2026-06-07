@@ -412,12 +412,12 @@ function renderResaRecue(r){
       En attente du paiement du locataire…
     </div>
     <div class="resa-actions one" style="margin-top:8px;">
-      <button class="btn-cancel" onclick="annulerResa('${r.id}','loueur')">Annuler (pénalité 10%)</button>
+      <button class="btn-cancel" onclick="annulerResa('${r.id}','loueur')">Annuler (25% retenus)</button>
     </div>`;
   } else if(r.statut==='payee'||r.statut==='confirmee'){
     actions=`<div style="margin-top:8px;display:flex;gap:10px;flex-wrap:wrap;">
       <a href="messages.html?annonce_id=${a.id||''}&avec=${r.locataire_id||''}" style="display:inline-block;padding:10px 18px;border-radius:8px;background:var(--teal);color:#fff;font-size:13px;font-weight:600;text-decoration:none;">💬 Envoyer un message</a>
-      <button class="btn-cancel" style="margin-left:auto;" onclick="annulerResa('${r.id}','loueur')">Annuler (pénalité 10%)</button>
+      <button class="btn-cancel" style="margin-left:auto;" onclick="annulerResa('${r.id}','loueur')">Annuler (25% retenus)</button>
     </div>`;
   }
 
@@ -467,7 +467,7 @@ function renderMaLocation(r){
     actions=`<div style="margin-top:8px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
       ${a.id?`<a href="annonce.html?id=${a.id}" style="display:inline-block;padding:10px 18px;border-radius:8px;background:var(--teal);color:#fff;font-size:13px;font-weight:600;text-decoration:none;">Voir l'annonce →</a>`:''}
       <a href="messages.html?annonce_id=${a.id||''}&avec=${r.loueur_id||''}" style="display:inline-block;padding:10px 18px;border-radius:8px;background:var(--teal);color:#fff;font-size:13px;font-weight:600;text-decoration:none;">💬 Envoyer un message</a>
-      <button class="btn-cancel" style="margin-left:auto;" onclick="annulerResa('${r.id}','locataire')">Annuler (8% retenus)</button>
+      <button class="btn-cancel" style="margin-left:auto;" onclick="annulerResa('${r.id}','locataire')">Annuler (25% retenus)</button>
     </div>`;
   }
 
