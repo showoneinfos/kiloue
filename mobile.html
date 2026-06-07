@@ -726,7 +726,7 @@ async function openAnnonce(id){
       <div class="cal-recap" id="cal-recap" style="display:none;">
         <div class="cal-recap-row"><span id="cr-days">—</span><span id="cr-base">—</span></div>
         <div class="cal-recap-row" id="cr-del-row" style="display:none;"><span>Livraison</span><span id="cr-del">—</span></div>
-        <div class="cal-recap-row"><span>Commission 5%</span><span id="cr-comm">—</span></div>
+        <div class="cal-recap-row"><span>Service kiloue (gratuit)</span><span id="cr-comm">—</span></div>
         <div class="cal-recap-total"><span>Total</span><span class="tv" id="cr-total">—</span></div>
       </div>
     </div>
@@ -877,7 +877,8 @@ function calcRecap(){
   const lp = delivEnabled ? (currentAnnonce.prix_livraison || 0) : 0;
   const base = days * pj;
   const sub = base + lp;
-  const comm = +(sub * 0.05).toFixed(2);
+  const COMMISSION = 0; // TAUX: changer 0 en 0.05 pour repasser à 5%
+  const comm = +(sub * COMMISSION).toFixed(2);
   const total = +(sub + comm).toFixed(2);
   document.getElementById('cr-days').textContent = days+' jour'+(days>1?'s':'')+' × '+pj+'€';
   document.getElementById('cr-base').textContent = base.toFixed(2)+' €';
@@ -899,7 +900,8 @@ async function reserverMobile(){
   const lp = delivEnabled ? (currentAnnonce.prix_livraison || 0) : 0;
   const base = days * pj;
   const sub = base + lp;
-  const comm = +(sub * 0.05).toFixed(2);
+  const COMMISSION = 0; // TAUX: changer 0 en 0.05 pour repasser à 5%
+  const comm = +(sub * COMMISSION).toFixed(2);
   const total = +(sub + comm).toFixed(2);
 
   const {data:chev} = await db.from('reservations').select('id')
@@ -929,7 +931,7 @@ async function reserverMobile(){
 
     // Email au loueur
     if(loueurData && loueurData.email){
-      const montant_net = +((total - comm) * 0.95).toFixed(2);
+      const montant_net = +(total - comm).toFixed(2);
       await fetch('/api/send-email',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
         type:'nouvelle_reservation',to:loueurData.email,
         data:{

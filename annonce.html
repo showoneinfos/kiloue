@@ -253,7 +253,7 @@
       <div class="recap" id="recap-bloc" style="display:none;">
         <div class="recap-row"><span class="l" id="r-days">—</span><span class="v" id="r-price">—</span></div>
         <div class="recap-row" id="r-del-row" style="display:none;"><span class="l">Livraison</span><span class="v" id="r-del-price">—</span></div>
-        <div class="recap-row"><span class="l">Commission kiloue (5%)</span><span class="v vt" id="r-comm">—</span></div>
+        <div class="recap-row"><span class="l">Service kiloue (gratuit)</span><span class="v vt" id="r-comm">—</span></div>
         <hr class="recap-divider">
         <div class="recap-total"><span class="tl">Total</span><span class="tv" id="r-total">—</span></div>
       </div>
@@ -274,7 +274,7 @@
     <p>Le loueur a été notifié et vous confirmera la réservation sous 24h.</p>
     <div class="modal-recap">
       <div><span id="modal-jours">—</span><span id="modal-base">—</span></div>
-      <div><span>Commission kiloue (5%)</span><span id="modal-comm">—</span></div>
+      <div><span>Service kiloue (gratuit)</span><span id="modal-comm">—</span></div>
       <div style="border-top:1px solid var(--border);margin-top:6px;padding-top:8px;font-weight:600;">
         <span>Total</span><span id="modal-total" style="color:var(--teal)">—</span>
       </div>
@@ -434,7 +434,8 @@ function calc(){
   const lp = deliv ? (ANNONCE.prix_livraison || 0) : 0;
   const base = days * pj;
   const sub = base + lp;
-  const comm = +(sub * 0.05).toFixed(2);
+  const COMMISSION = 0; // TAUX: changer 0 en 0.05 pour repasser à 5%
+  const comm = +(sub * COMMISSION).toFixed(2);
   const total = +(sub + comm).toFixed(2);
 
   document.getElementById('r-days').textContent = days + ' jour' + (days>1?'s':'') + ' × ' + pj + '€';
@@ -487,7 +488,8 @@ async function reserver(){
   const lp = deliv ? (ANNONCE.prix_livraison || 0) : 0;
   const base = days * pj;
   const sub = base + lp;
-  const comm = +(sub * 0.05).toFixed(2);
+  const COMMISSION = 0; // TAUX: changer 0 en 0.05 pour repasser à 5%
+  const comm = +(sub * COMMISSION).toFixed(2);
   const total = +(sub + comm).toFixed(2);
 
   // Vérifier chevauchement
@@ -520,7 +522,7 @@ async function reserver(){
 
     // Email au loueur
     if(loueurData && loueurData.email){
-      const montant_net = +((total - comm) * 0.95).toFixed(2);
+      const montant_net = +(total - comm).toFixed(2);
       await fetch('/api/send-email', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
