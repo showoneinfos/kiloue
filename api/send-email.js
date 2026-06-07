@@ -191,6 +191,11 @@ module.exports = async (req, res) => {
       </div>`;
     }
 
+    else if(type === 'annonce_publiee'){
+      subject = 'Votre annonce est en ligne — kiloue.com';
+      html = '<div style="'+baseStyle+'"><div style="'+headerStyle+'"><span style="color:#fff;font-size:20px;font-weight:700;">kiloue.com</span></div><div style="'+bodyStyle+'"><h2 style="color:#1A1A1A;margin-bottom:8px;">Annonce publiee !</h2><p style="color:#666;line-height:1.7;margin-bottom:16px;">Bonjour '+(data.prenom||'')+',<br><br>Votre annonce est maintenant visible sur kiloue.com. Vous serez notifie des qu un locataire vous contacte.</p><div style="background:#F5F5F5;border-radius:8px;padding:16px;margin-bottom:20px;"><div style="font-size:16px;font-weight:600;color:#1A1A1A;margin-bottom:6px;">'+(data.annonce_titre||'')+'</div><div style="color:#666;font-size:14px;">'+(data.ville||'')+' · '+(data.prix||'')+'€/jour</div></div><a href="https://kiloue.com/profil.html" style="'+btnStyle+'">Voir mon espace</a></div><div style="'+footerStyle+'">kiloue.com · Location de materiel entre particuliers</div></div>';
+    }
+
     else {
       return res.status(400).json({error: 'Type email inconnu: ' + type});
     }
