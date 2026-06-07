@@ -235,7 +235,7 @@ body{display:flex;flex-direction:column;}
 <body>
 
 <div class="topbar" id="main-topbar">
-  <a class="logo" href="#">kiloue<span>.com</span></a>
+  <a class="logo" href="index.html" onclick="goPage('home');return false;">kiloue<span>.com</span></a>
   <div class="search-bar" onclick="goPage('search')">
     <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
     <span>Tronçonneuse, tables…</span>
@@ -321,7 +321,7 @@ body{display:flex;flex-direction:column;}
 
   <div class="page" id="page-auth">
     <div class="auth-page">
-      <div class="auth-logo"><a class="logo" href="#">kiloue<span>.com</span></a></div>
+      <div class="auth-logo"><a class="logo" href="index.html" onclick="goPage('home');return false;">kiloue<span>.com</span></a></div>
       <div class="auth-tabs">
         <div class="auth-tab active" id="tab-login" onclick="switchAuthTab('login')">Se connecter</div>
         <div class="auth-tab" id="tab-signup" onclick="switchAuthTab('signup')">S'inscrire</div>
