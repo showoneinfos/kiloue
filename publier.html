@@ -193,14 +193,14 @@
 
     <div id="s3" class="card" style="display:none;">
       <div class="card-title"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Tarifs & zone</div>
-      <div class="field"><label>Prix / nuit (€) *</label><input type="number" id="f-prix" placeholder="80" min="1" oninput="updPreview()"></div>
+      <div class="field"><label id="prix-label">Prix / jour (€) *</label><input type="number" id="f-prix" placeholder="80" min="1" oninput="updPreview()"></div>
       <div style="background:var(--bg);border-radius:10px;padding:14px;margin-bottom:16px;">
         <div style="display:flex;align-items:center;justify-content:space-between;">
-          <div><div style="font-size:14px;font-weight:500;">Tarif à la semaine</div><div style="font-size:12px;color:var(--ink2);margin-top:2px;">Proposer un tarif hebdomadaire</div></div>
+          <div><div style="font-size:14px;font-weight:500;" id="demi-label">Location demi-journée</div><div style="font-size:12px;color:var(--ink2);margin-top:2px;" id="demi-sublabel">Proposer un tarif à la demi-journée</div></div>
           <div class="tgl" id="tgl-demi" onclick="toggleDemi(this)"></div>
         </div>
         <div id="demi-price-wrap" style="display:none;margin-top:12px;">
-          <div class="field" style="margin-bottom:0;"><label>Prix à la semaine (€)</label><input type="number" id="f-demi-prix" placeholder="500" min="1" style="max-width:200px;"></div>
+          <div class="field" style="margin-bottom:0;"><label id="demi-prix-label">Prix demi-journée (€)</label><input type="number" id="f-demi-prix" placeholder="500" min="1" style="max-width:200px;"></div>
         </div>
       </div>
       <div class="field"><label>Caution (€)</label><input type="number" id="f-caution" placeholder="Laisser vide si aucune" min="0"></div>
@@ -216,8 +216,8 @@
         <div class="tgl on" id="tgl-liv" onclick="toggleLivraison(this)"></div>
       </div>
       <div id="livraison-price-wrap" style="padding:10px 0 4px;">
-        <div class="field" style="margin-bottom:0;"><label>Frais de ménage (€)</label>
-          <input type="number" id="f-livraison-prix" placeholder="0" min="0" style="max-width:200px;">
+        <div class="field" style="margin-bottom:0;"><label id="livraison-prix-label">Supplément livraison (€)</label>
+          <input type="number" id="f-livraison-prix" placeholder="20" min="0" style="max-width:200px;">
           <div class="field-hint">Visible par le locataire avant de réserver.</div>
         </div>
       </div>
@@ -258,7 +258,7 @@
       <div class="prev-img"><img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400&q=80" alt="" id="prev-img-el" style="width:100%;height:100%;object-fit:cover;"></div>
       <div style="font-size:14px;font-weight:600;color:var(--ink);margin-bottom:3px;" id="prev-name">Nom de votre bien</div>
       <div style="font-size:12px;color:var(--ink2);margin-bottom:8px;" id="prev-loc">Votre ville</div>
-      <div style="font-size:20px;font-weight:700;color:var(--ink);margin-bottom:12px;" id="prev-price">— <small style="font-size:13px;font-weight:400;color:var(--ink2);">/nuit</small></div>
+      <div style="font-size:20px;font-weight:700;color:var(--ink);margin-bottom:12px;" id="prev-price">— <small style="font-size:13px;font-weight:400;color:var(--ink2);">/jour</small></div>
       <div class="earn-box">
         <div style="font-size:11px;font-weight:600;color:var(--ink2);text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px;">Vos revenus estimés</div>
         <div class="earn-row"><span>Tarif affiché</span><span id="e-brut">—</span></div>
@@ -330,11 +330,27 @@ function openCat(key, name){
     document.getElementById('materiel-fields').style.display='none';
     document.getElementById('f-titre').placeholder='Ex : Appartement T2 vue mer — Ajaccio';
     document.getElementById('f-desc').placeholder='Surface, équipements, règles de la maison…';
+    // Adapter labels step 3 pour hébergement
+    setTimeout(function(){
+      const pl = document.getElementById('prix-label'); if(pl) pl.textContent='Prix / nuit (€) *';
+      const dl = document.getElementById('demi-label'); if(dl) dl.textContent='Tarif à la semaine';
+      const dsl = document.getElementById('demi-sublabel'); if(dsl) dsl.textContent='Proposer un tarif hebdomadaire';
+      const dpl = document.getElementById('demi-prix-label'); if(dpl) dpl.textContent='Prix à la semaine (€)';
+      const ll = document.getElementById('livraison-prix-label'); if(ll) ll.textContent='Frais de ménage (€)';
+      const lf = document.getElementById('f-livraison-prix'); if(lf) lf.placeholder='0';
+    }, 100);
   } else {
     document.getElementById('hebergement-fields').style.display='none';
     document.getElementById('materiel-fields').style.display='grid';
     document.getElementById('f-titre').placeholder='Ex : Tronçonneuse Stihl MS 250 — excellent état';
     document.getElementById('f-desc').placeholder='État, accessoires inclus, conditions particulières…';
+    // Remettre labels step 3 normaux
+    document.getElementById('prix-label').textContent='Prix / jour (€) *';
+    document.getElementById('demi-label').textContent='Location demi-journée';
+    document.getElementById('demi-sublabel').textContent='Proposer un tarif à la demi-journée';
+    document.getElementById('demi-prix-label').textContent='Prix demi-journée (€)';
+    document.getElementById('livraison-prix-label').textContent='Supplément livraison (€)';
+    document.getElementById('f-livraison-prix').placeholder='20';
   }
   document.getElementById('pub-cat-label').textContent = name;
   const subs = SUBS[key]||[];
