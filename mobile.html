@@ -251,6 +251,7 @@ body{display:flex;flex-direction:column;}
   <div class="page active" id="page-home">
     <div class="cats-scroll" id="cats-scroll">
       <div class="cat-chip active" onclick="filterCat('',this)">Tout</div>
+      <div class="cat-chip" onclick="filterCat('Hébergement et Vacances',this)">Hébergement</div>
       <div class="cat-chip" onclick="filterCat('Véhicules',this)">Véhicules</div>
       <div class="cat-chip" onclick="filterCat('Bricolage & Outillage',this)">Bricolage</div>
       <div class="cat-chip" onclick="filterCat('Jardinage',this)">Jardinage</div>
@@ -362,7 +363,7 @@ body{display:flex;flex-direction:column;}
         <select id="pub-cat">
           <option value="">Choisir une catégorie</option>
           <option>Véhicules</option><option>Nautisme</option>
-          <option>Bricolage & Outillage</option><option>Jardinage</option>
+          <option>Hébergement et Vacances</option><option>Bricolage & Outillage</option><option>Jardinage</option>
           <option>BTP & Chantier</option><option>Matériel Agricole</option>
           <option>Maison & Équipement</option><option>Événementiel</option>
           <option>Sport & Loisirs</option><option>High-Tech</option>
@@ -424,6 +425,7 @@ body{display:flex;flex-direction:column;}
   <div class="drawer-handle"></div>
   <div class="drawer-title">Catégories</div>
   <div class="drawer-scroll">
+    <div class="drawer-cat-item" onclick="filterCatFromDrawer('Hébergement et Vacances')">Hébergement & Vacances</div>
     <div class="drawer-cat-item" onclick="filterCatFromDrawer('Véhicules')">Véhicules</div>
     <div class="drawer-cat-item" onclick="filterCatFromDrawer('Nautisme')">Nautisme</div>
     <div class="drawer-cat-item" onclick="filterCatFromDrawer('Bricolage & Outillage')">Bricolage & Outillage</div>
