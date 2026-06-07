@@ -511,11 +511,15 @@ function annulationInfo(r, roleAffiche){
         + '</div>';
     } else {
       const retenu = +(total * 0.25).toFixed(2);
+      const pour_loueur = +(total * 0.20).toFixed(2);
+      const pour_kiloue = +(total * 0.05).toFixed(2);
       const rembourse = +(total * 0.75).toFixed(2);
       return '<div style="'+styleRed+'">'
         + '<div style="font-weight:600;color:#C62828;margin-bottom:4px;">Annulée par vous</div>'
         + '<div style="'+row+'"><span>Montant payé</span><span>'+total.toFixed(2)+'€</span></div>'
-        + '<div style="'+row+'"><span>Frais annulation 25%</span><span style="color:#C62828;">-'+retenu.toFixed(2)+'€</span></div>'
+        + '<div style="'+row+'"><span>Frais annulation (25%)</span><span style="color:#C62828;">-'+retenu.toFixed(2)+'€</span></div>'
+        + '<div style="'+row+';padding-left:12px;font-size:11px;color:#999;"><span>dont loueur (20%)</span><span>'+pour_loueur.toFixed(2)+'€</span></div>'
+        + '<div style="'+row+';padding-left:12px;font-size:11px;color:#999;"><span>dont kiloue (5%)</span><span>'+pour_kiloue.toFixed(2)+'€</span></div>'
         + '<div style="'+totalRow+'"><span>Vous êtes remboursé</span><span style="color:#C62828;">'+rembourse.toFixed(2)+'€</span></div>'
         + '</div>';
     }

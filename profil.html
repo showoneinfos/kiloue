@@ -362,13 +362,17 @@ function annulationInfo(r, roleAffiche){
         + '<div style="'+totalRowGreen+'"><span>Vous êtes remboursé</span><span style="color:#2E7D32;">'+total.toFixed(2)+'€ (100%)</span></div>'
         + '</div>';
     } else {
-      // locataire a annulé → 25% retenus
+      // locataire a annulé → 25% retenus (20% loueur + 5% kiloue)
       const retenu = +(total * 0.25).toFixed(2);
+      const pour_loueur = +(total * 0.20).toFixed(2);
+      const pour_kiloue = +(total * 0.05).toFixed(2);
       const rembourse = +(total * 0.75).toFixed(2);
       return '<div style="'+styleRed+'">'
         + '<div style="font-weight:600;color:#C62828;margin-bottom:4px;">Annulée par vous</div>'
         + '<div style="'+row+'"><span>Montant payé</span><span>'+total.toFixed(2)+'€</span></div>'
-        + '<div style="'+row+'"><span>Frais annulation 25%</span><span style="color:#C62828;">-'+retenu.toFixed(2)+'€</span></div>'
+        + '<div style="'+row+'"><span>Frais annulation (25%)</span><span style="color:#C62828;">-'+retenu.toFixed(2)+'€</span></div>'
+        + '<div style="'+row+';padding-left:12px;font-size:11px;color:#999;"><span>dont loueur (20%)</span><span>'+pour_loueur.toFixed(2)+'€</span></div>'
+        + '<div style="'+row+';padding-left:12px;font-size:11px;color:#999;"><span>dont kiloue (5%)</span><span>'+pour_kiloue.toFixed(2)+'€</span></div>'
         + '<div style="'+totalRow+'"><span>Vous êtes remboursé</span><span style="color:#C62828;">'+rembourse.toFixed(2)+'€</span></div>'
         + '</div>';
     }
@@ -396,9 +400,13 @@ function renderResaRecue(r){
 
   let amtHtml = '';
   if(r.statut === 'annulee'){
-    amtHtml = `<div class="resa-amt" style="color:#C62828;">+${net.toFixed(2)} €</div>${annulationInfo(r,'loueur')}`;
+    const dedommagement = r.commission_annulation > 0 ? +(( r.prix_total||0) * 0.20).toFixed(2) : 0;
+    const amtLabel = r.commission_annulation > 0
+      ? '<div class="resa-amt" style="color:#C62828;">+'+dedommagement.toFixed(2)+' € <small style="font-size:11px;font-weight:400;">(dédommagement)</small></div>'
+      : '<div class="resa-amt" style="color:#C62828;">Annulée par vous</div>';
+    amtHtml = amtLabel + annulationInfo(r,'loueur');
   } else {
-    amtHtml = `<div class="resa-amt">+${net.toFixed(2)} €</div>`;
+    amtHtml = '<div class="resa-amt">+'+net.toFixed(2)+' €</div>';
   }
 
   let actions='';
@@ -446,9 +454,13 @@ function renderMaLocation(r){
 
   let amtHtml = '';
   if(r.statut === 'annulee'){
-    amtHtml = `<div class="resa-amt" style="color:#C62828;">${r.prix_total?r.prix_total.toFixed(2)+' €':''}</div>${annulationInfo(r,'locataire')}`;
+    const remb = r.commission_annulation > 0 ? +((r.prix_total||0)*0.75).toFixed(2) : (r.prix_total||0);
+    const lbl = r.commission_annulation > 0
+      ? remb.toFixed(2)+' € <small style="font-size:11px;font-weight:400;">(remboursé)</small>'
+      : r.prix_total ? r.prix_total.toFixed(2)+' €' : '';
+    amtHtml = '<div class="resa-amt" style="color:#C62828;">'+lbl+'</div>'+annulationInfo(r,'locataire');
   } else {
-    amtHtml = `<div class="resa-amt">${r.prix_total?r.prix_total.toFixed(2)+' €':''}</div>`;
+    amtHtml = '<div class="resa-amt">'+(r.prix_total?r.prix_total.toFixed(2)+' €':'')+'</div>';
   }
 
   let actions='';
