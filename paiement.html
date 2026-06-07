@@ -11,7 +11,7 @@
   :root{--teal:#00A693;--teal2:#008577;--teal-light:#E8F7F5;--ink:#1A1A1A;--ink2:#666;--ink3:#999;--border:#E5E5E5;--bg:#FAFAFA;--white:#fff;--sans:'Inter',system-ui,sans-serif;}
   *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
   body{font-family:var(--sans);background:var(--bg);color:var(--ink);min-height:100vh;}
-  nav{background:var(--white);border-bottom:1px solid var(--border);height:60px;display:flex;align-items:center;padding:0 24px;gap:16px;}
+  nav{background:var(--white);border-bottom:1px solid var(--border);height:60px;display:flex;align-items:center;padding:0 24px;}
   .logo{font-size:22px;font-weight:700;color:var(--teal);text-decoration:none;}
   .logo span{color:var(--ink);}
   .page{max-width:520px;margin:40px auto;padding:0 20px 60px;}
@@ -28,20 +28,27 @@
   .field input{width:100%;border:1.5px solid var(--border);border-radius:8px;padding:12px 14px;font-size:14px;font-family:var(--sans);color:var(--ink);outline:none;}
   .field input:focus{border-color:var(--teal);}
   #card-element{border:1.5px solid var(--border);border-radius:8px;padding:14px;background:var(--white);}
-  #card-element.focused{border-color:var(--teal);}
   #card-errors{color:#E53935;font-size:13px;margin-top:8px;min-height:18px;}
+  .contrat{background:#FFF8E1;border:1px solid #FFE082;border-radius:10px;padding:16px;margin-bottom:20px;}
+  .contrat-title{font-size:13px;font-weight:700;color:#5D4037;margin-bottom:10px;display:flex;align-items:center;gap:6px;}
+  .contrat-title svg{width:16px;height:16px;fill:none;stroke:#E65100;stroke-width:2;flex-shrink:0;}
+  .contrat-body{font-size:12px;color:#795548;line-height:1.8;}
+  .contrat-body strong{color:#5D4037;}
+  .montant-retenu{font-size:14px;font-weight:700;color:#E65100;}
+  .montant-rembourse{font-size:14px;font-weight:700;color:#2E7D32;}
+  .contrat-check{display:flex;align-items:flex-start;gap:10px;margin-top:14px;padding-top:14px;border-top:1px solid #FFE082;}
+  .contrat-check input[type=checkbox]{width:18px;height:18px;accent-color:var(--teal);flex-shrink:0;margin-top:2px;cursor:pointer;}
+  .contrat-check label{font-size:13px;color:#5D4037;font-weight:500;cursor:pointer;line-height:1.5;}
   .btn-pay{width:100%;padding:16px;border-radius:10px;background:var(--teal);color:#fff;border:none;font-size:16px;font-weight:700;font-family:var(--sans);cursor:pointer;margin-top:20px;display:flex;align-items:center;justify-content:center;gap:8px;transition:background .15s;}
   .btn-pay:hover{background:var(--teal2);}
   .btn-pay:disabled{opacity:.5;cursor:not-allowed;}
   .btn-pay svg{width:18px;height:18px;fill:none;stroke:#fff;stroke-width:2;}
   .secure-note{display:flex;align-items:center;justify-content:center;gap:6px;font-size:12px;color:var(--ink3);margin-top:14px;}
   .secure-note svg{width:13px;height:13px;fill:none;stroke:var(--teal);stroke-width:2;}
-  .politique{background:#FFF8E1;border:1px solid #FFE082;border-radius:8px;padding:12px 14px;font-size:12px;color:#795548;margin-bottom:20px;line-height:1.6;}
-  .politique strong{display:block;margin-bottom:4px;color:#5D4037;}
-  .success-screen{display:none;text-align:center;padding:20px 0;}
+  .success-screen{text-align:center;padding:20px 0;}
   .success-icon{width:72px;height:72px;border-radius:50%;background:var(--teal-light);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;}
   .success-icon svg{width:36px;height:36px;fill:none;stroke:var(--teal);stroke-width:2;}
-  .loading{display:none;text-align:center;padding:40px;color:var(--ink2);font-size:14px;}
+  .loading{text-align:center;padding:40px;color:var(--ink2);font-size:14px;}
   .spinner{width:32px;height:32px;border:3px solid var(--border);border-top-color:var(--teal);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 16px;}
   @keyframes spin{to{transform:rotate(360deg)}}
 </style>
@@ -53,23 +60,35 @@
 </nav>
 
 <div class="page">
-  <!-- CHARGEMENT -->
-  <div class="loading" id="loading">
-    <div class="spinner"></div>
-    Chargement de votre réservation…
+  <div class="card" id="loading">
+    <div class="loading">
+      <div class="spinner"></div>
+      Chargement de votre réservation…
+    </div>
   </div>
 
-  <!-- FORMULAIRE PAIEMENT -->
   <div class="card" id="payment-card" style="display:none;">
     <div class="title">Paiement sécurisé</div>
     <div class="subtitle">Votre réservation sera confirmée après le paiement</div>
 
     <div class="recap" id="recap-bloc"></div>
 
-    <div class="politique">
-      <strong>Politique d'annulation kiloue.com</strong>
-      Annulation par le locataire : 8% retenus par kiloue.<br>
-      Annulation par le loueur : pénalité de 10% à la charge du loueur.
+    <div class="contrat">
+      <div class="contrat-title">
+        <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        Conditions d'annulation — à lire attentivement
+      </div>
+      <div class="contrat-body">
+        En cas d'annulation de votre part, <strong>25% du montant total vous seront retenus</strong> :<br><br>
+        &bull; <strong>20%</strong> versés au loueur en dédommagement des jours de location bloqués<br>
+        &bull; <strong>5%</strong> retenus par kiloue.com pour couvrir les frais bancaires<br><br>
+        Montant retenu si vous annulez : <span class="montant-retenu" id="montant-retenu">—</span><br>
+        Montant remboursé si vous annulez : <span class="montant-rembourse" id="montant-rembourse">—</span>
+      </div>
+      <div class="contrat-check">
+        <input type="checkbox" id="contrat-ok" onchange="checkContrat()">
+        <label for="contrat-ok">J'ai lu et j'accepte les conditions d'annulation. Je comprends qu'en cas d'annulation de ma part, 25% du montant total me seront retenus.</label>
+      </div>
     </div>
 
     <div class="field">
@@ -83,9 +102,9 @@
       <div id="card-errors"></div>
     </div>
 
-    <button class="btn-pay" id="btn-pay" onclick="payerMaintenant()">
+    <button class="btn-pay" id="btn-pay" onclick="payerMaintenant()" disabled>
       <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-      Payer maintenant
+      Accepter et payer
     </button>
 
     <div class="secure-note">
@@ -94,9 +113,8 @@
     </div>
   </div>
 
-  <!-- SUCCÈS -->
   <div class="card" id="success-card" style="display:none;">
-    <div class="success-screen" style="display:block;">
+    <div class="success-screen">
       <div class="success-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
       <div style="font-size:22px;font-weight:700;color:var(--ink);margin-bottom:10px;">Paiement confirmé !</div>
       <div style="font-size:14px;color:var(--ink2);line-height:1.7;margin-bottom:24px;">
@@ -117,245 +135,171 @@ const STRIPE_PK = 'pk_test_51TeDsF2L9ZHTsxnGJNR4qgFD21u78wszdl5BVfQKs2pTXHu5Kjk3
 let stripe, cardElement, db, reservationData;
 
 function fmt(date){
-  return new Date(date).toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'});
+  return new Date(date+'T00:00:00').toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'});
+}
+
+function checkContrat(){
+  document.getElementById('btn-pay').disabled = !document.getElementById('contrat-ok').checked;
 }
 
 async function init(){
-  document.getElementById('loading').style.display='block';
+  const s = document.createElement('script');
+  s.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js';
+  s.onload = async function(){
+    db = supabase.createClient(SUPA_URL, SUPA_KEY);
 
-  // Charger Supabase
-  const s=document.createElement('script');
-  s.src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js';
-  s.onload=async function(){
-    db=supabase.createClient(SUPA_URL,SUPA_KEY);
+    const {data:{user}} = await db.auth.getUser();
+    if(!user){ window.location.href='inscription.html'; return; }
 
-    // Auth check
-    const {data:{user}}=await db.auth.getUser();
-    if(!user){window.location.href='inscription.html';return;}
+    const params = new URLSearchParams(window.location.search);
+    const resaId = params.get('reservation_id');
+    if(!resaId){ window.location.href='profil.html'; return; }
 
-    // Récupérer la réservation depuis l'URL
-    const params=new URLSearchParams(window.location.search);
-    const resaId=params.get('reservation_id');
-    if(!resaId){window.location.href='profil.html';return;}
-
-    // Charger la réservation
-    const {data:resa,error}=await db
+    const {data:resa, error} = await db
       .from('reservations')
-      .select('*, annonces(titre,photos,prix_jour), utilisateurs!loueur_id(prenom,nom,telephone)')
-      .eq('id',resaId)
-      .eq('locataire_id',user.id)
+      .select('*, annonces(titre,photos,prix_jour), utilisateurs!loueur_id(prenom,nom)')
+      .eq('id', resaId)
+      .eq('locataire_id', user.id)
       .single();
 
-    if(error||!resa){
-      alert('Réservation introuvable.');
-      window.location.href='profil.html';
-      return;
-    }
+    if(error || !resa){ alert('Réservation introuvable.'); window.location.href='profil.html'; return; }
+    if(resa.statut === 'payee' || resa.statut === 'confirmee'){ window.location.href='profil.html'; return; }
 
-    // Vérifier que pas déjà payée
-    if(resa.statut==='payee'||resa.statut==='confirmee'){
-      window.location.href='profil.html';
-      return;
-    }
+    reservationData = resa;
+    const a = resa.annonces || {};
+    const total = resa.prix_total || 0;
+    const commission = resa.commission || 0;
+    const base = total - commission;
 
-    reservationData=resa;
-    const a=resa.annonces||{};
-    const lou=resa.utilisateurs||{};
-    const net=resa.prix_total||0;
-    const commission=resa.commission||0;
+    // Calcul annulation 25%
+    const retenu = +(total * 0.25).toFixed(2);
+    const rembourse = +(total - retenu).toFixed(2);
+    document.getElementById('montant-retenu').textContent = retenu.toFixed(2) + ' €';
+    document.getElementById('montant-rembourse').textContent = rembourse.toFixed(2) + ' €';
 
-    // Remplir le récap
-    document.getElementById('recap-bloc').innerHTML=`
-      <div class="recap-row"><span>${a.titre||'Réservation'}</span><span class="val"></span></div>
-      <div class="recap-row"><span>Du ${fmt(resa.date_debut)} au ${fmt(resa.date_fin)}</span><span class="val">${((net-commission)*1).toFixed(2)} €</span></div>
-      ${resa.livraison?`<div class="recap-row"><span>Livraison</span><span class="val">${(resa.prix_livraison||0).toFixed(2)} €</span></div>`:''}
-      <div class="recap-row"><span>Commission kiloue (5%)</span><span class="val">${commission.toFixed(2)} €</span></div>
-      <div class="recap-row total"><span>Total à payer</span><span class="val">${net.toFixed(2)} €</span></div>
-    `;
+    // Récap
+    document.getElementById('recap-bloc').innerHTML =
+      '<div class="recap-row"><span>' + (a.titre||'Réservation') + '</span><span class="val"></span></div>' +
+      '<div class="recap-row"><span>Du ' + fmt(resa.date_debut) + ' au ' + fmt(resa.date_fin) + '</span><span class="val">' + base.toFixed(2) + ' €</span></div>' +
+      (resa.livraison ? '<div class="recap-row"><span>Livraison</span><span class="val">' + (resa.prix_livraison||0).toFixed(2) + ' €</span></div>' : '') +
+      '<div class="recap-row"><span>Commission kiloue (5%)</span><span class="val">' + commission.toFixed(2) + ' €</span></div>' +
+      '<div class="recap-row total"><span>Total à payer</span><span class="val">' + total.toFixed(2) + ' €</span></div>';
 
-    // Email pré-rempli
-    document.getElementById('email-input').value=user.email||'';
+    document.getElementById('email-input').value = user.email || '';
 
-    // Init Stripe
-    stripe=Stripe(STRIPE_PK);
-    const elements=stripe.elements();
-    cardElement=elements.create('card',{
+    stripe = Stripe(STRIPE_PK);
+    const elements = stripe.elements();
+    cardElement = elements.create('card', {
       style:{base:{fontFamily:'Inter, sans-serif',fontSize:'15px',color:'#1A1A1A','::placeholder':{color:'#999'}}}
     });
     cardElement.mount('#card-element');
-    cardElement.on('change',e=>{
-      document.getElementById('card-errors').textContent=e.error?e.error.message:'';
+    cardElement.on('change', function(e){
+      document.getElementById('card-errors').textContent = e.error ? e.error.message : '';
     });
 
-    document.getElementById('loading').style.display='none';
-    document.getElementById('payment-card').style.display='block';
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('payment-card').style.display = 'block';
   };
   document.head.appendChild(s);
 }
 
 async function payerMaintenant(){
-  const btn=document.getElementById('btn-pay');
-  const email=document.getElementById('email-input').value.trim();
-  if(!email){alert('Veuillez saisir votre email.');return;}
+  if(!document.getElementById('contrat-ok').checked){
+    alert('Veuillez accepter les conditions d\'annulation avant de payer.');
+    return;
+  }
+  const btn = document.getElementById('btn-pay');
+  const email = document.getElementById('email-input').value.trim();
+  if(!email){ alert('Veuillez saisir votre email.'); return; }
 
-  btn.disabled=true;
-  btn.textContent='Traitement en cours…';
+  btn.disabled = true;
+  btn.textContent = 'Traitement en cours…';
 
   try {
-    // 1. Créer le PaymentIntent via notre Vercel Function
-    const response=await fetch('/api/create-payment',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
+    const response = await fetch('/api/create-payment', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
         reservation_id: reservationData.id,
-        montant_total:  reservationData.prix_total,
+        montant_total: reservationData.prix_total,
         locataire_email: email,
-        annonce_titre:  reservationData.annonces?.titre||''
+        annonce_titre: reservationData.annonces?.titre || ''
       })
     });
 
-    const {client_secret,error:apiErr}=await response.json();
-    if(apiErr||!client_secret){
-      throw new Error(apiErr||'Erreur création paiement');
-    }
+    const {client_secret, error:apiErr} = await response.json();
+    if(apiErr || !client_secret) throw new Error(apiErr || 'Erreur création paiement');
 
-    // 2. Confirmer le paiement avec Stripe.js
-    const {paymentIntent,error:stripeErr}=await stripe.confirmCardPayment(client_secret,{
-      payment_method:{
-        card: cardElement,
-        billing_details:{email}
-      }
+    const {paymentIntent, error:stripeErr} = await stripe.confirmCardPayment(client_secret, {
+      payment_method: {card: cardElement, billing_details: {email}}
     });
 
     if(stripeErr){
-      document.getElementById('card-errors').textContent=stripeErr.message;
-      btn.disabled=false;
-      btn.innerHTML='<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#fff" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Payer maintenant';
+      document.getElementById('card-errors').textContent = stripeErr.message;
+      btn.disabled = false;
+      btn.innerHTML = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#fff" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Accepter et payer';
       return;
     }
 
-    if(paymentIntent.status==='succeeded'){
-      // 3. Mettre à jour Supabase directement (RLS autorisé pour locataire)
-      const { error: updateErr } = await db.from('reservations').update({
+    if(paymentIntent.status === 'succeeded'){
+      await db.from('reservations').update({
         statut: 'payee',
         stripe_payment_id: paymentIntent.id,
         paye_le: new Date().toISOString()
       }).eq('id', reservationData.id);
-      if(updateErr) console.warn('Update error:', updateErr.message);
 
-      // 4. Message au loueur
+      // Message au loueur
       try {
         const {data:{user:u}} = await db.auth.getUser();
         await db.from('messages').insert([{
-          expediteur_id:   u.id,
+          expediteur_id: u.id,
           destinataire_id: reservationData.loueur_id,
-          annonce_id:      reservationData.annonce_id,
-          contenu:         'Votre réservation vient d\'être payée ! Contactez le locataire pour organiser la remise.',
-          lu:              false
+          annonce_id: reservationData.annonce_id,
+          contenu: 'Votre réservation vient d\'être payée ! Contactez le locataire pour organiser la remise.',
+          lu: false
         }]);
       } catch(e){ console.warn('Message error:', e); }
 
-      // 5. Email de confirmation au locataire
+      // Emails
       try {
         const {data:{user:u}} = await db.auth.getUser();
-        const {data:locData} = await db.from('utilisateurs').select('email,prenom').eq('id',u.id).single();
         const a = reservationData.annonces || {};
+        const fmtD = function(s){ return s ? new Date(s+'T00:00:00').toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'}) : ''; };
+
+        const [{data:locData},{data:louData}] = await Promise.all([
+          db.from('utilisateurs').select('email,prenom').eq('id',u.id).single(),
+          db.from('utilisateurs').select('email,prenom').eq('id',reservationData.loueur_id).single()
+        ]);
+
         if(locData?.email){
-          await fetch('/api/send-email', {
-            method:'POST',
-            headers:{'Content-Type':'application/json'},
-            body: JSON.stringify({
-              type: 'paiement_confirme',
-              to: locData.email,
-              data: {
-                locataire_prenom: locData.prenom||'',
-                annonce_titre: a.titre||'',
-                date_debut: new Date(reservationData.date_debut).toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'}),
-                date_fin: new Date(reservationData.date_fin).toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'}),
-                montant_total: reservationData.prix_total?.toFixed(2)||''
-              }
-            })
+          await fetch('/api/send-email',{method:'POST',headers:{'Content-Type':'application/json'},
+            body:JSON.stringify({type:'paiement_confirme',to:locData.email,data:{
+              locataire_prenom:locData.prenom||'',annonce_titre:a.titre||'',
+              date_debut:fmtD(reservationData.date_debut),date_fin:fmtD(reservationData.date_fin),
+              montant_total:reservationData.prix_total?.toFixed(2)||''
+            }})
           });
         }
-        // Email au loueur
-        const {data:louData} = await db.from('utilisateurs').select('email,prenom').eq('id',reservationData.loueur_id).single();
         if(louData?.email){
-          await fetch('/api/send-email', {
-            method:'POST',
-            headers:{'Content-Type':'application/json'},
-            body: JSON.stringify({
-              type: 'nouvelle_reservation',
-              to: louData.email,
-              data: {
-                loueur_prenom: louData.prenom||'',
-                locataire_nom: locData?.prenom||'Locataire',
-                annonce_titre: a.titre||'',
-                date_debut: new Date(reservationData.date_debut).toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'}),
-                date_fin: new Date(reservationData.date_fin).toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'}),
-                montant_net: ((reservationData.prix_total||0)-(reservationData.commission||0)).toFixed(2)
-              }
-            })
+          await fetch('/api/send-email',{method:'POST',headers:{'Content-Type':'application/json'},
+            body:JSON.stringify({type:'nouvelle_reservation',to:louData.email,data:{
+              loueur_prenom:louData.prenom||'',locataire_nom:locData?.prenom||'Locataire',
+              annonce_titre:a.titre||'',date_debut:fmtD(reservationData.date_debut),
+              date_fin:fmtD(reservationData.date_fin),
+              montant_net:((reservationData.prix_total||0)-(reservationData.commission||0)).toFixed(2)
+            }})
           });
         }
       } catch(e){ console.warn('Email error:', e); }
 
-      // 5. Emails de confirmation
-      try {
-        const {data:{user:u2}} = await db.auth.getUser();
-        const a = reservationData.annonces || {};
-        const fmtD = s => s ? new Date(s+'T00:00:00').toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'}) : '';
-
-        // Email au locataire
-        const {data:locData} = await db.from('utilisateurs').select('email,prenom').eq('id',u2.id).single();
-        if(locData?.email){
-          await fetch('/api/send-email',{
-            method:'POST',
-            headers:{'Content-Type':'application/json'},
-            body: JSON.stringify({
-              type: 'paiement_confirme',
-              to: locData.email,
-              data: {
-                locataire_prenom: locData.prenom||'',
-                annonce_titre: a.titre||'',
-                date_debut: fmtD(reservationData.date_debut),
-                date_fin: fmtD(reservationData.date_fin),
-                montant_total: reservationData.prix_total?.toFixed(2)||''
-              }
-            })
-          });
-        }
-
-        // Email au loueur
-        const {data:louData} = await db.from('utilisateurs').select('email,prenom').eq('id',reservationData.loueur_id).single();
-        if(louData?.email){
-          await fetch('/api/send-email',{
-            method:'POST',
-            headers:{'Content-Type':'application/json'},
-            body: JSON.stringify({
-              type: 'nouvelle_reservation',
-              to: louData.email,
-              data: {
-                loueur_prenom: louData.prenom||'',
-                locataire_nom: locData?.prenom||'Locataire',
-                annonce_titre: a.titre||'',
-                date_debut: fmtD(reservationData.date_debut),
-                date_fin: fmtD(reservationData.date_fin),
-                montant_net: ((reservationData.prix_total||0)-(reservationData.commission||0)).toFixed(2)
-              }
-            })
-          });
-        }
-      } catch(e){ console.warn('Email error:', e); }
-
-      // 6. Succès
-      document.getElementById('payment-card').style.display='none';
-      document.getElementById('success-card').style.display='block';
+      document.getElementById('payment-card').style.display = 'none';
+      document.getElementById('success-card').style.display = 'block';
     }
 
   } catch(err){
-    alert('Erreur : '+err.message);
-    btn.disabled=false;
-    btn.innerHTML='<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#fff" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Payer maintenant';
+    alert('Erreur : ' + err.message);
+    btn.disabled = false;
+    btn.innerHTML = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#fff" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Accepter et payer';
   }
 }
 
