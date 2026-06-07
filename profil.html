@@ -249,6 +249,49 @@
 
 <div id="toast"></div>
 
+<!-- MODAL BOOST -->
+<div id="boost-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:300;align-items:center;justify-content:center;">
+  <div style="background:#fff;border-radius:16px;padding:32px;max-width:440px;width:90%;position:relative;">
+    <button onclick="fermerBoost()" style="position:absolute;top:16px;right:16px;background:none;border:none;font-size:22px;cursor:pointer;color:#999;">×</button>
+    <div style="text-align:center;margin-bottom:24px;">
+      <div style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#FF6B35,#FF8E53);display:flex;align-items:center;justify-content:center;margin:0 auto 12px;">
+        <span style="font-size:24px;">★</span>
+      </div>
+      <h2 style="font-size:20px;font-weight:700;color:#1A1A1A;margin-bottom:6px;">Mettre en avant</h2>
+      <p style="font-size:14px;color:#666;" id="boost-titre-label">Votre annonce</p>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:24px;">
+      <div class="boost-option" onclick="selectBoost(this,1,2)" style="border:2px solid #E5E5E5;border-radius:10px;padding:14px;text-align:center;cursor:pointer;transition:all .15s;">
+        <div style="font-size:20px;font-weight:700;color:#1A1A1A;">2€</div>
+        <div style="font-size:12px;color:#666;margin-top:4px;">1 jour</div>
+      </div>
+      <div class="boost-option" onclick="selectBoost(this,7,9)" style="border:2px solid #FF6B35;border-radius:10px;padding:14px;text-align:center;cursor:pointer;background:#FFF4F1;transition:all .15s;position:relative;">
+        <div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:#FF6B35;color:#fff;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;white-space:nowrap;">Populaire</div>
+        <div style="font-size:20px;font-weight:700;color:#FF6B35;">9€</div>
+        <div style="font-size:12px;color:#666;margin-top:4px;">7 jours</div>
+      </div>
+      <div class="boost-option" onclick="selectBoost(this,30,29)" style="border:2px solid #E5E5E5;border-radius:10px;padding:14px;text-align:center;cursor:pointer;transition:all .15s;">
+        <div style="font-size:20px;font-weight:700;color:#1A1A1A;">29€</div>
+        <div style="font-size:12px;color:#666;margin-top:4px;">30 jours</div>
+      </div>
+    </div>
+    <div id="boost-avantages" style="background:#FFF4F1;border-radius:10px;padding:14px;margin-bottom:20px;font-size:13px;color:#666;line-height:1.8;">
+      <strong style="color:#FF6B35;display:block;margin-bottom:6px;">★ Avantages de la mise en avant</strong>
+      Votre annonce apparaît en premier sur l'accueil<br>
+      Badge "À la une" visible par tous les visiteurs<br>
+      Jusqu'à 5× plus de vues
+    </div>
+    <div id="boost-payment-wrap" style="display:none;">
+      <div id="boost-card-element" style="border:1.5px solid #E5E5E5;border-radius:8px;padding:12px;margin-bottom:16px;"></div>
+      <div id="boost-card-error" style="color:#C62828;font-size:13px;margin-bottom:12px;display:none;"></div>
+    </div>
+    <button id="boost-btn" onclick="payerBoost()" style="width:100%;padding:14px;border-radius:10px;background:linear-gradient(135deg,#FF6B35,#FF8E53);color:#fff;border:none;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;">
+      Choisir une durée
+    </button>
+    <p style="text-align:center;font-size:12px;color:#999;margin-top:10px;">Paiement sécurisé par Stripe</p>
+  </div>
+</div>
+
 <script>
 const SUPA_URL = 'https://nsvosbuxkpnoasfilyqy.supabase.co';
 const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5zdm9zYnV4a3Bub2FzZmlseXF5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAxODczOTcsImV4cCI6MjA5NTc2MzM5N30.pTuH4X8IQy0UJq8zUZ8t7I2WLMEUXae_8nWdtIFrpRE';
@@ -458,9 +501,15 @@ function renderMaLocation(r){
 function renderAnnonce(a){
   const photo=imgOrPlaceholder(a.photos,'ann-img');
   const dispo=a.disponible;
+  const now = new Date();
+  const isBoosted = a.boost_expire && new Date(a.boost_expire) > now;
+  const boostExpire = isBoosted ? new Date(a.boost_expire).toLocaleDateString('fr-FR',{day:'numeric',month:'short'}) : null;
   const btnToggle=dispo
     ?`<button class="btn-sm" onclick="toggleAnnonce('${a.id}',true)">Pause</button>`
     :`<button class="btn-sm" style="color:var(--teal);border-color:var(--teal);" onclick="toggleAnnonce('${a.id}',false)">Réactiver</button>`;
+  const boostBtn = isBoosted
+    ? `<button class="btn-sm" style="color:#FF6B35;border-color:#FF6B35;" disabled>★ En avant jusqu'au ${boostExpire}</button>`
+    : `<button class="btn-sm" style="color:#FF6B35;border-color:#FF6B35;" onclick="ouvrirBoost('${a.id}','${a.titre.replace(/'/g,'')}')">★ Booster</button>`;
   return `<div class="ann-item">
     ${photo}
     <div class="ann-info">
@@ -469,10 +518,12 @@ function renderAnnonce(a){
         <span><span class="${dispo?'dot-on':'dot-off'}"></span>${dispo?'Active':'En pause'}</span>
         <span>${a.ville||''}</span>
         <span>${a.prix_jour}€/j</span>
+        ${isBoosted?'<span style="color:#FF6B35;font-weight:600;">★ À la une</span>':''}
       </div>
     </div>
     <div class="ann-acts">
       <button class="btn-sm" onclick="window.location.href='annonce.html?id=${a.id}'">Voir</button>
+      ${boostBtn}
       ${btnToggle}
     </div>
   </div>`;
@@ -710,6 +761,96 @@ async function init(){
     const moy=avis.reduce((s,a)=>s+(a.note||0),0)/avis.length;
     document.getElementById('stat-note').textContent=moy.toFixed(1)+' ★';
     document.getElementById('stat-note-sub').textContent='sur '+avis.length+' avis';
+  }
+}
+</script>
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+let boostAnnonceId = null;
+let boostDuree = null;
+let boostMontant = null;
+let stripeBoost = null;
+let cardElement = null;
+
+function ouvrirBoost(annonceId, annonceTitre){
+  boostAnnonceId = annonceId;
+  boostDuree = 7; boostMontant = 9;
+  document.getElementById('boost-titre-label').textContent = annonceTitre || 'Votre annonce';
+  // Sélectionner 7j par défaut
+  document.querySelectorAll('.boost-option').forEach((el,i) => {
+    el.style.border = i===1 ? '2px solid #FF6B35' : '2px solid #E5E5E5';
+    el.style.background = i===1 ? '#FFF4F1' : '#fff';
+  });
+  document.getElementById('boost-btn').textContent = 'Mettre en avant 7 jours — 9€';
+  document.getElementById('boost-payment-wrap').style.display = 'none';
+  document.getElementById('boost-modal').style.display = 'flex';
+  // Init Stripe
+  if(!stripeBoost){
+    stripeBoost = Stripe('pk_test_51TeDsF2L9ZHTsxnGJNR4qgFD21u78wszdl5BVfQKs2pTXHu5Kjk3Q9dRMH05eEZiypast0pf2l3UsVsqyX1dAkFo00Epcn8Af7');
+    const elements = stripeBoost.elements();
+    cardElement = elements.create('card', {style:{base:{fontSize:'14px',fontFamily:'Inter, sans-serif'}}});
+    cardElement.mount('#boost-card-element');
+    cardElement.on('change', e => {
+      const err = document.getElementById('boost-card-error');
+      err.textContent = e.error ? e.error.message : '';
+      err.style.display = e.error ? 'block' : 'none';
+    });
+  }
+  document.getElementById('boost-payment-wrap').style.display = 'block';
+}
+
+function selectBoost(el, duree, montant){
+  boostDuree = duree; boostMontant = montant;
+  document.querySelectorAll('.boost-option').forEach(o => {
+    o.style.border = '2px solid #E5E5E5';
+    o.style.background = '#fff';
+  });
+  el.style.border = '2px solid #FF6B35';
+  el.style.background = '#FFF4F1';
+  const labels = {1:'1 jour',7:'7 jours',30:'30 jours'};
+  document.getElementById('boost-btn').textContent = 'Mettre en avant '+labels[duree]+' — '+montant+'€';
+}
+
+function fermerBoost(){
+  document.getElementById('boost-modal').style.display = 'none';
+}
+
+async function payerBoost(){
+  if(!boostAnnonceId || !boostDuree) return;
+  const btn = document.getElementById('boost-btn');
+  btn.disabled = true; btn.textContent = 'Traitement…';
+
+  try {
+    // Créer PaymentIntent
+    const res = await fetch('/api/boost-annonce', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({annonce_id: boostAnnonceId, duree: boostDuree, user_id: currentUser.id})
+    });
+    const data = await res.json();
+    if(!data.client_secret) throw new Error(data.error || 'Erreur serveur');
+
+    // Confirmer le paiement
+    const {error, paymentIntent} = await stripeBoost.confirmCardPayment(data.client_secret, {
+      payment_method: {card: cardElement}
+    });
+    if(error) throw new Error(error.message);
+
+    // Confirmer le boost
+    await fetch('/api/confirm-boost', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({payment_intent_id: paymentIntent.id, annonce_id: boostAnnonceId, duree: boostDuree})
+    });
+
+    fermerBoost();
+    toast('★ Annonce mise en avant ! Elle apparaît maintenant en premier.');
+    setTimeout(() => location.reload(), 2000);
+  } catch(e) {
+    document.getElementById('boost-card-error').textContent = e.message;
+    document.getElementById('boost-card-error').style.display = 'block';
+    btn.disabled = false;
+    btn.textContent = 'Réessayer';
   }
 }
 </script>

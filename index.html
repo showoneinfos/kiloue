@@ -17,8 +17,6 @@
   *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
   html{scroll-behavior:smooth;}
   body{font-family:var(--sans);background:var(--white);color:var(--ink);overflow-x:hidden;}
-
-  /* NAV */
   nav{position:sticky;top:0;z-index:100;background:var(--white);border-bottom:1px solid var(--border);height:60px;display:flex;align-items:center;padding:0 24px;gap:16px;}
   .logo{font-size:22px;font-weight:700;color:var(--teal);text-decoration:none;letter-spacing:-0.5px;margin-right:8px;white-space:nowrap;}
   .logo span{color:var(--ink);}
@@ -35,31 +33,18 @@
   .btn-login:hover{color:var(--teal);}
   .btn-sell{padding:9px 18px;border-radius:8px;background:var(--teal);color:#fff;font-size:14px;font-weight:600;text-decoration:none;white-space:nowrap;}
   .btn-sell:hover{background:var(--teal2);}
-
-  /* TRUST BAR */
   .trust-bar{background:var(--teal-light);border-bottom:1px solid #C8EEEA;padding:10px 24px;display:flex;justify-content:center;gap:40px;flex-wrap:wrap;}
   .trust-item{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--teal2);font-weight:500;}
   .trust-item svg{width:15px;height:15px;fill:none;stroke:var(--teal);stroke-width:2;}
-
-  /* CATÉGORIES — PILLS */
   .cats-section{padding:24px 24px 16px;}
   .cats-section-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:16px;}
   .cats-section-title{font-size:16px;font-weight:600;color:var(--ink);}
-  .cats-section-more{font-size:13px;color:var(--teal);text-decoration:none;font-weight:500;}
-  .cats-section-more:hover{text-decoration:underline;}
   .pills-wrap{display:flex;flex-wrap:wrap;gap:8px;}
   .pill{padding:8px 18px;border-radius:20px;border:1.5px solid var(--border);background:var(--white);font-size:13px;font-weight:500;color:var(--ink2);cursor:pointer;text-decoration:none;transition:all .15s;white-space:nowrap;}
   .pill:hover{border-color:var(--teal);background:var(--teal-light);color:var(--teal2);}
-  .pill.active{border-color:var(--teal);background:var(--teal-light);color:var(--teal2);}
-
-  /* SECTION */
   .section{padding:28px 24px;}
   .section-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:20px;}
   .section-title{font-size:18px;font-weight:600;color:var(--ink);}
-  .section-more{font-size:13px;color:var(--teal);text-decoration:none;font-weight:500;}
-  .section-more:hover{text-decoration:underline;}
-
-  /* LISTINGS */
   .listings-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;}
   .listing-card{cursor:pointer;background:transparent;border:none;transition:transform .15s;}
   .listing-card:hover{transform:translateY(-3px);}
@@ -70,6 +55,8 @@
   .lc-fav{position:absolute;top:8px;right:8px;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.92);display:flex;align-items:center;justify-content:center;cursor:pointer;border:none;box-shadow:0 1px 4px rgba(0,0,0,.15);}
   .lc-fav svg{width:16px;height:16px;fill:none;stroke:#666;stroke-width:2;}
   .lc-fav:hover svg{stroke:#e53935;}
+  /* BADGE BOOST */
+  .lc-boost{position:absolute;top:8px;left:8px;background:linear-gradient(135deg,#FF6B35,#FF8E53);color:#fff;font-size:10px;font-weight:700;padding:3px 8px;border-radius:10px;letter-spacing:.3px;box-shadow:0 2px 6px rgba(255,107,53,.4);}
   .lc-body{padding:8px 2px 4px;}
   .lc-name{font-size:13px;font-weight:500;color:var(--ink);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
   .lc-meta{font-size:11px;color:var(--ink3);margin-bottom:4px;}
@@ -79,16 +66,12 @@
   .lc-badge{font-size:10px;padding:2px 7px;border-radius:20px;font-weight:500;}
   .badge-livr{background:var(--teal-light);color:var(--teal2);}
   .badge-cert{background:#FFF3E0;color:#E65100;}
-
-  /* HOW */
   .how-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
   .how-step{text-align:center;padding:28px 20px;}
   .how-icon{width:56px;height:56px;border-radius:50%;background:var(--teal-light);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;}
   .how-icon svg{width:24px;height:24px;fill:none;stroke:var(--teal);stroke-width:2;}
   .how-step h3{font-size:15px;font-weight:600;color:var(--ink);margin-bottom:8px;}
   .how-step p{font-size:13px;color:var(--ink2);line-height:1.7;}
-
-  /* CERTIF */
   .certif-banner{margin:0 24px 36px;border-radius:12px;overflow:hidden;display:grid;grid-template-columns:1fr 1fr;}
   .cb-left{background:var(--teal);padding:40px 36px;}
   .cb-left h2{font-size:22px;font-weight:700;color:#fff;margin-bottom:10px;line-height:1.2;}
@@ -101,8 +84,6 @@
   .cb-right p{font-size:13px;color:var(--ink2);line-height:1.6;margin-bottom:8px;}
   .btn-certif{padding:12px 24px;border-radius:6px;background:var(--teal);color:#fff;border:none;font-size:14px;font-weight:600;font-family:var(--sans);cursor:pointer;width:fit-content;}
   .btn-certif:hover{background:var(--teal2);}
-
-  /* SIMULATEUR */
   .sim-section{background:var(--bg);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:36px 24px;}
   .sim-inner{max-width:700px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;}
   .sim-text h2{font-size:22px;font-weight:700;color:var(--ink);margin-bottom:10px;}
@@ -118,8 +99,6 @@
   .sim-total{display:flex;justify-content:space-between;align-items:center;padding-top:12px;margin-top:4px;border-top:2px solid var(--border);}
   .sim-total span{font-size:14px;font-weight:600;color:var(--ink);}
   .sim-total .big{font-size:24px;font-weight:700;color:var(--teal);}
-
-  /* FOOTER */
   footer{background:var(--ink);padding:36px 24px;display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:24px;}
   .footer-col h4{font-size:13px;font-weight:600;color:var(--white);margin-bottom:12px;}
   .footer-col a{display:block;font-size:13px;color:var(--ink3);text-decoration:none;margin-bottom:7px;}
@@ -127,7 +106,6 @@
   .footer-logo{font-size:20px;font-weight:700;color:var(--teal);}
   .footer-logo span{color:var(--white);}
   .footer-copy{border-top:1px solid #333;padding:16px 24px;font-size:12px;color:var(--ink3);text-align:center;}
-
   @media(max-width:768px){
     nav{flex-wrap:wrap;padding:10px 16px;height:auto;gap:8px;}
     .nav-links{display:none;}
@@ -170,6 +148,7 @@
   s.src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js';
   s.onload=function(){
     var db=supabase.createClient('https://nsvosbuxkpnoasfilyqy.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5zdm9zYnV4a3Bub2FzZmlseXF5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAxODczOTcsImV4cCI6MjA5NTc2MzM5N30.pTuH4X8IQy0UJq8zUZ8t7I2WLMEUXae_8nWdtIFrpRE');
+
     db.auth.getUser().then(function(r){
       var btn=document.getElementById('nav-login');
       if(!btn) return;
@@ -180,18 +159,29 @@
         btn.style.color='#00A693';
       }
     });
-    // Charger annonces réelles
-    db.from('annonces').select('*').eq('disponible',true).order('created_at',{ascending:false}).limit(12).then(function(res){
+
+    // Charger annonces — boostées en premier
+    db.from('annonces').select('*').eq('disponible',true).order('created_at',{ascending:false}).limit(24).then(function(res){
       if(!res.data||res.data.length===0) return;
       var grid=document.getElementById('home-listings');
       if(!grid) return;
-      grid.innerHTML=res.data.map(function(a){
-        var photo=a.photos&&a.photos.length>0?a.photos[0]:'';
-        var imgHtml=photo
-          ?'<img class="lc-img" src="'+photo+'" alt="'+a.titre+'" loading="lazy">'
-          :'<div class="lc-img-placeholder"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>';
-        return '<div class="listing-card" onclick="window.location.href=\'annonce.html?id='+a.id+'\'">'+
-          '<div class="lc-wrap">'+imgHtml+
+
+      var now = new Date();
+      // Séparer boostées et normales
+      var boosted = res.data.filter(function(a){ return a.boost_expire && new Date(a.boost_expire) > now; });
+      var normal = res.data.filter(function(a){ return !a.boost_expire || new Date(a.boost_expire) <= now; });
+      var sorted = boosted.concat(normal).slice(0, 12);
+
+      grid.innerHTML = sorted.map(function(a){
+        var isBoosted = a.boost_expire && new Date(a.boost_expire) > now;
+        var photo = a.photos && a.photos.length > 0 ? a.photos[0] : '';
+        var imgHtml = photo
+          ? '<img class="lc-img" src="'+photo+'" alt="'+a.titre+'" loading="lazy">'
+          : '<div class="lc-img-placeholder"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>';
+        var boostBadge = isBoosted ? '<div class="lc-boost">★ À la une</div>' : '';
+        var cardStyle = isBoosted ? 'box-shadow:0 0 0 2px #FF6B35,0 4px 16px rgba(255,107,53,.15);border-radius:12px;' : '';
+        return '<div class="listing-card" onclick="window.location.href=\'annonce.html?id='+a.id+'\'" style="'+cardStyle+'">'+
+          '<div class="lc-wrap">'+imgHtml+boostBadge+
           '<button class="lc-fav" onclick="event.stopPropagation()"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button></div>'+
           '<div class="lc-body">'+
           '<div class="lc-name">'+a.titre+'</div>'+
@@ -205,7 +195,6 @@
 })();
 </script>
 
-<!-- TRUST BAR -->
 <div class="trust-bar">
   <div class="trust-item"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Loueurs vérifiés & certifiés</div>
   <div class="trust-item"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Paiement sécurisé</div>
@@ -214,7 +203,6 @@
   <div class="trust-item"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Commission 5% seulement</div>
 </div>
 
-<!-- CATÉGORIES — PILLS -->
 <div class="cats-section">
   <div class="cats-section-head">
     <div class="cats-section-title">Parcourir par catégorie</div>
@@ -237,34 +225,15 @@
   </div>
 </div>
 
-<!-- ANNONCES -->
 <div class="section">
   <div class="section-head">
     <div class="section-title">Annonces près de vous</div>
-    
   </div>
   <div class="listings-grid" id="home-listings">
-    <!-- Chargé depuis Supabase via le script ci-dessus -->
-    <div class="listing-card" onclick="window.location.href='annonce.html'">
-      <div class="lc-wrap"><img class="lc-img" src="https://images.unsplash.com/photo-1617953141905-b27fb1f9a1b0?w=400&q=80" alt=""><button class="lc-fav"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button></div>
-      <div class="lc-body"><div class="lc-name">Tronçonneuse Stihl MS 250</div><div class="lc-meta">Ajaccio</div><div class="lc-bot"><div class="lc-price">25€<small>/j</small></div><div class="lc-badge badge-livr">Livraison</div></div></div>
-    </div>
-    <div class="listing-card" onclick="window.location.href='annonce.html'">
-      <div class="lc-wrap"><img class="lc-img" src="https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=400&q=80" alt=""><button class="lc-fav"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button></div>
-      <div class="lc-body"><div class="lc-name">Lot 50 chaises blanches</div><div class="lc-meta">Ajaccio</div><div class="lc-bot"><div class="lc-price">40€<small>/j</small></div><div class="lc-badge badge-livr">Livraison</div></div></div>
-    </div>
-    <div class="listing-card" onclick="window.location.href='annonce.html'">
-      <div class="lc-wrap"><img class="lc-img" src="https://images.unsplash.com/photo-1504148455328-c376907d081c?w=400&q=80" alt=""><button class="lc-fav"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button></div>
-      <div class="lc-body"><div class="lc-name">Échafaudage roulant 4 m</div><div class="lc-meta">Ajaccio</div><div class="lc-bot"><div class="lc-price">18€<small>/j</small></div><div class="lc-badge badge-cert">Certifié</div></div></div>
-    </div>
-    <div class="listing-card" onclick="window.location.href='annonce.html'">
-      <div class="lc-wrap"><img class="lc-img" src="https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=400&q=80" alt=""><button class="lc-fav"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button></div>
-      <div class="lc-body"><div class="lc-name">Remorque benne 750 kg</div><div class="lc-meta">Ajaccio</div><div class="lc-bot"><div class="lc-price">22€<small>/j</small></div><div class="lc-badge badge-cert">Sans caution</div></div></div>
-    </div>
+    <div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--ink3);">Chargement…</div>
   </div>
 </div>
 
-<!-- COMMENT CA MARCHE -->
 <div class="section" id="comment-ca-marche" style="background:var(--bg);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
   <div class="section-head"><div class="section-title">Comment ça marche ?</div></div>
   <div class="how-grid">
@@ -286,7 +255,6 @@
   </div>
 </div>
 
-<!-- CERTIF -->
 <div class="certif-banner">
   <div class="cb-left">
     <h2>Devenez loueur certifié kiloue.com</h2>
@@ -309,7 +277,6 @@
   </div>
 </div>
 
-<!-- SIMULATEUR -->
 <div class="sim-section">
   <div class="sim-inner">
     <div class="sim-text">
@@ -326,7 +293,6 @@
   </div>
 </div>
 
-<!-- QUI SOMMES NOUS -->
 <div id="qui-sommes-nous" style="padding:60px 24px;background:#fff;border-top:1px solid var(--border);">
   <div style="max-width:800px;margin:0 auto;text-align:center;">
     <h2 style="font-size:22px;font-weight:700;color:var(--ink);margin-bottom:16px;">Qui sommes-nous ?</h2>
@@ -340,7 +306,6 @@
   </div>
 </div>
 
-<!-- CONTACT -->
 <div id="contact" style="padding:60px 24px;max-width:600px;margin:0 auto;text-align:center;">
   <h2 style="font-size:22px;font-weight:700;color:var(--ink);margin-bottom:8px;">Nous contacter</h2>
   <p style="font-size:14px;color:var(--ink2);margin-bottom:32px;">Une question ? Une suggestion ? On vous répond sous 24h.</p>
