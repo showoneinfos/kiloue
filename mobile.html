@@ -479,34 +479,45 @@ function annulationInfo(r, roleAffiche){
   const comm = r.commission_annulation || 0;
   if(total === 0) return '';
 
-  const style = 'margin-top:8px;padding:10px 12px;background:#FFF0F0;border:1px solid #FFCDD2;border-radius:8px;font-size:12px;color:#666;line-height:1.8;';
+  const styleRed = 'margin-top:8px;padding:10px 12px;background:#FFF0F0;border:1px solid #FFCDD2;border-radius:8px;font-size:12px;color:#666;line-height:1.8;';
+  const styleGreen = 'margin-top:8px;padding:10px 12px;background:#F0FFF4;border:1px solid #C8E6C9;border-radius:8px;font-size:12px;color:#666;line-height:1.8;';
   const row = 'display:flex;justify-content:space-between;';
-  const total_row = 'display:flex;justify-content:space-between;font-weight:600;color:#1A1A1A;border-top:1px solid #FFCDD2;margin-top:4px;padding-top:4px;';
+  const totalRow = 'display:flex;justify-content:space-between;font-weight:600;color:#1A1A1A;border-top:1px solid #FFCDD2;margin-top:4px;padding-top:4px;';
+  const totalRowGreen = 'display:flex;justify-content:space-between;font-weight:600;color:#1A1A1A;border-top:1px solid #C8E6C9;margin-top:4px;padding-top:4px;';
 
   if(roleAffiche === 'loueur'){
-    if(comm > 0 && comm <= 8){
-      const retenu = +(total * comm / 100).toFixed(2);
-      return `<div style="${style}"><div style="font-weight:600;color:#C62828;margin-bottom:4px;">Annulée par le locataire</div>
-        <div style="${row}"><span>Montant réservation</span><span>${total.toFixed(2)}€</span></div>
-        <div style="${row}"><span>Frais retenus (${comm}%)</span><span style="color:#C62828;">-${retenu}€</span></div></div>`;
+    if(comm > 0){
+      const pour_loueur = +(total * 0.20).toFixed(2);
+      const pour_kiloue = +(total * 0.05).toFixed(2);
+      return '<div style="'+styleRed+'">'
+        + '<div style="font-weight:600;color:#C62828;margin-bottom:4px;">Annulée par le locataire</div>'
+        + '<div style="'+row+'"><span>Montant réservation</span><span>'+total.toFixed(2)+'€</span></div>'
+        + '<div style="'+row+'"><span>Votre dédommagement (20%)</span><span style="color:#2E7D32;">+'+pour_loueur.toFixed(2)+'€</span></div>'
+        + '<div style="'+row+'"><span>Frais kiloue (5%)</span><span>'+pour_kiloue.toFixed(2)+'€</span></div>'
+        + '</div>';
     } else {
-      const penalite = +(total * Math.abs(comm) / 100).toFixed(2);
-      return `<div style="${style}"><div style="font-weight:600;color:#C62828;margin-bottom:4px;">Annulée par vous</div>
-        <div style="${row}"><span>Remboursé au locataire</span><span>${total.toFixed(2)}€</span></div>
-        <div style="${row}"><span>Pénalité (10%)</span><span style="color:#C62828;">-${penalite}€</span></div></div>`;
+      return '<div style="'+styleRed+'">'
+        + '<div style="font-weight:600;color:#C62828;margin-bottom:4px;">Annulée par vous</div>'
+        + '<div style="'+row+'"><span>Remboursé au locataire</span><span>'+total.toFixed(2)+'€ (100%)</span></div>'
+        + '<div style="'+row+'"><span>Pénalité</span><span style="color:#2E7D32;">Aucune</span></div>'
+        + '</div>';
     }
   } else {
-    if(comm < 0 || comm >= 10){
-      return `<div style="${style.replace('#FFF0F0','#F0FFF4').replace('#FFCDD2','#C8E6C9')}"><div style="font-weight:600;color:#2E7D32;margin-bottom:4px;">Annulée par le loueur</div>
-        <div style="${row}"><span>Montant payé</span><span>${total.toFixed(2)}€</span></div>
-        <div style="${total_row.replace('#FFCDD2','#C8E6C9')}"><span>Vous êtes remboursé</span><span style="color:#2E7D32;">${total.toFixed(2)}€</span></div></div>`;
+    if(comm === 0 && r.statut === 'annulee'){
+      return '<div style="'+styleGreen+'">'
+        + '<div style="font-weight:600;color:#2E7D32;margin-bottom:4px;">Annulée par le loueur</div>'
+        + '<div style="'+row+'"><span>Montant payé</span><span>'+total.toFixed(2)+'€</span></div>'
+        + '<div style="'+totalRowGreen+'"><span>Vous êtes remboursé</span><span style="color:#2E7D32;">'+total.toFixed(2)+'€ (100%)</span></div>'
+        + '</div>';
     } else {
-      const retenu = +(total * comm / 100).toFixed(2);
-      const rembourse = +(total - retenu).toFixed(2);
-      return `<div style="${style}"><div style="font-weight:600;color:#C62828;margin-bottom:4px;">Annulée par vous</div>
-        <div style="${row}"><span>Montant payé</span><span>${total.toFixed(2)}€</span></div>
-        <div style="${row}"><span>Frais d'annulation (${comm}%)</span><span style="color:#C62828;">-${retenu}€</span></div>
-        <div style="${total_row}"><span>Vous êtes remboursé</span><span style="color:#C62828;">${rembourse}€</span></div></div>`;
+      const retenu = +(total * 0.25).toFixed(2);
+      const rembourse = +(total * 0.75).toFixed(2);
+      return '<div style="'+styleRed+'">'
+        + '<div style="font-weight:600;color:#C62828;margin-bottom:4px;">Annulée par vous</div>'
+        + '<div style="'+row+'"><span>Montant payé</span><span>'+total.toFixed(2)+'€</span></div>'
+        + '<div style="'+row+'"><span>Frais annulation 25%</span><span style="color:#C62828;">-'+retenu.toFixed(2)+'€</span></div>'
+        + '<div style="'+totalRow+'"><span>Vous êtes remboursé</span><span style="color:#C62828;">'+rembourse.toFixed(2)+'€</span></div>'
+        + '</div>';
     }
   }
 }
