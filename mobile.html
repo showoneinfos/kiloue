@@ -391,6 +391,14 @@ body{display:flex;flex-direction:column;}
         <div class="tgl" id="pub-tgl-livraison" onclick="this.classList.toggle('on');toggleLivraisonField()"></div>
       </div>
       <div class="pub-field" id="pub-livraison-field" style="display:none;margin-top:10px;"><label>Supplément livraison (€)</label><input type="number" id="pub-prix-livraison" placeholder="20" min="0"></div>
+      <div class="pub-field" style="margin-top:10px;"><label>Délai entre deux locations</label>
+        <select id="pub-battement">
+          <option value="0">0 jour — je gère moi-même</option>
+          <option value="1" selected>1 jour — recommandé</option>
+          <option value="2">2 jours — gros matériels</option>
+        </select>
+        <div style="font-size:11px;color:#999;margin-top:4px;">Jours bloqués après chaque location. Non facturés.</div>
+      </div>
       <div class="pub-field" style="margin-top:10px;">
         <label>Photos</label>
         <div id="pub-photo-previews" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;"></div>
@@ -820,11 +828,18 @@ async function openAnnonce(id){
 
   const {data:resaData} = await db.from('reservations').select('date_debut,date_fin')
     .eq('annonce_id', id).in('statut',['en_attente','acceptee','payee','confirmee']);
+  const delaiB = data.delai_battement || 0;
   if(resaData){
     resaData.forEach(r => {
       const s = new Date(r.date_debut+'T00:00:00');
       const e = new Date(r.date_fin+'T00:00:00');
       for(let d=new Date(s); d<=e; d.setDate(d.getDate()+1)) blockedDates.add(fmtISO(d));
+      // Jours de battement après la réservation
+      for(let i=1; i<=delaiB; i++){
+        const bat = new Date(e);
+        bat.setDate(bat.getDate() + i);
+        blockedDates.add(fmtISO(bat));
+      }
     });
   }
 
@@ -1699,6 +1714,7 @@ async function publierAnnonce(){
 
   const {error} = await db.from('annonces').insert([{
     user_id: currentUser.id, categorie: cat, sous_categorie: document.getElementById('pub-sous-cat').value || '', titre, description: desc,
+    delai_battement: parseInt(document.getElementById('pub-battement').value)||0,
     prix_jour: prix, caution, ville, rayon_km: rayon,
     livraison, prix_livraison: prixLivraison, photos, disponible: true
   }]);
@@ -1735,6 +1751,7 @@ async function publierAnnonce(){
   document.getElementById('pub-photo-previews').innerHTML = '';
   document.getElementById('pub-file-input').value = '';
   document.getElementById('pub-sous-cat-field').style.display = 'none';
+  document.getElementById('pub-battement').value = '1';
   document.getElementById('pub-cat').value = '';
   window._mobilePhotoFiles = [];
   const MOBILE_SUBS = {

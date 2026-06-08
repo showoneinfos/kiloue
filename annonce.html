@@ -656,6 +656,7 @@ async function reserver(){
     }
 
     // Charger les dates bloquées
+    const delai = data.delai_battement || 0;
     const { data: resaData } = await db.from('reservations').select('date_debut,date_fin,statut')
       .eq('annonce_id', id)
       .in('statut', ['en_attente','acceptee','payee','confirmee']);
@@ -664,8 +665,15 @@ async function reserver(){
       resaData.forEach(r => {
         const s = new Date(r.date_debut+'T00:00:00');
         const e = new Date(r.date_fin+'T00:00:00');
+        // Bloquer les dates de la réservation
         for(let d=new Date(s); d<=e; d.setDate(d.getDate()+1)){
           blockedDates.add(fmtISO(d));
+        }
+        // Bloquer les jours de battement après la réservation
+        for(let i=1; i<=delai; i++){
+          const bat = new Date(e);
+          bat.setDate(bat.getDate() + i);
+          blockedDates.add(fmtISO(bat));
         }
       });
     }

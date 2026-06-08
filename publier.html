@@ -211,6 +211,14 @@
         </div>
       </div>
       <div style="background:var(--teal-light);border-radius:8px;padding:11px 14px;font-size:12px;color:var(--teal2);margin-bottom:16px;">Les locataires hors de cette zone ne verront pas votre annonce.</div>
+      <div class="field"><label>Délai entre deux locations</label>
+        <select id="f-battement">
+          <option value="0">0 jour — je gère moi-même</option>
+          <option value="1" selected>1 jour — recommandé</option>
+          <option value="2">2 jours — gros matériels</option>
+        </select>
+        <div class="field-hint">Jours bloqués après chaque location pour la restitution. Non facturés au locataire.</div>
+      </div>
       <div class="tgl-row">
         <div><div class="tgl-lbl">Livraison à domicile</div><div class="tgl-sub">Vous fixez le supplément</div></div>
         <div class="tgl on" id="tgl-liv" onclick="toggleLivraison(this)"></div>
@@ -502,6 +510,7 @@ async function publish(){
       categorie:_catName||'Divers', sous_categorie:_sousCat||'',
       prix_jour:prix, prix_demi_journee:demiJour?prixDemi:null,
       caution, ville, rayon_km:rayon, livraison, prix_livraison:prixLiv,
+      delai_battement: parseInt(document.getElementById('f-battement').value)||0,
       photos:photoUrls, disponible:true
     }]);
     if(error) throw error;
