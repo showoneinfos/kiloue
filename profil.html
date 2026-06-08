@@ -423,9 +423,13 @@ function renderResaRecue(r){
       <button class="btn-cancel" onclick="annulerResa('${r.id}','loueur')">Annuler la réservation</button>
     </div>`;
   } else if(r.statut==='payee'||r.statut==='confirmee'){
-    actions=`<div style="margin-top:8px;display:flex;gap:10px;flex-wrap:wrap;">
+    actions=`<div style="margin-top:8px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
       <a href="messages.html?annonce_id=${a.id||''}&avec=${r.locataire_id||''}" style="display:inline-block;padding:10px 18px;border-radius:8px;background:var(--teal);color:#fff;font-size:13px;font-weight:600;text-decoration:none;">💬 Envoyer un message</a>
+      <button onclick="telechargerContratLoueur('${r.id}')" style="padding:10px 18px;border-radius:8px;border:2px solid var(--teal);background:#fff;color:var(--teal);font-size:13px;font-weight:600;cursor:pointer;">📄 Contrat à faire signer</button>
       <button class="btn-cancel" style="margin-left:auto;" onclick="annulerResa('${r.id}','loueur')">Annuler la réservation</button>
+    </div>
+    <div style="margin-top:8px;padding:10px 14px;background:#FFF8E1;border-radius:8px;font-size:12px;color:#795548;">
+      ⚠️ Lors de la remise du matériel, faites signer ce contrat en 2 exemplaires à votre locataire. Il vous protège en cas de litige et certifie la remise de la caution.
     </div>`;
   }
 
@@ -479,6 +483,7 @@ function renderMaLocation(r){
     actions=`<div style="margin-top:8px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
       ${a.id?`<a href="annonce.html?id=${a.id}" style="display:inline-block;padding:10px 18px;border-radius:8px;background:var(--teal);color:#fff;font-size:13px;font-weight:600;text-decoration:none;">Voir l'annonce →</a>`:''}
       <a href="messages.html?annonce_id=${a.id||''}&avec=${r.loueur_id||''}" style="display:inline-block;padding:10px 18px;border-radius:8px;background:var(--teal);color:#fff;font-size:13px;font-weight:600;text-decoration:none;">💬 Envoyer un message</a>
+      <button onclick="telechargerContratLocataire('${r.id}')" style="padding:10px 18px;border-radius:8px;border:2px solid var(--teal);background:#fff;color:var(--teal);font-size:13px;font-weight:600;cursor:pointer;">📄 Mon contrat de location</button>
       <button class="btn-cancel" style="margin-left:auto;" onclick="annulerResa('${r.id}','locataire')">Annuler (25% retenus)</button>
     </div>`;
   }
@@ -685,6 +690,132 @@ async function sauvegarderProfil(){
   setTimeout(() => ok.style.display = 'none', 3000);
 }
 
+/* ── CONTRAT PDF ── */
+function fmt2(date){
+  if(!date) return '';
+  return new Date(date+'T00:00:00').toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'});
+}
+
+async function telechargerContratLoueur(resaId){
+  const {data:r} = await db.from('reservations').select('*, annonces(*), utilisateurs!locataire_id(prenom,nom,telephone,ville)').eq('id',resaId).single();
+  const {data:loueur} = await db.from('utilisateurs').select('*').eq('id',currentUser.id).single();
+  genererContratPDF(r, loueur, r.utilisateurs||{});
+}
+
+async function telechargerContratLocataire(resaId){
+  const {data:r} = await db.from('reservations').select('*, annonces(*), utilisateurs!loueur_id(prenom,nom,telephone,ville)').eq('id',resaId).single();
+  const {data:locataire} = await db.from('utilisateurs').select('*').eq('id',currentUser.id).single();
+  genererContratPDF(r, r.utilisateurs||{}, locataire);
+}
+
+function genererContratPDF(r, loueur, locataire){
+  const { jsPDF } = window.jspdf;
+  const ann = r.annonces || {};
+  const today = new Date().toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'});
+  const caution = ann.caution || 0;
+  const total = (r.prix_total || 0).toFixed(2);
+
+  const doc = new jsPDF({ orientation:'portrait', unit:'mm', format:'a4' });
+  const W = 210, M = 20;
+
+  function drawPage(num){
+    if(num === 2) doc.addPage();
+    let y = 20;
+
+    doc.setFillColor(0,166,147);
+    doc.rect(0,0,W,18,'F');
+    doc.setTextColor(255,255,255);
+    doc.setFontSize(13); doc.setFont('helvetica','bold');
+    doc.text('kiloue.com — Contrat de location entre particuliers', W/2, 12, {align:'center'});
+    doc.setTextColor(0,0,0);
+    y = 28;
+
+    doc.setFontSize(11); doc.setFont('helvetica','bold');
+    doc.text('EXEMPLAIRE '+num+'/2', W-M, y, {align:'right'});
+    doc.text('Date : '+today, M, y);
+    y += 10;
+
+    doc.setDrawColor(0,166,147); doc.setLineWidth(0.5);
+    doc.line(M, y, W-M, y); y += 8;
+
+    // Matériel
+    doc.setFontSize(11); doc.setFont('helvetica','bold'); doc.setTextColor(0,166,147);
+    doc.text('MATÉRIEL LOUÉ', M, y); doc.setTextColor(0,0,0); y += 7;
+    doc.setFont('helvetica','normal'); doc.setFontSize(10);
+    doc.text('Désignation : '+(ann.titre||''), M, y, {maxWidth:W-M*2}); y += 6;
+    doc.text('Période : du '+fmt2(r.date_debut)+' au '+fmt2(r.date_fin), M, y); y += 6;
+    doc.text('Montant payé en ligne : '+total+' EUR (via kiloue.com)', M, y); y += 10;
+
+    // Caution
+    doc.setDrawColor(200,200,200); doc.setLineWidth(0.3);
+    doc.line(M,y,W-M,y); y += 8;
+    doc.setFontSize(11); doc.setFont('helvetica','bold'); doc.setTextColor(0,166,147);
+    doc.text('CAUTION', M, y); doc.setTextColor(0,0,0); y += 7;
+    doc.setFont('helvetica','normal'); doc.setFontSize(10);
+    doc.text('Montant : '+caution+' EUR — Remise en main propre par le locataire au loueur.', M, y, {maxWidth:W-M*2}); y += 8;
+    doc.rect(M+5, y-4, 4, 4);
+    doc.text('Chèque', M+11, y);
+    doc.rect(M+35, y-4, 4, 4);
+    doc.text('Espèces', M+41, y);
+    y += 10;
+    doc.text('La caution sera restituée lors du retour du matériel en bon état.', M, y, {maxWidth:W-M*2}); y += 10;
+
+    // Loueur
+    doc.line(M,y,W-M,y); y += 8;
+    doc.setFontSize(11); doc.setFont('helvetica','bold'); doc.setTextColor(0,166,147);
+    doc.text('LE LOUEUR', M, y); doc.setTextColor(0,0,0); y += 7;
+    doc.setFont('helvetica','normal'); doc.setFontSize(10);
+    doc.text('Nom et prénom : '+(loueur.prenom||'')+' '+(loueur.nom||''), M, y); y += 6;
+    doc.text('Téléphone : '+(loueur.telephone||''), M, y); y += 6;
+    doc.text('Ville : '+(loueur.ville||''), M, y); y += 10;
+
+    // Locataire
+    doc.line(M,y,W-M,y); y += 8;
+    doc.setFontSize(11); doc.setFont('helvetica','bold'); doc.setTextColor(0,166,147);
+    doc.text('LE LOCATAIRE', M, y); doc.setTextColor(0,0,0); y += 7;
+    doc.setFont('helvetica','normal'); doc.setFontSize(10);
+    doc.text('Nom et prénom : '+(locataire.prenom||'')+' '+(locataire.nom||''), M, y); y += 6;
+    doc.text('Téléphone : '+(locataire.telephone||''), M, y); y += 6;
+    doc.text('Ville : '+(locataire.ville||''), M, y); y += 10;
+
+    // Déclaration
+    doc.line(M,y,W-M,y); y += 8;
+    doc.setFontSize(11); doc.setFont('helvetica','bold'); doc.setTextColor(0,166,147);
+    doc.text('DÉCLARATION', M, y); doc.setTextColor(0,0,0); y += 7;
+    doc.setFont('helvetica','normal'); doc.setFontSize(10);
+    const decl = 'Je soussigné(e) '+(locataire.prenom||'')+' '+(locataire.nom||'')+
+      ' certifie avoir loué le matériel ci-dessus auprès de '+(loueur.prenom||'')+' '+(loueur.nom||'')+
+      ' pour la période du '+fmt2(r.date_debut)+' au '+fmt2(r.date_fin)+
+      ', et avoir remis en main propre la somme de '+caution+' EUR à titre de caution.'+
+      ' Je m'engage à restituer le matériel en bon état à la date convenue.';
+    const declLines = doc.splitTextToSize(decl, W-M*2);
+    doc.text(declLines, M, y); y += declLines.length * 6 + 8;
+
+    // Signatures
+    doc.line(M,y,W-M,y); y += 8;
+    doc.setFontSize(11); doc.setFont('helvetica','bold'); doc.setTextColor(0,166,147);
+    doc.text('SIGNATURES', M, y); doc.setTextColor(0,0,0); y += 10;
+    doc.setFont('helvetica','normal'); doc.setFontSize(10);
+    const c1 = M, c2 = W/2+5;
+    doc.text('Signature du loueur :', c1, y);
+    doc.text('Signature du locataire :', c2, y); y += 5;
+    doc.text('(précédée de "Lu et approuvé")', c1, y, {maxWidth:80});
+    doc.text('(précédée de "Lu et approuvé")', c2, y, {maxWidth:80}); y += 25;
+    doc.setDrawColor(100,100,100);
+    doc.line(c1, y, c1+75, y);
+    doc.line(c2, y, c2+75, y); y += 15;
+    doc.text('Fait à _____________ le '+today, M, y);
+
+    doc.setFontSize(8); doc.setTextColor(150,150,150);
+    doc.text('kiloue.com — Contrat de location entre particuliers — Ce document fait foi entre les deux parties.', W/2, 287, {align:'center'});
+    doc.setTextColor(0,0,0);
+  }
+
+  drawPage(1);
+  drawPage(2);
+  doc.save('contrat-kiloue-'+(r.id||'').substring(0,8)+'.pdf');
+}
+
 /* ── INIT ── */
 (function(){
   const s=document.createElement('script');
@@ -782,6 +913,7 @@ async function init(){
 }
 </script>
 <script src="https://js.stripe.com/v3/"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
 let boostAnnonceId = null;
 let boostDuree = null;
