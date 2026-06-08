@@ -793,7 +793,11 @@ async function openAnnonce(id){
       </div>
       <div class="cal-legend">
         <span><span class="cal-legend-dot" style="background:var(--teal);"></span>Sélectionné</span>
-        <span><span class="cal-legend-dot" style="background:#f5f5f5;border:1px solid #eee;"></span>Indisponible</span>
+        <span><span class="cal-legend-dot" style="background:#FFCDD2;border:1px solid #FFCDD2;"></span>Indisponible</span>
+        <span><span class="cal-legend-dot" style="background:#E8F5E9;border:1px solid #C8E6C9;"></span>Disponible</span>
+      </div>
+      <div style="margin-top:8px;padding:8px 10px;background:#FFF8E1;border-radius:8px;font-size:11px;color:#795548;line-height:1.6;">
+        ⚠️ Les dates rouges après une location sont des jours de restitution réservés au loueur pour récupérer son matériel. Ces jours ne vous sont pas facturés.
       </div>
       <div class="dates-boxes">
         <div class="date-box" id="det-box-debut"><div class="date-box-label">Arrivée</div><div class="date-box-val ph" id="det-val-debut">Choisir</div></div>
@@ -1268,9 +1272,9 @@ async function showSection(section){
                  <button class="btn-refuse-m" onclick="refuserResaMobile('${r.id}')">✗ Refuser</button>`;
       } else if(r.statut==='acceptee'){
         actions=`<div style="padding:8px 10px;background:#E3F2FD;border-radius:8px;font-size:12px;color:#1565C0;margin-top:6px;">En attente du paiement…</div>
-                 <button class="btn-cancel-m" onclick="annulerResaMobile('${r.id}','loueur')">Annuler (25% retenus)</button>`;
+                 <button class="btn-cancel-m" onclick="annulerResaMobile('${r.id}','loueur')">Annuler la réservation</button>`;
       } else if(r.statut==='payee'||r.statut==='confirmee'){
-        actions=`<button class="btn-cancel-m" onclick="annulerResaMobile('${r.id}','loueur')">Annuler (25% retenus)</button>`;
+        actions=`<button class="btn-cancel-m" onclick="annulerResaMobile('${r.id}','loueur')">Annuler la réservation</button>`;
       }
       const amtHtmlLoueur = r.statut==='annulee'
         ? '<div class="resa-amt" style="color:#C62828;">+'+net.toFixed(2)+'€</div>'+annulationInfo(r,'loueur')
