@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://js.stripe.com/v3/"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
   :root{--teal:#00A693;--teal2:#008577;--teal-light:#E8F7F5;--ink:#1A1A1A;--ink2:#666;--ink3:#999;--border:#E5E5E5;--bg:#FAFAFA;--white:#fff;--sans:'Inter',system-ui,sans-serif;}
   *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
@@ -43,6 +44,8 @@
   .btn-pay:hover{background:var(--teal2);}
   .btn-pay:disabled{opacity:.5;cursor:not-allowed;}
   .btn-pay svg{width:18px;height:18px;fill:none;stroke:#fff;stroke-width:2;}
+  .btn-contrat{width:100%;padding:14px;border-radius:10px;background:var(--white);color:var(--teal);border:2px solid var(--teal);font-size:15px;font-weight:700;font-family:var(--sans);cursor:pointer;margin-top:12px;display:flex;align-items:center;justify-content:center;gap:8px;}
+  .btn-contrat:hover{background:var(--teal-light);}
   .secure-note{display:flex;align-items:center;justify-content:center;gap:6px;font-size:12px;color:var(--ink3);margin-top:14px;}
   .secure-note svg{width:13px;height:13px;fill:none;stroke:var(--teal);stroke-width:2;}
   .success-screen{text-align:center;padding:20px 0;}
@@ -118,9 +121,13 @@
       <div class="success-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
       <div style="font-size:22px;font-weight:700;color:var(--ink);margin-bottom:10px;">Paiement confirmé !</div>
       <div style="font-size:14px;color:var(--ink2);line-height:1.7;margin-bottom:24px;">
-        Votre réservation est confirmée. Le loueur va vous contacter pour organiser la remise du matériel.
+        Votre réservation est confirmée. Le loueur va vous contacter pour organiser la remise du matériel.<br><br>
+        <strong>N'oubliez pas de télécharger votre contrat de location en 2 exemplaires à faire signer par les deux parties.</strong>
       </div>
-      <button onclick="window.location.href='profil.html'" style="padding:13px 28px;border-radius:8px;background:var(--teal);color:#fff;border:none;font-size:15px;font-weight:600;font-family:var(--sans);cursor:pointer;">
+      <button class="btn-contrat" onclick="genererContrat()">
+        📄 Télécharger le contrat de location (2 exemplaires)
+      </button>
+      <button onclick="window.location.href='profil.html'" style="width:100%;padding:13px 28px;border-radius:8px;background:var(--teal);color:#fff;border:none;font-size:15px;font-weight:600;font-family:var(--sans);cursor:pointer;margin-top:12px;">
         Voir mes locations →
       </button>
     </div>
@@ -132,7 +139,7 @@ const SUPA_URL = 'https://nsvosbuxkpnoasfilyqy.supabase.co';
 const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5zdm9zYnV4a3Bub2FzZmlseXF5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAxODczOTcsImV4cCI6MjA5NTc2MzM5N30.pTuH4X8IQy0UJq8zUZ8t7I2WLMEUXae_8nWdtIFrpRE';
 const STRIPE_PK = 'pk_test_51TeDsF2L9ZHTsxnGJNR4qgFD21u78wszdl5BVfQKs2pTXHu5Kjk3Q9dRMH05eEZiypast0pf2l3UsVsqyX1dAkFo00Epcn8Af7';
 
-let stripe, cardElement, db, reservationData;
+let stripe, cardElement, db, reservationData, locataireInfo, loueurInfo;
 
 function fmt(date){
   return new Date(date+'T00:00:00').toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'});
@@ -140,6 +147,187 @@ function fmt(date){
 
 function checkContrat(){
   document.getElementById('btn-pay').disabled = !document.getElementById('contrat-ok').checked;
+}
+
+function genererContrat(){
+  const { jsPDF } = window.jspdf;
+
+  const r = reservationData;
+  const ann = r.annonces || {};
+  const loc = locataireInfo || {};
+  const lou = loueurInfo || {};
+  const dateDebut = fmt(r.date_debut);
+  const dateFin = fmt(r.date_fin);
+  const total = (r.prix_total || 0).toFixed(2);
+  const caution = ann.caution || 0;
+  const today = new Date().toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'});
+
+  // Créer PDF en A4
+  const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+  const W = 210, margin = 20;
+  let y = 20;
+
+  function contratPage(exemplaire){
+    if(exemplaire === 2) doc.addPage();
+    y = 20;
+
+    // En-tête
+    doc.setFillColor(0, 166, 147);
+    doc.rect(0, 0, W, 18, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(13);
+    doc.setFont('helvetica', 'bold');
+    doc.text('kiloue.com — Contrat de location entre particuliers', W/2, 12, {align:'center'});
+    doc.setTextColor(0, 0, 0);
+    y = 28;
+
+    doc.setFontSize(11);
+    doc.setFont('helvetica', 'bold');
+    doc.text('EXEMPLAIRE ' + exemplaire + '/2', W - margin, y, {align:'right'});
+    doc.text('Date du contrat : ' + today, margin, y);
+    y += 10;
+
+    // Ligne séparatrice
+    doc.setDrawColor(0, 166, 147);
+    doc.setLineWidth(0.5);
+    doc.line(margin, y, W - margin, y);
+    y += 8;
+
+    // Section matériel
+    doc.setFontSize(11);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(0, 166, 147);
+    doc.text('MATÉRIEL LOUÉ', margin, y);
+    doc.setTextColor(0, 0, 0);
+    y += 7;
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(10);
+    doc.text('Désignation : ' + (ann.titre || ''), margin, y); y += 6;
+    doc.text('Période : du ' + dateDebut + ' au ' + dateFin, margin, y); y += 6;
+    doc.text('Montant de la location : ' + total + ' EUR (paiement effectué en ligne via kiloue.com)', margin, y); y += 10;
+
+    // Section caution
+    doc.setLineWidth(0.3);
+    doc.setDrawColor(220, 220, 220);
+    doc.line(margin, y, W - margin, y); y += 8;
+    doc.setFontSize(11);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(0, 166, 147);
+    doc.text('CAUTION', margin, y);
+    doc.setTextColor(0, 0, 0);
+    y += 7;
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(10);
+    doc.text('Montant de la caution : ' + caution + ' EUR', margin, y); y += 6;
+    doc.text('Modalité de remise :', margin, y); y += 6;
+
+    // Cases à cocher
+    const cx = margin + 5;
+    doc.rect(cx, y-4, 4, 4);
+    doc.text('Chèque', cx + 6, y);
+    doc.rect(cx + 30, y-4, 4, 4);
+    doc.text('Espèces', cx + 36, y);
+    y += 10;
+
+    doc.text('La caution est remise en main propre par le locataire au loueur avant la remise du matériel.', margin, y, {maxWidth: W - margin*2}); y += 8;
+    doc.text('Elle sera restituée par le loueur au locataire lors du retour du matériel, si celui-ci est rendu', margin, y, {maxWidth: W - margin*2}); y += 5;
+    doc.text('en bon état et sans dommages.', margin, y); y += 10;
+
+    // Section loueur
+    doc.line(margin, y, W - margin, y); y += 8;
+    doc.setFontSize(11);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(0, 166, 147);
+    doc.text('LE LOUEUR', margin, y);
+    doc.setTextColor(0, 0, 0);
+    y += 7;
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(10);
+    doc.text('Nom et prénom : ' + (lou.prenom || '') + ' ' + (lou.nom || ''), margin, y); y += 6;
+    doc.text('Téléphone : ' + (lou.telephone || ''), margin, y); y += 6;
+    doc.text('Ville : ' + (lou.ville || ''), margin, y); y += 10;
+
+    // Section locataire
+    doc.line(margin, y, W - margin, y); y += 8;
+    doc.setFontSize(11);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(0, 166, 147);
+    doc.text('LE LOCATAIRE', margin, y);
+    doc.setTextColor(0, 0, 0);
+    y += 7;
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(10);
+    doc.text('Nom et prénom : ' + (loc.prenom || '') + ' ' + (loc.nom || ''), margin, y); y += 6;
+    doc.text('Téléphone : ' + (loc.telephone || ''), margin, y); y += 6;
+    doc.text('Ville : ' + (loc.ville || ''), margin, y); y += 10;
+
+    // Déclarations
+    doc.line(margin, y, W - margin, y); y += 8;
+    doc.setFontSize(11);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(0, 166, 147);
+    doc.text('DÉCLARATIONS', margin, y);
+    doc.setTextColor(0, 0, 0);
+    y += 7;
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(10);
+
+    const decl = [
+      'Je soussigné(e) ' + (loc.prenom||'') + ' ' + (loc.nom||'') + ', certifie avoir loué le matériel désigné ci-dessus',
+      'auprès de ' + (lou.prenom||'') + ' ' + (lou.nom||'') + ' pour la période du ' + dateDebut + ' au ' + dateFin + '.',
+      '',
+      'Je certifie avoir remis en main propre la somme de ' + caution + ' EUR à titre de caution au loueur.',
+      '',
+      'Je m\'engage à restituer le matériel en bon état à la date convenue.',
+    ];
+    decl.forEach(function(line){
+      if(line === ''){ y += 3; return; }
+      doc.text(line, margin, y, {maxWidth: W - margin*2}); y += 6;
+    });
+
+    y += 8;
+    // Signatures
+    doc.line(margin, y, W - margin, y); y += 8;
+    doc.setFontSize(11);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(0, 166, 147);
+    doc.text('SIGNATURES', margin, y);
+    doc.setTextColor(0, 0, 0);
+    y += 10;
+
+    // Deux colonnes signature
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(10);
+    const col1 = margin;
+    const col2 = W/2 + 5;
+
+    doc.text('Signature du loueur :', col1, y);
+    doc.text('Signature du locataire :', col2, y);
+    y += 5;
+    doc.text('(précédée de la mention "Lu et approuvé")', col1, y, {maxWidth: 80});
+    doc.text('(précédée de la mention "Lu et approuvé")', col2, y, {maxWidth: 80});
+    y += 25;
+
+    // Ligne de signature
+    doc.setDrawColor(100, 100, 100);
+    doc.line(col1, y, col1 + 75, y);
+    doc.line(col2, y, col2 + 75, y);
+    y += 15;
+
+    // Date et lieu
+    doc.text('Fait à _____________ le ' + today, margin, y);
+
+    // Pied de page
+    doc.setFontSize(8);
+    doc.setTextColor(150, 150, 150);
+    doc.text('kiloue.com — Plateforme de location de matériel entre particuliers — Ce contrat fait foi entre les deux parties.', W/2, 287, {align:'center'});
+    doc.setTextColor(0, 0, 0);
+  }
+
+  contratPage(1);
+  contratPage(2);
+
+  doc.save('contrat-location-kiloue-' + (r.id || '').substring(0,8) + '.pdf');
 }
 
 async function init(){
@@ -157,27 +345,38 @@ async function init(){
 
     const {data:resa, error} = await db
       .from('reservations')
-      .select('*, annonces(titre,photos,prix_jour), utilisateurs!loueur_id(prenom,nom)')
+      .select('*, annonces(*), utilisateurs!loueur_id(prenom,nom,telephone,ville)')
       .eq('id', resaId)
       .eq('locataire_id', user.id)
       .single();
 
     if(error || !resa){ alert('Réservation introuvable.'); window.location.href='profil.html'; return; }
-    if(resa.statut === 'payee' || resa.statut === 'confirmee'){ window.location.href='profil.html'; return; }
+    if(resa.statut === 'payee' || resa.statut === 'confirmee'){
+      reservationData = resa;
+      loueurInfo = resa.utilisateurs || {};
+      const {data:locData} = await db.from('utilisateurs').select('*').eq('id', user.id).single();
+      locataireInfo = locData || {};
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('success-card').style.display = 'block';
+      return;
+    }
 
     reservationData = resa;
+    loueurInfo = resa.utilisateurs || {};
+
+    const {data:locData} = await db.from('utilisateurs').select('*').eq('id', user.id).single();
+    locataireInfo = locData || {};
+
     const a = resa.annonces || {};
     const total = resa.prix_total || 0;
     const commission = resa.commission || 0;
     const base = total - commission;
 
-    // Calcul annulation 25%
     const retenu = +(total * 0.25).toFixed(2);
     const rembourse = +(total - retenu).toFixed(2);
     document.getElementById('montant-retenu').textContent = retenu.toFixed(2) + ' €';
     document.getElementById('montant-rembourse').textContent = rembourse.toFixed(2) + ' €';
 
-    // Récap
     document.getElementById('recap-bloc').innerHTML =
       '<div class="recap-row"><span>' + (a.titre||'Réservation') + '</span><span class="val"></span></div>' +
       '<div class="recap-row"><span>Du ' + fmt(resa.date_debut) + ' au ' + fmt(resa.date_fin) + '</span><span class="val">' + base.toFixed(2) + ' €</span></div>' +
@@ -248,7 +447,6 @@ async function payerMaintenant(){
         paye_le: new Date().toISOString()
       }).eq('id', reservationData.id);
 
-      // Message au loueur
       try {
         const {data:{user:u}} = await db.auth.getUser();
         await db.from('messages').insert([{
@@ -260,30 +458,29 @@ async function payerMaintenant(){
         }]);
       } catch(e){ console.warn('Message error:', e); }
 
-      // Emails
       try {
         const {data:{user:u}} = await db.auth.getUser();
         const a = reservationData.annonces || {};
         const fmtD = function(s){ return s ? new Date(s+'T00:00:00').toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'}) : ''; };
 
-        const [{data:locData},{data:louData}] = await Promise.all([
+        const [{data:locD},{data:louD}] = await Promise.all([
           db.from('utilisateurs').select('email,prenom').eq('id',u.id).single(),
           db.from('utilisateurs').select('email,prenom').eq('id',reservationData.loueur_id).single()
         ]);
 
-        if(locData?.email){
+        if(locD?.email){
           await fetch('/api/send-email',{method:'POST',headers:{'Content-Type':'application/json'},
-            body:JSON.stringify({type:'paiement_confirme',to:locData.email,data:{
-              locataire_prenom:locData.prenom||'',annonce_titre:a.titre||'',
+            body:JSON.stringify({type:'paiement_confirme',to:locD.email,data:{
+              locataire_prenom:locD.prenom||'',annonce_titre:a.titre||'',
               date_debut:fmtD(reservationData.date_debut),date_fin:fmtD(reservationData.date_fin),
               montant_total:reservationData.prix_total?.toFixed(2)||''
             }})
           });
         }
-        if(louData?.email){
+        if(louD?.email){
           await fetch('/api/send-email',{method:'POST',headers:{'Content-Type':'application/json'},
-            body:JSON.stringify({type:'nouvelle_reservation',to:louData.email,data:{
-              loueur_prenom:louData.prenom||'',locataire_nom:locData?.prenom||'Locataire',
+            body:JSON.stringify({type:'nouvelle_reservation',to:louD.email,data:{
+              loueur_prenom:louD.prenom||'',locataire_nom:locD?.prenom||'Locataire',
               annonce_titre:a.titre||'',date_debut:fmtD(reservationData.date_debut),
               date_fin:fmtD(reservationData.date_fin),
               montant_net:((reservationData.prix_total||0)-(reservationData.commission||0)).toFixed(2)
