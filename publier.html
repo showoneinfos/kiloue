@@ -211,13 +211,15 @@
         </div>
       </div>
       <div style="background:var(--teal-light);border-radius:8px;padding:11px 14px;font-size:12px;color:var(--teal2);margin-bottom:16px;">Les locataires hors de cette zone ne verront pas votre annonce.</div>
-      <div class="field"><label>Délai entre deux locations</label>
-        <select id="f-battement">
-          <option value="0">0 jour — je gère moi-même</option>
-          <option value="1" selected>1 jour — recommandé</option>
-          <option value="2">2 jours — gros matériels</option>
-        </select>
-        <div class="field-hint">Jours bloqués après chaque location pour la restitution. Non facturés au locataire.</div>
+      <div style="background:var(--bg);border-radius:10px;padding:14px;margin-bottom:16px;">
+        <div style="display:flex;align-items:flex-start;gap:12px;">
+          <input type="checkbox" id="f-battement-check" onchange="toggleBattement(this)" style="width:18px;height:18px;margin-top:2px;accent-color:var(--teal);flex-shrink:0;cursor:pointer;">
+          <div>
+            <div style="font-size:14px;font-weight:500;color:var(--ink);">Bloquer un jour de restitution</div>
+            <div style="font-size:12px;color:var(--ink2);margin-top:3px;line-height:1.5;">Bloque automatiquement 1 jour après chaque location pour récupérer et vérifier votre matériel. Non facturé au locataire.<br><strong>Décochez si vous avez plusieurs exemplaires du même équipement.</strong></div>
+          </div>
+        </div>
+        <input type="hidden" id="f-battement" value="0">
       </div>
       <div class="tgl-row">
         <div><div class="tgl-lbl">Livraison à domicile</div><div class="tgl-sub">Vous fixez le supplément</div></div>
@@ -415,6 +417,10 @@ function toggleDemi(el){
   document.getElementById('demi-price-wrap').style.display=el.classList.contains('on')?'block':'none';
 }
 function toggleLivraison(el){ el.classList.toggle('on'); document.getElementById('livraison-price-wrap').style.display=el.classList.contains('on')?'block':'none'; }
+function toggleBattement(el){
+  document.getElementById('f-battement').value = el.checked ? '1' : '0';
+}
+
 function chkCGU(){ const ok=document.getElementById('tgl-cgu').classList.contains('on')&&document.getElementById('tgl-own').classList.contains('on'); document.getElementById('btn-next').style.opacity=ok?'1':'.5'; }
 
 function updPreview(){
