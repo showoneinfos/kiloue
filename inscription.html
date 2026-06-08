@@ -8,7 +8,10 @@
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Connexion — kiloue.com</title>
+<title>Connexion — louetoo.com</title>
+<meta name="description" content="Connectez-vous ou créez votre compte sur louetoo.com pour louer et proposer du matériel entre particuliers.">
+<meta name="robots" content="noindex">
+<link rel="canonical" href="https://www.louetoo.com/inscription.html">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -61,13 +64,13 @@
 </head>
 <body>
 <nav>
-  <a class="logo" href="index.html">kiloue<span>.com</span></a>
+  <a class="logo" href="index.html">louetoo<span>.com</span></a>
 </nav>
 
 <div class="page">
   <div class="left">
     <h2>Louez votre matériel inutilisé et gagnez jusqu'à 400€/mois</h2>
-    <p>Rejoignez des milliers de particuliers qui rentabilisent leur matériel sur kiloue.com. Zéro abonnement, 5% de commission seulement.</p>
+    <p>Rejoignez des milliers de particuliers qui rentabilisent leur matériel sur louetoo.com. Zéro abonnement, 5% de commission seulement.</p>
     <div class="benefits">
       <div class="benefit">
         <div class="benefit-icon"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
@@ -97,12 +100,12 @@
       <!-- CONNEXION -->
       <div id="s-login">
         <div class="form-title">Se connecter</div>
-        <div class="form-sub">Bon retour sur kiloue.com !</div>
+        <div class="form-sub">Bon retour sur louetoo.com !</div>
         <div class="err-msg" id="err-login"></div>
-        <div class="field"><label>Email *</label><input type="email" id="login-email" placeholder="jean@exemple.fr"></div>
+        <div class="field"><label>Email *</label><input type="email" id="login-email" autocomplete="off" placeholder="jean@exemple.fr"></div>
         <div class="field"><label>Mot de passe *</label>
           <div class="pwd-wrap">
-            <input type="password" id="login-pwd" placeholder="Votre mot de passe">
+            <input type="password" id="login-pwd" autocomplete="off" placeholder="Votre mot de passe">
             <button class="eye-btn" onclick="toggleLoginPwd()" type="button">
               <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
             </button>
@@ -120,18 +123,18 @@
         <div class="form-sub">Gratuit · 2 minutes · Aucune carte requise</div>
         <div class="err-msg" id="err-msg"></div>
         <div class="field-row">
-          <div class="field"><label>Prénom *</label><input type="text" id="prenom" placeholder="Jean" oninput="chk1()"></div>
-          <div class="field"><label>Nom *</label><input type="text" id="nom" placeholder="Dupont" oninput="chk1()"></div>
+          <div class="field"><label>Prénom *</label><input type="text" id="prenom" autocomplete="off" placeholder="Jean" oninput="chk1()"></div>
+          <div class="field"><label>Nom *</label><input type="text" id="nom" autocomplete="off" placeholder="Dupont" oninput="chk1()"></div>
         </div>
-        <div class="field"><label>Email *</label><input type="email" id="email" placeholder="jean@exemple.fr" oninput="chk1()"></div>
+        <div class="field"><label>Email *</label><input type="email" id="email" autocomplete="off" placeholder="jean@exemple.fr" oninput="chk1()"></div>
         <div class="field-row">
-          <div class="field"><label>Ville *</label><input type="text" id="ville" placeholder="Ajaccio" oninput="chk1()"></div>
-          <div class="field"><label>Code postal *</label><input type="text" id="code_postal" placeholder="20000" maxlength="5" oninput="chk1()"></div>
+          <div class="field"><label>Ville *</label><input type="text" id="ville" autocomplete="off" placeholder="Ajaccio" oninput="chk1()"></div>
+          <div class="field"><label>Code postal *</label><input type="text" id="code_postal" autocomplete="off" placeholder="20000" maxlength="5" oninput="chk1()"></div>
         </div>
-        <div class="field"><label>Téléphone *</label><input type="tel" id="telephone" placeholder="06 12 34 56 78" oninput="chk1()"></div>
+        <div class="field"><label>Téléphone *</label><input type="tel" id="telephone" autocomplete="off" placeholder="06 12 34 56 78" oninput="chk1()"></div>
         <div class="field"><label>Mot de passe *</label>
           <div class="pwd-wrap">
-            <input type="password" id="pwd" placeholder="6 caractères minimum" oninput="chk1()">
+            <input type="password" id="pwd" autocomplete="new-password" placeholder="6 caractères minimum" oninput="chk1()">
             <button class="eye-btn" onclick="togglePwd()" type="button">
               <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
             </button>

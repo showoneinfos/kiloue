@@ -3,7 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>kiloue.com</title>
+<title>louetoo.com — Location de matériel entre particuliers</title>
+<meta name="description" content="Louez du matériel entre particuliers près de chez vous sur louetoo.com. Paiement sécurisé, commission 5% seulement.">
+<meta name="robots" content="noindex">
+<link rel="canonical" href="https://www.louetoo.com/mobile.html">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://js.stripe.com/v3/"></script>
@@ -235,7 +238,7 @@ body{display:flex;flex-direction:column;}
 <body>
 
 <div class="topbar" id="main-topbar">
-  <a class="logo" href="index.html" onclick="goPage('home');return false;">kiloue<span>.com</span></a>
+  <a class="logo" href="index.html" onclick="goPage('home');return false;">louetoo<span>.com</span></a>
   <div class="search-bar" onclick="goPage('search')">
     <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
     <span>Tronçonneuse, tables…</span>
@@ -321,7 +324,7 @@ body{display:flex;flex-direction:column;}
 
   <div class="page" id="page-auth">
     <div class="auth-page">
-      <div class="auth-logo"><a class="logo" href="index.html" onclick="goPage('home');return false;">kiloue<span>.com</span></a></div>
+      <div class="auth-logo"><a class="logo" href="index.html" onclick="goPage('home');return false;">louetoo<span>.com</span></a></div>
       <div class="auth-tabs">
         <div class="auth-tab active" id="tab-login" onclick="switchAuthTab('login')">Se connecter</div>
         <div class="auth-tab" id="tab-signup" onclick="switchAuthTab('signup')">S'inscrire</div>
@@ -556,7 +559,7 @@ function annulationInfo(r, roleAffiche){
         + '<div style="font-weight:600;color:#C62828;margin-bottom:4px;">Annulée par le locataire</div>'
         + '<div style="'+row+'"><span>Montant réservation</span><span>'+total.toFixed(2)+'€</span></div>'
         + '<div style="'+row+'"><span>Votre dédommagement (20%)</span><span style="color:#2E7D32;">+'+pour_loueur.toFixed(2)+'€</span></div>'
-        + '<div style="'+row+'"><span>Frais kiloue (5%)</span><span>'+pour_kiloue.toFixed(2)+'€</span></div>'
+        + '<div style="'+row+'"><span>Frais louetoo (5%)</span><span>'+pour_kiloue.toFixed(2)+'€</span></div>'
         + '</div>';
     } else {
       return '<div style="'+styleRed+'">'
@@ -582,7 +585,7 @@ function annulationInfo(r, roleAffiche){
         + '<div style="'+row+'"><span>Montant payé</span><span>'+total.toFixed(2)+'€</span></div>'
         + '<div style="'+row+'"><span>Frais annulation (25%)</span><span style="color:#C62828;">-'+retenu.toFixed(2)+'€</span></div>'
         + '<div style="'+row+';padding-left:12px;font-size:11px;color:#999;"><span>dont loueur (20%)</span><span>'+pour_loueur.toFixed(2)+'€</span></div>'
-        + '<div style="'+row+';padding-left:12px;font-size:11px;color:#999;"><span>dont kiloue (5%)</span><span>'+pour_kiloue.toFixed(2)+'€</span></div>'
+        + '<div style="'+row+';padding-left:12px;font-size:11px;color:#999;"><span>dont louetoo (5%)</span><span>'+pour_kiloue.toFixed(2)+'€</span></div>'
         + '<div style="'+totalRow+'"><span>Vous êtes remboursé</span><span style="color:#C62828;">'+rembourse.toFixed(2)+'€</span></div>'
         + '</div>';
     }
@@ -806,7 +809,7 @@ async function openAnnonce(id){
       <div class="cal-recap" id="cal-recap" style="display:none;">
         <div class="cal-recap-row"><span id="cr-days">—</span><span id="cr-base">—</span></div>
         <div class="cal-recap-row" id="cr-del-row" style="display:none;"><span>Livraison</span><span id="cr-del">—</span></div>
-        <div class="cal-recap-row"><span>Commission kiloue (5%)</span><span id="cr-comm">—</span></div>
+        <div class="cal-recap-row"><span>Commission louetoo (5%)</span><span id="cr-comm">—</span></div>
         <div class="cal-recap-total"><span>Total</span><span class="tv" id="cr-total">—</span></div>
       </div>
     </div>
@@ -1485,7 +1488,7 @@ async function accepterResaMobile(id, locataireId, annonceId){
     db.from('utilisateurs').select('prenom,telephone').eq('id',currentUser.id).single()
   ]);
   const titre = ann?.titre||'le matériel';
-  const lien = 'https://kiloue.com/paiement.html?reservation_id='+id;
+  const lien = 'https://louetoo.com/paiement.html?reservation_id='+id;
   await db.from('messages').insert([{
     expediteur_id: currentUser.id, destinataire_id: locataireId,
     annonce_id: annonceId||null,
@@ -1523,7 +1526,7 @@ function refuserResaMobile(id){
 
 async function annulerResaMobile(id, role){
   const comm = role==='loueur' ? 10 : 8;
-  if(!confirm(role==='loueur' ? 'Annuler cette réservation ? Le locataire sera remboursé à 100%.' : 'Annuler ? 25% du montant total vous sera retenu (20% au loueur + 5% kiloue).')) return;
+  if(!confirm(role==='loueur' ? 'Annuler cette réservation ? Le locataire sera remboursé à 100%.' : 'Annuler ? 25% du montant total vous sera retenu (20% au loueur + 5% louetoo).')) return;
   try {
     const res = await fetch('/api/cancel-payment', {
       method: 'POST',
@@ -1595,7 +1598,7 @@ async function inscrire(){
   if(signInErr){ err.textContent='❌ '+signInErr.message; err.style.display='block'; return; }
   currentUser = signInData.user;
   await db.from('utilisateurs').upsert({id:currentUser.id,prenom,nom,email,ville,code_postal:cp,telephone:tel,est_certifie:false},{onConflict:'id'});
-  toast('Compte créé ! Bienvenue sur kiloue.com');
+  toast('Compte créé ! Bienvenue sur louetoo.com');
   goPage('home');
 }
 
@@ -1680,7 +1683,7 @@ function genererContratMobilePDF(r, loueur, locataire, estLoueur){
     let y = 20;
     doc.setFillColor(0,166,147); doc.rect(0,0,W,18,'F');
     doc.setTextColor(255,255,255); doc.setFontSize(12); doc.setFont('helvetica','bold');
-    doc.text('kiloue.com — Contrat de location entre particuliers', W/2, 12, {align:'center'});
+    doc.text('louetoo.com — Contrat de location entre particuliers', W/2, 12, {align:'center'});
     doc.setTextColor(0,0,0); y = 28;
     doc.setFontSize(11); doc.setFont('helvetica','bold');
     doc.text('EXEMPLAIRE '+num+'/2', W-M, y, {align:'right'});
@@ -1693,7 +1696,7 @@ function genererContratMobilePDF(r, loueur, locataire, estLoueur){
     doc.setFont('helvetica','normal'); doc.setFontSize(10);
     doc.text('Désignation : '+(ann.titre||''), M, y, {maxWidth:W-M*2}); y += 6;
     doc.text('Période : du '+fmtD(r.date_debut)+' au '+fmtD(r.date_fin), M, y); y += 6;
-    doc.text('Montant payé en ligne : '+total+' EUR (via kiloue.com)', M, y); y += 10;
+    doc.text('Montant payé en ligne : '+total+' EUR (via louetoo.com)', M, y); y += 10;
 
     doc.setDrawColor(200,200,200); doc.setLineWidth(0.3);
     doc.line(M,y,W-M,y); y += 8;
@@ -1746,12 +1749,12 @@ function genererContratMobilePDF(r, loueur, locataire, estLoueur){
     doc.line(c1,y,c1+75,y); doc.line(c2,y,c2+75,y); y += 15;
     doc.text('Fait à _____________ le '+today, M, y);
     doc.setFontSize(8); doc.setTextColor(150,150,150);
-    doc.text('kiloue.com — Ce contrat fait foi entre les deux parties.', W/2, 287, {align:'center'});
+    doc.text('louetoo.com — Ce contrat fait foi entre les deux parties.', W/2, 287, {align:'center'});
     doc.setTextColor(0,0,0);
   }
 
   drawPage(1); drawPage(2);
-  doc.save('contrat-kiloue-'+(r.id||'').substring(0,8)+'.pdf');
+  doc.save('contrat-louetoo-'+(r.id||'').substring(0,8)+'.pdf');
 }
 
 async function handleMobilePhotos(input){

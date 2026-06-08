@@ -8,7 +8,10 @@
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>kiloue.com</title>
+<title>Annonce — louetoo.com</title>
+<meta name="description" content="Louez ce matériel près de chez vous sur louetoo.com. Paiement sécurisé, commission 5%.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://www.louetoo.com/annonce.html">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -143,7 +146,7 @@
 <body>
 
 <nav>
-  <a class="logo" href="index.html">kiloue<span>.com</span></a>
+  <a class="logo" href="index.html">louetoo<span>.com</span></a>
   <div class="nav-actions">
     <button class="btn-login" onclick="window.location.href='inscription.html?mode=login'">Se connecter</button>
     <button class="btn-sell" onclick="window.location.href='publier.html'">Déposer une annonce</button>
@@ -231,9 +234,7 @@
           <div class="cal-legend-item"><div class="cal-legend-dot" style="background:#FFCDD2;"></div>Indisponible</div>
           <div class="cal-legend-item"><div class="cal-legend-dot" style="background:#E8F5E9;"></div>Disponible</div>
         </div>
-        <div style="margin-top:8px;padding:8px 10px;background:#FFF8E1;border-radius:6px;font-size:11px;color:#795548;line-height:1.6;">
-          ⚠️ Les dates rouges après une location sont des jours de restitution. Le loueur les réserve pour récupérer son matériel — ils ne vous sont pas facturés.
-        </div>
+        <div id="battement-note" style="display:none;margin-top:8px;padding:8px 10px;background:#FFF8E1;border-radius:6px;font-size:11px;color:#795548;line-height:1.6;">⚠️ Les dates rouges après une location sont des jours de restitution. Le loueur les réserve pour récupérer son matériel — ils ne vous sont pas facturés.</div>
       </div>
 
       <!-- DATES SÉLECTIONNÉES -->
@@ -256,14 +257,14 @@
       <div class="recap" id="recap-bloc" style="display:none;">
         <div class="recap-row"><span class="l" id="r-days">—</span><span class="v" id="r-price">—</span></div>
         <div class="recap-row" id="r-del-row" style="display:none;"><span class="l">Livraison</span><span class="v" id="r-del-price">—</span></div>
-        <div class="recap-row"><span class="l">Commission kiloue (5%)</span><span class="v vt" id="r-comm">—</span></div>
+        <div class="recap-row"><span class="l">Commission louetoo (5%)</span><span class="v vt" id="r-comm">—</span></div>
         <hr class="recap-divider">
         <div class="recap-total"><span class="tl">Total</span><span class="tv" id="r-total">—</span></div>
       </div>
 
       <div class="caution-note" id="caution-note"></div>
       <button class="btn-reserve" id="btn-reserver" onclick="reserver()">Sélectionnez des dates</button>
-      <div class="secure"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Paiement 100% sécurisé · kiloue.com</div>
+      <div class="secure"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Paiement 100% sécurisé · louetoo.com</div>
       <div class="zone-note" id="zone-note" style="display:none;"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
     </div>
   </div>
@@ -277,7 +278,7 @@
     <p>Le loueur a été notifié et vous confirmera la réservation sous 24h.</p>
     <div class="modal-recap">
       <div><span id="modal-jours">—</span><span id="modal-base">—</span></div>
-      <div><span>Commission kiloue (5%)</span><span id="modal-comm">—</span></div>
+      <div><span>Commission louetoo (5%)</span><span id="modal-comm">—</span></div>
       <div style="border-top:1px solid var(--border);margin-top:6px;padding-top:8px;font-weight:600;">
         <span>Total</span><span id="modal-total" style="color:var(--teal)">—</span>
       </div>
@@ -595,7 +596,7 @@ async function reserver(){
     const u = data.utilisateurs || {};
     LOUEUR_ID = data.user_id;
 
-    document.title = data.titre + ' — kiloue.com';
+    document.title = data.titre + ' — louetoo.com';
     document.getElementById('annonce-titre').textContent = data.titre;
     document.getElementById('bc-cat').textContent = data.categorie || '—';
     document.getElementById('bc-titre').textContent = data.titre;
@@ -660,6 +661,7 @@ async function reserver(){
 
     // Charger les dates bloquées
     const delai = data.delai_battement || 0;
+    if(delai > 0){ const n=document.getElementById("battement-note"); if(n) n.style.display="block"; }
     const { data: resaData } = await db.from('reservations').select('date_debut,date_fin,statut')
       .eq('annonce_id', id)
       .in('statut', ['en_attente','acceptee','payee','confirmee']);
