@@ -8,7 +8,9 @@
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mon espace — kiloue.com</title>
+<title>Mon espace — louetoo.com</title>
+<meta name="robots" content="noindex">
+<link rel="canonical" href="https://www.louetoo.com/profil.html">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -102,7 +104,7 @@
 <body>
 
 <div class="sidebar">
-  <div class="sidebar-logo"><a href="index.html">kiloue<span>.com</span></a></div>
+  <div class="sidebar-logo"><a href="index.html">louetoo<span>.com</span></a></div>
   <a class="nav-item active" id="nav-dashboard" href="#" onclick="showSection('dashboard');return false;">
     <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Tableau de bord
   </a>
@@ -335,15 +337,15 @@ function annulationInfo(r, roleAffiche){
 
   if(roleAffiche === 'loueur'){
     if(comm > 0){
-      // locataire a annulé → 25% retenus (20% loueur + 5% kiloue)
+      // locataire a annulé → 25% retenus (20% loueur + 5% louetoo)
       const retenu_total = +(total * 0.25).toFixed(2);
       const pour_loueur = +(total * 0.20).toFixed(2);
-      const pour_kiloue = +(total * 0.05).toFixed(2);
+      const pour_louetoo = +(total * 0.05).toFixed(2);
       return '<div style="'+styleRed+'">'
         + '<div style="font-weight:600;color:#C62828;margin-bottom:4px;">Annulée par le locataire</div>'
         + '<div style="'+row+'"><span>Montant de la réservation</span><span>'+total.toFixed(2)+'€</span></div>'
         + '<div style="'+row+'"><span>Votre dédommagement (20%)</span><span style="color:#2E7D32;">+'+pour_loueur.toFixed(2)+'€</span></div>'
-        + '<div style="'+row+'"><span>Frais kiloue (5%)</span><span style="color:#C62828;">'+pour_kiloue.toFixed(2)+'€</span></div>'
+        + '<div style="'+row+'"><span>Frais louetoo (5%)</span><span style="color:#C62828;">'+pour_louetoo.toFixed(2)+'€</span></div>'
         + '</div>';
     } else {
       // loueur a annulé → 0 pénalité
@@ -362,17 +364,17 @@ function annulationInfo(r, roleAffiche){
         + '<div style="'+totalRowGreen+'"><span>Vous êtes remboursé</span><span style="color:#2E7D32;">'+total.toFixed(2)+'€ (100%)</span></div>'
         + '</div>';
     } else {
-      // locataire a annulé → 25% retenus (20% loueur + 5% kiloue)
+      // locataire a annulé → 25% retenus (20% loueur + 5% louetoo)
       const retenu = +(total * 0.25).toFixed(2);
       const pour_loueur = +(total * 0.20).toFixed(2);
-      const pour_kiloue = +(total * 0.05).toFixed(2);
+      const pour_louetoo = +(total * 0.05).toFixed(2);
       const rembourse = +(total * 0.75).toFixed(2);
       return '<div style="'+styleRed+'">'
         + '<div style="font-weight:600;color:#C62828;margin-bottom:4px;">Annulée par vous</div>'
         + '<div style="'+row+'"><span>Montant payé</span><span>'+total.toFixed(2)+'€</span></div>'
         + '<div style="'+row+'"><span>Frais annulation (25%)</span><span style="color:#C62828;">-'+retenu.toFixed(2)+'€</span></div>'
         + '<div style="'+row+';padding-left:12px;font-size:11px;color:#999;"><span>dont loueur (20%)</span><span>'+pour_loueur.toFixed(2)+'€</span></div>'
-        + '<div style="'+row+';padding-left:12px;font-size:11px;color:#999;"><span>dont kiloue (5%)</span><span>'+pour_kiloue.toFixed(2)+'€</span></div>'
+        + '<div style="'+row+';padding-left:12px;font-size:11px;color:#999;"><span>dont louetoo (5%)</span><span>'+pour_louetoo.toFixed(2)+'€</span></div>'
         + '<div style="'+totalRow+'"><span>Vous êtes remboursé</span><span style="color:#C62828;">'+rembourse.toFixed(2)+'€</span></div>'
         + '</div>';
     }
@@ -551,7 +553,7 @@ async function accepterResa(id, locataireId, annonceId){
   ]);
 
   const titre=ann?.titre||'le matériel';
-  const lienPaiement='https://kiloue.com/paiement.html?reservation_id='+id;
+  const lienPaiement='https://louetoo.com/paiement.html?reservation_id='+id;
   const msg='Bonne nouvelle ! Votre demande de réservation pour "'+titre+'" a été acceptée.\n\nPour confirmer définitivement votre réservation, veuillez procéder au paiement sécurisé ici :\n'+lienPaiement+'\n\nUne fois le paiement effectué, nous vous mettrons en contact avec le loueur.';
 
   await db.from('messages').insert([{
@@ -580,7 +582,7 @@ async function accepterResa(id, locataireId, annonceId){
             date_debut: resaData?.date_debut ? new Date(resaData.date_debut+'T00:00:00').toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'}) : '',
             date_fin: resaData?.date_fin ? new Date(resaData.date_fin+'T00:00:00').toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'}) : '',
             montant_total: resaData?.prix_total?.toFixed(2)||'',
-            lien_paiement: 'https://kiloue.com/paiement.html?reservation_id='+id
+            lien_paiement: 'https://louetoo.com/paiement.html?reservation_id='+id
           }
         })
       });
@@ -603,7 +605,7 @@ function refuserResa(id){
 async function annulerResa(id, role){
   const msg = role==='loueur'
     ? 'Annuler cette réservation ? Le locataire sera remboursé à 100%, aucune pénalité pour vous.'
-    : 'Annuler votre réservation ? 25% du montant total vous seront retenus (20% au loueur + 5% kiloue).';
+    : 'Annuler votre réservation ? 25% du montant total vous seront retenus (20% au loueur + 5% louetoo).';
   if(!confirm(msg)) return;
 
   const btn = event.target;
@@ -618,7 +620,7 @@ async function annulerResa(id, role){
     const data = await res.json();
     if(!data.success) throw new Error(data.error || 'Erreur annulation');
     const msg2 = data.remboursement > 0
-      ? 'Réservation annulée. Remboursement de '+data.remboursement+'€ en cours ('+data.retenu+'€ retenus par kiloue).'
+      ? 'Réservation annulée. Remboursement de '+data.remboursement+'€ en cours ('+data.retenu+'€ retenus par louetoo).'
       : 'Réservation annulée.';
     toast(msg2);
     setTimeout(()=>location.reload(), 2000);
@@ -726,7 +728,7 @@ function genererContratPDF(r, loueur, locataire){
     doc.rect(0,0,W,18,'F');
     doc.setTextColor(255,255,255);
     doc.setFontSize(13); doc.setFont('helvetica','bold');
-    doc.text('kiloue.com — Contrat de location entre particuliers', W/2, 12, {align:'center'});
+    doc.text('louetoo.com — Contrat de location entre particuliers', W/2, 12, {align:'center'});
     doc.setTextColor(0,0,0);
     y = 28;
 
@@ -744,7 +746,7 @@ function genererContratPDF(r, loueur, locataire){
     doc.setFont('helvetica','normal'); doc.setFontSize(10);
     doc.text('Désignation : '+(ann.titre||''), M, y, {maxWidth:W-M*2}); y += 6;
     doc.text('Période : du '+fmt2(r.date_debut)+' au '+fmt2(r.date_fin), M, y); y += 6;
-    doc.text('Montant payé en ligne : '+total+' EUR (via kiloue.com)', M, y); y += 10;
+    doc.text('Montant payé en ligne : '+total+' EUR (via louetoo.com)', M, y); y += 10;
 
     // Caution
     doc.setDrawColor(200,200,200); doc.setLineWidth(0.3);
@@ -807,13 +809,13 @@ function genererContratPDF(r, loueur, locataire){
     doc.text('Fait à _____________ le '+today, M, y);
 
     doc.setFontSize(8); doc.setTextColor(150,150,150);
-    doc.text('kiloue.com — Contrat de location entre particuliers — Ce document fait foi entre les deux parties.', W/2, 287, {align:'center'});
+    doc.text('louetoo.com — Contrat de location entre particuliers — Ce document fait foi entre les deux parties.', W/2, 287, {align:'center'});
     doc.setTextColor(0,0,0);
   }
 
   drawPage(1);
   drawPage(2);
-  doc.save('contrat-kiloue-'+(r.id||'').substring(0,8)+'.pdf');
+  doc.save('contrat-louetoo-'+(r.id||'').substring(0,8)+'.pdf');
 }
 
 /* ── INIT ── */

@@ -3,7 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Paiement sécurisé — kiloue.com</title>
+<title>Paiement sécurisé — louetoo.com</title>
+<meta name="robots" content="noindex">
+<link rel="canonical" href="https://www.louetoo.com/paiement.html">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://js.stripe.com/v3/"></script>
@@ -59,7 +61,7 @@
 <body>
 
 <nav>
-  <a class="logo" href="index.html">kiloue<span>.com</span></a>
+  <a class="logo" href="index.html">louetoo<span>.com</span></a>
 </nav>
 
 <div class="page">
@@ -84,7 +86,7 @@
       <div class="contrat-body">
         En cas d'annulation de votre part, <strong>25% du montant total vous seront retenus</strong> :<br><br>
         &bull; <strong>20%</strong> versés au loueur en dédommagement des jours de location bloqués<br>
-        &bull; <strong>5%</strong> retenus par kiloue.com pour couvrir les frais bancaires<br><br>
+        &bull; <strong>5%</strong> retenus par louetoo.com pour couvrir les frais bancaires<br><br>
         Montant retenu si vous annulez : <span class="montant-retenu" id="montant-retenu">—</span><br>
         Montant remboursé si vous annulez : <span class="montant-rembourse" id="montant-rembourse">—</span>
       </div>
@@ -177,7 +179,7 @@ function genererContrat(){
     doc.setTextColor(255, 255, 255);
     doc.setFontSize(13);
     doc.setFont('helvetica', 'bold');
-    doc.text('kiloue.com — Contrat de location entre particuliers', W/2, 12, {align:'center'});
+    doc.text('louetoo.com — Contrat de location entre particuliers', W/2, 12, {align:'center'});
     doc.setTextColor(0, 0, 0);
     y = 28;
 
@@ -204,7 +206,7 @@ function genererContrat(){
     doc.setFontSize(10);
     doc.text('Désignation : ' + (ann.titre || ''), margin, y); y += 6;
     doc.text('Période : du ' + dateDebut + ' au ' + dateFin, margin, y); y += 6;
-    doc.text('Montant de la location : ' + total + ' EUR (paiement effectué en ligne via kiloue.com)', margin, y); y += 10;
+    doc.text('Montant de la location : ' + total + ' EUR (paiement effectué en ligne via louetoo.com)', margin, y); y += 10;
 
     // Section caution
     doc.setLineWidth(0.3);
@@ -320,14 +322,14 @@ function genererContrat(){
     // Pied de page
     doc.setFontSize(8);
     doc.setTextColor(150, 150, 150);
-    doc.text('kiloue.com — Plateforme de location de matériel entre particuliers — Ce contrat fait foi entre les deux parties.', W/2, 287, {align:'center'});
+    doc.text('louetoo.com — Plateforme de location de matériel entre particuliers — Ce contrat fait foi entre les deux parties.', W/2, 287, {align:'center'});
     doc.setTextColor(0, 0, 0);
   }
 
   contratPage(1);
   contratPage(2);
 
-  doc.save('contrat-location-kiloue-' + (r.id || '').substring(0,8) + '.pdf');
+  doc.save('contrat-location-louetoo-' + (r.id || '').substring(0,8) + '.pdf');
 }
 
 async function init(){
@@ -381,7 +383,7 @@ async function init(){
       '<div class="recap-row"><span>' + (a.titre||'Réservation') + '</span><span class="val"></span></div>' +
       '<div class="recap-row"><span>Du ' + fmt(resa.date_debut) + ' au ' + fmt(resa.date_fin) + '</span><span class="val">' + base.toFixed(2) + ' €</span></div>' +
       (resa.livraison ? '<div class="recap-row"><span>Livraison</span><span class="val">' + (resa.prix_livraison||0).toFixed(2) + ' €</span></div>' : '') +
-      '<div class="recap-row"><span>Commission kiloue (5%)</span><span class="val">' + commission.toFixed(2) + ' €</span></div>' +
+      '<div class="recap-row"><span>Commission louetoo (5%)</span><span class="val">' + commission.toFixed(2) + ' €</span></div>' +
       '<div class="recap-row total"><span>Total à payer</span><span class="val">' + total.toFixed(2) + ' €</span></div>';
 
     document.getElementById('email-input').value = user.email || '';
