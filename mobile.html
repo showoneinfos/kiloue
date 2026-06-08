@@ -360,14 +360,20 @@ body{display:flex;flex-direction:column;}
     </div>
     <div class="pub-form">
       <div class="pub-field"><label>Catégorie *</label>
-        <select id="pub-cat">
+        <select id="pub-cat" onchange="updateSousCats()">
           <option value="">Choisir une catégorie</option>
+          <option>Hébergement et Vacances</option>
           <option>Véhicules</option><option>Nautisme</option>
-          <option>Hébergement et Vacances</option><option>Bricolage & Outillage</option><option>Jardinage</option>
-          <option>BTP & Chantier</option><option>Matériel Agricole</option>
-          <option>Maison & Équipement</option><option>Événementiel</option>
-          <option>Sport & Loisirs</option><option>High-Tech</option>
-          <option>Mode & Accessoires</option><option>Animaux</option><option>Divers</option>
+          <option>Bricolage et Outillage</option><option>Jardinage</option>
+          <option>BTP et Chantier</option><option>Matériel Agricole</option>
+          <option>Maison et Equipement</option><option>Evenementiel</option>
+          <option>Sport et Loisirs</option><option>High-Tech</option>
+          <option>Mode et Accessoires</option><option>Animaux</option><option>Divers</option>
+        </select>
+      </div>
+      <div class="pub-field" id="pub-sous-cat-field" style="display:none;"><label>Sous-catégorie</label>
+        <select id="pub-sous-cat">
+          <option value="">Choisir une sous-catégorie</option>
         </select>
       </div>
       <div class="pub-field"><label>Titre *</label><input type="text" id="pub-titre" placeholder="Ex : Tronçonneuse Stihl MS 250"></div>
@@ -1430,6 +1436,36 @@ function toggleLivraisonField(){
   document.getElementById('pub-livraison-field').style.display = show ? 'block' : 'none';
 }
 
+const MOBILE_SUBS = {
+  'Hébergement et Vacances':['Appartements','Maisons','Villas','Mobile homes','Bungalows','Tentes et Glamping','Chambres hotes','Gites','Chalets','Camping-cars et Vans','Caravanes','Autres'],
+  'Véhicules':['Voitures','Utilitaires','Motos','Scooters','Vélos','Vélos électriques','Trottinettes','Quads','Camping-cars','Caravanes','Remorques','Autres'],
+  'Nautisme':['Bateaux à moteur','Voiliers','Jet-skis','Kayaks','Canoes','Paddles','Pédalos','Matériel de pêche','Matériel de plongée','Autres'],
+  'Bricolage et Outillage':['Perçage','Découpe','Ponçage','Soudure','Peinture','Outillage manuel','Outillage électrique','Echelles','Echafaudages','Nettoyage','Autres'],
+  'Jardinage':['Tondeuses','Tronçonneuses','Taille-haies','Débroussailleuses','Motobineuses','Broyeurs','Souffleurs','Scarificateurs','Outils de jardin','Arrosage','Autres'],
+  'BTP et Chantier':['Mini-pelles','Nacelles','Compacteurs','Bétonnières','Groupes électrogènes','Marteaux-piqueurs','Lasers de chantier','Matériel de levage','Autres'],
+  'Matériel Agricole':['Tracteurs','Micro-tracteurs','Remorques agricoles','Broyeurs','Charrues','Pulvérisateurs','Semoirs','Matériel irrigation','Autres'],
+  'Maison et Equipement':['Electroménager','Chauffage','Climatisation','Nettoyage','Mobilier','Déménagement','Décoration','Autres'],
+  'Evenementiel':['Tables','Chaises','Barnums','Tentes','Vaisselle','Décoration','Gonflables','Machines festives','Sonorisation','Eclairage','Autres'],
+  'Sport et Loisirs':['Fitness','Cyclisme','Sports nautiques','Sports hiver','Sports collectifs','Arts martiaux','Raquette','Randonnée','Camping','Chasse','Pêche','Autres'],
+  'High-Tech':['Ordinateurs','Tablettes','Smartphones','Consoles','VR','Appareils photo','Caméras','Drones','Vidéoprojecteurs','Imprimantes','Ecrans','Autres'],
+  'Mode et Accessoires':['Robes de soirée','Costumes','Vêtements homme','Vêtements femme','Vêtements enfant','Sacs','Bijoux','Montres','Chaussures','Autres'],
+  'Animaux':['Cages','Niches','Clotures','Remorques animaux','Equitation','Transport','Accessoires chiens','Accessoires chats','Autres'],
+  'Divers':['Instruments de musique','Matériel médical','Déguisements','Livres','Jeux de société','Bagagerie','Autres']
+};
+
+function updateSousCats(){
+  const cat = document.getElementById('pub-cat').value;
+  const field = document.getElementById('pub-sous-cat-field');
+  const select = document.getElementById('pub-sous-cat');
+  if(!cat || !MOBILE_SUBS[cat]){
+    field.style.display = 'none';
+    return;
+  }
+  const subs = MOBILE_SUBS[cat];
+  select.innerHTML = '<option value="">Choisir une sous-catégorie</option>' + subs.map(function(s){ return '<option>'+s+'</option>'; }).join('');
+  field.style.display = 'block';
+}
+
 window._mobilePhotoUrls = [];
 window._mobilePhotoFiles = [];
 
@@ -1508,7 +1544,7 @@ async function publierAnnonce(){
   btn.textContent = 'Publication…';
 
   const {error} = await db.from('annonces').insert([{
-    user_id: currentUser.id, categorie: cat, titre, description: desc,
+    user_id: currentUser.id, categorie: cat, sous_categorie: document.getElementById('pub-sous-cat').value || '', titre, description: desc,
     prix_jour: prix, caution, ville, rayon_km: rayon,
     livraison, prix_livraison: prixLivraison, photos, disponible: true
   }]);
@@ -1544,8 +1580,40 @@ async function publierAnnonce(){
   document.getElementById('pub-rayon').value = '30';
   document.getElementById('pub-photo-previews').innerHTML = '';
   document.getElementById('pub-file-input').value = '';
+  document.getElementById('pub-sous-cat-field').style.display = 'none';
+  document.getElementById('pub-cat').value = '';
   window._mobilePhotoFiles = [];
-  window._mobilePhotoUrls = [];
+  const MOBILE_SUBS = {
+  'Hébergement et Vacances':['Appartements','Maisons','Villas','Mobile homes','Bungalows','Tentes et Glamping','Chambres hotes','Gites','Chalets','Camping-cars et Vans','Caravanes','Autres'],
+  'Véhicules':['Voitures','Utilitaires','Motos','Scooters','Vélos','Vélos électriques','Trottinettes','Quads','Camping-cars','Caravanes','Remorques','Autres'],
+  'Nautisme':['Bateaux à moteur','Voiliers','Jet-skis','Kayaks','Canoes','Paddles','Pédalos','Matériel de pêche','Matériel de plongée','Autres'],
+  'Bricolage et Outillage':['Perçage','Découpe','Ponçage','Soudure','Peinture','Outillage manuel','Outillage électrique','Echelles','Echafaudages','Nettoyage','Autres'],
+  'Jardinage':['Tondeuses','Tronçonneuses','Taille-haies','Débroussailleuses','Motobineuses','Broyeurs','Souffleurs','Scarificateurs','Outils de jardin','Arrosage','Autres'],
+  'BTP et Chantier':['Mini-pelles','Nacelles','Compacteurs','Bétonnières','Groupes électrogènes','Marteaux-piqueurs','Lasers de chantier','Matériel de levage','Autres'],
+  'Matériel Agricole':['Tracteurs','Micro-tracteurs','Remorques agricoles','Broyeurs','Charrues','Pulvérisateurs','Semoirs','Matériel irrigation','Autres'],
+  'Maison et Equipement':['Electroménager','Chauffage','Climatisation','Nettoyage','Mobilier','Déménagement','Décoration','Autres'],
+  'Evenementiel':['Tables','Chaises','Barnums','Tentes','Vaisselle','Décoration','Gonflables','Machines festives','Sonorisation','Eclairage','Autres'],
+  'Sport et Loisirs':['Fitness','Cyclisme','Sports nautiques','Sports hiver','Sports collectifs','Arts martiaux','Raquette','Randonnée','Camping','Chasse','Pêche','Autres'],
+  'High-Tech':['Ordinateurs','Tablettes','Smartphones','Consoles','VR','Appareils photo','Caméras','Drones','Vidéoprojecteurs','Imprimantes','Ecrans','Autres'],
+  'Mode et Accessoires':['Robes de soirée','Costumes','Vêtements homme','Vêtements femme','Vêtements enfant','Sacs','Bijoux','Montres','Chaussures','Autres'],
+  'Animaux':['Cages','Niches','Clotures','Remorques animaux','Equitation','Transport','Accessoires chiens','Accessoires chats','Autres'],
+  'Divers':['Instruments de musique','Matériel médical','Déguisements','Livres','Jeux de société','Bagagerie','Autres']
+};
+
+function updateSousCats(){
+  const cat = document.getElementById('pub-cat').value;
+  const field = document.getElementById('pub-sous-cat-field');
+  const select = document.getElementById('pub-sous-cat');
+  if(!cat || !MOBILE_SUBS[cat]){
+    field.style.display = 'none';
+    return;
+  }
+  const subs = MOBILE_SUBS[cat];
+  select.innerHTML = '<option value="">Choisir une sous-catégorie</option>' + subs.map(function(s){ return '<option>'+s+'</option>'; }).join('');
+  field.style.display = 'block';
+}
+
+window._mobilePhotoUrls = [];
 
   toast('✓ Annonce publiée !');
   setTimeout(function(){ goPage('home'); loadAnnonces(); }, 1500);
