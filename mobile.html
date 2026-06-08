@@ -1284,17 +1284,62 @@ async function showSection(section){
     const {data} = await db.from('annonces').select('*').eq('user_id',currentUser.id).order('created_at',{ascending:false});
     const anns = data || [];
     if(!anns.length){ content.innerHTML = '<div class="empty-state"><div class="ico">📦</div><p>Aucune annonce</p><button onclick="goPage(\'publish\')">Déposer →</button></div>'; return; }
-    content.innerHTML = '<div style="margin-top:4px;">'+anns.map(a => `
-      <div style="display:flex;align-items:center;gap:10px;padding:12px;background:var(--white);border-radius:10px;margin-bottom:8px;">
-        ${a.photos&&a.photos.length>0?`<img src="${a.photos[0]}" style="width:52px;height:52px;border-radius:8px;object-fit:cover;" alt="">`:
-        '<div style="width:52px;height:52px;border-radius:8px;background:#f0f0f0;display:flex;align-items:center;justify-content:center;">📦</div>'}
-        <div style="flex:1;min-width:0;">
-          <div style="font-size:13px;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${a.titre}</div>
-          <div style="font-size:11px;color:var(--ink2);margin-top:2px;">${a.disponible?'🟢 Active':'⚫ En pause'} · ${a.prix_jour}€/j</div>
-        </div>
-        <button onclick="openAnnonce('${a.id}')" style="padding:6px 10px;border-radius:6px;border:1.5px solid var(--border);background:var(--white);font-size:12px;cursor:pointer;">Voir</button>
-      </div>`).join('')+'</div>';
+    content.innerHTML = '';
+    const wrap = document.createElement('div');
+    wrap.style.marginTop = '4px';
+    anns.forEach(function(a){
+      const card = document.createElement('div');
+      card.style.cssText = 'background:var(--white);border-radius:10px;margin-bottom:8px;overflow:hidden;';
+
+      const photo = a.photos && a.photos.length > 0
+        ? '<img src="'+a.photos[0]+'" style="width:52px;height:52px;border-radius:8px;object-fit:cover;" alt="">'
+        : '<div style="width:52px;height:52px;border-radius:8px;background:#f0f0f0;display:flex;align-items:center;justify-content:center;">📦</div>';
+
+      card.innerHTML = '<div style="display:flex;align-items:center;gap:10px;padding:12px;">'
+        + photo
+        + '<div style="flex:1;min-width:0;">'
+        + '<div style="font-size:13px;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+a.titre+'</div>'
+        + '<div style="font-size:11px;color:var(--ink2);margin-top:2px;">'+(a.disponible?'🟢 Active':'⚫ En pause')+' · '+a.prix_jour+'€/j</div>'
+        + '</div>'
+        + '<button class="btn-voir-ann" style="padding:6px 10px;border-radius:6px;border:1.5px solid var(--border);background:var(--white);font-size:12px;cursor:pointer;flex-shrink:0;">Voir</button>'
+        + '</div>'
+        + '<div style="display:flex;gap:8px;padding:0 12px 12px;">'
+        + '<button class="btn-mod-ann" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--teal);background:var(--white);color:var(--teal);font-size:12px;font-weight:600;cursor:pointer;">✏️ Modifier</button>'
+        + '<button class="btn-tgl-ann" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:var(--white);font-size:12px;cursor:pointer;">'+(a.disponible?'⏸ Pause':'▶ Activer')+'</button>'
+        + '<button class="btn-del-ann" style="flex:1;padding:8px;border-radius:8px;border:1.5px solid #FFCDD2;background:var(--white);color:#C62828;font-size:12px;font-weight:600;cursor:pointer;">🗑 Supprimer</button>'
+        + '</div>';
+
+      const annonceId = a.id;
+      const annonceTitre = a.titre;
+      const annonceDispo = a.disponible;
+      card.querySelector('.btn-voir-ann').onclick = function(){ openAnnonce(annonceId); };
+      card.querySelector('.btn-mod-ann').onclick = function(){ modifierAnnonceMobile(annonceId); };
+      card.querySelector('.btn-tgl-ann').onclick = function(){ toggleAnnonceM(annonceId, annonceDispo); };
+      card.querySelector('.btn-del-ann').onclick = function(){ supprimerAnnonceMobile(annonceId, annonceTitre); };
+
+      wrap.appendChild(card);
+    });
+    content.appendChild(wrap);
   }
+}
+
+function modifierAnnonceMobile(id){
+  window.location.href = 'modifier-annonce.html?id=' + id;
+}
+
+async function supprimerAnnonceMobile(id, titre){
+  if(!confirm('Supprimer "'+titre+'" ?')) return;
+  const {error} = await db.from('annonces').delete().eq('id', id);
+  if(error){ toast('Erreur : '+error.message); return; }
+  toast('Annonce supprimée.');
+  showSection('mes_annonces');
+}
+
+async function toggleAnnonceM(id, actuel){
+  const {error} = await db.from('annonces').update({disponible: !actuel}).eq('id', id);
+  if(error){ toast('Erreur : '+error.message); return; }
+  toast(actuel ? 'Annonce mise en pause.' : 'Annonce réactivée.');
+  showSection('mes_annonces');
 }
 
 function payerMaintenant(resaId){
