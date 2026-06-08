@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /profil.html
+Disallow: /paiement.html
+Disallow: /messages.html
+
+Sitemap: https://www.louetoo.com/sitemap.xml
