@@ -623,7 +623,7 @@ async function annulerResa(id, role){
     toast(msg2);
     setTimeout(()=>location.reload(), 2000);
   } catch(e) {
-    await db.from('reservations').update({statut:'annulee',commission_annulation}).eq('id',id);
+    await db.from('reservations').update({statut:'annulee'}).eq('id',id);
     toast('Réservation annulée.');
     setTimeout(()=>location.reload(), 1500);
   }
@@ -827,7 +827,7 @@ function genererContratPDF(r, loueur, locataire){
 async function init(){
   db=supabase.createClient(SUPA_URL,SUPA_KEY);
   const {data:{user}}=await db.auth.getUser();
-  if(!user){window.location.href='inscription.html?mode=signup';return;}
+  if(!user){window.location.href='inscription.html';return;}
   currentUser=user;
 
   document.getElementById('btn-deco').onclick=async()=>{
