@@ -787,7 +787,7 @@ function genererContratPDF(r, loueur, locataire){
       ' certifie avoir loué le matériel ci-dessus auprès de '+(loueur.prenom||'')+' '+(loueur.nom||'')+
       ' pour la période du '+fmt2(r.date_debut)+' au '+fmt2(r.date_fin)+
       ', et avoir remis en main propre la somme de '+caution+' EUR à titre de caution.'+
-      ' Je m'engage à restituer le matériel en bon état à la date convenue.';
+      ' Je m\'engage à restituer le matériel en bon état à la date convenue.';
     const declLines = doc.splitTextToSize(decl, W-M*2);
     doc.text(declLines, M, y); y += declLines.length * 6 + 8;
 
