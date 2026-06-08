@@ -407,6 +407,42 @@ body{display:flex;flex-direction:column;}
     </div>
   </div>
 
+  <!-- PAGE MODIFIER ANNONCE -->
+  <div class="page" id="page-edit_annonce" style="display:none;overflow-y:auto;">
+    <div style="padding:16px;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+        <button onclick="goPage('profile');showSection('mes_annonces');" style="width:34px;height:34px;border-radius:50%;background:#f0f0f0;border:none;font-size:18px;cursor:pointer;">←</button>
+        <div style="font-size:16px;font-weight:700;">Modifier l'annonce</div>
+      </div>
+      <input type="hidden" id="edit-ann-id">
+      <div style="margin-bottom:12px;"><label style="font-size:11px;font-weight:600;color:#666;text-transform:uppercase;letter-spacing:.4px;display:block;margin-bottom:5px;">Titre *</label>
+        <input type="text" id="edit-ann-titre" style="width:100%;border:1.5px solid #E5E5E5;border-radius:8px;padding:11px 14px;font-size:14px;font-family:inherit;outline:none;"></div>
+      <div style="margin-bottom:12px;"><label style="font-size:11px;font-weight:600;color:#666;text-transform:uppercase;letter-spacing:.4px;display:block;margin-bottom:5px;">Description</label>
+        <textarea id="edit-ann-desc" rows="4" style="width:100%;border:1.5px solid #E5E5E5;border-radius:8px;padding:11px 14px;font-size:14px;font-family:inherit;outline:none;resize:none;"></textarea></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
+        <div><label style="font-size:11px;font-weight:600;color:#666;text-transform:uppercase;letter-spacing:.4px;display:block;margin-bottom:5px;">Prix/jour (€) *</label>
+          <input type="number" id="edit-ann-prix" min="1" style="width:100%;border:1.5px solid #E5E5E5;border-radius:8px;padding:11px 14px;font-size:14px;font-family:inherit;outline:none;"></div>
+        <div><label style="font-size:11px;font-weight:600;color:#666;text-transform:uppercase;letter-spacing:.4px;display:block;margin-bottom:5px;">Caution (€)</label>
+          <input type="number" id="edit-ann-caution" min="0" style="width:100%;border:1.5px solid #E5E5E5;border-radius:8px;padding:11px 14px;font-size:14px;font-family:inherit;outline:none;"></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
+        <div><label style="font-size:11px;font-weight:600;color:#666;text-transform:uppercase;letter-spacing:.4px;display:block;margin-bottom:5px;">Ville *</label>
+          <input type="text" id="edit-ann-ville" style="width:100%;border:1.5px solid #E5E5E5;border-radius:8px;padding:11px 14px;font-size:14px;font-family:inherit;outline:none;"></div>
+        <div><label style="font-size:11px;font-weight:600;color:#666;text-transform:uppercase;letter-spacing:.4px;display:block;margin-bottom:5px;">Rayon</label>
+          <select id="edit-ann-rayon" style="width:100%;border:1.5px solid #E5E5E5;border-radius:8px;padding:11px 14px;font-size:14px;font-family:inherit;outline:none;">
+            <option value="10">10 km</option><option value="30">30 km</option><option value="50">50 km</option><option value="999">France</option>
+          </select></div>
+      </div>
+      <div style="margin-bottom:12px;">
+        <label style="font-size:11px;font-weight:600;color:#666;text-transform:uppercase;letter-spacing:.4px;display:block;margin-bottom:8px;">Photos actuelles</label>
+        <div id="edit-ann-photos" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;"></div>
+        <input type="file" id="edit-ann-new-photos" multiple accept="image/*" style="font-size:13px;color:#666;">
+        <div style="font-size:11px;color:#999;margin-top:4px;">Ajouter de nouvelles photos</div>
+      </div>
+      <button id="btn-save-ann" onclick="sauvegarderModifAnnonce()" style="width:100%;padding:14px;border-radius:10px;background:#00A693;color:#fff;border:none;font-size:15px;font-weight:700;font-family:inherit;cursor:pointer;">Enregistrer</button>
+    </div>
+  </div>
+
 </div>
 
 <div class="bottom-nav">
@@ -1323,8 +1359,81 @@ async function showSection(section){
   }
 }
 
-function modifierAnnonceMobile(id){
-  window.location.href = 'modifier-annonce.html?id=' + id;
+async function modifierAnnonceMobile(id){
+  // Charger les données de l'annonce
+  const {data, error} = await db.from('annonces').select('*').eq('id', id).single();
+  if(error || !data){ toast('Erreur chargement annonce'); return; }
+
+  // Remplir le formulaire de modification
+  document.getElementById('edit-ann-id').value = id;
+  document.getElementById('edit-ann-titre').value = data.titre || '';
+  document.getElementById('edit-ann-desc').value = data.description || '';
+  document.getElementById('edit-ann-prix').value = data.prix_jour || '';
+  document.getElementById('edit-ann-caution').value = data.caution || '';
+  document.getElementById('edit-ann-ville').value = data.ville || '';
+  document.getElementById('edit-ann-rayon').value = data.rayon_km || '30';
+
+  // Afficher les photos actuelles
+  window._editCurrentPhotos = data.photos || [];
+  renderEditPhotos();
+
+  // Aller à la page de modification
+  goPage('edit_annonce');
+}
+
+function renderEditPhotos(){
+  const wrap = document.getElementById('edit-ann-photos');
+  wrap.innerHTML = window._editCurrentPhotos.map(function(url, i){
+    return '<div style="position:relative;width:70px;height:70px;flex-shrink:0;">'
+      + '<img src="'+url+'" style="width:70px;height:70px;border-radius:8px;object-fit:cover;">'
+      + '<button onclick="removeEditPhoto('+i+')" style="position:absolute;top:2px;right:2px;width:20px;height:20px;border-radius:50%;background:#C62828;color:#fff;border:none;font-size:12px;cursor:pointer;line-height:1;">×</button>'
+      + '</div>';
+  }).join('');
+}
+
+function removeEditPhoto(i){
+  window._editCurrentPhotos.splice(i, 1);
+  renderEditPhotos();
+}
+
+async function sauvegarderModifAnnonce(){
+  const id = document.getElementById('edit-ann-id').value;
+  const titre = document.getElementById('edit-ann-titre').value.trim();
+  const desc = document.getElementById('edit-ann-desc').value.trim();
+  const prix = parseFloat(document.getElementById('edit-ann-prix').value) || 0;
+  const caution = parseFloat(document.getElementById('edit-ann-caution').value) || 0;
+  const ville = document.getElementById('edit-ann-ville').value.trim();
+  const rayon = parseInt(document.getElementById('edit-ann-rayon').value) || 30;
+
+  if(!titre || !prix || !ville){ toast('Titre, prix et ville obligatoires'); return; }
+
+  const btn = document.getElementById('btn-save-ann');
+  btn.disabled = true; btn.textContent = 'Enregistrement…';
+
+  // Upload nouvelles photos
+  const fileInput = document.getElementById('edit-ann-new-photos');
+  const newFiles = Array.from(fileInput.files);
+  for(let i = 0; i < newFiles.length; i++){
+    const file = newFiles[i];
+    const ext = file.name.split('.').pop() || 'jpg';
+    const path = currentUser.id + '/' + Date.now() + '_' + i + '.' + ext;
+    const {error: upErr} = await db.storage.from('annonces-photos').upload(path, file, {contentType: file.type, upsert: true});
+    if(!upErr){
+      const {data: pub} = db.storage.from('annonces-photos').getPublicUrl(path);
+      if(pub?.publicUrl) window._editCurrentPhotos.push(pub.publicUrl);
+    }
+  }
+
+  const {error} = await db.from('annonces').update({
+    titre, description: desc, prix_jour: prix,
+    caution, ville, rayon_km: rayon,
+    photos: window._editCurrentPhotos
+  }).eq('id', id);
+
+  btn.disabled = false; btn.textContent = 'Enregistrer';
+  if(error){ toast('Erreur : '+error.message); return; }
+  toast('✓ Annonce mise à jour !');
+  setTimeout(function(){ showSection('mes_annonces'); goPage('profile'); }, 1500);
 }
 
 async function supprimerAnnonceMobile(id, titre){
