@@ -527,8 +527,10 @@ function renderAnnonce(a){
     </div>
     <div class="ann-acts">
       <button class="btn-sm" onclick="window.location.href='annonce.html?id=${a.id}'">Voir</button>
+      <button class="btn-sm" style="color:var(--teal);border-color:var(--teal);" onclick="modifierAnnonce('${a.id}')">Modifier</button>
       ${boostBtn}
       ${btnToggle}
+      <button class="btn-sm" style="color:#C62828;border-color:#FFCDD2;" onclick="supprimerAnnonce('${a.id}','${a.titre.replace(/'/g,'')}')">Supprimer</button>
     </div>
   </div>`;
 }
@@ -622,6 +624,18 @@ async function annulerResa(id, role){
   }
 }
 
+async function supprimerAnnonce(id, titre){
+  if(!confirm('Supprimer "'+titre+'" ? Cette action est irréversible.')) return;
+  const {error} = await db.from('annonces').delete().eq('id', id);
+  if(error){ toast('Erreur : '+error.message); return; }
+  toast('Annonce supprimée.');
+  showSection('annonces');
+}
+
+function modifierAnnonce(id){
+  window.location.href = 'modifier-annonce.html?id=' + id;
+}
+
 function toggleAnnonce(id,actuel){
   db.from('annonces').update({disponible:!actuel}).eq('id',id).then(({error})=>{
     if(error){toast('Erreur');return;}
@@ -682,7 +696,7 @@ async function sauvegarderProfil(){
 async function init(){
   db=supabase.createClient(SUPA_URL,SUPA_KEY);
   const {data:{user}}=await db.auth.getUser();
-  if(!user){window.location.href='inscription.html';return;}
+  if(!user){window.location.href='inscription.html?mode=signup';return;}
   currentUser=user;
 
   document.getElementById('btn-deco').onclick=async()=>{

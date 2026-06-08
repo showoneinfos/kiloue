@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Modifier l'annonce — kiloue.com</title>
+<script>
+  if(/Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) || window.innerWidth < 768){
+    window.location.replace('mobile.html');
+  }
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{--teal:#00A693;--teal2:#008577;--teal-light:#E8F7F5;--ink:#1A1A1A;--ink2:#666;--ink3:#999;--border:#E5E5E5;--bg:#FAFAFA;--white:#fff;--sans:'Inter',system-ui,sans-serif;}
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:var(--sans);background:var(--bg);color:var(--ink);}
+  nav{background:var(--white);border-bottom:1px solid var(--border);height:60px;display:flex;align-items:center;padding:0 24px;gap:16px;}
+  .logo{font-size:22px;font-weight:700;color:var(--teal);text-decoration:none;}
+  .logo span{color:var(--ink);}
+  .page{max-width:700px;margin:40px auto;padding:0 24px 80px;}
+  .card{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:28px;margin-bottom:20px;}
+  .card-title{font-size:18px;font-weight:700;color:var(--ink);margin-bottom:20px;}
+  .field{margin-bottom:16px;}
+  .field label{display:block;font-size:12px;font-weight:600;color:var(--ink2);margin-bottom:6px;text-transform:uppercase;letter-spacing:.4px;}
+  .field input,.field select,.field textarea{width:100%;border:1.5px solid var(--border);border-radius:8px;padding:11px 14px;font-size:14px;font-family:var(--sans);color:var(--ink);background:var(--white);outline:none;}
+  .field input:focus,.field select:focus,.field textarea:focus{border-color:var(--teal);}
+  .field textarea{min-height:100px;resize:vertical;}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .photos-wrap{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;}
+  .photo-thumb{position:relative;width:80px;height:80px;border-radius:8px;overflow:hidden;border:1px solid var(--border);}
+  .photo-thumb img{width:100%;height:100%;object-fit:cover;}
+  .photo-thumb button{position:absolute;top:2px;right:2px;width:20px;height:20px;border-radius:50%;background:#C62828;color:#fff;border:none;font-size:12px;cursor:pointer;line-height:1;}
+  .btn-save{width:100%;padding:14px;border-radius:8px;background:var(--teal);color:#fff;border:none;font-size:15px;font-weight:600;font-family:var(--sans);cursor:pointer;}
+  .btn-save:hover{background:var(--teal2);}
+  .btn-back{padding:10px 20px;border-radius:8px;border:1.5px solid var(--border);background:var(--white);font-size:14px;font-family:var(--sans);cursor:pointer;color:var(--ink2);margin-bottom:20px;}
+  .spinner{width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--teal);border-radius:50%;animation:spin .8s linear infinite;margin:60px auto;}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1A1A1A;color:#fff;padding:12px 24px;border-radius:8px;font-size:14px;z-index:999;display:none;}
+</style>
+</head>
+<body>
+<nav>
+  <a class="logo" href="index.html">kiloue<span>.com</span></a>
+</nav>
+
+<div class="page">
+  <div id="loading"><div class="spinner"></div></div>
+  <div id="form-area" style="display:none;">
+    <button class="btn-back" onclick="window.location.href='profil.html'">← Retour à mes annonces</button>
+    <div class="card">
+      <div class="card-title">Modifier l'annonce</div>
+
+      <div class="field"><label>Titre *</label><input type="text" id="f-titre" placeholder="Titre de l'annonce"></div>
+      <div class="field"><label>Description</label><textarea id="f-desc" placeholder="Description…"></textarea></div>
+      <div class="row2">
+        <div class="field"><label>Prix / jour (€) *</label><input type="number" id="f-prix" min="1"></div>
+        <div class="field"><label>Caution (€)</label><input type="number" id="f-caution" min="0"></div>
+      </div>
+      <div class="row2">
+        <div class="field"><label>Ville *</label><input type="text" id="f-ville"></div>
+        <div class="field"><label>Rayon max</label>
+          <select id="f-rayon">
+            <option value="10">10 km</option>
+            <option value="30">30 km</option>
+            <option value="50">50 km</option>
+            <option value="999">Toute la France</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Photos actuelles</label>
+        <div class="photos-wrap" id="photos-wrap"></div>
+        <div style="margin-top:8px;">
+          <input type="file" id="new-photos" multiple accept="image/*" style="font-size:13px;color:var(--ink2);">
+          <div style="font-size:11px;color:var(--ink3);margin-top:4px;">Sélectionnez des photos pour en ajouter de nouvelles</div>
+        </div>
+      </div>
+
+      <div id="err" style="display:none;background:#FFF0F0;border:1px solid #FFCDD2;border-radius:8px;padding:10px 14px;font-size:13px;color:#C62828;margin-bottom:12px;"></div>
+      <button class="btn-save" id="btn-save" onclick="sauvegarder()">Enregistrer les modifications</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const SUPA_URL = 'https://nsvosbuxkpnoasfilyqy.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5zdm9zYnV4a3Bub2FzZmlseXF5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAxODczOTcsImV4cCI6MjA5NTc2MzM5N30.pTuH4X8IQy0UJq8zUZ8t7I2WLMEUXae_8nWdtIFrpRE';
+
+let db, annonceId, currentPhotos = [];
+
+function toast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.style.display='block';
+  setTimeout(function(){ t.style.display='none'; }, 3000);
+}
+
+function renderPhotos(){
+  const wrap = document.getElementById('photos-wrap');
+  wrap.innerHTML = currentPhotos.map(function(url, i){
+    return '<div class="photo-thumb">'
+      + '<img src="'+url+'" alt="">'
+      + '<button onclick="removePhoto('+i+')" title="Supprimer">×</button>'
+      + '</div>';
+  }).join('');
+}
+
+function removePhoto(i){
+  currentPhotos.splice(i, 1);
+  renderPhotos();
+}
+
+async function sauvegarder(){
+  const titre = document.getElementById('f-titre').value.trim();
+  const desc = document.getElementById('f-desc').value.trim();
+  const prix = parseFloat(document.getElementById('f-prix').value) || 0;
+  const caution = parseFloat(document.getElementById('f-caution').value) || 0;
+  const ville = document.getElementById('f-ville').value.trim();
+  const rayon = parseInt(document.getElementById('f-rayon').value) || 30;
+
+  const err = document.getElementById('err');
+  err.style.display = 'none';
+
+  if(!titre || !prix || !ville){
+    err.textContent = 'Veuillez remplir le titre, le prix et la ville.';
+    err.style.display = 'block';
+    return;
+  }
+
+  const btn = document.getElementById('btn-save');
+  btn.disabled = true; btn.textContent = 'Enregistrement…';
+
+  // Upload nouvelles photos
+  const fileInput = document.getElementById('new-photos');
+  const newFiles = Array.from(fileInput.files);
+  const {data:{user}} = await db.auth.getUser();
+
+  for(let i = 0; i < newFiles.length; i++){
+    const file = newFiles[i];
+    const ext = file.name.split('.').pop() || 'jpg';
+    const path = user.id + '/' + Date.now() + '_' + i + '.' + ext;
+    const {error: upErr} = await db.storage.from('annonces-photos').upload(path, file, {contentType: file.type, upsert: true});
+    if(!upErr){
+      const {data: pub} = db.storage.from('annonces-photos').getPublicUrl(path);
+      if(pub?.publicUrl) currentPhotos.push(pub.publicUrl);
+    }
+  }
+
+  const {error} = await db.from('annonces').update({
+    titre, description: desc, prix_jour: prix,
+    caution, ville, rayon_km: rayon, photos: currentPhotos
+  }).eq('id', annonceId);
+
+  btn.disabled = false; btn.textContent = 'Enregistrer les modifications';
+
+  if(error){ err.textContent = 'Erreur : ' + error.message; err.style.display='block'; return; }
+
+  toast('✓ Annonce mise à jour !');
+  setTimeout(function(){ window.location.href = 'profil.html'; }, 1500);
+}
+
+(function(){
+  const params = new URLSearchParams(window.location.search);
+  annonceId = params.get('id');
+  if(!annonceId){ window.location.href = 'profil.html'; return; }
+
+  const s = document.createElement('script');
+  s.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js';
+  s.onload = async function(){
+    db = supabase.createClient(SUPA_URL, SUPA_KEY);
+
+    const {data:{user}} = await db.auth.getUser();
+    if(!user){ window.location.href = 'inscription.html'; return; }
+
+    const {data, error} = await db.from('annonces').select('*').eq('id', annonceId).eq('user_id', user.id).single();
+    if(error || !data){ window.location.href = 'profil.html'; return; }
+
+    document.getElementById('f-titre').value = data.titre || '';
+    document.getElementById('f-desc').value = data.description || '';
+    document.getElementById('f-prix').value = data.prix_jour || '';
+    document.getElementById('f-caution').value = data.caution || '';
+    document.getElementById('f-ville').value = data.ville || '';
+    document.getElementById('f-rayon').value = data.rayon_km || '30';
+    currentPhotos = data.photos || [];
+    renderPhotos();
+
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('form-area').style.display = 'block';
+  };
+  document.head.appendChild(s);
+})();
+</script>
+</body>
+</html>
